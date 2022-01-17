@@ -111,6 +111,7 @@ const Login = ({ OnLogged }) => {
                                 name="cid"
                                 value={corpId}
                                 placeholder="Corporate ID"
+                                required
                             />
                         )}
                         <br />
@@ -119,12 +120,14 @@ const Login = ({ OnLogged }) => {
                             name="uid"
                             value={userId}
                             placeholder="User ID"
+                            required
                         />
                         <br />
                         <input
                             type="password"
                             name="password"
                             placeholder="Password"
+                            required
                         />
                         <br />
                         <input
