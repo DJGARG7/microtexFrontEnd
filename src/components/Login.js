@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-const Login = ({OnLogged}) => {
+const Login = ({ OnLogged }) => {
     const [savedList, setSavedList] = useState(
         JSON.parse(localStorage.getItem("saved"))
     );
@@ -32,9 +32,9 @@ const Login = ({OnLogged}) => {
         event.preventDefault();
         // authenticate with backend and fetch the type from {admin,user,proprietor}
         //setType("frombackend")
-        OnLogged(true,type,corpId,userId);
+        OnLogged(true, type, corpId, userId);
         //else if authentication failed show appropriate message
-    }
+    };
     return (
         <div className="blackbox">
             <div className="leftPart">
@@ -42,12 +42,8 @@ const Login = ({OnLogged}) => {
                 <div className="recentUserList">
                     {Object.keys(savedList).map((ele) => {
                         return (
-<<<<<<< HEAD
                             <button
                                 className="savedList"
-=======
-                            <button className="savedList"
->>>>>>> d1fd763566746d9465a72bf805c437b9da6d1014
                                 onClick={() =>
                                     savedClickHandler(
                                         savedList[ele].c_id,
@@ -138,11 +134,13 @@ const Login = ({OnLogged}) => {
                             name="remember"
                         />{" "}
                         Remember me
-                        <input
+                        <button
                             type="submit"
                             className="btn btn-login"
                             value="LOGIN"
-                        >Login</button>
+                        >
+                            Login
+                        </button>
                     </form>
                 </div>
             </div>
