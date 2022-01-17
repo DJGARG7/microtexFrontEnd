@@ -35,6 +35,12 @@ const Login = ({ OnLogged }) => {
         OnLogged(true, type, corpId, userId);
         //else if authentication failed show appropriate message
     };
+    const radiohandler = (event)=>{
+        setType(event.currentTarget.value);
+        setUserId("");
+        setCorpId();
+        
+    }
     return (
         <div className="blackbox">
             <div className="leftPart">
@@ -95,9 +101,7 @@ const Login = ({ OnLogged }) => {
                                         id={t}
                                         value={t}
                                         checked={type === t}
-                                        onChange={(e) =>
-                                            setType(e.currentTarget.value)
-                                        }
+                                        onChange={radiohandler}
                                     />
                                     <label for={t}>
                                         <span>{t}</span>
@@ -111,6 +115,7 @@ const Login = ({ OnLogged }) => {
                                 name="cid"
                                 value={corpId}
                                 placeholder="Corporate ID"
+                                onChange={(e) => setCorpId(e.target.value)}
                             />
                         )}
                         <br />
@@ -119,6 +124,7 @@ const Login = ({ OnLogged }) => {
                             name="uid"
                             value={userId}
                             placeholder="User ID"
+                            onChange={(e) => setUserId(e.target.value)}
                         />
                         <br />
                         <input
