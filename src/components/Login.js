@@ -37,6 +37,7 @@ const Login = () => {
                     {Object.keys(savedList).map((ele) => {
                         return (
                             <button
+                                className="savedList"
                                 onClick={() =>
                                     savedClickHandler(
                                         savedList[ele].c_id,
@@ -61,6 +62,7 @@ const Login = () => {
                     {Object.keys(savedPro).map((ele) => {
                         return (
                             <button
+                                className="savedPro"
                                 onClick={() =>
                                     savedProClickHandler(savedPro[ele].u_id)
                                 }
@@ -76,24 +78,26 @@ const Login = () => {
             </div>
             <div className="rightPart">
                 <h2>Login</h2>
-                <div>
+                <div className="form">
                     <form>
-                        <div>
+                        <div className="switch-field">
                             {types.map((t) => (
                                 <>
                                     <input
                                         type="radio"
                                         name="type"
+                                        id={t}
                                         value={t}
                                         checked={type === t}
                                         onChange={(e) =>
                                             setType(e.currentTarget.value)
                                         }
-                                    />{" "}
-                                    {t}
+                                    />
+                                    <label for={t}>
+                                        <span>{t}</span>
+                                    </label>
                                 </>
                             ))}
-                            <p>{type}</p>
                         </div>
                         {type === "firm" && (
                             <input
@@ -125,10 +129,9 @@ const Login = () => {
                             name="remember"
                         />{" "}
                         Remember me
-                        <p>Is "My Value" checked? {remember.toString()}</p>
                         <input
                             type="submit"
-                            className="btn-login"
+                            className="btn btn-login"
                             value="LOGIN"
                         />
                     </form>

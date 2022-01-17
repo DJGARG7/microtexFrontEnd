@@ -6,6 +6,7 @@ body {
     padding: 0px;
     font-family: "Manrope", sans-serif;
     background-color: #353535;
+    box-sizing: border-box;
 }
 
 .mainParent {
@@ -47,6 +48,7 @@ body {
     align-items: center;
     justify-content: space-evenly;
     background-color: #d9d9d9;
+    overflow: auto;
 }
 
 .leftPart h2 {
@@ -67,6 +69,27 @@ body {
     padding: 10px;
     border-radius: 10px;
     margin: 7.5px;
+    box-shadow: 0 9px #999;
+}
+
+.leftPart .recentUserList button:active {
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}
+
+.savedList:hover {
+    background-color: #e61414;
+}
+
+.savedPro:hover {
+    background-color: #311edb;
+}
+
+.savedList {
+    background-color: #ff4d6d;
+}
+.savedPro {
+    background-color: #00bbf9;
 }
 
 .leftPart .recentUserList button td {
@@ -82,17 +105,108 @@ body {
     align-items: center;
     justify-content: space-evenly;
     background-color: #38d39f;
+    overflow: auto;
 }
 
 .rightPart h2 {
     text-transform: uppercase;
 }
 
+.rightPart .form {
+    height: 75%;
+}
+
+.rightPart form {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.rightPart form .switch-field {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.rightPart .switch-field input {
+    position: absolute !important;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    width: 1px;
+    border: 0;
+    overflow: hidden;
+}
+
+.rightPart .switch-field label {
+    background-color: #e4e4e4;
+    color: #000000;
+    font-size: 14px;
+    line-height: 1;
+    text-align: center;
+    padding: 8px 16px;
+    margin-right: -1px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    /* box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1); */
+    transition: all 0.1s ease-in-out;
+}
+
+.rightPart .switch-field label:hover {
+    cursor: pointer;
+}
+
+.rightPart .switch-field input:checked + label {
+    background-color: #a5dc86;
+    box-shadow: none;
+}
+
+.rightPart .switch-field label:first-of-type {
+    border-radius: 4px 0 0 4px;
+}
+
+.rightPart .switch-field label:last-of-type {
+    border-radius: 0 4px 4px 0;
+}
+
+.rightPart .form input[type="text"],
+form input[type="password"] {
+    background: #dcdcdc;
+    border: none;
+    width: 100%;
+    color: #212121;
+    font-family: "Manrope", sans-serif;
+    padding: 10px;
+    margin: 10px;
+}
+
+.rightPart .form .btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.rightPart .form .btn-login {
+    display: block;
+    border: 2px solid #0ba360;
+    border-radius: 25px;
+    color: #0ba360;
+    padding: 10px 25px;
+    cursor: pointer;
+    font-family: "Manrope", sans-serif;
+    background-color: #fafafa;
+    font-weight: 400;
+}
+
+.rightPart .form .btn-login:hover {
+    background-color: #0ba360;
+    color: #fafafa;
+    font-weight: 800;
+}
+
 .navbar {
     width: 100vw;
-    /* position: absolute;
-    bottom: 0;
-    left: 0; */
     background-color: #333;
 }
 .navbar a {
