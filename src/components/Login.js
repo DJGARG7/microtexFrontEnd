@@ -116,6 +116,7 @@ const Login = ({ OnLogged }) => {
                                 value={corpId}
                                 placeholder="Corporate ID"
                                 onChange={(e) => setCorpId(e.target.value)}
+                                required
                             />
                         )}
                         <br />
@@ -125,12 +126,14 @@ const Login = ({ OnLogged }) => {
                             value={userId}
                             placeholder="User ID"
                             onChange={(e) => setUserId(e.target.value)}
+                            required
                         />
                         <br />
                         <input
                             type="password"
                             name="password"
                             placeholder="Password"
+                            required
                         />
                         <br />
                         <input
