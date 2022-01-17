@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-const Login = () => {
+const Login = ({OnLogged}) => {
     const [savedList, setSavedList] = useState(
         JSON.parse(localStorage.getItem("saved"))
     );
@@ -28,7 +28,13 @@ const Login = () => {
     const onChangeHandler = () => {
         setRemember(!remember);
     };
-
+    const loginHandler = (event) => {
+        event.preventDefault();
+        // authenticate with backend and fetch the type from {admin,user,proprietor}
+        //setType("frombackend")
+        OnLogged(true,type,corpId,userId);
+        //else if authentication failed show appropriate message
+    }
     return (
         <div className="blackbox">
             <div className="leftPart">
@@ -36,8 +42,12 @@ const Login = () => {
                 <div className="recentUserList">
                     {Object.keys(savedList).map((ele) => {
                         return (
+<<<<<<< HEAD
                             <button
                                 className="savedList"
+=======
+                            <button className="savedList"
+>>>>>>> d1fd763566746d9465a72bf805c437b9da6d1014
                                 onClick={() =>
                                     savedClickHandler(
                                         savedList[ele].c_id,
@@ -79,7 +89,7 @@ const Login = () => {
             <div className="rightPart">
                 <h2>Login</h2>
                 <div className="form">
-                    <form>
+                    <form onSubmit={loginHandler}>
                         <div className="switch-field">
                             {types.map((t) => (
                                 <>
@@ -118,7 +128,6 @@ const Login = () => {
                         <input
                             type="password"
                             name="password"
-                            value=""
                             placeholder="Password"
                         />
                         <br />
@@ -133,7 +142,7 @@ const Login = () => {
                             type="submit"
                             className="btn btn-login"
                             value="LOGIN"
-                        />
+                        >Login</button>
                     </form>
                 </div>
             </div>
