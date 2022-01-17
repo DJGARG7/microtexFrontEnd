@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-const Login = () => {
+const Login = ({OnLogged}) => {
     const [savedList, setSavedList] = useState(
         JSON.parse(localStorage.getItem("saved"))
     );
@@ -28,7 +28,13 @@ const Login = () => {
     const onChangeHandler = () => {
         setRemember(!remember);
     };
-
+    const loginHandler = (event) => {
+        event.preventDefault();
+        // authenticate with backend and fetch the type from {admin,user,proprietor}
+        //setType("frombackend")
+        OnLogged(true,type,corpId,userId);
+        //else if authentication failed show appropriate message
+    }
     return (
         <div className="blackbox">
             <div className="leftPart">
@@ -36,7 +42,7 @@ const Login = () => {
                 <div className="recentUserList">
                     {Object.keys(savedList).map((ele) => {
                         return (
-                            <button
+                            <button className="savedList"
                                 onClick={() =>
                                     savedClickHandler(
                                         savedList[ele].c_id,
@@ -60,7 +66,7 @@ const Login = () => {
                     })}
                     {Object.keys(savedPro).map((ele) => {
                         return (
-                            <button
+                            <button className="savedPro"
                                 onClick={() =>
                                     savedProClickHandler(savedPro[ele].u_id)
                                 }
@@ -77,7 +83,7 @@ const Login = () => {
             <div className="rightPart">
                 <h2>Login</h2>
                 <div>
-                    <form>
+                    <form onSubmit={loginHandler}>
                         <div>
                             {types.map((t) => (
                                 <>
@@ -114,7 +120,6 @@ const Login = () => {
                         <input
                             type="password"
                             name="password"
-                            value=""
                             placeholder="Password"
                         />
                         <br />
@@ -126,11 +131,11 @@ const Login = () => {
                         />{" "}
                         Remember me
                         <p>Is "My Value" checked? {remember.toString()}</p>
-                        <input
+                        <button
                             type="submit"
                             className="btn-login"
                             value="LOGIN"
-                        />
+                        >Login</button>
                     </form>
                 </div>
             </div>

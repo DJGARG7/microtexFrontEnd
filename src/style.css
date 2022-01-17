@@ -67,6 +67,19 @@ body {
     padding: 10px;
     border-radius: 10px;
     margin: 7.5px;
+    box-shadow: 0 9px #999;
+}
+.leftPart .recentUserList button:active {
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}
+.savedList:hover {background-color: #e61414}
+.savedPro:hover {background-color: #311edb}
+ .savedList {
+    background-color: #FF4D6D;
+}
+.savedPro {
+    background-color: #00BBF9;
 }
 
 .leftPart .recentUserList button td {
