@@ -5,11 +5,15 @@ import Login from "./components/Login";
 import AdminDashboard from "./components/AdminDashboard";
 var CryptoJS = require("crypto-js");
 function App() {
-  // var data = [
-  //     { name: "Rutvay", u_id: "RUT0051" },
-  //     { name: "Digvi", u_id: "DRI0058" },
-  // ];
-  // localStorage.setItem("savedPro", JSON.stringify(data));
+  localStorage.getItem("savedPro") === null &&
+    localStorage.setItem("savedPro", JSON.stringify({}));
+  localStorage.getItem("savedFirm") === null &&
+    localStorage.setItem("savedFirm", JSON.stringify({}));
+  // var exp = {
+  //     "RUT0051":{ name: "Rutvay", u_id: "RUT0051" },
+  //     "DRI0058":{ name: "Digvi", u_id: "DRI0058" },
+  // };
+  // localStorage.setItem("savedPro", JSON.stringify(exp));
   const [isLogged, setIsLogged] = useState(false);
   const [isType, setIsType] = useState();
   const [isCorpId, setIsCorpId] = useState();

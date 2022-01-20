@@ -76,7 +76,7 @@ body {
     transform: translateY(4px);
 }
 
-.savedList:hover {
+.savedFirm:hover {
     background-color: #e61414;
 }
 
@@ -84,7 +84,7 @@ body {
     background-color: #311edb;
 }
 
-.savedList {
+.savedFirm {
     background-color: #ff4d6d;
 }
 .savedPro {
