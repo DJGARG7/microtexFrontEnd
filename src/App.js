@@ -25,10 +25,10 @@ function App() {
     setIsUserId(userId);
   };
   return (
-    <div className="mainParent">
+    <div>
       <div className="logo">MicroTex ERP Solutions</div>
       {!isLogged && <Login OnLogged={loggedInHandler} />}
-      {isLogged && isType === "admin" && <AdminDashboard />}
+      {isLogged && <AdminDashboard />}
       {/* {isLogged && isType === "user" && <UserDashboard />}
       {isLogged && isType === "proprietor" && <ProprietorDashboard />} */}
 
