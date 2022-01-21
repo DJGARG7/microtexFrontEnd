@@ -1,32 +1,41 @@
+.body {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+}
+
 .Sidebar {
-  position: absolute;
-  height: 100%;
-  width: 250px;
-  align-items: left;
-  background-color: #2f4050;
+    height: 100%;
+    width: 22.5%;
+    align-items: left;
+    background-color: #2f4050;
 }
 
 .MenuBarList {
-  height: auto;
-  padding: 0;
-  width: 100%;
+    height: auto;
+    padding: 0;
+    width: 100%;
 }
 
 .MenuBarList .row {
-  width: 100%;
-  height: 60px;
-  margin: 0;
-  display: flex;
-  list-style-type: none;
-  flex-direction: row;
-  color: white;
-  justify-content: center;
-  align-items: center;
-  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", Arial, sans-serif;
+    width: 100%;
+    height: 60px;
+    margin: 0;
+    display: flex;
+    list-style-type: none;
+    flex-direction: row;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+        "Lucida Sans", Arial, sans-serif;
 }
 
 .MenuBarList .row:hover {
-  cursor: pointer;
-  background-color: #293846;
+    cursor: pointer;
+    background-color: #293846;
+}
+
+.content {
+    width: 75%;
 }

@@ -33,16 +33,17 @@ function App() {
       {/* {isLogged && isType === "user" && <UserDashboard />}
       {isLogged && isType === "proprietor" && <ProprietorDashboard />} */}
 
-      <div className="navbar">
-        <a href="#home" class="active">
-          support@microtex.in
-        </a>
-        <a>Contact: 1800 5654 7868</a>
-        <a href="#news">Date</a>
-        <a href="#contact">Time</a>
-      </div>
-    </div>
-  );
+            <AdminDashboard />
+            <div className="navbar">
+                <a href="#home" class="active">
+                    support@microtex.in
+                </a>
+                <a>Contact: 1800 5654 7868</a>
+                <a href="#news">Date</a>
+                <a href="#contact">Time</a>
+            </div>
+        </div>
+    );
 }
 
 export default App;
