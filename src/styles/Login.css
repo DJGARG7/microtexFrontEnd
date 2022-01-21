@@ -50,19 +50,28 @@
     transform: translateY(4px);
 }
 
-.savedFirm:hover {
+.leftPart .savedFirm {
+    background-color: #ff4d6d;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.leftPart .savedFirm:hover {
     background-color: #e61414;
 }
 
-.savedPro:hover {
-    background-color: #311edb;
+.leftPart .savedPro {
+    background-color: #00bbf9;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.savedFirm {
-    background-color: #ff4d6d;
-}
-.savedPro {
-    background-color: #00bbf9;
+.leftPart .savedPro:hover {
+    background-color: #311edb;
 }
 
 .leftPart .recentUserList button td {

@@ -102,17 +102,14 @@ const Login = ({ OnLogged }) => {
                                         )
                                     }
                                 >
-                                    <table>
-                                        <tr>
-                                            <td rowSpan={2}>
-                                                {savedFirm[ele].name}
-                                            </td>
-                                            <td>{savedFirm[ele].c_id}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>{savedFirm[ele].u_id}</td>
-                                        </tr>
-                                    </table>
+                                    <div className="delete-firm">✗</div>
+                                    <div className="firm-name">
+                                        {savedFirm[ele].name}
+                                    </div>
+                                    <div className="firm-id">
+                                        <div>{savedFirm[ele].c_id}</div>
+                                        <div>{savedFirm[ele].u_id}</div>
+                                    </div>
                                 </button>
                             );
                         })}
@@ -124,10 +121,13 @@ const Login = ({ OnLogged }) => {
                                         savedProClickHandler(savedPro[ele].u_id)
                                     }
                                 >
-                                    <tr>
-                                        <td>{savedPro[ele].name}</td>
-                                        <td>{savedPro[ele].u_id}</td>
-                                    </tr>
+                                    <div className="delete-firm">✗</div>
+                                    <div className="firm-name">
+                                        {savedPro[ele].name}
+                                    </div>
+                                    <div className="firm-id">
+                                        <div>{savedPro[ele].u_id}</div>
+                                    </div>
                                 </button>
                             );
                         })}
