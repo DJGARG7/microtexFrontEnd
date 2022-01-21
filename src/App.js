@@ -34,7 +34,8 @@ function App() {
             <div className="logo">MicroTex ERP Solutions</div>
             {/* {!isLogged && <Login OnLogged={loggedInHandler} />} */}
             {/* {isLogged && <AdminDashboard />} */}
-            <AdminDashboard userDetails={user} />
+            <Login />
+            {/* <AdminDashboard userDetails={user} /> */}
             {/* {isLogged && isType === "user" && <UserDashboard />}
       {isLogged && isType === "proprietor" && <ProprietorDashboard />} */}
             <div className="navbar">
