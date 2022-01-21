@@ -1,7 +1,7 @@
 import { Route } from "react-router-dom";
-import CityMaster from "../pages/CityMaster";
+import CityMaster from "../../pages/CityMaster";
 import MainMenu from "./MainMenu";
-import "./AdminDashboard.css";
+import "../../styles/AdminDashboard.css";
 //routes will be defined here
 const AdminDashboard = () => {
   console.log("hello");

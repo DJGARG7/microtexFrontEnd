@@ -2,7 +2,7 @@ import "./style.css";
 // import Modal from "./Modal";
 import { useEffect, useState } from "react";
 import Login from "./components/Login";
-import AdminDashboard from "./components/AdminDashboard";
+import AdminDashboard from "./components/Admin_components/AdminDashboard";
 var CryptoJS = require("crypto-js");
 function App() {
   localStorage.getItem("savedPro") === null &&
@@ -23,6 +23,8 @@ function App() {
     setIsType(type);
     setIsCorpId(corpId);
     setIsUserId(userId);
+    //backend name 
+    var name = "dummy name";
   };
   return (
     <div>
@@ -32,8 +34,6 @@ function App() {
       <AdminDashboard />
       {/* {isLogged && isType === "user" && <UserDashboard />}
       {isLogged && isType === "proprietor" && <ProprietorDashboard />} */}
-
-            <AdminDashboard />
             <div className="navbar">
                 <a href="#home" class="active">
                     support@microtex.in

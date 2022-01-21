@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import './Login.css';
+import '../styles/Login.css';
 const Login = ({ OnLogged }) => {
   const [savedFirm, setSavedFirm] = useState(
     JSON.parse(localStorage.getItem("savedFirm"))
@@ -30,10 +30,10 @@ const Login = ({ OnLogged }) => {
   };
   const loginHandler = (event) => {
     event.preventDefault();
-    // authenticate with backend and fetch the type from {admin,user,proprietor}
+    // authenticate with backend and fetch the type from {admin,user,proprietor} and name
     // if auth fails show appropriate message
     //else continue with below code
-    //setType("frombackend")
+    //setType("frombackend") setName
     //dummy code for setType
     type === "firm" && setType("admin");
     if (remember) {
