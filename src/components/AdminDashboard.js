@@ -1,14 +1,14 @@
 import MainMenu from "./MainMenu";
-import './AdminDashboard.css';
+import "./AdminDashboard.css";
 
-const AdminDashboard = () =>{
+const AdminDashboard = () => {
     console.log("hello");
     return (
-        <div>
+        <div className="body">
             <MainMenu />
+            <div className="content">Hello</div>
         </div>
     );
-}
-
+};
 
 export default AdminDashboard;
