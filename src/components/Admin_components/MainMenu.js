@@ -17,8 +17,9 @@ function MainMenu(props) {
                 </ul>
             </nav>
             <ul className="user-details">
-                <li className="row">{props.userDetails.id}</li>
                 <li className="row">{props.userDetails.name}</li>
+                <li className="row">{props.userDetails.u_id}</li>
+                <li className="row">{props.userDetails.c_id}</li>
             </ul>
         </div>
     );

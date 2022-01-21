@@ -1,5 +1,4 @@
 import "./style.css";
-// import Modal from "./Modal";
 import { useEffect, useState } from "react";
 import Login from "./components/Login";
 import AdminDashboard from "./components/Admin_components/AdminDashboard";
@@ -14,28 +13,27 @@ function App() {
     //     "DRI0058":{ name: "Digvi", u_id: "DRI0058" },
     // };
     // localStorage.setItem("savedPro", JSON.stringify(exp));
-    const [isLogged, setIsLogged] = useState(true);
+    const [isLogged, setIsLogged] = useState(false);
     const [isType, setIsType] = useState();
-    const [isCorpId, setIsCorpId] = useState();
-    const [isUserId, setIsUserId] = useState();
-    const loggedInHandler = (status, type, corpId, userId) => {
+    const [isUser,setIsUser] = useState();
+    const loggedInHandler = (status, type, corpId, userId,UserName) => {
+		if(status === false){
+			//show appropriate message of login failed try again in red @dhairya like in php
+			console.log("inside");
+			return
+		}
+		console.log("outside");
         setIsLogged(status);
         setIsType(type);
-        setIsCorpId(corpId);
-        setIsUserId(userId);
+        setIsUser({u_id: userId, name: UserName,c_id:corpId})
     };
-
-    //backend name
-    let user = { id: "12345", name: "DummyName" };
-    console.log(user);
-
     return (
         <div>
             <div className="logo">MicroTex ERP Solutions</div>
-            {/* {!isLogged && <Login OnLogged={loggedInHandler} />} */}
-            {/* {isLogged && <AdminDashboard />} */}
-            <Login />
-            {/* <AdminDashboard userDetails={user} /> */}
+            {!isLogged && <Login OnLogged={loggedInHandler} />}
+            {isLogged && <AdminDashboard userDetails={isUser}/>}
+            {/* <Login /> */}
+            {/* <AdminDashboard userDetails={isUser} /> */}
             {/* {isLogged && isType === "user" && <UserDashboard />}
       {isLogged && isType === "proprietor" && <ProprietorDashboard />} */}
             <div className="navbar">

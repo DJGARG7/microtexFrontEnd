@@ -8,9 +8,11 @@ const Login = ({ OnLogged }) => {
         JSON.parse(localStorage.getItem("savedPro"))
     );
     const [remember, setRemember] = useState(false);
+
     const [corpId, setCorpId] = useState();
     const [userId, setUserId] = useState();
     const [type, setType] = useState("firm");
+
     const types = ["firm", "proprietor"];
     const savedClickHandler = (c_id, u_id) => {
         console.log(c_id, u_id);
@@ -31,9 +33,11 @@ const Login = ({ OnLogged }) => {
     const loginHandler = (event) => {
         event.preventDefault();
         // authenticate with backend and fetch the type from {admin,user,proprietor} and name
-        // if auth fails show appropriate message
+		//if auth fails uncomment below for testing and comment OnLogged(true...)
+		//OnLogged(false,"","","","")
         //else continue with below code
         //setType("frombackend") setName
+		var UserName = "fromBackend"
         //dummy code for setType
         type === "firm" && setType("admin");
         if (remember) {
@@ -42,12 +46,12 @@ const Login = ({ OnLogged }) => {
                 localStorage.setItem(
                     "savedPro",
                     JSON.stringify({
-                        [userId]: { name: "fromPrompt", u_id: userId },
+                        [userId]: { name: UserName, u_id: userId },
                         ...savedPro,
                     })
                 );
                 setSavedPro({
-                    [userId]: { name: "fromPrompt", u_id: userId },
+                    [userId]: { name: UserName, u_id: userId },
                     ...savedPro,
                 });
                 console.log(savedPro);
@@ -61,7 +65,7 @@ const Login = ({ OnLogged }) => {
                     JSON.stringify({
                         [userId]: {
                             c_id: corpId,
-                            name: "fromPrompt",
+                            name: UserName,
                             u_id: userId,
                         },
                         ...savedFirm,
@@ -70,7 +74,7 @@ const Login = ({ OnLogged }) => {
                 setSavedFirm({
                     [userId]: {
                         c_id: corpId,
-                        name: "fromPrompt",
+                        name: UserName,
                         u_id: userId,
                     },
                     ...savedFirm,
@@ -78,7 +82,7 @@ const Login = ({ OnLogged }) => {
                 console.log(savedFirm);
             }
         }
-        OnLogged(true, type, corpId, userId);
+        OnLogged(true, type, corpId, userId,UserName);
     };
     const radiohandler = (event) => {
         setType(event.currentTarget.value);
