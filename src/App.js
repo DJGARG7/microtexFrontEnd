@@ -3,7 +3,7 @@ import "./style.css";
 import { useEffect, useState } from "react";
 import Login from "./components/Login";
 import AdminDashboard from "./components/AdminDashboard";
-var CryptoJS = require("crypto-js");
+
 function App() {
     localStorage.getItem("savedPro") === null &&
         localStorage.setItem("savedPro", JSON.stringify({}));
@@ -26,7 +26,9 @@ function App() {
     };
     return (
         <div>
-            <div className="logo">MicroTex ERP Solutions</div>
+            <div className="logo">
+                <p>MicroTex ERP Solutions</p>
+            </div>
             {/* {!isLogged && <Login OnLogged={loggedInHandler} />} */}
             {/* {isLogged && <AdminDashboard />} */}
             {/* {isLogged && isType === "user" && <UserDashboard />}
@@ -34,7 +36,7 @@ function App() {
 
             <AdminDashboard />
             <div className="navbar">
-                <a href="#home" class="active">
+                <a href="#home" className="active">
                     support@microtex.in
                 </a>
                 <a>Contact: 1800 5654 7868</a>

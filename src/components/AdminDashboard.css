@@ -1,7 +1,8 @@
 .body {
     display: flex;
     flex-direction: row;
-    height: 100vh;
+    height: 95vh;
+    width: 100vw;
 }
 
 .Sidebar {
