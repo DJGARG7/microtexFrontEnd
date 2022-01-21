@@ -14,7 +14,7 @@ function App() {
   //     "DRI0058":{ name: "Digvi", u_id: "DRI0058" },
   // };
   // localStorage.setItem("savedPro", JSON.stringify(exp));
-  const [isLogged, setIsLogged] = useState(true);
+  const [isLogged, setIsLogged] = useState(false);
   const [isType, setIsType] = useState();
   const [isCorpId, setIsCorpId] = useState();
   const [isUserId, setIsUserId] = useState();
@@ -29,9 +29,9 @@ function App() {
   return (
     <div>
       <div className="logo">MicroTex ERP Solutions</div>
-      {/* {!isLogged && <Login OnLogged={loggedInHandler} />} */}
-      {/* {isLogged && <AdminDashboard />} */}
-      <AdminDashboard />
+      {!isLogged && <Login OnLogged={loggedInHandler} />}
+      {isLogged && <AdminDashboard />}
+      {/* <AdminDashboard /> */}
       {/* {isLogged && isType === "user" && <UserDashboard />}
       {isLogged && isType === "proprietor" && <ProprietorDashboard />} */}
             <div className="navbar">

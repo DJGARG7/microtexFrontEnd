@@ -5,20 +5,20 @@ export const SideBarData = [
         link:"/cityMaster"
     },
     {
-        title: "Master",
-        link:"/home"
+        title: "Account Master",
+        link:"/accountMaster"
+    },
+    {
+        title: "Design Master",
+        link:"/designMaster"
     },
     {
         title: "Master",
         link:"/home"
     },
     {
-        title: "Master",
-        link:"/home"
-    },
-    {
-        title: "Master",
-        link:"/home"
+        title: "User Management",
+        link:"/userManagement"
     }
 ]
 

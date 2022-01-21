@@ -4,8 +4,7 @@ import "../../styles/AdminDashboard.css";
 import { SideBarData } from "./SideBarData";
 function MainMenu(props) {
   return (
-    <div className="Sidebar">
-      <nav>
+      <nav className="Sidebar">
         <ul className="MenuBarList">
           {SideBarData.map((val, key) => {
             return (
@@ -16,7 +15,6 @@ function MainMenu(props) {
           })}
         </ul>
       </nav>
-    </div>
   );
 }
 
