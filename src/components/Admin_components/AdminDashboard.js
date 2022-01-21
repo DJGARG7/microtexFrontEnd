@@ -1,5 +1,6 @@
 import { Route } from "react-router-dom";
 import CityMaster from "../../pages/CityMaster";
+import AccountMaster from "../../pages/AccountMaster";
 import MainMenu from "./MainMenu";
 import "../../styles/AdminDashboard.css";
 
@@ -12,6 +13,9 @@ const AdminDashboard = (props) => {
             <div className="content">
                 <Route path="/cityMaster">
                     <CityMaster />
+                </Route>
+                <Route path="/accountMaster">
+                    <AccountMaster />
                 </Route>
             </div>
         </div>

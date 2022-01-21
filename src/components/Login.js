@@ -51,7 +51,7 @@ const Login = ({ OnLogged }) => {
           ...savedPro,
         });
         console.log(savedPro);
-      } else {
+      } else if(type !== "proprietor" && !(userId in savedFirm) && corpId !== ""){
         localStorage.setItem(
           "savedFirm",
           JSON.stringify({
