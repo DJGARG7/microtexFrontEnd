@@ -3,7 +3,7 @@ import "./style.css";
 import { useEffect, useState } from "react";
 import Login from "./components/Login";
 import AdminDashboard from "./components/Admin_components/AdminDashboard";
-var CryptoJS = require("crypto-js");
+
 function App() {
     localStorage.getItem("savedPro") === null &&
         localStorage.setItem("savedPro", JSON.stringify({}));
@@ -23,24 +23,25 @@ function App() {
         setIsType(type);
         setIsCorpId(corpId);
         setIsUserId(userId);
-        //backend name
-        var name = "dummy name";
     };
+
+    //backend name
+    let user = { id: "12345", name: "DummyName" };
+    console.log(user);
+
     return (
         <div>
             <div className="logo">MicroTex ERP Solutions</div>
             {/* {!isLogged && <Login OnLogged={loggedInHandler} />} */}
             {/* {isLogged && <AdminDashboard />} */}
-            <AdminDashboard />
+            <AdminDashboard userDetails={user} />
             {/* {isLogged && isType === "user" && <UserDashboard />}
       {isLogged && isType === "proprietor" && <ProprietorDashboard />} */}
             <div className="navbar">
-                <a href="#home" className="active">
-                    support@microtex.in
-                </a>
-                <a>Contact: 1800 5654 7868</a>
-                <a href="#news">Date</a>
-                <a href="#contact">Time</a>
+                <a className="active">support@microtex.in</a>
+                <a href="#hello">Contact: 1800 5654 7868</a>
+                <a href="#hello">Date</a>
+                <a href="#hello">Time</a>
             </div>
         </div>
     );

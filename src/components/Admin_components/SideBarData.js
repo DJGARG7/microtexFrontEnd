@@ -1,25 +1,22 @@
-
 export const SideBarData = [
     {
         title: "City Master",
-        link:"/cityMaster"
+        link: "/cityMaster",
     },
     {
         title: "Master",
-        link:"/home"
+        link: "/home",
     },
     {
         title: "Master",
-        link:"/home"
+        link: "/home",
     },
     {
         title: "Master",
-        link:"/home"
+        link: "/home",
     },
     {
         title: "Master",
-        link:"/home"
-    }
-]
-
-
+        link: "/home",
+    },
+];
