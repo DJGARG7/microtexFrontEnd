@@ -2,8 +2,8 @@ import "./style.css";
 // import Modal from "./Modal";
 import { useEffect, useState } from "react";
 import Login from "./components/Login";
-import AdminDashboard from "./components/AdminDashboard";
-
+import AdminDashboard from "./components/Admin_components/AdminDashboard";
+var CryptoJS = require("crypto-js");
 function App() {
     localStorage.getItem("savedPro") === null &&
         localStorage.setItem("savedPro", JSON.stringify({}));
@@ -14,7 +14,7 @@ function App() {
     //     "DRI0058":{ name: "Digvi", u_id: "DRI0058" },
     // };
     // localStorage.setItem("savedPro", JSON.stringify(exp));
-    const [isLogged, setIsLogged] = useState(false);
+    const [isLogged, setIsLogged] = useState(true);
     const [isType, setIsType] = useState();
     const [isCorpId, setIsCorpId] = useState();
     const [isUserId, setIsUserId] = useState();
@@ -23,18 +23,17 @@ function App() {
         setIsType(type);
         setIsCorpId(corpId);
         setIsUserId(userId);
+        //backend name
+        var name = "dummy name";
     };
     return (
         <div>
-            <div className="logo">
-                <p>MicroTex ERP Solutions</p>
-            </div>
+            <div className="logo">MicroTex ERP Solutions</div>
             {/* {!isLogged && <Login OnLogged={loggedInHandler} />} */}
             {/* {isLogged && <AdminDashboard />} */}
+            <AdminDashboard />
             {/* {isLogged && isType === "user" && <UserDashboard />}
       {isLogged && isType === "proprietor" && <ProprietorDashboard />} */}
-
-            <AdminDashboard />
             <div className="navbar">
                 <a href="#home" className="active">
                     support@microtex.in
