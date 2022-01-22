@@ -15,7 +15,9 @@ function App() {
     // localStorage.setItem("savedPro", JSON.stringify(exp));
     const [isLogged, setIsLogged] = useState(false);
     const [isType, setIsType] = useState();
-    const [isUser,setIsUser] = useState();
+    // const [isUser,setIsUser] = useState();
+    const [isUser,setIsUser] = useState({u_id: "userId", name: "UserName",c_id:"corpId"});
+
     const loggedInHandler = (status, type, corpId, userId,UserName) => {
 		if(status === false){
 			//show appropriate message of login failed try again in red @dhairya like in php
@@ -30,10 +32,10 @@ function App() {
     return (
         <div>
             <div className="logo">MicroTex ERP Solutions</div>
-            {!isLogged && <Login OnLogged={loggedInHandler} />}
-            {isLogged && <AdminDashboard userDetails={isUser}/>}
+            {/* {!isLogged && <Login OnLogged={loggedInHandler} />} */}
+            {/* {isLogged && <AdminDashboard userDetails={isUser}/>} */}
             {/* <Login /> */}
-            {/* <AdminDashboard userDetails={isUser} /> */}
+            <AdminDashboard userDetails={isUser} />
             {/* {isLogged && isType === "user" && <UserDashboard />}
       {isLogged && isType === "proprietor" && <ProprietorDashboard />} */}
             <div className="navbar">

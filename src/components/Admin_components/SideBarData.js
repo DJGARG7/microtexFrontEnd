@@ -1,4 +1,4 @@
-export const SideBarData = [
+const SideBarData = [
     {
         title: "City Master",
         link: "/cityMaster",
@@ -20,3 +20,5 @@ export const SideBarData = [
         link: "/userManagement",
     },
 ];
+
+export default SideBarData;
