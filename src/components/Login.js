@@ -33,11 +33,11 @@ const Login = ({ OnLogged }) => {
     const loginHandler = (event) => {
         event.preventDefault();
         // authenticate with backend and fetch the type from {admin,user,proprietor} and name
-		//if auth fails uncomment below for testing and comment OnLogged(true...)
-		//OnLogged(false,"","","","")
+        //if auth fails uncomment below for testing and comment OnLogged(true...)
+        //OnLogged(false,"","","","")
         //else continue with below code
         //setType("frombackend") setName
-		var UserName = "fromBackend"
+        var UserName = "fromBackend";
         //dummy code for setType
         type === "firm" && setType("admin");
         if (remember) {
@@ -82,7 +82,7 @@ const Login = ({ OnLogged }) => {
                 console.log(savedFirm);
             }
         }
-        OnLogged(true, type, corpId, userId,UserName);
+        OnLogged(true, type, corpId, userId, UserName);
     };
     const radiohandler = (event) => {
         setType(event.currentTarget.value);
@@ -97,42 +97,48 @@ const Login = ({ OnLogged }) => {
                     <div className="recentUserList">
                         {Object.keys(savedFirm).map((ele) => {
                             return (
-                                <button
-                                    className="savedFirm"
-                                    onClick={() =>
-                                        savedClickHandler(
-                                            savedFirm[ele].c_id,
-                                            savedFirm[ele].u_id
-                                        )
-                                    }
-                                >
-                                    <div className="delete-firm">✗</div>
-                                    <div className="firm-name">
-                                        {savedFirm[ele].name}
-                                    </div>
-                                    <div className="firm-id">
-                                        <div>{savedFirm[ele].c_id}</div>
-                                        <div>{savedFirm[ele].u_id}</div>
-                                    </div>
-                                </button>
+                                <div className="button-duo">
+                                    <button className="delete-firm">✗</button>
+                                    <button
+                                        className="savedFirm"
+                                        onClick={() =>
+                                            savedClickHandler(
+                                                savedFirm[ele].c_id,
+                                                savedFirm[ele].u_id
+                                            )
+                                        }
+                                    >
+                                        <div className="firm-name">
+                                            {savedFirm[ele].name}
+                                        </div>
+                                        <div className="firm-id">
+                                            <div>{savedFirm[ele].c_id}</div>
+                                            <div>{savedFirm[ele].u_id}</div>
+                                        </div>
+                                    </button>
+                                </div>
                             );
                         })}
                         {Object.keys(savedPro).map((ele) => {
                             return (
-                                <button
-                                    className="savedPro"
-                                    onClick={() =>
-                                        savedProClickHandler(savedPro[ele].u_id)
-                                    }
-                                >
-                                    <div className="delete-firm">✗</div>
-                                    <div className="firm-name">
-                                        {savedPro[ele].name}
-                                    </div>
-                                    <div className="firm-id">
-                                        <div>{savedPro[ele].u_id}</div>
-                                    </div>
-                                </button>
+                                <div className="button-duo">
+                                    <button className="delete-firm">✗</button>
+                                    <button
+                                        className="savedPro"
+                                        onClick={() =>
+                                            savedProClickHandler(
+                                                savedPro[ele].u_id
+                                            )
+                                        }
+                                    >
+                                        <div className="firm-name">
+                                            {savedPro[ele].name}
+                                        </div>
+                                        <div className="firm-id">
+                                            <div>{savedPro[ele].u_id}</div>
+                                        </div>
+                                    </button>
+                                </div>
                             );
                         })}
                     </div>

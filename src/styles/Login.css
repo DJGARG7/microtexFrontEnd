@@ -50,6 +50,11 @@
     transform: translateY(4px);
 }
 
+.leftPart .button-duo {
+    display: flex;
+    flex-direction: row;
+}
+
 .leftPart .savedFirm {
     background-color: #ff4d6d;
     display: flex;
