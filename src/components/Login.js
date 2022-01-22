@@ -33,8 +33,9 @@ const Login = ({ OnLogged }) => {
     const loginHandler = (event) => {
         event.preventDefault();
         // authenticate with backend and fetch the type from {admin,user,proprietor} and name
-        //if auth fails uncomment below for testing and comment OnLogged(true...)
+        //if auth fails uncomment below 2 lines for testing
         //OnLogged(false,"","","","")
+        //return
         //else continue with below code
         //setType("frombackend") setName
         var UserName = "fromBackend";

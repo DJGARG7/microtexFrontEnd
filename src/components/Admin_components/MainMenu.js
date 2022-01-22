@@ -9,9 +9,10 @@ function MainMenu(props) {
                 <ul className="MenuBarList">
                     {SideBarData.map((val, key) => {
                         return (
+							<Link to={val.link}>
                             <li key={key} className="row">
-                                <Link to={val.link}>{val.title}</Link>
-                            </li>
+                                {val.title}
+                            </li></Link>
                         );
                     })}
                 </ul>
