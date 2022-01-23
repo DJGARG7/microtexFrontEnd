@@ -1,11 +1,12 @@
 import { useState } from "react";
-
+import {useHistory} from "react-router-dom"
 import SideBar from "./SideBar";
 import AdminSideBarData from "../../jsonData/AdminSideBarData";
 
 import "../../styles/AdminDashboard.css";
 
 function MainMenu({ userDetails }) {
+    const history = useHistory();
     const [subMenu, setSubMenu] = useState({
         status: false,
         data: AdminSideBarData,
@@ -18,6 +19,8 @@ function MainMenu({ userDetails }) {
     };
     const onBack = () => {
         setSubMenu({ status: false, data: AdminSideBarData, name: "" });
+        // history.goBack();
+        history.push("/");
     };
     return (
         <SideBar

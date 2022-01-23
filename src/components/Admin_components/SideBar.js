@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "../../styles/SideBar.css";
 function SideBar({ SideBarData, userDetails, onClickMenu, onBack }) {
     const clickHandler = (valTitle, valSubLinks) => {
@@ -32,11 +32,11 @@ function SideBar({ SideBarData, userDetails, onClickMenu, onBack }) {
                     <ul className="MenuBarList">
                         {SideBarData.data.map((val, key) => {
                             return (
-                                <Link to={val.link}>
+                                <NavLink activeClassName="SBactive" to={val.link}>
                                     <li key={key} className="row">
                                         {val.title}
                                     </li>
-                                </Link>
+                                </NavLink>
                             );
                         })}
                     </ul>

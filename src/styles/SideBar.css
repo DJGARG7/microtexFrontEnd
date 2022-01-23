@@ -28,7 +28,7 @@
 
 .MenuBarList .row:hover {
     cursor: pointer;
-    background-color: #6b7a88;
+    background-color: #0817f3;
 }
 
 .user-details {
@@ -49,4 +49,13 @@
     align-items: center;
     font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
         "Lucida Sans", Arial, sans-serif;
+}
+a {
+    color: white;
+    text-decoration: none;
+  }
+.SBactive li{
+  background-color: #0817f3;
+  padding-bottom: 0.25rem;
+  border-bottom: 4px solid #95bcf0;
 }

@@ -6,7 +6,6 @@ import "../../styles/AdminDashboard.css";
 
 const AdminDashboard = ({ userDetails }) => {
     return (
-        // <Route path="/" exact>
         <div className="body">
             <div className="MainMenu">
                 <MainMenu userDetails={userDetails} />
@@ -15,7 +14,6 @@ const AdminDashboard = ({ userDetails }) => {
                 <AdminContent />
             </div>
         </div>
-        // </Route>
     );
 };
 

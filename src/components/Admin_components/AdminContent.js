@@ -1,6 +1,7 @@
 import { Route } from "react-router-dom";
 import CityMasterAdd from "../../pages/CityMasterAdd";
 import AccountMaster from "../../pages/AccountMaster";
+import AdminLandingPage from "../../pages/AdminLandingPage";
 const AdminContent = () => {
     return (
         <div>
@@ -16,6 +17,8 @@ const AdminContent = () => {
             <Route path="/accountMaster">
                 <AccountMaster />
             </Route>
+            <Route path="/" exact><AdminLandingPage/></Route>
+            
         </div>
     );
 };
