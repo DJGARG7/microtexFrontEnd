@@ -16,10 +16,10 @@ const Login = ({ OnLogged }) => {
 
     const types = ["firm", "proprietor"];
 
-    console.log(type);
+    // console.log(type);
 
     const savedClickHandler = (c_id, u_id) => {
-        console.log(c_id, u_id);
+        // console.log(c_id, u_id);
         setCorpId(c_id);
         setUserId(u_id);
         setType("firm");
@@ -27,7 +27,7 @@ const Login = ({ OnLogged }) => {
     };
 
     const savedProClickHandler = (u_id) => {
-        console.log(u_id);
+        // console.log(u_id);
         setUserId(u_id);
         setType("proprietor");
         setRemember(true);
@@ -41,55 +41,55 @@ const Login = ({ OnLogged }) => {
         event.preventDefault();
         // authenticate with backend and fetch the type from {admin,user,proprietor} and name
         //if auth fails uncomment below 2 lines for testing
-        OnLogged("fail", "", "", "", "");
-        return;
-        // //else continue with below code
-        // //setType("frombackend") setName
-        // var UserName = "fromBackend";
-        // //dummy code for setType
-        // type === "firm" && setType("admin");
-        // if (remember) {
-        //     // name in prompt remaining
-        //     if (type === "proprietor" && !(userId in savedPro)) {
-        //         localStorage.setItem(
-        //             "savedPro",
-        //             JSON.stringify({
-        //                 [userId]: { name: UserName, u_id: userId },
-        //                 ...savedPro,
-        //             })
-        //         );
-        //         setSavedPro({
-        //             [userId]: { name: UserName, u_id: userId },
-        //             ...savedPro,
-        //         });
-        //         console.log(savedPro);
-        //     } else if (
-        //         type !== "proprietor" &&
-        //         !(userId in savedFirm) &&
-        //         corpId !== ""
-        //     ) {
-        //         localStorage.setItem(
-        //             "savedFirm",
-        //             JSON.stringify({
-        //                 [userId]: {
-        //                     c_id: corpId,
-        //                     name: UserName,
-        //                     u_id: userId,
-        //                 },
-        //                 ...savedFirm,
-        //             })
-        //         );
-        //         setSavedFirm({
-        //             [userId]: {
-        //                 c_id: corpId,
-        //                 name: UserName,
-        //                 u_id: userId,
-        //             },
-        //             ...savedFirm,
-        //         });
-        //         console.log(savedFirm);
-        //     }
-        // }
+        // OnLogged("fail", "", "", "", "");
+        // return;
+        //else continue with below code
+        //setType("frombackend") setName
+        var UserName = "fromBackend";
+        //dummy code for setType
+        type === "firm" && setType("admin");
+        if (remember) {
+            // name in prompt remaining
+            if (type === "proprietor" && !(userId in savedPro)) {
+                localStorage.setItem(
+                    "savedPro",
+                    JSON.stringify({
+                        [userId]: { name: UserName, u_id: userId },
+                        ...savedPro,
+                    })
+                );
+                setSavedPro({
+                    [userId]: { name: UserName, u_id: userId },
+                    ...savedPro,
+                });
+                console.log(savedPro);
+            } else if (
+                type !== "proprietor" &&
+                !(userId in savedFirm) &&
+                corpId !== ""
+            ) {
+                localStorage.setItem(
+                    "savedFirm",
+                    JSON.stringify({
+                        [userId]: {
+                            c_id: corpId,
+                            name: UserName,
+                            u_id: userId,
+                        },
+                        ...savedFirm,
+                    })
+                );
+                setSavedFirm({
+                    [userId]: {
+                        c_id: corpId,
+                        name: UserName,
+                        u_id: userId,
+                    },
+                    ...savedFirm,
+                });
+                console.log(savedFirm);
+            }
+        }
         // OnLogged("true", type, corpId, userId, UserName);
     };
     const radiohandler = (event) => {
@@ -105,7 +105,10 @@ const Login = ({ OnLogged }) => {
                     <RecentUserList
                         savedFirm={savedFirm}
                         savedPro={savedPro}
+                        setSavedFirm={setSavedFirm}
+                        setSavedPro={setSavedPro}
                         savedClickHandler={savedClickHandler}
+                        savedProClickHandler={savedProClickHandler}
                     />
                     {/* <div className="recentUserList">
                         {Object.keys(savedFirm).map((ele) => {

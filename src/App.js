@@ -35,12 +35,12 @@ function App() {
     return (
         <div>
             <div className="logo">MicroTex ERP Solutions</div>
-            {isLogged === "fail" && (
+            {/* {isLogged === "fail" && (
                 <div className="logo">MicroTex ERP Solutions</div>
-            )}
+            )} */}
             {/* {!isLogged && <Login OnLogged={loggedInHandler} />}
             {isLogged && <AdminDashboard userDetails={isUser}/>} */}
-            <Login OnLogged={loggedInHandler} />
+            <Login />
             {/* <AdminDashboard userDetails={isUser} /> */}
             {/* {isLogged && isType === "user" && <UserDashboard />}
       {isLogged && isType === "proprietor" && <ProprietorDashboard />} */}
