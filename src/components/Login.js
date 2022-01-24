@@ -132,18 +132,16 @@ const Login = ({ OnLogged }) => {
                                     </>
                                 ))}
                             </div>
-                            <input
-                                type="text"
-                                name="cid"
-                                value={corpId}
-                                placeholder="Corporate ID"
-                                style={{
-                                    display:
-                                        type === "firm" ? "none" : "inherit",
-                                }}
-                                onChange={(e) => setCorpId(e.target.value)}
-                                required
-                            />
+                            {type === "firm" && (
+                                <input
+                                    type="text"
+                                    name="cid"
+                                    value={corpId}
+                                    placeholder="Corporate ID"
+                                    onChange={(e) => setCorpId(e.target.value)}
+                                    required
+                                />
+                            )}
                             <input
                                 type="text"
                                 name="uid"
