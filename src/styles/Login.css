@@ -49,12 +49,7 @@
 }
 
 .rightPart .form {
-    height: 75%;
-}
-
-.rightPart form {
-    width: 100%;
-    height: 100%;
+    margin-top: 5%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -63,7 +58,7 @@
 
 .rightPart form .switch-field {
     display: flex;
-    margin-bottom: 10px;
+    margin-top: 10%;
 }
 
 .rightPart .switch-field input {
@@ -113,14 +108,14 @@ form input[type="password"] {
     color: #212121;
     font-family: "Manrope", sans-serif;
     padding: 10px;
-    margin: 10px;
+    margin-top: 35px;
 }
 
 .rightPart .form .btn {
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    margin-top: 30px;
+    justify-content: flex-start;
+    margin-top: 50px;
 }
 
 .rightPart .form .btn-login {
@@ -139,4 +134,13 @@ form input[type="password"] {
     background-color: #0ba360;
     color: #fafafa;
     font-weight: 800;
+}
+
+.rightPart .form .rememberMe {
+    width: 60%;
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-evenly;
+    margin-top: 35px;
 }

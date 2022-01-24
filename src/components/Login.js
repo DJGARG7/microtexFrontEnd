@@ -113,8 +113,8 @@ const Login = ({ OnLogged }) => {
                 </div>
                 <div className="rightPart">
                     <h2>Login</h2>
-                    <div className="form">
-                        <form onSubmit={loginHandler}>
+                    <form onSubmit={loginHandler}>
+                        <div className="form">
                             <div className="switch-field">
                                 {types.map((t) => (
                                     <>
@@ -132,17 +132,18 @@ const Login = ({ OnLogged }) => {
                                     </>
                                 ))}
                             </div>
-                            {type === "firm" && (
-                                <input
-                                    type="text"
-                                    name="cid"
-                                    value={corpId}
-                                    placeholder="Corporate ID"
-                                    onChange={(e) => setCorpId(e.target.value)}
-                                    required
-                                />
-                            )}
-                            <br />
+                            <input
+                                type="text"
+                                name="cid"
+                                value={corpId}
+                                placeholder="Corporate ID"
+                                style={{
+                                    display:
+                                        type === "firm" ? "none" : "inherit",
+                                }}
+                                onChange={(e) => setCorpId(e.target.value)}
+                                required
+                            />
                             <input
                                 type="text"
                                 name="uid"
@@ -151,21 +152,21 @@ const Login = ({ OnLogged }) => {
                                 onChange={(e) => setUserId(e.target.value)}
                                 required
                             />
-                            <br />
                             <input
                                 type="password"
                                 name="password"
                                 placeholder="Password"
                                 required
                             />
-                            <br />
-                            <input
-                                type="checkbox"
-                                checked={remember}
-                                onChange={onChangeHandler}
-                                name="remember"
-                            />{" "}
-                            Remember me
+                            <div className="rememberMe">
+                                <input
+                                    type="checkbox"
+                                    checked={remember}
+                                    onChange={onChangeHandler}
+                                    name="remember"
+                                />{" "}
+                                Remember me
+                            </div>
                             <button
                                 type="submit"
                                 className="btn btn-login"
@@ -173,8 +174,8 @@ const Login = ({ OnLogged }) => {
                             >
                                 Login
                             </button>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
