@@ -2,7 +2,7 @@ import "./style.css";
 import { useEffect, useState } from "react";
 import Login from "./components/Login";
 import AdminDashboard from "./components/Admin_components/AdminDashboard";
-
+import TableComponent from "./components/Admin_components/AdminDashboard";
 function App() {
     localStorage.getItem("savedPro") === null &&
         localStorage.setItem("savedPro", JSON.stringify({}));

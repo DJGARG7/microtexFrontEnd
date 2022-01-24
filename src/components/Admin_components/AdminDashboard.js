@@ -1,4 +1,3 @@
-import { Route } from "react-router-dom";
 import MainMenu from "./MainMenu";
 import AdminContent from "./AdminContent";
 

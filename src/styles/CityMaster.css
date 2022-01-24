@@ -1,0 +1,15 @@
+.Citymaster{
+    display: flex;
+    flex-direction: column;
+}
+.Inputs{
+    display: flex;
+    flex-direction: row;
+    padding: 50px;
+    justify-content: space-between;
+}
+
+.table {
+    height: 500px;
+    overflow:auto;
+}
