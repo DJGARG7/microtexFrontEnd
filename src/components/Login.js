@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+import RecentUserList from "./RecentUserList";
 import "../styles/Login.css";
+
 const Login = ({ OnLogged }) => {
     const [savedFirm, setSavedFirm] = useState(
         JSON.parse(localStorage.getItem("savedFirm"))
@@ -8,12 +10,14 @@ const Login = ({ OnLogged }) => {
         JSON.parse(localStorage.getItem("savedPro"))
     );
     const [remember, setRemember] = useState(false);
-
-    const [corpId, setCorpId] = useState();
-    const [userId, setUserId] = useState();
+    const [corpId, setCorpId] = useState("");
+    const [userId, setUserId] = useState("");
     const [type, setType] = useState("firm");
 
     const types = ["firm", "proprietor"];
+
+    console.log(type);
+
     const savedClickHandler = (c_id, u_id) => {
         console.log(c_id, u_id);
         setCorpId(c_id);
@@ -21,69 +25,72 @@ const Login = ({ OnLogged }) => {
         setType("firm");
         setRemember(true);
     };
+
     const savedProClickHandler = (u_id) => {
         console.log(u_id);
         setUserId(u_id);
         setType("proprietor");
         setRemember(true);
     };
+
     const onChangeHandler = () => {
         setRemember(!remember);
     };
+
     const loginHandler = (event) => {
         event.preventDefault();
         // authenticate with backend and fetch the type from {admin,user,proprietor} and name
         //if auth fails uncomment below 2 lines for testing
-        //OnLogged(false,"","","","")
-        //return
-        //else continue with below code
-        //setType("frombackend") setName
-        var UserName = "fromBackend";
-        //dummy code for setType
-        type === "firm" && setType("admin");
-        if (remember) {
-            // name in prompt remaining
-            if (type === "proprietor" && !(userId in savedPro)) {
-                localStorage.setItem(
-                    "savedPro",
-                    JSON.stringify({
-                        [userId]: { name: UserName, u_id: userId },
-                        ...savedPro,
-                    })
-                );
-                setSavedPro({
-                    [userId]: { name: UserName, u_id: userId },
-                    ...savedPro,
-                });
-                console.log(savedPro);
-            } else if (
-                type !== "proprietor" &&
-                !(userId in savedFirm) &&
-                corpId !== ""
-            ) {
-                localStorage.setItem(
-                    "savedFirm",
-                    JSON.stringify({
-                        [userId]: {
-                            c_id: corpId,
-                            name: UserName,
-                            u_id: userId,
-                        },
-                        ...savedFirm,
-                    })
-                );
-                setSavedFirm({
-                    [userId]: {
-                        c_id: corpId,
-                        name: UserName,
-                        u_id: userId,
-                    },
-                    ...savedFirm,
-                });
-                console.log(savedFirm);
-            }
-        }
-        OnLogged(true, type, corpId, userId, UserName);
+        OnLogged("fail", "", "", "", "");
+        return;
+        // //else continue with below code
+        // //setType("frombackend") setName
+        // var UserName = "fromBackend";
+        // //dummy code for setType
+        // type === "firm" && setType("admin");
+        // if (remember) {
+        //     // name in prompt remaining
+        //     if (type === "proprietor" && !(userId in savedPro)) {
+        //         localStorage.setItem(
+        //             "savedPro",
+        //             JSON.stringify({
+        //                 [userId]: { name: UserName, u_id: userId },
+        //                 ...savedPro,
+        //             })
+        //         );
+        //         setSavedPro({
+        //             [userId]: { name: UserName, u_id: userId },
+        //             ...savedPro,
+        //         });
+        //         console.log(savedPro);
+        //     } else if (
+        //         type !== "proprietor" &&
+        //         !(userId in savedFirm) &&
+        //         corpId !== ""
+        //     ) {
+        //         localStorage.setItem(
+        //             "savedFirm",
+        //             JSON.stringify({
+        //                 [userId]: {
+        //                     c_id: corpId,
+        //                     name: UserName,
+        //                     u_id: userId,
+        //                 },
+        //                 ...savedFirm,
+        //             })
+        //         );
+        //         setSavedFirm({
+        //             [userId]: {
+        //                 c_id: corpId,
+        //                 name: UserName,
+        //                 u_id: userId,
+        //             },
+        //             ...savedFirm,
+        //         });
+        //         console.log(savedFirm);
+        //     }
+        // }
+        // OnLogged("true", type, corpId, userId, UserName);
     };
     const radiohandler = (event) => {
         setType(event.currentTarget.value);
@@ -95,7 +102,12 @@ const Login = ({ OnLogged }) => {
             <div className="blackbox">
                 <div className="leftPart">
                     <h2>Saved Users</h2>
-                    <div className="recentUserList">
+                    <RecentUserList
+                        savedFirm={savedFirm}
+                        savedPro={savedPro}
+                        savedClickHandler={savedClickHandler}
+                    />
+                    {/* <div className="recentUserList">
                         {Object.keys(savedFirm).map((ele) => {
                             return (
                                 <div className="button-duo">
@@ -142,7 +154,7 @@ const Login = ({ OnLogged }) => {
                                 </div>
                             );
                         })}
-                    </div>
+                    </div> */}
                 </div>
                 <div className="rightPart">
                     <h2>Login</h2>

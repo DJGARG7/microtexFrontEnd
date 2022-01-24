@@ -13,7 +13,7 @@ function App() {
     //     "DRI0058":{ name: "Digvi", u_id: "DRI0058" },
     // };
     // localStorage.setItem("savedPro", JSON.stringify(exp));
-    const [isLogged, setIsLogged] = useState(false);
+    const [isLogged, setIsLogged] = useState("false");
     const [isType, setIsType] = useState();
     const [isUser, setIsUser] = useState({
         u_id: "userId",
@@ -21,8 +21,9 @@ function App() {
         c_id: "corpId",
     });
     const loggedInHandler = (status, type, corpId, userId, UserName) => {
-        if (status === false) {
+        if (status === "fail") {
             //show appropriate message of login failed try again in red @dhairya like in php
+            setIsLogged("fail");
             console.log("inside");
             return;
         }
@@ -34,10 +35,13 @@ function App() {
     return (
         <div>
             <div className="logo">MicroTex ERP Solutions</div>
+            {isLogged === "fail" && (
+                <div className="logo">MicroTex ERP Solutions</div>
+            )}
             {/* {!isLogged && <Login OnLogged={loggedInHandler} />}
             {isLogged && <AdminDashboard userDetails={isUser}/>} */}
-            {/* <Login /> */}
-            <AdminDashboard userDetails={isUser} />
+            <Login OnLogged={loggedInHandler} />
+            {/* <AdminDashboard userDetails={isUser} /> */}
             {/* {isLogged && isType === "user" && <UserDashboard />}
       {isLogged && isType === "proprietor" && <ProprietorDashboard />} */}
             <div className="navbar">
