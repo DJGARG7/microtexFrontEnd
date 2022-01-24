@@ -4,6 +4,12 @@ import Login from "./components/Login";
 import AdminDashboard from "./components/Admin_components/AdminDashboard";
 import TableComponent from "./components/Admin_components/AdminDashboard";
 function App() {
+    const [time, setTime] = useState(new Date());
+    useEffect(() => {
+        setInterval(() => {
+            setTime(new Date());
+        }, 1000);
+    }, []);
     localStorage.getItem("savedPro") === null &&
         localStorage.setItem("savedPro", JSON.stringify({}));
     localStorage.getItem("savedFirm") === null &&
@@ -47,8 +53,8 @@ function App() {
             <div className="navbar">
                 <a className="active">support@microtex.in</a>
                 <a href="#hello">Contact: 1800 5654 7868</a>
-                <a href="#hello">Date</a>
-                <a href="#hello">Time</a>
+                <a href="#hello">{time.toLocaleDateString()}</a>
+                <a href="#hello">{time.toLocaleTimeString()}</a>
             </div>
         </div>
     );
