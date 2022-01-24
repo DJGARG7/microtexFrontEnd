@@ -110,54 +110,6 @@ const Login = ({ OnLogged }) => {
                         savedClickHandler={savedClickHandler}
                         savedProClickHandler={savedProClickHandler}
                     />
-                    {/* <div className="recentUserList">
-                        {Object.keys(savedFirm).map((ele) => {
-                            return (
-                                <div className="button-duo">
-                                    <button className="delete-firm">✗</button>
-                                    <button
-                                        className="savedFirm"
-                                        onClick={() =>
-                                            savedClickHandler(
-                                                savedFirm[ele].c_id,
-                                                savedFirm[ele].u_id
-                                            )
-                                        }
-                                    >
-                                        <div className="firm-name">
-                                            {savedFirm[ele].name}
-                                        </div>
-                                        <div className="firm-id">
-                                            <div>{savedFirm[ele].c_id}</div>
-                                            <div>{savedFirm[ele].u_id}</div>
-                                        </div>
-                                    </button>
-                                </div>
-                            );
-                        })}
-                        {Object.keys(savedPro).map((ele) => {
-                            return (
-                                <div className="button-duo">
-                                    <button className="delete-firm">✗</button>
-                                    <button
-                                        className="savedPro"
-                                        onClick={() =>
-                                            savedProClickHandler(
-                                                savedPro[ele].u_id
-                                            )
-                                        }
-                                    >
-                                        <div className="firm-name">
-                                            {savedPro[ele].name}
-                                        </div>
-                                        <div className="firm-id">
-                                            <div>{savedPro[ele].u_id}</div>
-                                        </div>
-                                    </button>
-                                </div>
-                            );
-                        })}
-                    </div> */}
                 </div>
                 <div className="rightPart">
                     <h2>Login</h2>

@@ -1,16 +1,13 @@
 // This component renders a list of recent users.
 
-import React from "react";
 import RecentUser from "./RecentUser";
+import styles from "../styles/RecentUserList.module.css";
 
 function RecentUserList(props) {
-    // Retrieving values of saved users from localStorage.
-    // const firms = localStorage.getItem("savedFirm");
-    // const proprietors = localStorage.getItem("savedPro");
-
     const firms = props.savedFirm;
     const proprietors = props.savedPro;
 
+    // On execution deletes user from state & localStorage.
     const deleteUser = (key, type) => {
         if (type === "firm") {
             delete firms[key];
@@ -24,15 +21,15 @@ function RecentUserList(props) {
     };
 
     return (
-        <div className="recent-users">
+        <div className={styles["recent-users"]}>
             {Object.keys(firms).map((key) => {
                 return (
-                    <React.Fragment key={key}>
+                    <div className={styles["recent-user"]} key={key}>
                         <button
-                            className="delete-user"
+                            className={styles["delete-user"]}
                             onClick={() => deleteUser(key, "firm")}
                         >
-                            ✗
+                            <strong>✗</strong>
                         </button>
                         <RecentUser
                             user={firms[key]}
@@ -40,17 +37,17 @@ function RecentUserList(props) {
                             key={key}
                             savedClickHandler={props.savedClickHandler}
                         />
-                    </React.Fragment>
+                    </div>
                 );
             })}
             {Object.keys(proprietors).map((key) => {
                 return (
-                    <React.Fragment key={key}>
+                    <div className={styles["recent-user"]} key={key}>
                         <button
-                            className="delete-user"
+                            className={styles["delete-user"]}
                             onClick={() => deleteUser(key, "proprietor")}
                         >
-                            ✗
+                            <strong>✗</strong>
                         </button>
                         <RecentUser
                             user={proprietors[key]}
@@ -58,7 +55,7 @@ function RecentUserList(props) {
                             key={key}
                             savedClickHandler={props.savedProClickHandler}
                         />
-                    </React.Fragment>
+                    </div>
                 );
             })}
         </div>

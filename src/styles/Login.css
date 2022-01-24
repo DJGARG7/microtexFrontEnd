@@ -20,68 +20,15 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: flex-start;
     background-color: #d9d9d9;
     overflow: auto;
 }
 
 .leftPart h2 {
+    margin-top: 10%;
+    font-weight: 600;
     text-transform: uppercase;
-}
-
-.leftPart .recentUserList {
-    width: 50%;
-    height: 75%;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-}
-
-.leftPart .recentUserList button {
-    font-family: "Manrope", sans-serif;
-    border: 0;
-    padding: 10px;
-    border-radius: 10px;
-    margin: 7.5px;
-    box-shadow: 0 9px #999;
-}
-.leftPart .recentUserList button:active {
-    box-shadow: 0 5px #666;
-    transform: translateY(4px);
-}
-
-.leftPart .button-duo {
-    display: flex;
-    flex-direction: row;
-}
-
-.leftPart .savedFirm {
-    background-color: #ff4d6d;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.leftPart .savedFirm:hover {
-    background-color: #e61414;
-}
-
-.leftPart .savedPro {
-    background-color: #00bbf9;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.leftPart .savedPro:hover {
-    background-color: #311edb;
-}
-
-.leftPart .recentUserList button td {
-    width: 100%;
-    padding: 5px;
 }
 
 .rightPart {
@@ -90,12 +37,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: flex-start;
     background-color: #38d39f;
     overflow: auto;
 }
 
 .rightPart h2 {
+    margin-top: 10%;
+    font-weight: 600;
     text-transform: uppercase;
 }
 

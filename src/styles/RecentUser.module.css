@@ -1,0 +1,46 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+.recent-user {
+    /* Size. */
+    width: 350px;
+    height: 75px;
+    /* Display */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    /* Appearance */
+    font-family: "Inter", sans-serif;
+    font-size: 15px;
+    background-color: red;
+    border: 0;
+    border-radius: 0 10px 10px 0;
+    box-shadow: 0 9px #999;
+    padding: 25px;
+}
+
+.recent-user:active {
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+}
+
+.firm {
+    background-color: #d5b8ff;
+}
+
+.firm:hover {
+    background-color: #bf55ec;
+}
+
+.proprietor {
+    background-color: #77a4ce;
+}
+
+.proprietor:hover {
+    background-color: #538bc1;
+}
+
+.recent-user .proprietor-id {
+    display: flex;
+    flex-direction: column;
+}
