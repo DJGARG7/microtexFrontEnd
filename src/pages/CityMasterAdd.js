@@ -2,29 +2,8 @@ import React from "react";
 import TableComponent from "../components/Admin_components/TableComponent";
 import { useState } from "react";
 import "../styles/CityMaster.css";
+import CityData from "../jsonData/CityData";
 
-const dataArray = [
-  {
-    cityname: "Bharuch",
-    statename: "Gujarat",
-  },
-  {
-    cityname: "Bharuch",
-    statename: "Gujarat",
-  },
-  {
-    cityname: "Bharuch",
-    statename: "Gujarat",
-  },
-  {
-    cityname: "Bharuch",
-    statename: "Gujarat",
-  },
-  {
-    cityname: "Bharuch",
-    statename: "Gujarat",
-  },
-];
 
 const TableColData = [
   {
@@ -38,7 +17,7 @@ const TableColData = [
 ];
 
 function CityMasterAdd(props) {
-  const [tabledata, setTabledata] =  useState(dataArray)
+  const [tabledata, setTabledata] =  useState(CityData)
   const [city, setCitychange] =  useState('')
   const [state, setStatechange] =  useState('')
 
@@ -55,8 +34,7 @@ function CityMasterAdd(props) {
         cityname: city,
         statename: state
       }
-    console.log(dataArray)
-
+      
     setTabledata(preExpense=>{
       return [...preExpense,newData];
     })
