@@ -43,8 +43,8 @@ function CityMasterAdd(props) {
     <div className="Citymaster">
       <div className="Inputs">
         <form onSubmit={onClickHandler}>
-          <lable>City Name</lable> <input type="text" onChange={cityHandler} value = {city}></input>
-          <lable>State Name</lable> <input type="text" onChange={stateHandler} value = {state}></input>
+          <label>City Name</label> <input type="text" onChange={cityHandler} value = {city}></input>
+          <label>State Name</label> <input type="text" onChange={stateHandler} value = {state}></input>
           <button> Add </button>
         </form>
       </div>

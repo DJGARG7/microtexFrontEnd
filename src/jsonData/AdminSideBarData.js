@@ -1,29 +1,23 @@
-import CityMasterData from "./CityMasterData";
 const AdminSideBarData = [
     {
         title: "City Master",
         link: "/cityMaster",
-        sublinks: CityMasterData,
     },
     {
         title: "Account Master",
         link: "/accountMaster",
-        sublinks: {},
     },
     {
         title: "Design Master",
         link: "/designMaster",
-        sublinks: {},
     },
     {
-        title: "Master",
-        link: "/home",
-        sublinks: {},
+        title: "Account Type Master",
+        link: "/accountTypeMaster",
     },
     {
         title: "User Management",
         link: "/userManagement",
-        sublinks: {},
     },
 ];
 

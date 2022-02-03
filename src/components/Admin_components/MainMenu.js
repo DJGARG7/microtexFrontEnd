@@ -1,35 +1,31 @@
-import { useState } from "react";
-import {useHistory} from "react-router-dom"
-import SideBar from "./SideBar";
+import SideBar from "../Reuse_components/SideBar";
 import AdminSideBarData from "../../jsonData/AdminSideBarData";
-
+// import { useState, useEffect } from "react";
+// import { useHistory } from "react-router-dom";
 import "../../styles/AdminDashboard.css";
 
 function MainMenu({ userDetails }) {
-    const history = useHistory();
-    const [subMenu, setSubMenu] = useState({
-        status: false,
-        data: AdminSideBarData,
-        name: "",
-    });
+    // const history = useHistory();
+    // const [subMenu, setSubMenu] = useState({
+    //     data: AdminSideBarData,
+    // });
 
-    const onClickMenu = (name, subData) => {
-        console.log(name, subData);
-        setSubMenu({ status: true, data: subData, name: name });
-    };
-    const onBack = () => {
-        setSubMenu({ status: false, data: AdminSideBarData, name: "" });
-        // history.goBack();
-        history.push("/");
-    };
+    // const onClickMenu = (name, subData) => {
+    //     console.log(name, subData);
+    //     setSubMenu({ status: true, data: subData, name: name });
+    // };
+    // const onBack = () => {
+    //     setSubMenu({ status: false, data: AdminSideBarData, name: "" });
+    //     // history.goBack();
+    //     history.push("/");
+    // };
     return (
         <SideBar
-            SideBarData={subMenu}
+            SideBarData={{ data: AdminSideBarData }}
             userDetails={userDetails}
-            onClickMenu={onClickMenu}
-            onBack={onBack}
+            // onClickMenu={onClickMenu}
+            // onBack={onBack}
         />
     );
 }
-
 export default MainMenu;

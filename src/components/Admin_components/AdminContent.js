@@ -5,20 +5,16 @@ import AdminLandingPage from "../../pages/AdminLandingPage";
 const AdminContent = () => {
     return (
         <div>
-            <Route path="/cityMaster/add">
-                <CityMasterAdd />
+            <Route path="/cityMaster" exact>
+                <CityMasterAdd/>
             </Route>
-            {/* <Route path="/cityMaster/view">
-                <CityMasterView/>
-            </Route>
-            <Route path="/cityMaster/delete">
-                <CityMasterDelete/>
-            </Route> */}
-            <Route path="/accountMaster">
+            <Route path="/accountMaster" exact>
                 <AccountMaster />
             </Route>
+            {/* <Route path="/accountTypeMaster" exact>
+                <AccountTypeMaster/>
+            </Route> */}
             <Route path="/" exact><AdminLandingPage/></Route>
-            
         </div>
     );
 };
