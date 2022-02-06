@@ -44,9 +44,9 @@ function App() {
             {/* {isLogged === "fail" && (
                 <div className="logo">MicroTex ERP Solutions</div>
             )} */}
-            {/* {!isLogged && <Login OnLogged={loggedInHandler} />}
-            {isLogged && <AdminDashboard userDetails={isUser}/>} */}
-            <Login />
+            {!isLogged && <Login OnLogged={loggedInHandler} />}
+            {isLogged && <AdminDashboard userDetails={isUser}/>}
+            {/* <Login /> */}
             {/* <AdminDashboard userDetails={isUser} /> */}
             {/* {isLogged && isType === "user" && <UserDashboard />}
       {isLogged && isType === "proprietor" && <ProprietorDashboard />} */}
