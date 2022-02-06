@@ -42,19 +42,19 @@ function App() {
         <div>
             <div className="logo">MicroTex ERP Solutions</div>
             {/* {isLogged === "fail" && (
-                <div className="logo">MicroTex ERP Solutions</div>
+                <div className="logo">Login Failed Try Again</div>
             )} */}
-            {!isLogged && <Login OnLogged={loggedInHandler} />}
-            {isLogged && <AdminDashboard userDetails={isUser}/>}
+            {/* {!isLogged && <Login OnLogged={loggedInHandler} />}
             {/* <Login /> */}
-            {/* <AdminDashboard userDetails={isUser} /> */}
+            {/* {isLogged && <AdminDashboard userDetails={isUser}/>} */}
+            <AdminDashboard userDetails={isUser} />
             {/* {isLogged && isType === "user" && <UserDashboard />}
-      {isLogged && isType === "proprietor" && <ProprietorDashboard />} */}
+            {isLogged && isType === "proprietor" && <ProprietorDashboard />} */}
             <div className="navbar">
                 <a className="active">support@microtex.in</a>
-                <a href="#hello">Contact: 1800 5654 7868</a>
-                <a href="#hello">{time.toLocaleDateString()}</a>
-                <a href="#hello">{time.toLocaleTimeString()}</a>
+                <a>Contact: 1800 5654 7868</a>
+                <a>{time.toLocaleDateString()}</a>
+                <a>{time.toLocaleTimeString()}</a>
             </div>
         </div>
     );

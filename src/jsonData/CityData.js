@@ -5,16 +5,16 @@ const CityData = [
       
     },
     {
-      cityname: "Bharuch",
+      cityname: "Surat",
       statename: "Gujarat",
     },
     {
-      cityname: "Bharuch",
-      statename: "Gujarat",
+      cityname: "New Delhi",
+      statename: "Delhi",
     },
     {
-      cityname: "Bharuch",
-      statename: "Gujarat",
+      cityname: "Kasol",
+      statename: "Himachal",
     },
     {
       cityname: "Bharuch",
