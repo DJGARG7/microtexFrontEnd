@@ -1,7 +1,15 @@
 import "../../styles/TableComponent.css";
 import { useTable } from "react-table";
 import React from "react";
-import { useMemo } from "react";
+
+
+/* this module is used to create resuable tables
+
+The component accepts two props 
+ 1. TableCol - how many colums and their name in JSON format 
+ 2. TableData - the rows in jason format. 
+
+ */
 
 function TableComponent({ TableCol, TableData }) {
 
@@ -29,7 +37,7 @@ function TableComponent({ TableCol, TableData }) {
           return (
             <tr {...row.getRowProps()}>
               {row.cells.map((cells) => {
-                return <td {...cells.getCellProps}>{cells.render("Cell")}</td>;
+                return <td  key = {Math.random()} {...cells.getCellProps}>{cells.render("Cell")}</td>;
               })}
             </tr>
           );

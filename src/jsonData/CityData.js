@@ -2,6 +2,7 @@ const CityData = [
     {
       cityname: "Bharuch",
       statename: "Gujarat",
+      
     },
     {
       cityname: "Bharuch",
