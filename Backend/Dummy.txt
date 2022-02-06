@@ -1,1 +1,5 @@
+- -- ----- --- - City Master -- -- - - --- - - - -  
+
+Table name -> CITYMASTER
+DATABASE -> ADMINDASHBOARD
 
