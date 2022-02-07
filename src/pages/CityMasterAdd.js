@@ -2,19 +2,12 @@ import React from "react";
 import TableComponent from "../components/Admin_components/TableComponent";
 import { useState, useEffect } from "react";
 import "../styles/CityMaster.css";
-import CityData from "../jsonData/CityData";
 import Axios from "axios";
 
 function CityMasterAdd({ props }) {
-  const [tabledata, setTabledata] = useState(CityData);
+  const [tabledata, setTabledata] = useState([]);
   const [city, setCitychange] = useState("");
   const [state, setStatechange] = useState("");
-  const submitData = () => {
-    Axios.post("http://localhost:3001/cityMaster/Add", {
-      City: city,
-      State: state,
-    })
-  };
   useEffect(() => {
     Axios.get("http://localhost:3001/cityMaster/Add").then((res) => {
       setTabledata(res.data);
@@ -76,11 +69,21 @@ function CityMasterAdd({ props }) {
   const onClickHandler = (event) => {
     event.preventDefault();
     const newData = {
-      CityName: city,
-      StateName: state,
+      CityName: city.trim(),
+      StateName: state.trim(),
     };
 
     setTabledata((preExpense) => {
+      for (const i in preExpense) {
+        if (preExpense[i].CityName.toLowerCase() === newData.CityName.toLowerCase()) {
+          alert("City present");
+          return [...preExpense];
+        }
+        Axios.post("http://localhost:3001/cityMaster/Add", {
+          City: city.trim(),
+          State: state.trim(),
+        });
+      }
       return [...preExpense, newData];
     });
   };
@@ -92,7 +95,7 @@ function CityMasterAdd({ props }) {
           <input type="text" onChange={cityHandler} value={city}></input>
           <label>State Name</label>{" "}
           <input type="text" onChange={stateHandler} value={state}></input>
-          <button onClick={submitData}> Add </button>
+          <button> Add </button>
         </form>
       </div>
       <div className="table">

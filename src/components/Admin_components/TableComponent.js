@@ -11,7 +11,7 @@ The component accepts two props
 
  */
 
-function TableComponent({ TableCol, TableData }) {
+function TableComponent({ TableCol, TableData, Unique }) {
 
   const Tableinsatance = useTable({
     columns : TableCol,
@@ -37,7 +37,7 @@ function TableComponent({ TableCol, TableData }) {
           return (
             <tr {...row.getRowProps()}>
               {row.cells.map((cells) => {
-                return <td  key = {Math.random()} {...cells.getCellProps}>{cells.render("Cell")}</td>;
+                return <td key = {Math.random()} {...cells.getCellProps}>{cells.render("Cell")}</td>;
               })}
             </tr>
           );
