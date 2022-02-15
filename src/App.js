@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Login from "./components/Login";
 import AdminDashboard from "./components/Admin_components/AdminDashboard";
 import TableComponent from "./components/Admin_components/AdminDashboard";
+import AccountTypeData from "./jsonData/AccountTypeData";
 function App() {
     const [time, setTime] = useState(new Date());
     useEffect(() => {
@@ -47,7 +48,8 @@ function App() {
             {/* {!isLogged && <Login OnLogged={loggedInHandler} />}
             {/* <Login /> */}
             {/* {isLogged && <AdminDashboard userDetails={isUser}/>} */}
-            <AdminDashboard userDetails={isUser} />
+            {/* <Login /> */}
+            {/* <AdminDashboard userDetails={isUser} /> */}
             {/* {isLogged && isType === "user" && <UserDashboard />}
             {isLogged && isType === "proprietor" && <ProprietorDashboard />} */}
             <div className="navbar">
