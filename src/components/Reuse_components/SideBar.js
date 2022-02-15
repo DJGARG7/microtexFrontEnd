@@ -7,7 +7,7 @@ function SideBar({ SideBarData, userDetails }) {
             <ul className="MenuBarList">
                 {SideBarData.data.map((val, key) => {
                     return (
-                        <NavLink activeClassName="SBactive" to={val.link}>
+                        <NavLink activeClassName="SBactive" to={val.link} key = {key}>
                             <li key={key} className="row">
                                 {val.title}
                             </li>

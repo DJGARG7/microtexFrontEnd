@@ -1,12 +1,12 @@
 import { Route } from "react-router-dom";
-import CityMasterAdd from "../../pages/CityMasterAdd";
+import CityMaster from "../../pages/CityMaster";
 import AccountMaster from "../../pages/AccountMaster";
 import AdminLandingPage from "../../pages/AdminLandingPage";
 const AdminContent = () => {
     return (
         <div>
             <Route path="/cityMaster" exact>
-                <CityMasterAdd/>
+                <CityMaster/>
             </Route>
             <Route path="/accountMaster" exact>
                 <AccountMaster />
