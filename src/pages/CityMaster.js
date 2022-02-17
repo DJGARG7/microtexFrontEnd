@@ -9,7 +9,6 @@ function CityMaster({ c_id }) {
   const [city, setCitychange] = useState("");
   const [state, setStatechange] = useState("");
   const [editMode, setEditMode] = useState(false);
-  var isExpired = false;
   const token = localStorage.getItem('accessToken');
 
   console.log(token);
