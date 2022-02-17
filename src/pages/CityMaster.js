@@ -3,17 +3,19 @@ import TableComponent from "../components/Admin_components/TableComponent";
 import { useState, useEffect } from "react";
 import "../styles/CityMaster.css";
 import Axios from "axios";
-let index,oldcity;
+let index, oldcity;
 function CityMaster({ props }) {
   const [tabledata, setTabledata] = useState([]);
   const [city, setCitychange] = useState("");
   const [state, setStatechange] = useState("");
   const [editMode, setEditMode] = useState(false);
+  // for gettig the data when the page loads for the first time
   useEffect(() => {
     Axios.get("http://localhost:3001/cityMaster/Add").then((res) => {
       setTabledata(res.data);
     });
   }, []);
+
   const TableColData = [
     {
       Header: "City Name",
@@ -53,6 +55,7 @@ function CityMaster({ props }) {
               setEditMode(true);
               setCitychange(dataCopy[tableProps.row.index].CityName);
               setStatechange(dataCopy[tableProps.row.index].StateName);
+              // captures the city name and index of the row selected for editing and stores them globally which is used in onClickhandler funtion
               index = tableProps.row.index;
               oldcity = dataCopy[tableProps.row.index].CityName;
             }}
@@ -69,6 +72,8 @@ function CityMaster({ props }) {
   const stateHandler = (event) => {
     setStatechange(event.target.value);
   };
+
+  // funtion executes when the form is submitted
   const onClickHandler = (event) => {
     event.preventDefault();
     if (city.length === 0) return alert("Enter City Name");
@@ -77,6 +82,7 @@ function CityMaster({ props }) {
       CityName: city.trim(),
       StateName: state.trim(),
     };
+    // checks wether the mode is edit or not if edit --> updates the exsisting selected row in the table and if !edit-> adds new data into the table if not present.
     if (editMode) {
       setTabledata((preExpense) => {
         for (const i in preExpense) {
@@ -88,13 +94,15 @@ function CityMaster({ props }) {
             return [...preExpense];
           }
         }
+        // updates the backend table
         Axios.post("http://localhost:3001/cityMaster/Update", {
           City: city.trim(),
           State: state.trim(),
-          oldcity : oldcity.trim()
+          oldcity: oldcity.trim(),
         });
         preExpense[index].CityName = newData.CityName;
         preExpense[index].StateName = newData.StateName;
+        setEditMode(false);
         return [...preExpense];
       });
     } else {
@@ -108,6 +116,7 @@ function CityMaster({ props }) {
             return [...preExpense];
           }
         }
+        // adds value to the backend table
         Axios.post("http://localhost:3001/cityMaster/Add", {
           City: city.trim(),
           State: state.trim(),
