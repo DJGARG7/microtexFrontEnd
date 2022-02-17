@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import RecentUserList from "./RecentUserList";
 import "../styles/Login.css";
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
-const Login = ({ OnLogged }) => {
+const Login = ({ onLogged }) => {
     const [savedFirm, setSavedFirm] = useState(
         JSON.parse(localStorage.getItem("savedFirm"))
     );
@@ -37,7 +39,54 @@ const Login = ({ OnLogged }) => {
         setRemember(!remember);
     };
 
-    const loginHandler = (event) => {
+    const loginHandler = async (event) => {
+        // Prevent refreshing the page
+        event.preventDefault();
+
+        // Check user type.
+        if (type === "proprietor") {
+            try {
+                // Send request to backend.
+                const res = await axios.post(
+                    "http://localhost:5000/user/login",
+                    {
+                        userType: "proprietor",
+                        userID: userId,
+                        password: document.getElementById("password").value,
+                    }
+                );
+
+                console.log(res.data.userID);
+                console.log(res.data.accessToken);
+
+                // Toast on success.
+                toast.success("Logged in successfully!", {
+                    style: {
+                        borderRadius: "15px",
+                        background: "#333",
+                        color: "#fff",
+                    },
+                });
+
+                // Change state to logged in.
+                onLogged(true, type, corpId, userId, res.data.accessToken);
+
+                // Reload page.
+                // window.location.reload();
+            } catch (err) {
+                // Toast on failure.
+                toast.error("Log in failed!", {
+                    style: {
+                        borderRadius: "15px",
+                        background: "#333",
+                        color: "#fff",
+                    },
+                });
+            }
+        }
+    };
+
+    const tempLoginHandler = (event) => {
         event.preventDefault();
         // authenticate with backend and fetch the type from {admin,user,proprietor} and name
         //if auth fails uncomment below 2 lines for testing
@@ -90,7 +139,6 @@ const Login = ({ OnLogged }) => {
                 console.log(savedFirm);
             }
         }
-        // OnLogged("true", type, corpId, userId, UserName);
     };
     const radiohandler = (event) => {
         setType(event.currentTarget.value);
@@ -98,85 +146,92 @@ const Login = ({ OnLogged }) => {
         setCorpId("");
     };
     return (
-        <div className="mainParent">
-            <div className="blackbox">
-                <div className="leftPart">
-                    <h2>Saved Users</h2>
-                    <RecentUserList
-                        savedFirm={savedFirm}
-                        savedPro={savedPro}
-                        setSavedFirm={setSavedFirm}
-                        setSavedPro={setSavedPro}
-                        savedClickHandler={savedClickHandler}
-                        savedProClickHandler={savedProClickHandler}
-                    />
-                </div>
-                <div className="rightPart">
-                    <h2>Login</h2>
-                    <form onSubmit={loginHandler}>
-                        <div className="form">
-                            <div className="switch-field">
-                                {types.map((t) => (
-                                    <>
-                                        <input
-                                            type="radio"
-                                            name="type"
-                                            id={t}
-                                            value={t}
-                                            checked={type === t}
-                                            onChange={radiohandler}
-                                        />
-                                        <label htmlFor={t}>
-                                            <span>{t}</span>
-                                        </label>
-                                    </>
-                                ))}
-                            </div>
-                            {type === "firm" && (
+        <React.Fragment>
+            <Toaster />
+            <div className="mainParent">
+                <div className="blackbox">
+                    <div className="leftPart">
+                        <h2>Saved Users</h2>
+                        <RecentUserList
+                            savedFirm={savedFirm}
+                            savedPro={savedPro}
+                            setSavedFirm={setSavedFirm}
+                            setSavedPro={setSavedPro}
+                            savedClickHandler={savedClickHandler}
+                            savedProClickHandler={savedProClickHandler}
+                        />
+                    </div>
+                    <div className="rightPart">
+                        <h2>Login</h2>
+                        <form onSubmit={loginHandler}>
+                            <div className="form">
+                                <div className="switch-field">
+                                    {types.map((t) => (
+                                        <>
+                                            <input
+                                                type="radio"
+                                                name="type"
+                                                id={t}
+                                                value={t}
+                                                checked={type === t}
+                                                onChange={radiohandler}
+                                            />
+                                            <label htmlFor={t}>
+                                                <span>{t}</span>
+                                            </label>
+                                        </>
+                                    ))}
+                                </div>
+                                {type === "firm" && (
+                                    <input
+                                        type="text"
+                                        name="cid"
+                                        value={corpId}
+                                        placeholder="Corporate ID"
+                                        onChange={(e) =>
+                                            setCorpId(e.target.value)
+                                        }
+                                        required
+                                    />
+                                )}
                                 <input
                                     type="text"
-                                    name="cid"
-                                    value={corpId}
-                                    placeholder="Corporate ID"
-                                    onChange={(e) => setCorpId(e.target.value)}
+                                    name="uid"
+                                    value={userId}
+                                    placeholder="User ID"
+                                    onChange={(e) => setUserId(e.target.value)}
                                     required
                                 />
-                            )}
-                            <input
-                                type="text"
-                                name="uid"
-                                value={userId}
-                                placeholder="User ID"
-                                onChange={(e) => setUserId(e.target.value)}
-                                required
-                            />
-                            <input
-                                type="password"
-                                name="password"
-                                placeholder="Password"
-                                required
-                            />
-                            <div className="rememberMe">
                                 <input
-                                    type="checkbox"
-                                    checked={remember}
-                                    onChange={onChangeHandler}
-                                    name="remember"
-                                />{" "}
-                                Remember me
+                                    id="password"
+                                    type="password"
+                                    name="password"
+                                    placeholder="Password"
+                                    // onChange={(e) => setUserId(e.target.value)}
+                                    required
+                                />
+                                <div className="rememberMe">
+                                    <input
+                                        type="checkbox"
+                                        checked={remember}
+                                        onChange={onChangeHandler}
+                                        name="remember"
+                                    />{" "}
+                                    Remember me
+                                </div>
+                                <button
+                                    type="submit"
+                                    className="btn btn-login"
+                                    value="LOGIN"
+                                >
+                                    Login
+                                </button>
                             </div>
-                            <button
-                                type="submit"
-                                className="btn btn-login"
-                                value="LOGIN"
-                            >
-                                Login
-                            </button>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
+        </React.Fragment>
     );
 };
 export default Login;

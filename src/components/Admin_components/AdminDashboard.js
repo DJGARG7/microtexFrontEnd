@@ -5,7 +5,7 @@ import AdminContent from "./AdminContent";
 import { Fragment } from "react/cjs/react.production.min";
 import "../../styles/AdminDashboard.css";
 
-const AdminDashboard = ({ userDetails }) => {
+const AdminDashboard = ({ userDetails, logoutHandler }) => {
     // const history = useHistory();
     // const [displayPrompt,setDisplayPrompt] = useState(false);
     // const [locationKeys, setLocationKeys] = useState([]);
@@ -34,7 +34,10 @@ const AdminDashboard = ({ userDetails }) => {
             {/* <Prompt when={displayPrompt} message = "Dont use browser back/forward buttons"/> */}
             <div className="body">
                 <div className="MainMenu">
-                    <MainMenu userDetails={userDetails} />
+                    <MainMenu
+                        userDetails={userDetails}
+                        logoutHandler={logoutHandler}
+                    />
                 </div>
                 <div className="content">
                     <AdminContent />

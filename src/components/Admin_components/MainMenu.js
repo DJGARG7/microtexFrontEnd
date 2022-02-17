@@ -4,7 +4,7 @@ import AdminSideBarData from "../../jsonData/AdminSideBarData";
 // import { useHistory } from "react-router-dom";
 import "../../styles/AdminDashboard.css";
 
-function MainMenu({ userDetails }) {
+function MainMenu({ userDetails, logoutHandler }) {
     // const history = useHistory();
     // const [subMenu, setSubMenu] = useState({
     //     data: AdminSideBarData,
@@ -23,6 +23,7 @@ function MainMenu({ userDetails }) {
         <SideBar
             SideBarData={{ data: AdminSideBarData }}
             userDetails={userDetails}
+            logoutHandler={logoutHandler}
             // onClickMenu={onClickMenu}
             // onBack={onBack}
         />
