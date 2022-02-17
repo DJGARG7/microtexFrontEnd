@@ -4,16 +4,24 @@ import { useState, useEffect } from "react";
 import "../styles/CityMaster.css";
 import Axios from "axios";
 let index, oldcity;
-function CityMaster({ props }) {
+function CityMaster({ c_id }) {
   const [tabledata, setTabledata] = useState([]);
   const [city, setCitychange] = useState("");
   const [state, setStatechange] = useState("");
   const [editMode, setEditMode] = useState(false);
   // for gettig the data when the page loads for the first time
-  useEffect(() => {
-    Axios.get("http://localhost:3001/cityMaster/Add").then((res) => {
-      setTabledata(res.data);
-    });
+  useEffect(() => { 
+    (async function (){
+      try{
+        const res = await Axios.get("http://localhost:3001/cityMaster/Add",{
+          firmname : c_id
+        })
+        setTabledata(res.data);
+      }
+      catch(e){
+        console.log(e);
+      }
+  })()
   }, []);
 
   const TableColData = [

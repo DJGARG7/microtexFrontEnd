@@ -48,7 +48,7 @@ const Login = ({ onLogged }) => {
             try {
                 // Send request to backend.
                 const res = await axios.post(
-                    "http://localhost:5000/user/login",
+                    "http://localhost:3002/user/login",
                     {
                         userType: "proprietor",
                         userID: userId,

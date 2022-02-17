@@ -1,9 +1,8 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import "./style.css";
 import { useEffect, useState } from "react";
 import Login from "./components/Login";
 import AdminDashboard from "./components/Admin_components/AdminDashboard";
-import TableComponent from "./components/Admin_components/AdminDashboard";
-import AccountTypeData from "./jsonData/AccountTypeData";
 function App() {
     const [time, setTime] = useState(new Date());
     useEffect(() => {

@@ -2,11 +2,11 @@ import { Route } from "react-router-dom";
 import CityMaster from "../../pages/CityMaster";
 import AccountMaster from "../../pages/AccountMaster";
 import AdminLandingPage from "../../pages/AdminLandingPage";
-const AdminContent = () => {
+const AdminContent = ({firm}) => {
     return (
         <div>
             <Route path="/cityMaster" exact>
-                <CityMaster/>
+                <CityMaster c_id ={firm}/>
             </Route>
             <Route path="/accountMaster" exact>
                 <AccountMaster />
