@@ -68,11 +68,54 @@ const Login = ({ onLogged }) => {
                     },
                 });
 
+                // Save user in recents list if the user chooses so.
+                var UserName = "fromBackend";
+
+                if (remember) {
+                    // name in prompt remaining
+                    if (type === "proprietor" && !(userId in savedPro)) {
+                        localStorage.setItem(
+                            "savedPro",
+                            JSON.stringify({
+                                [userId]: { name: UserName, u_id: userId },
+                                ...savedPro,
+                            })
+                        );
+                        setSavedPro({
+                            [userId]: { name: UserName, u_id: userId },
+                            ...savedPro,
+                        });
+                        console.log(savedPro);
+                    } else if (
+                        type !== "proprietor" &&
+                        !(userId in savedFirm) &&
+                        corpId !== ""
+                    ) {
+                        localStorage.setItem(
+                            "savedFirm",
+                            JSON.stringify({
+                                [userId]: {
+                                    c_id: corpId,
+                                    name: UserName,
+                                    u_id: userId,
+                                },
+                                ...savedFirm,
+                            })
+                        );
+                        setSavedFirm({
+                            [userId]: {
+                                c_id: corpId,
+                                name: UserName,
+                                u_id: userId,
+                            },
+                            ...savedFirm,
+                        });
+                        console.log(savedFirm);
+                    }
+                }
+
                 // Change state to logged in.
                 onLogged(true, type, corpId, userId, res.data.accessToken);
-
-                // Reload page.
-                // window.location.reload();
             } catch (err) {
                 // Toast on failure.
                 toast.error("Log in failed!", {
@@ -87,7 +130,6 @@ const Login = ({ onLogged }) => {
     };
 
     const tempLoginHandler = (event) => {
-        event.preventDefault();
         // authenticate with backend and fetch the type from {admin,user,proprietor} and name
         //if auth fails uncomment below 2 lines for testing
         // OnLogged("fail", "", "", "", "");
@@ -97,48 +139,48 @@ const Login = ({ onLogged }) => {
         var UserName = "fromBackend";
         //dummy code for setType
         type === "firm" && setType("admin");
-        if (remember) {
-            // name in prompt remaining
-            if (type === "proprietor" && !(userId in savedPro)) {
-                localStorage.setItem(
-                    "savedPro",
-                    JSON.stringify({
-                        [userId]: { name: UserName, u_id: userId },
-                        ...savedPro,
-                    })
-                );
-                setSavedPro({
-                    [userId]: { name: UserName, u_id: userId },
-                    ...savedPro,
-                });
-                console.log(savedPro);
-            } else if (
-                type !== "proprietor" &&
-                !(userId in savedFirm) &&
-                corpId !== ""
-            ) {
-                localStorage.setItem(
-                    "savedFirm",
-                    JSON.stringify({
-                        [userId]: {
-                            c_id: corpId,
-                            name: UserName,
-                            u_id: userId,
-                        },
-                        ...savedFirm,
-                    })
-                );
-                setSavedFirm({
-                    [userId]: {
-                        c_id: corpId,
-                        name: UserName,
-                        u_id: userId,
-                    },
-                    ...savedFirm,
-                });
-                console.log(savedFirm);
-            }
-        }
+        // if (remember) {
+        //     // name in prompt remaining
+        //     if (type === "proprietor" && !(userId in savedPro)) {
+        //         localStorage.setItem(
+        //             "savedPro",
+        //             JSON.stringify({
+        //                 [userId]: { name: UserName, u_id: userId },
+        //                 ...savedPro,
+        //             })
+        //         );
+        //         setSavedPro({
+        //             [userId]: { name: UserName, u_id: userId },
+        //             ...savedPro,
+        //         });
+        //         console.log(savedPro);
+        //     } else if (
+        //         type !== "proprietor" &&
+        //         !(userId in savedFirm) &&
+        //         corpId !== ""
+        //     ) {
+        //         localStorage.setItem(
+        //             "savedFirm",
+        //             JSON.stringify({
+        //                 [userId]: {
+        //                     c_id: corpId,
+        //                     name: UserName,
+        //                     u_id: userId,
+        //                 },
+        //                 ...savedFirm,
+        //             })
+        //         );
+        //         setSavedFirm({
+        //             [userId]: {
+        //                 c_id: corpId,
+        //                 name: UserName,
+        //                 u_id: userId,
+        //             },
+        //             ...savedFirm,
+        //         });
+        //         console.log(savedFirm);
+        //     }
+        // }
     };
     const radiohandler = (event) => {
         setType(event.currentTarget.value);
