@@ -1,13 +1,17 @@
 import { NavLink } from "react-router-dom";
 import "../../styles/SideBar.css";
 
-function SideBar({ SideBarData, userDetails }) {
+function SideBar({ SideBarData, userDetails, logoutHandler }) {
     return (
         <div className="Sidebar">
             <ul className="MenuBarList">
                 {SideBarData.data.map((val, key) => {
                     return (
-                        <NavLink activeClassName="SBactive" to={val.link} key = {key}>
+                        <NavLink
+                            activeClassName="SBactive"
+                            to={val.link}
+                            key={key}
+                        >
                             <li key={key} className="row">
                                 {val.title}
                             </li>
@@ -19,6 +23,9 @@ function SideBar({ SideBarData, userDetails }) {
                 <li className="row">{userDetails.name}</li>
                 <li className="row">{userDetails.u_id}</li>
                 <li className="row">{userDetails.c_id}</li>
+                <button className="row" onClick={logoutHandler}>
+                    Logout
+                </button>
             </ul>
         </div>
     );
