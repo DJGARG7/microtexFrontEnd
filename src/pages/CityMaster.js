@@ -9,12 +9,18 @@ function CityMaster({ c_id }) {
   const [city, setCitychange] = useState("");
   const [state, setStatechange] = useState("");
   const [editMode, setEditMode] = useState(false);
-  // for gettig the data when the page loads for the first time
+  var isExpired = false;
+  const token = localStorage.getItem('accessToken');
+
+  console.log(token);
+
+  // // for gettig the data when the page loads for the first time
   useEffect(() => { 
-    (async function (){
+    (async function fetchdata(){
       try{
-        const res = await Axios.get("http://localhost:3001/cityMaster/Add",{
-          firmname : c_id
+        const res = await Axios.post("http://localhost:3001/cityMaster/getdata",{
+          firmname : c_id,
+          accessToken : token
         })
         setTabledata(res.data);
       }
@@ -22,7 +28,7 @@ function CityMaster({ c_id }) {
         console.log(e);
       }
   })()
-  }, []);
+  },[ ]);
 
   const TableColData = [
     {
@@ -42,13 +48,18 @@ function CityMaster({ c_id }) {
             style={{
               cursor: "pointer",
             }}
-            onClick={() => {
-              Axios.post("http://localhost:3001/cityMaster/Delete", {
-                City: tableProps.row.values.CityName,
-              });
-              const dataCopy = [...tabledata];
-              dataCopy.splice(tableProps.row.index, 1);
-              setTabledata(dataCopy);
+            onClick={async () => {
+              try{
+                const res = await Axios.post("http://localhost:3001/cityMaster/Delete", {
+                  City: tableProps.row.values.CityName,
+                });
+                const dataCopy = [...tabledata];
+                dataCopy.splice(tableProps.row.index, 1);
+                setTabledata(dataCopy);
+              }
+              catch(e){
+                console.log(e);
+              }
             }}
           >
             Delete
