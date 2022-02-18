@@ -47,13 +47,15 @@ function CityMaster({ c_id }) {
             style={{
               cursor: "pointer",
             }}
-            onClick={async () => {
+            onClick={() => {
               try{
-                const res = await Axios.post("http://localhost:3001/cityMaster/Delete", {
+                Axios.post("http://localhost:3001/cityMaster/Delete", {
                   City: tableProps.row.values.CityName,
+                  accessToken : token
                 });
                 const dataCopy = [...tabledata];
                 dataCopy.splice(tableProps.row.index, 1);
+                console.log("hello");
                 setTabledata(dataCopy);
               }
               catch(e){
@@ -117,6 +119,7 @@ function CityMaster({ c_id }) {
           City: city.trim(),
           State: state.trim(),
           oldcity: oldcity.trim(),
+          accessToken:token
         });
         preExpense[index].CityName = newData.CityName;
         preExpense[index].StateName = newData.StateName;
@@ -138,6 +141,7 @@ function CityMaster({ c_id }) {
         Axios.post("http://localhost:3001/cityMaster/Add", {
           City: city.trim(),
           State: state.trim(),
+          accessToken:token
         });
         return [...preExpense, newData];
       });
