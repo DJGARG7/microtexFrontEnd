@@ -1,0 +1,38 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    color: white;
+}
+
+.main .title {
+    margin: 10px 0 10px 0;
+}
+
+.main .form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main .form .input-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 10px 0 10px 0;
+}
+
+.main .form .input-grid {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 10px 0 10px 0;
+}
+
+.main .form .input-grid .input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0 10px 0 10px;
+}
