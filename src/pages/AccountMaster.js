@@ -1,5 +1,7 @@
 import { useState } from "react";
 import AccountTypeData from "../jsonData/AccountTypeData";
+import styles from "../styles/AccountMaster.module.css";
+
 const AccountMaster = () => {
     const [isEntering, setIsEntering] = useState(false);
     const [accName, setAccName] = useState("");

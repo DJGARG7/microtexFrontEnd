@@ -3,16 +3,8 @@ import "./style.css";
 import { useEffect, useState } from "react";
 import Login from "./components/Login";
 import AdminDashboard from "./components/Admin_components/AdminDashboard";
+import BottomBar from "./components/BottomBar";
 function App() {
-    const [time, setTime] = useState(new Date());
-    
-    // useEffect(() => {
-    //     setInterval(() => {
-    //         setTime(new Date());
-    //     }, 1000);
-    // },[ ]);
-
-
     localStorage.getItem("savedPro") === null &&
         localStorage.setItem("savedPro", JSON.stringify({}));
     localStorage.getItem("savedFirm") === null &&
@@ -58,12 +50,7 @@ function App() {
                     logoutHandler={logoutHandler}
                 />
             )}
-            <div className="navbar">
-                <a className="active">support@microtex.in</a>
-                <a>Contact: 1800 5654 7868</a>
-                <a>{time.toLocaleDateString()}</a>
-                <a>{time.toLocaleTimeString()}</a>
-            </div>
+            <BottomBar />
         </div>
     );
 }
