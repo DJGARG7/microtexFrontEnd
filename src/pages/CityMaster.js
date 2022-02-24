@@ -1,5 +1,5 @@
 import React from "react";
-import TableComponent from "../components/Admin_components/TableComponent";
+import TableComponent from "../components/Reuse_components/TableComponent";
 import { useState, useEffect } from "react";
 import "../styles/CityMaster.css";
 import Axios from "axios";
@@ -9,25 +9,32 @@ function CityMaster({ c_id }) {
   const [city, setCitychange] = useState("");
   const [state, setStatechange] = useState("");
   const [editMode, setEditMode] = useState(false);
-  const token = localStorage.getItem('accessToken');
+  const token = localStorage.getItem("accessToken");
 
   console.log(token);
+  const headers = {
+    accessToken: token,
+  };
 
   // // for gettig the data when the page loads for the first time
-  useEffect(() => { 
-    (async function fetchdata(){
-      try{
-        const res = await Axios.post("http://localhost:3001/cityMaster/getdata",{
-          firmname : c_id,
-          accessToken : token
-        })
+  useEffect(() => {
+    (async function fetchdata() {
+      try {
+        const res = await Axios.post(
+          "http://localhost:3001/cityMaster/getdata",
+          {
+            firmname: c_id,
+          },
+          {
+            headers: headers,
+          }
+        );
         setTabledata(res.data);
-      }
-      catch(e){
+      } catch (e) {
         console.log(e);
       }
-  })()
-  },[ ]);
+    })();
+  }, []);
 
   const TableColData = [
     {
@@ -48,17 +55,21 @@ function CityMaster({ c_id }) {
               cursor: "pointer",
             }}
             onClick={() => {
-              try{
-                Axios.post("http://localhost:3001/cityMaster/Delete", {
-                  City: tableProps.row.values.CityName,
-                  accessToken : token
-                });
+              try {
+                Axios.post(
+                  "http://localhost:3001/cityMaster/Delete",
+                  {
+                    City: tableProps.row.values.CityName,
+                  },
+                  {
+                    headers: headers,
+                  }
+                );
                 const dataCopy = [...tabledata];
                 dataCopy.splice(tableProps.row.index, 1);
                 console.log("hello");
                 setTabledata(dataCopy);
-              }
-              catch(e){
+              } catch (e) {
                 console.log(e);
               }
             }}
@@ -115,12 +126,17 @@ function CityMaster({ c_id }) {
           }
         }
         // updates the backend table
-        Axios.post("http://localhost:3001/cityMaster/Update", {
-          City: city.trim(),
-          State: state.trim(),
-          oldcity: oldcity.trim(),
-          accessToken:token
-        });
+        Axios.post(
+          "http://localhost:3001/cityMaster/Update",
+          {
+            City: city.trim(),
+            State: state.trim(),
+            oldcity: oldcity.trim(),
+          },
+          {
+            headers: headers,
+          }
+        );
         preExpense[index].CityName = newData.CityName;
         preExpense[index].StateName = newData.StateName;
         setEditMode(false);
@@ -138,11 +154,16 @@ function CityMaster({ c_id }) {
           }
         }
         // adds value to the backend table
-        Axios.post("http://localhost:3001/cityMaster/Add", {
-          City: city.trim(),
-          State: state.trim(),
-          accessToken:token
-        });
+        Axios.post(
+          "http://localhost:3001/cityMaster/Add",
+          {
+            City: city.trim(),
+            State: state.trim(),
+          },
+          {
+            headers: headers,
+          }
+        );
         return [...preExpense, newData];
       });
     }
