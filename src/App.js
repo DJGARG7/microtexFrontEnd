@@ -1,16 +1,17 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import "./style.css";
 import { useEffect, useState } from "react";
 import Login from "./components/Login";
 import AdminDashboard from "./components/Admin_components/AdminDashboard";
-import TableComponent from "./components/Admin_components/AdminDashboard";
-import AccountTypeData from "./jsonData/AccountTypeData";
 function App() {
     const [time, setTime] = useState(new Date());
-    useEffect(() => {
-        setInterval(() => {
-            setTime(new Date());
-        }, 1000);
-    }, []);
+    
+    // useEffect(() => {
+    //     setInterval(() => {
+    //         setTime(new Date());
+    //     }, 1000);
+    // },[ ]);
+
 
     localStorage.getItem("savedPro") === null &&
         localStorage.setItem("savedPro", JSON.stringify({}));
@@ -46,7 +47,7 @@ function App() {
         setIsUser({ u_id: "", token: "", c_id: "" });
         window.location.reload();
     };
-
+    console.log("app.js");
     return (
         <div>
             <div className="logo">MicroTex ERP Solutions</div>

@@ -4,17 +4,30 @@ import { useState, useEffect } from "react";
 import "../styles/CityMaster.css";
 import Axios from "axios";
 let index, oldcity;
-function CityMaster({ props }) {
+function CityMaster({ c_id }) {
   const [tabledata, setTabledata] = useState([]);
   const [city, setCitychange] = useState("");
   const [state, setStatechange] = useState("");
   const [editMode, setEditMode] = useState(false);
-  // for gettig the data when the page loads for the first time
-  useEffect(() => {
-    Axios.get("http://localhost:3001/cityMaster/Add").then((res) => {
-      setTabledata(res.data);
-    });
-  }, []);
+  const token = localStorage.getItem('accessToken');
+
+  console.log(token);
+
+  // // for gettig the data when the page loads for the first time
+  useEffect(() => { 
+    (async function fetchdata(){
+      try{
+        const res = await Axios.post("http://localhost:3001/cityMaster/getdata",{
+          firmname : c_id,
+          accessToken : token
+        })
+        setTabledata(res.data);
+      }
+      catch(e){
+        console.log(e);
+      }
+  })()
+  },[ ]);
 
   const TableColData = [
     {
@@ -35,12 +48,19 @@ function CityMaster({ props }) {
               cursor: "pointer",
             }}
             onClick={() => {
-              Axios.post("http://localhost:3001/cityMaster/Delete", {
-                City: tableProps.row.values.CityName,
-              });
-              const dataCopy = [...tabledata];
-              dataCopy.splice(tableProps.row.index, 1);
-              setTabledata(dataCopy);
+              try{
+                Axios.post("http://localhost:3001/cityMaster/Delete", {
+                  City: tableProps.row.values.CityName,
+                  accessToken : token
+                });
+                const dataCopy = [...tabledata];
+                dataCopy.splice(tableProps.row.index, 1);
+                console.log("hello");
+                setTabledata(dataCopy);
+              }
+              catch(e){
+                console.log(e);
+              }
             }}
           >
             Delete
@@ -99,6 +119,7 @@ function CityMaster({ props }) {
           City: city.trim(),
           State: state.trim(),
           oldcity: oldcity.trim(),
+          accessToken:token
         });
         preExpense[index].CityName = newData.CityName;
         preExpense[index].StateName = newData.StateName;
@@ -120,6 +141,7 @@ function CityMaster({ props }) {
         Axios.post("http://localhost:3001/cityMaster/Add", {
           City: city.trim(),
           State: state.trim(),
+          accessToken:token
         });
         return [...preExpense, newData];
       });
