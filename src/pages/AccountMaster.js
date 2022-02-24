@@ -1,6 +1,6 @@
 import { useState } from "react";
 import AccountTypeData from "../jsonData/AccountTypeData";
-const AccountMaster = () => {
+const AccountMaster = ({ c_id }) => {
     const [isEntering, setIsEntering] = useState(true);
     const [accName, setAccName] = useState("");
     const [accType, setType] = useState("none");
@@ -11,7 +11,6 @@ const AccountMaster = () => {
     const [city, setCity] = useState("");
     const [boolList, setBoolList] = useState([]);
     const [disMode, setDisMode] = useState(0);
-
     const buttonModes = {
         0: [
             { dis: true, label: "delete" },
@@ -37,7 +36,6 @@ const AccountMaster = () => {
     };
     //from city service in useeffect
     const CityData = ["Surat", "Delhi", "Mumbai", "Ahmedabad"];
-
     const submitHandler = (e) => {
         e.preventDefault();
         console.log(accName);
@@ -51,7 +49,6 @@ const AccountMaster = () => {
     const cityHandler = (e) => {
         setCity(e.target.value);
     };
-
     const deleteHandler = () => {
         if (disMode == 1) {
             // delete from database after confirming
@@ -59,24 +56,22 @@ const AccountMaster = () => {
             exitHandler();
         }
     };
-
     const addSaveHandler = () => {
         if (disMode == 0) {
             // add to database
-            console.log("data added to db")
+            console.log("data added to db");
         }
         if (disMode == 2) {
             // update to database
-            console.log("data updated to db")
+            console.log("data updated to db");
         }
         setDisMode(1);
         setIsEntering(false);
     };
-
     const editViewHandler = () => {
         if (disMode == 0) {
             // select * all data in modal
-            console.log("data displayed in modal")
+            console.log("data displayed in modal");
         }
         if (disMode == 1) {
             setDisMode(2);
@@ -95,13 +90,11 @@ const AccountMaster = () => {
         setDisMode(0);
         setType("none");
         setBoolList([]);
-        setIsEntering(true)
+        setIsEntering(true);
     };
-    
     return (
         <div>
             <h1>This is Account Master</h1>
-
             <form onSubmit={submitHandler}>
                 <input
                     type="text"
