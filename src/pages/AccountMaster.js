@@ -193,38 +193,39 @@ const AccountMaster = () => {
                     {boolList.includes("GstCat") && <p>GstCat</p>}
                     {boolList.includes("shares") && <p>shares</p>}
                 </div>
-                <button>a</button>
             </form>
-            <button
-                disabled={buttonModes[disMode][0].dis}
-                onClick={deleteHandler}
-            >
-                {buttonModes[disMode][0].label}
-            </button>
-            <button
-                disabled={buttonModes[disMode][1].dis}
-                onClick={addSaveHandler}
-            >
-                {buttonModes[disMode][1].label}
-            </button>
-            <button
-                disabled={buttonModes[disMode][2].dis}
-                onClick={editViewHandler}
-            >
-                {buttonModes[disMode][2].label}
-            </button>
-            <button
-                disabled={buttonModes[disMode][3].dis}
-                onClick={cancelHandler}
-            >
-                {buttonModes[disMode][3].label}
-            </button>
-            <button
-                disabled={buttonModes[disMode][4].dis}
-                onClick={exitHandler}
-            >
-                {buttonModes[disMode][4].label}
-            </button>
+            <div className={styles["button-group"]}>
+                <button
+                    disabled={buttonModes[disMode][0].dis}
+                    onClick={deleteHandler}
+                >
+                    {buttonModes[disMode][0].label}
+                </button>
+                <button
+                    disabled={buttonModes[disMode][1].dis}
+                    onClick={addSaveHandler}
+                >
+                    {buttonModes[disMode][1].label}
+                </button>
+                <button
+                    disabled={buttonModes[disMode][2].dis}
+                    onClick={editViewHandler}
+                >
+                    {buttonModes[disMode][2].label}
+                </button>
+                <button
+                    disabled={buttonModes[disMode][3].dis}
+                    onClick={cancelHandler}
+                >
+                    {buttonModes[disMode][3].label}
+                </button>
+                <button
+                    disabled={buttonModes[disMode][4].dis}
+                    onClick={exitHandler}
+                >
+                    {buttonModes[disMode][4].label}
+                </button>
+            </div>
         </div>
     );
 };

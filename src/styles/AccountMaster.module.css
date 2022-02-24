@@ -36,3 +36,17 @@
     align-items: flex-start;
     margin: 0 10px 0 10px;
 }
+
+.main .form input,
+.main .form select {
+    margin: 10px 10px 10px 10px;
+}
+
+.main .button-group {
+    display: flex;
+    flex-direction: row;
+}
+
+.main .button-group button {
+    margin: 10px 5px 10px 5px;
+}
