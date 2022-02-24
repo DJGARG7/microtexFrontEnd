@@ -9,7 +9,7 @@ const AdminContent = ({ firm }) => {
                 <CityMaster c_id={firm} />
             </Route>
             <Route path="/accountMaster" exact>
-                <AccountMaster />
+                <AccountMaster c_id={firm}/>
             </Route>
             {/* <Route path="/accountTypeMaster" exact>
                 <AccountTypeMaster/>
