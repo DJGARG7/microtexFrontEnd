@@ -3,6 +3,7 @@ import RecentUserList from "./RecentUserList";
 import "../styles/Login.css";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import { loginFunction } from "../services/loginService";
 
 const Login = ({ onLogged }) => {
     const [savedFirm, setSavedFirm] = useState(
@@ -44,6 +45,12 @@ const Login = ({ onLogged }) => {
         event.preventDefault();
 
         // Check user type.
+        loginFunction(
+            type,
+            userId,
+            document.getElementById("password").value,
+            corpId
+        );
         if (type === "proprietor") {
             try {
                 // Send request to backend.

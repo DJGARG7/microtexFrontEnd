@@ -1,5 +1,6 @@
 import "./style.css";
 import { useEffect, useState } from "react";
+import React from "react";
 import Login from "./components/Login";
 import AdminDashboard from "./components/Admin_components/AdminDashboard";
 import TableComponent from "./components/Admin_components/AdminDashboard";
@@ -10,6 +11,7 @@ function App() {
         setInterval(() => {
             setTime(new Date());
         }, 1000);
+        
     }, []);
 
     localStorage.getItem("savedPro") === null &&
@@ -50,13 +52,13 @@ function App() {
     return (
         <div>
             <div className="logo">MicroTex ERP Solutions</div>
-            {!isLogged && <Login onLogged={loggedInHandler} />}
-            {isLogged && (
+            {/* {!isLogged && <Login onLogged={loggedInHandler} />}
+            {isLogged && ( */}
                 <AdminDashboard
                     userDetails={isUser}
                     logoutHandler={logoutHandler}
                 />
-            )}
+             {/* )} */}
             <div className="navbar">
                 <a className="active">support@microtex.in</a>
                 <a>Contact: 1800 5654 7868</a>
