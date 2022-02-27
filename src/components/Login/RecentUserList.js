@@ -1,7 +1,7 @@
 // This component renders a list of recent users.
 
 import RecentUser from "./RecentUser";
-import styles from "../styles/RecentUserList.module.css";
+import styles from "./styles/RecentUserList.module.css";
 
 function RecentUserList(props) {
     const firms = props.savedFirm;

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import RecentUserList from "./RecentUserList";
-import "../styles/Login.css";
+import "./styles/Login.css";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 

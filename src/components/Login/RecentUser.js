@@ -1,6 +1,6 @@
 // This component renders a card for a recent user.
 
-import styles from "../styles/RecentUser.module.css";
+import styles from "./styles/RecentUser.module.css";
 
 function RecentUser(props) {
     // On execution autofills the form inputs.
