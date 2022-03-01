@@ -4,17 +4,16 @@ import { useState, useEffect } from "react";
 import "../styles/CityMaster.css";
 import Axios from "axios";
 let index, oldcity;
-function CityMaster({ c_id }) {
+function CityMaster({ userDetails }) {
   const [tabledata, setTabledata] = useState([]);
   const [city, setCitychange] = useState("");
   const [state, setStatechange] = useState("");
   const [editMode, setEditMode] = useState(false);
-  const token = localStorage.getItem("accessToken");
-
-  console.log(token);
+  const [token, settoken] = useState(userDetails.token);
   const headers = {
     accessToken: token,
   };
+ 
 
   // // for gettig the data when the page loads for the first time
   useEffect(() => {
@@ -23,10 +22,12 @@ function CityMaster({ c_id }) {
         const res = await Axios.post(
           "http://localhost:3001/cityMaster/getdata",
           {
-            firmname: c_id,
+            firmname: userDetails.c_id,
           },
           {
-            headers: headers,
+            headers: {
+              accessToken: userDetails.token
+            },
           }
         );
         setTabledata(res.data);
@@ -34,7 +35,7 @@ function CityMaster({ c_id }) {
         console.log(e);
       }
     })();
-  }, []);
+  }, [userDetails.token]);
 
   const TableColData = [
     {

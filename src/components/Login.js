@@ -58,6 +58,7 @@ const Login = ({ onLogged }) => {
 
                 console.log(res.data.userID);
                 console.log(res.data.accessToken);
+                localStorage.setItem("accessToken",res.data.accessToken);
 
                 // Toast on success.
                 toast.success("Logged in successfully!", {

@@ -10,7 +10,7 @@ function App() {
     localStorage.getItem("savedFirm") === null &&
         localStorage.setItem("savedFirm", JSON.stringify({}));
 
-    const [isLogged, setIsLogged] = useState(true);
+    const [isLogged, setIsLogged] = useState(false);
     const [isType, setIsType] = useState();
     const [isUser, setIsUser] = useState({
         u_id: "userId",
