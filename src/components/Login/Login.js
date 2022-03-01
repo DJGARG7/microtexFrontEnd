@@ -1,42 +1,39 @@
 import React, { useState } from "react";
-import RecentUserList from "./RecentUserList";
-import "./styles/Login.css";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import RecentUserList from "./RecentUserList";
+import "./styles/Login.css";
 
-const Login = ({ onLogged }) => {
-    const [savedFirm, setSavedFirm] = useState(
-        JSON.parse(localStorage.getItem("savedFirm"))
-    );
-    const [savedPro, setSavedPro] = useState(
-        JSON.parse(localStorage.getItem("savedPro"))
-    );
-    const [remember, setRemember] = useState(false);
-    const [corpId, setCorpId] = useState("");
-    const [userId, setUserId] = useState("");
+export default function Login({ onLogged }) {
+    const [rememberUser, setRememberUser] = useState(false);
+
+    const [corporateID, setCorporateID] = useState("");
+    const [userID, setUserID] = useState("");
     const [type, setType] = useState("firm");
 
     const types = ["firm", "proprietor"];
 
-    // console.log(type);
-
-    const savedClickHandler = (c_id, u_id) => {
-        // console.log(c_id, u_id);
-        setCorpId(c_id);
-        setUserId(u_id);
+    const savedFirmHandler = (c_id, u_id) => {
+        setCorporateID(c_id);
+        setUserID(u_id);
         setType("firm");
-        setRemember(true);
+        setRememberUser(true);
     };
 
-    const savedProClickHandler = (u_id) => {
-        // console.log(u_id);
-        setUserId(u_id);
+    const savedProprietorHandler = (u_id) => {
+        setUserID(u_id);
         setType("proprietor");
-        setRemember(true);
+        setRememberUser(true);
     };
 
-    const onChangeHandler = () => {
-        setRemember(!remember);
+    const rememberHandler = () => {
+        setRememberUser(!rememberUser);
+    };
+
+    const radioHandler = (event) => {
+        setType(event.currentTarget.value);
+        setUserID("");
+        setCorporateID("");
     };
 
     const loginHandler = async (event) => {
@@ -51,71 +48,88 @@ const Login = ({ onLogged }) => {
                     "http://localhost:3002/user/login",
                     {
                         userType: "proprietor",
-                        userID: userId,
+                        userID: userID,
                         password: document.getElementById("password").value,
                     }
                 );
 
-                console.log(res.data.userID);
-                console.log(res.data.accessToken);
+                // Save user in recents list if the user chooses so.
+                var UserName = "fromBackend";
 
-                // Toast on success.
-                toast.success("Logged in successfully!", {
+                if (rememberUser) {
+                    const savedProprietors = JSON.parse(
+                        localStorage.getItem("savedPro")
+                    );
+
+                    // name in prompt remaining
+                    if (!(userID in savedProprietors)) {
+                        localStorage.setItem(
+                            "savedPro",
+                            JSON.stringify({
+                                [userID]: { name: UserName, u_id: userID },
+                                ...savedProprietors,
+                            })
+                        );
+                    }
+                }
+
+                // Change state to logged in.
+                onLogged(true, type, corporateID, userID, res.data.accessToken);
+            } catch (err) {
+                // Toast on failure.
+                toast.error("Log in failed!", {
                     style: {
                         borderRadius: "15px",
                         background: "#333",
                         color: "#fff",
                     },
                 });
+            }
+        } else if (type === "firm") {
+            try {
+                // Send request to backend.
+                const res = await axios.post(
+                    "http://localhost:3002/user/login",
+                    {
+                        userType: "firm",
+                        corporateID: corporateID,
+                        userID: userID,
+                        password: document.getElementById("password").value,
+                    }
+                );
 
                 // Save user in recents list if the user chooses so.
                 var UserName = "fromBackend";
 
-                if (remember) {
+                if (rememberUser) {
+                    const savedFirms = JSON.parse(
+                        localStorage.getItem("savedFirm")
+                    );
+
                     // name in prompt remaining
-                    if (type === "proprietor" && !(userId in savedPro)) {
-                        localStorage.setItem(
-                            "savedPro",
-                            JSON.stringify({
-                                [userId]: { name: UserName, u_id: userId },
-                                ...savedPro,
-                            })
-                        );
-                        setSavedPro({
-                            [userId]: { name: UserName, u_id: userId },
-                            ...savedPro,
-                        });
-                        console.log(savedPro);
-                    } else if (
-                        type !== "proprietor" &&
-                        !(userId in savedFirm) &&
-                        corpId !== ""
-                    ) {
+                    if (!(userID in savedFirms)) {
                         localStorage.setItem(
                             "savedFirm",
                             JSON.stringify({
-                                [userId]: {
-                                    c_id: corpId,
+                                [userID]: {
                                     name: UserName,
-                                    u_id: userId,
+                                    c_id: corporateID,
+                                    u_id: userID,
                                 },
-                                ...savedFirm,
+                                ...savedFirms,
                             })
                         );
-                        setSavedFirm({
-                            [userId]: {
-                                c_id: corpId,
-                                name: UserName,
-                                u_id: userId,
-                            },
-                            ...savedFirm,
-                        });
-                        console.log(savedFirm);
                     }
                 }
 
                 // Change state to logged in.
-                onLogged(true, type, corpId, userId, res.data.accessToken);
+                onLogged(
+                    "true",
+                    type,
+                    corporateID,
+                    userID,
+                    res.data.accessToken
+                );
             } catch (err) {
                 // Toast on failure.
                 toast.error("Log in failed!", {
@@ -129,25 +143,16 @@ const Login = ({ onLogged }) => {
         }
     };
 
-    const radiohandler = (event) => {
-        setType(event.currentTarget.value);
-        setUserId("");
-        setCorpId("");
-    };
     return (
-        <React.Fragment>
+        <>
             <Toaster />
             <div className="mainParent">
                 <div className="blackbox">
                     <div className="leftPart">
                         <h2>Saved Users</h2>
                         <RecentUserList
-                            savedFirm={savedFirm}
-                            savedPro={savedPro}
-                            setSavedFirm={setSavedFirm}
-                            setSavedPro={setSavedPro}
-                            savedClickHandler={savedClickHandler}
-                            savedProClickHandler={savedProClickHandler}
+                            savedFirmHandler={savedFirmHandler}
+                            savedProprietorHandler={savedProprietorHandler}
                         />
                     </div>
                     <div className="rightPart">
@@ -159,11 +164,10 @@ const Login = ({ onLogged }) => {
                                         <>
                                             <input
                                                 type="radio"
-                                                name="type"
                                                 id={t}
                                                 value={t}
                                                 checked={type === t}
-                                                onChange={radiohandler}
+                                                onChange={radioHandler}
                                             />
                                             <label htmlFor={t}>
                                                 <span>{t}</span>
@@ -174,45 +178,38 @@ const Login = ({ onLogged }) => {
                                 {type === "firm" && (
                                     <input
                                         type="text"
-                                        name="cid"
-                                        value={corpId}
+                                        value={corporateID}
                                         placeholder="Corporate ID"
                                         onChange={(e) =>
-                                            setCorpId(e.target.value)
+                                            setCorporateID(e.target.value)
                                         }
                                         required
                                     />
                                 )}
                                 <input
                                     type="text"
-                                    name="uid"
-                                    value={userId}
+                                    value={userID}
                                     placeholder="User ID"
-                                    onChange={(e) => setUserId(e.target.value)}
+                                    onChange={(e) => setUserID(e.target.value)}
                                     required
                                 />
                                 <input
                                     id="password"
                                     type="password"
-                                    name="password"
                                     placeholder="Password"
-                                    // onChange={(e) => setUserId(e.target.value)}
                                     required
                                 />
+
                                 <div className="rememberMe">
                                     <input
                                         type="checkbox"
-                                        checked={remember}
-                                        onChange={onChangeHandler}
+                                        checked={rememberUser}
+                                        onChange={rememberHandler}
                                         name="remember"
                                     />{" "}
                                     Remember me
                                 </div>
-                                <button
-                                    type="submit"
-                                    className="btn btn-login"
-                                    value="LOGIN"
-                                >
+                                <button type="submit" className="btn btn-login">
                                     Login
                                 </button>
                             </div>
@@ -220,7 +217,6 @@ const Login = ({ onLogged }) => {
                     </div>
                 </div>
             </div>
-        </React.Fragment>
+        </>
     );
-};
-export default Login;
+}

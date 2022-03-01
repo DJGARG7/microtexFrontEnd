@@ -4,14 +4,20 @@ import { useEffect, useState } from "react";
 import Login from "./components/Login/Login";
 import AdminDashboard from "./components/Admin_components/AdminDashboard";
 import BottomBar from "./components/BottomBar";
+import { Route, Redirect, Switch } from "react-router";
+
 function App() {
+    // For recent users.
     localStorage.getItem("savedPro") === null &&
         localStorage.setItem("savedPro", JSON.stringify({}));
     localStorage.getItem("savedFirm") === null &&
         localStorage.setItem("savedFirm", JSON.stringify({}));
 
-    const [isLogged, setIsLogged] = useState(true);
-    const [isType, setIsType] = useState();
+    localStorage.getItem("loggedIn") === null &&
+        localStorage.setItem("loggedIn", "false");
+
+    const [isLogged, setIsLogged] = useState(localStorage.getItem("loggedIn"));
+    const [isType, setIsType] = useState("");
     const [isUser, setIsUser] = useState({
         u_id: "userId",
         name: "UserName",
@@ -20,42 +26,53 @@ function App() {
     });
 
     const loggedInHandler = (status, type, corpId, userId, token) => {
-        if (status === "fail") {
+        if (status == "false") {
             //show appropriate message of login failed try again in red @dhairya like in php
             setIsLogged("false");
             console.log("inside");
             return;
         }
         console.log("outside");
-        setIsLogged(status);
+        localStorage.setItem("loggedIn", "true");
+        console.log(typeof localStorage.getItem("loggedIn"));
+        setIsLogged(localStorage.getItem("loggedIn"));
         setIsType(type);
         setIsUser({ u_id: userId, token: token, c_id: corpId });
+        <Redirect to="/" />;
     };
 
     const logoutHandler = () => {
         console.log("Logout");
-        setIsLogged(false);
+        localStorage.setItem("loggedIn", "false");
+        setIsLogged(localStorage.getItem("loggedIn"));
         setIsType("");
         setIsUser({ u_id: "", token: "", c_id: "" });
-        window.location.reload();
+        <Redirect to="/" />;
     };
     console.log("app.js");
     return (
-        <div>
+        <>
+            {console.log(`State: ${isLogged}`)}
             <div className="logo">MicroTex ERP Solutions</div>
-            {!isLogged && <Login onLogged={loggedInHandler} />}
-            {isLogged && (
+            {/* <Switch> */}
+            <Route path="/">
+                {isLogged == "true" ? (
+                    <Redirect to="/dashboard" />
+                ) : (
+                    <Redirect to="/login" />
+                )}
+            </Route>
+            <Route path="/login">
+                <Login onLogged={loggedInHandler} />
+            </Route>
+            <Route path="/dashboard">
                 <AdminDashboard
                     userDetails={isUser}
                     logoutHandler={logoutHandler}
                 />
-            )}
-            {/* <AdminDashboard
-                    userDetails={isUser}
-                    logoutHandler={logoutHandler}
-                /> */}
+            </Route>
             <BottomBar />
-        </div>
+        </>
     );
 }
 
