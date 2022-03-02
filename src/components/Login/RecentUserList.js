@@ -5,12 +5,19 @@ import RecentUser from "./RecentUser";
 import styles from "./styles/RecentUserList.module.css";
 
 function RecentUserList(props) {
+    // For persisting recent users.
+    localStorage.getItem("savedFirms") === null &&
+        localStorage.setItem("savedFirms", JSON.stringify({}));
+
+    localStorage.getItem("savedProprietors") === null &&
+        localStorage.setItem("savedProprietors", JSON.stringify({}));
+
     // Saving recent users from local storage as current state.
     const [firms, saveFirm] = useState(
-        JSON.parse(localStorage.getItem("savedFirm"))
+        JSON.parse(localStorage.getItem("savedFirms"))
     );
     const [proprietors, saveProprietor] = useState(
-        JSON.parse(localStorage.getItem("savedPro"))
+        JSON.parse(localStorage.getItem("savedProprietors"))
     );
 
     // On execution deletes user from state & localStorage.

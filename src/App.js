@@ -5,14 +5,9 @@ import Login from "./components/Login/Login";
 import AdminDashboard from "./components/Admin_components/AdminDashboard";
 import BottomBar from "./components/BottomBar";
 import { Route, Redirect, Switch } from "react-router";
+import { Toaster } from "react-hot-toast";
 
 function App() {
-    // For recent users.
-    localStorage.getItem("savedPro") === null &&
-        localStorage.setItem("savedPro", JSON.stringify({}));
-    localStorage.getItem("savedFirm") === null &&
-        localStorage.setItem("savedFirm", JSON.stringify({}));
-
     localStorage.getItem("loggedIn") === null &&
         localStorage.setItem("loggedIn", "false");
 
@@ -38,7 +33,6 @@ function App() {
         setIsLogged(localStorage.getItem("loggedIn"));
         setIsType(type);
         setIsUser({ u_id: userId, token: token, c_id: corpId });
-        <Redirect to="/" />;
     };
 
     const logoutHandler = () => {
@@ -47,14 +41,13 @@ function App() {
         setIsLogged(localStorage.getItem("loggedIn"));
         setIsType("");
         setIsUser({ u_id: "", token: "", c_id: "" });
-        <Redirect to="/" />;
     };
     console.log("app.js");
     return (
         <>
+            <Toaster />
             {console.log(`State: ${isLogged}`)}
             <div className="logo">MicroTex ERP Solutions</div>
-            {/* <Switch> */}
             <Route path="/">
                 {isLogged == "true" ? (
                     <Redirect to="/dashboard" />

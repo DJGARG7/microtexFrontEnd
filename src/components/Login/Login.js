@@ -58,13 +58,13 @@ export default function Login({ onLogged }) {
 
                 if (rememberUser) {
                     const savedProprietors = JSON.parse(
-                        localStorage.getItem("savedPro")
+                        localStorage.getItem("savedProprietors")
                     );
 
                     // name in prompt remaining
                     if (!(userID in savedProprietors)) {
                         localStorage.setItem(
-                            "savedPro",
+                            "savedProprietors",
                             JSON.stringify({
                                 [userID]: { name: UserName, u_id: userID },
                                 ...savedProprietors,
@@ -103,13 +103,13 @@ export default function Login({ onLogged }) {
 
                 if (rememberUser) {
                     const savedFirms = JSON.parse(
-                        localStorage.getItem("savedFirm")
+                        localStorage.getItem("savedFirms")
                     );
 
                     // name in prompt remaining
                     if (!(userID in savedFirms)) {
                         localStorage.setItem(
-                            "savedFirm",
+                            "savedFirms",
                             JSON.stringify({
                                 [userID]: {
                                     name: UserName,
@@ -145,7 +145,7 @@ export default function Login({ onLogged }) {
 
     return (
         <>
-            <Toaster />
+            {/* <Toaster /> */}
             <div className="mainParent">
                 <div className="blackbox">
                     <div className="leftPart">
@@ -205,9 +205,11 @@ export default function Login({ onLogged }) {
                                         type="checkbox"
                                         checked={rememberUser}
                                         onChange={rememberHandler}
-                                        name="remember"
-                                    />{" "}
-                                    Remember me
+                                        id="rememberMe"
+                                    />
+                                    <label htmlFor="rememberMe">
+                                        Remember me
+                                    </label>
                                 </div>
                                 <button type="submit" className="btn btn-login">
                                     Login
