@@ -9,11 +9,9 @@ function CityMaster({ userDetails }) {
   const [city, setCitychange] = useState("");
   const [state, setStatechange] = useState("");
   const [editMode, setEditMode] = useState(false);
-  const [token, settoken] = useState(userDetails.token);
   const headers = {
-    accessToken: token,
+    accessToken: userDetails.token,
   };
- 
 
   // // for gettig the data when the page loads for the first time
   useEffect(() => {
@@ -25,9 +23,7 @@ function CityMaster({ userDetails }) {
             firmname: userDetails.c_id,
           },
           {
-            headers: {
-              accessToken: userDetails.token
-            },
+            headers: headers,
           }
         );
         setTabledata(res.data);
@@ -68,7 +64,6 @@ function CityMaster({ userDetails }) {
                 );
                 const dataCopy = [...tabledata];
                 dataCopy.splice(tableProps.row.index, 1);
-                console.log("hello");
                 setTabledata(dataCopy);
               } catch (e) {
                 console.log(e);
@@ -83,7 +78,7 @@ function CityMaster({ userDetails }) {
             }}
             onClick={() => {
               const dataCopy = [...tabledata];
-              console.log(dataCopy);
+
               setEditMode(true);
               setCitychange(dataCopy[tableProps.row.index].CityName);
               setStatechange(dataCopy[tableProps.row.index].StateName);
@@ -117,7 +112,9 @@ function CityMaster({ userDetails }) {
     // checks wether the mode is edit or not if edit --> updates the exsisting selected row in the table and if !edit-> adds new data into the table if not present.
     if (editMode) {
       setTabledata((preExpense) => {
-        for (const i in preExpense) {
+        for (let i = 0; i < preExpense.length; i++) {
+          if (i === index) continue;
+
           if (
             preExpense[i].CityName.toLowerCase() ===
             newData.CityName.toLowerCase()

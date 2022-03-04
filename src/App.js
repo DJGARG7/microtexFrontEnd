@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Login from "./components/Login";
 import AdminDashboard from "./components/Admin_components/AdminDashboard";
 import BottomBar from "./components/BottomBar";
+import UserDashboard from "./components/User_components/UserDashboard";
 function App() {
     localStorage.getItem("savedPro") === null &&
         localStorage.setItem("savedPro", JSON.stringify({}));
@@ -44,8 +45,15 @@ function App() {
         <div>
             <div className="logo">MicroTex ERP Solutions</div>
             {!isLogged && <Login onLogged={loggedInHandler} />}
-            {isLogged && (
+            
+            {isLogged && isUser.u_id!=='user1' && (
                 <AdminDashboard
+                    userDetails={isUser}
+                    logoutHandler={logoutHandler}
+                />
+            )}
+            {isLogged && isUser.u_id==='user1' && (
+                <UserDashboard
                     userDetails={isUser}
                     logoutHandler={logoutHandler}
                 />
