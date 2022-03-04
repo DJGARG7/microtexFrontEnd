@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import axios from "./api/axios";
+import toast from "react-hot-toast";
 import RecentUserList from "./RecentUserList";
 import "./styles/Login.css";
 
@@ -44,15 +44,17 @@ export default function Login({ onLogged }) {
         if (type === "proprietor") {
             try {
                 // Send request to backend.
-                const res = await axios.post(
-                    "http://localhost:3002/user/login",
-                    {
-                        userType: "proprietor",
-                        userID: userID,
-                        password: document.getElementById("password").value,
-                    }
-                );
+                // try {
+                const res = await axios.post("http://localhost:3005/login", {
+                    userType: "proprietor",
+                    userID: userID,
+                    password: document.getElementById("password").value,
+                });
 
+                console.log(res);
+                // } catch (error) {
+                //     console.log(error);
+                // }
                 // Save user in recents list if the user chooses so.
                 var UserName = "fromBackend";
 
@@ -73,6 +75,8 @@ export default function Login({ onLogged }) {
                     }
                 }
 
+                localStorage.setItem("accessToken", res.data.accessToken);
+
                 // Change state to logged in.
                 onLogged(true, type, corporateID, userID, res.data.accessToken);
             } catch (err) {
@@ -88,18 +92,15 @@ export default function Login({ onLogged }) {
         } else if (type === "firm") {
             try {
                 // Send request to backend.
-                const res = await axios.post(
-                    "http://localhost:3002/user/login",
-                    {
-                        userType: "firm",
-                        corporateID: corporateID,
-                        userID: userID,
-                        password: document.getElementById("password").value,
-                    }
-                );
+                // const res = await axios.post({
+                //     userType: "firm",
+                //     corporateID: corporateID,
+                //     userID: userID,
+                //     password: document.getElementById("password").value,
+                // });
 
                 // Save user in recents list if the user chooses so.
-                var UserName = "fromBackend";
+                // var UserName = "fromBackend";
 
                 if (rememberUser) {
                     const savedFirms = JSON.parse(
@@ -123,13 +124,13 @@ export default function Login({ onLogged }) {
                 }
 
                 // Change state to logged in.
-                onLogged(
-                    "true",
-                    type,
-                    corporateID,
-                    userID,
-                    res.data.accessToken
-                );
+                // onLogged(
+                //     "true",
+                //     type,
+                //     corporateID,
+                //     userID,
+                //     res.data.accessToken
+                // );
             } catch (err) {
                 // Toast on failure.
                 toast.error("Log in failed!", {

@@ -6,6 +6,7 @@ import AdminDashboard from "./components/Admin_components/AdminDashboard";
 import BottomBar from "./components/BottomBar";
 import { Route, Redirect, Switch } from "react-router";
 import { Toaster } from "react-hot-toast";
+import axios from "axios";
 
 function App() {
     localStorage.getItem("loggedIn") === null &&
@@ -37,6 +38,7 @@ function App() {
 
     const logoutHandler = () => {
         console.log("Logout");
+        localStorage.removeItem("accessToken");
         localStorage.setItem("loggedIn", "false");
         setIsLogged(localStorage.getItem("loggedIn"));
         setIsType("");
