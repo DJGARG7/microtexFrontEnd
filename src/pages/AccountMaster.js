@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import AccountTypeData from "../jsonData/AccountTypeData";
 import styles from "../styles/AccountMaster.module.css";
 import Axios from "axios";
@@ -9,7 +9,10 @@ const instance = Axios.create({
   },
 });
 var oldaccountname;
-const AccountMaster = ({ c_id }) => {
+const AccountMaster = ({ userDetails }) => {
+  const headers = {
+    accessToken: userDetails.token,
+  };
   const [isEntering, setIsEntering] = useState(true);
   const [accName, setAccName] = useState("");
   const [accType, setType] = useState("none");
@@ -20,6 +23,7 @@ const AccountMaster = ({ c_id }) => {
   const [city, setCity] = useState("");
   const [boolList, setBoolList] = useState([]);
   const [disMode, setDisMode] = useState(0);
+  const [citydata, setcitydata] = useState([]);
   const buttonModes = {
     0: [
       { dis: true, label: "delete" },
@@ -44,7 +48,31 @@ const AccountMaster = ({ c_id }) => {
     ],
   };
   //from city service in useeffect
-  const CityData = ["Surat", "Delhi", "Mumbai", "Ahmedabad"];
+  var data1 = []
+  useEffect(() => {
+    (async function fetchdata() {
+      try {
+        const res = await Axios.post(
+          "http://localhost:3001/cityMaster/getdata",
+          {
+            firmname: userDetails.c_id,
+          },
+          {
+            headers: headers,
+          }
+        );
+        for(var ch in res.data){
+          // console.log(res.data[ch].CityName);
+          data1.push(res.data[ch].CityName);
+        };
+        setcitydata(data1);
+        console.log("inside useeffect",data1);
+      } catch (e) {
+        console.log(e);
+      }
+    })();
+  }, [userDetails.token]);
+
   const submitHandler = (e) => {
     e.preventDefault();
     console.log(accName);
@@ -220,7 +248,7 @@ const AccountMaster = ({ c_id }) => {
                 <option value="none" selected disabled hidden>
                   Select City
                 </option>
-                {CityData.map((city) => {
+                {citydata.map((city) => {
                   return <option value={city}>{city}</option>;
                 })}
               </select>
@@ -232,7 +260,7 @@ const AccountMaster = ({ c_id }) => {
                 onChange={(e) => setPinCode(e.target.value)}
                 min={100000}
                 max={999999}
-                required
+                required = 'true'
                 disabled={!isEntering}
               />
             </div>
