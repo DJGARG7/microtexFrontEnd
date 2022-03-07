@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import Login from "./components/Login/Login";
 import AdminDashboard from "./components/Admin_components/AdminDashboard";
 import BottomBar from "./components/BottomBar";
-import { Route, Redirect, Switch } from "react-router";
+import { Route, Redirect } from "react-router";
 import { Toaster } from "react-hot-toast";
-import axios from "axios";
+import axios from "./components/Login/api/axios";
 
 function App() {
     localStorage.getItem("loggedIn") === null &&
@@ -38,13 +38,20 @@ function App() {
 
     const logoutHandler = () => {
         console.log("Logout");
+
+        const res = axios.get("/logout", {
+            headers: {
+                userID: "test11",
+            },
+        });
+        console.log(res);
         localStorage.removeItem("accessToken");
         localStorage.setItem("loggedIn", "false");
+
         setIsLogged(localStorage.getItem("loggedIn"));
         setIsType("");
         setIsUser({ u_id: "", token: "", c_id: "" });
     };
-    console.log("app.js");
     return (
         <>
             <Toaster />

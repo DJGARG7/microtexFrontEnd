@@ -45,16 +45,14 @@ export default function Login({ onLogged }) {
             try {
                 // Send request to backend.
                 // try {
-                const res = await axios.post("http://localhost:3005/login", {
+                const res = await axios.post("/login", {
                     userType: "proprietor",
                     userID: userID,
                     password: document.getElementById("password").value,
                 });
 
                 console.log(res);
-                // } catch (error) {
-                //     console.log(error);
-                // }
+
                 // Save user in recents list if the user chooses so.
                 var UserName = "fromBackend";
 
