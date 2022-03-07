@@ -4,16 +4,13 @@ import { useState, useEffect } from "react";
 import "../styles/CityMaster.css";
 import Axios from "axios";
 let index, oldcity;
-function CityMaster({ c_id }) {
+function CityMaster({ userDetails }) {
   const [tabledata, setTabledata] = useState([]);
   const [city, setCitychange] = useState("");
   const [state, setStatechange] = useState("");
   const [editMode, setEditMode] = useState(false);
-  const token = localStorage.getItem("accessToken");
-
-  console.log(token);
   const headers = {
-    accessToken: token,
+    accessToken: userDetails.token,
   };
 
   // // for gettig the data when the page loads for the first time
@@ -23,7 +20,7 @@ function CityMaster({ c_id }) {
         const res = await Axios.post(
           "http://localhost:3001/cityMaster/getdata",
           {
-            firmname: c_id,
+            firmname: userDetails.c_id,
           },
           {
             headers: headers,
@@ -34,7 +31,7 @@ function CityMaster({ c_id }) {
         console.log(e);
       }
     })();
-  }, []);
+  }, [userDetails.token]);
 
   const TableColData = [
     {
@@ -67,7 +64,6 @@ function CityMaster({ c_id }) {
                 );
                 const dataCopy = [...tabledata];
                 dataCopy.splice(tableProps.row.index, 1);
-                console.log("hello");
                 setTabledata(dataCopy);
               } catch (e) {
                 console.log(e);
@@ -82,7 +78,7 @@ function CityMaster({ c_id }) {
             }}
             onClick={() => {
               const dataCopy = [...tabledata];
-              console.log(dataCopy);
+
               setEditMode(true);
               setCitychange(dataCopy[tableProps.row.index].CityName);
               setStatechange(dataCopy[tableProps.row.index].StateName);
@@ -116,7 +112,9 @@ function CityMaster({ c_id }) {
     // checks wether the mode is edit or not if edit --> updates the exsisting selected row in the table and if !edit-> adds new data into the table if not present.
     if (editMode) {
       setTabledata((preExpense) => {
-        for (const i in preExpense) {
+        for (let i = 0; i < preExpense.length; i++) {
+          if (i === index) continue;
+
           if (
             preExpense[i].CityName.toLowerCase() ===
             newData.CityName.toLowerCase()

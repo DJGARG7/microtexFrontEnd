@@ -40,7 +40,7 @@ const AdminDashboard = ({ userDetails, logoutHandler }) => {
                     />
                 </div>
                 <div className="content">
-                    <AdminContent firm={userDetails.c_id}/>
+                    <AdminContent userDetails={userDetails}/>
                 </div>
             </div>
         </Fragment>

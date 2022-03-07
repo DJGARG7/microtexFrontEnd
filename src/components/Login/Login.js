@@ -48,7 +48,7 @@ const Login = ({ onLogged }) => {
             try {
                 // Send request to backend.
                 const res = await axios.post(
-                    "http://localhost:3002/user/login",
+                    "http://localhost:3002/auth/login",
                     {
                         userType: "proprietor",
                         userID: userId,
@@ -58,6 +58,7 @@ const Login = ({ onLogged }) => {
 
                 console.log(res.data.userID);
                 console.log(res.data.accessToken);
+                localStorage.setItem("accessToken",res.data.accessToken);
 
                 // Toast on success.
                 toast.success("Logged in successfully!", {
