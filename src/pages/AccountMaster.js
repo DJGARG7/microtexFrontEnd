@@ -1,4 +1,4 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import AccountTypeData from "../jsonData/AccountTypeData";
 import styles from "../styles/AccountMaster.module.css";
 import Axios from "axios";
@@ -9,20 +9,45 @@ const instance = Axios.create({
   },
 });
 var oldaccountname;
+
 const AccountMaster = ({ userDetails }) => {
   const headers = {
     accessToken: userDetails.token,
   };
   const [isEntering, setIsEntering] = useState(true);
+
   const [accName, setAccName] = useState("");
   const [accType, setType] = useState("none");
+
   const [addline1, setAddLine1] = useState("");
   const [addline2, setAddLine2] = useState("");
   const [addline3, setAddLine3] = useState("");
   const [pinCode, setPinCode] = useState(0);
   const [city, setCity] = useState("");
+
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+
+  const [gstin, setGstin] = useState("");
+  const [regDate, setRegDate] = useState("");
+  const [propName, setPropName] = useState("");
+  const [pan, setPan] = useState("");
+  const [dist, setDist] = useState("");
+
+  const [transport, setTransport] = useState("");
+
+  const [openBal, setOpenBal] = useState("");
+  const [crdr, setCrdr] = useState("");
+
+  const [beneficiary, setBeneficiary] = useState("");
+  const [accNum, setAccNum] = useState("");
+  const [ifsc, setIfsc] = useState("");
+
+  const [share, setShare] = useState(0);
+
   const [boolList, setBoolList] = useState([]);
   const [disMode, setDisMode] = useState(0);
+
   const [citydata, setcitydata] = useState([]);
   const buttonModes = {
     0: [
@@ -48,7 +73,7 @@ const AccountMaster = ({ userDetails }) => {
     ],
   };
   //from city service in useeffect
-  var data1 = []
+  var data1 = [];
   useEffect(() => {
     (async function fetchdata() {
       try {
@@ -61,12 +86,12 @@ const AccountMaster = ({ userDetails }) => {
             headers: headers,
           }
         );
-        for(var ch in res.data){
+        for (var ch in res.data) {
           // console.log(res.data[ch].CityName);
           data1.push(res.data[ch].CityName);
-        };
+        }
         setcitydata(data1);
-        console.log("inside useeffect",data1);
+        console.log("inside useeffect", data1);
       } catch (e) {
         console.log(e);
       }
@@ -83,13 +108,10 @@ const AccountMaster = ({ userDetails }) => {
     setBoolList(AccountTypeData[e.target.value]);
     setType(e.target.value);
   };
-  const cityHandler = (e) => {
-    setCity(e.target.value);
-  };
   const deleteHandler = async () => {
     if (disMode === 1) {
       // sanity check
-      if(!accName || accType==='none'){
+      if (!accName || accType === "none") {
         alert("Enter account name or select account type");
         return;
       }
@@ -109,7 +131,7 @@ const AccountMaster = ({ userDetails }) => {
   };
   const addSaveHandler = async () => {
     // sanity check
-    if(!accName || accType==='none'){
+    if (!accName || accType === "none") {
       alert("Enter account name or select account type");
       return;
     }
@@ -184,7 +206,7 @@ const AccountMaster = ({ userDetails }) => {
     <div className={styles["main"]}>
       <h2 className={styles["title"]}>This is Account Master</h2>
 
-      <form onSubmit={submitHandler} className={styles["form"]}>
+      <form onSubmit={addSaveHandler} className={styles["form"]}>
         <div className={styles["input-section"]}>
           <input
             type="text"
@@ -242,7 +264,7 @@ const AccountMaster = ({ userDetails }) => {
               <select
                 name="cityName"
                 value={city}
-                onChange={cityHandler}
+                onChange={(e) => setCity(e.target.value)}
                 disabled={!isEntering}
               >
                 <option value="none" selected disabled hidden>
@@ -260,27 +282,181 @@ const AccountMaster = ({ userDetails }) => {
                 onChange={(e) => setPinCode(e.target.value)}
                 min={100000}
                 max={999999}
-                required = 'true'
+                required
                 disabled={!isEntering}
               />
             </div>
           )}
-          {boolList.includes("ContactGroup") && <p>ContactGroup</p>}
-          {boolList.includes("GstGroup") && <p>GstGroup</p>}
-          {boolList.includes("transport") && <p>transport</p>}
-          {boolList.includes("OBGroup") && <p>OBGroup</p>}
-          {boolList.includes("bankdetail") && <p>bankdetail</p>}
-          {boolList.includes("GstCat") && <p>GstCat</p>}
-          {boolList.includes("shares") && <p>shares</p>}
+          {boolList.includes("ContactGroup") && (
+            <div className={styles["input-group"]}>
+              <input
+                type="text"
+                name="Phone No."
+                value={phone}
+                placeholder="Phone No."
+                onChange={(e) => setPhone(e.target.value)}
+                required
+                disabled={!isEntering}
+              />
+              <input
+                type="text"
+                name="Email"
+                value={email}
+                placeholder="Email"
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                disabled={!isEntering}
+              />
+            </div>
+          )}
+
+          {boolList.includes("GstGroup") && (
+            <div className={styles["input-group"]}>
+              <input
+                type="text"
+                name="gstin"
+                value={gstin}
+                placeholder="GSTIN"
+                onChange={(e) => setGstin(e.target.value)}
+                required
+                disabled={!isEntering}
+              />
+              <input
+                type="text"
+                name="RegDate"
+                value={regDate}
+                placeholder="RegDate"
+                onChange={(e) => setRegDate(e.target.value)}
+                required
+                disabled
+              />
+              <input
+                type="text"
+                name="propName"
+                value={propName}
+                placeholder="prop Name"
+                onChange={(e) => setPropName(e.target.value)}
+                required
+                disabled
+              />
+              <input
+                type="text"
+                name="PAN"
+                value={pan}
+                placeholder="PAN no."
+                onChange={(e) => setPan(e.target.value)}
+                required
+                disabled
+              />
+              <input
+                type="number"
+                name="dist"
+                value={dist}
+                placeholder="Distance"
+                onChange={(e) => setDist(e.target.value)}
+                required
+                disabled
+              />
+            </div>
+          )}
+          {boolList.includes("transport") && (
+            <div className={styles["input-group"]}>
+              <input
+                type="text"
+                name="transport"
+                value={transport}
+                placeholder="Transport"
+                onChange={(e) => setTransport(e.target.value)}
+                required
+                disabled={!isEntering}
+              />
+            </div>
+          )}
+          {boolList.includes("OBGroup") && (
+            <div className={styles["input-group"]}>
+              <input
+                type="number"
+                name="openBal"
+                value={openBal}
+                placeholder="Opening Bal"
+                onChange={(e) => setOpenBal(e.target.value)}
+                required
+                disabled={!isEntering}
+              />
+              <select
+                name="crdr"
+                value={crdr}
+                onChange={(e) => setCrdr(e.target.value)}
+                disabled={!isEntering}
+              >
+                <option value="none" selected disabled hidden>
+                  Cr./Dr.
+                </option>
+                <option value="CR">Cr.</option>
+                <option value="DR">Dr.</option>
+                {/* {CityData.map((city) => {
+                                    return <option value={city}>{city}</option>;
+                                })} */}
+              </select>
+            </div>
+          )}
+          {boolList.includes("bankdetail") && (
+            <div className={styles["input-group"]}>
+              <input
+                type="text"
+                name="beneficiary"
+                value={beneficiary}
+                placeholder="beneficiary name"
+                onChange={(e) => setBeneficiary(e.target.value)}
+                required
+                disabled={!isEntering}
+              />
+              <input
+                type="number"
+                name="accNum"
+                value={accNum}
+                placeholder="Account Number"
+                onChange={(e) => setAccNum(e.target.value)}
+                required
+                disabled={!isEntering}
+              />
+              <input
+                type="text"
+                name="ifsc"
+                value={ifsc}
+                placeholder="IFSC code"
+                onChange={(e) => setIfsc(e.target.value)}
+                required
+                disabled={!isEntering}
+              />
+            </div>
+          )}
+          {/* {boolList.includes("GstCat") && <p>GstCat</p>} */}
+          {boolList.includes("shares") && (
+            <div className={styles["input-group"]}>
+              <input
+                type="number"
+                name="share"
+                value={share}
+                placeholder="Share %"
+                onChange={(e) => setShare(e.target.value)}
+                required
+                disabled={!isEntering}
+                min={0}
+                max={100}
+              />
+            </div>
+          )}
         </div>
+        <button disabled={buttonModes[disMode][1].dis} onClick={addSaveHandler}>
+          {buttonModes[disMode][1].label}
+        </button>
       </form>
       <div className={styles["button-group"]}>
         <button disabled={buttonModes[disMode][0].dis} onClick={deleteHandler}>
           {buttonModes[disMode][0].label}
         </button>
-        <button disabled={buttonModes[disMode][1].dis} onClick={addSaveHandler}>
-          {buttonModes[disMode][1].label}
-        </button>
+
         <button
           disabled={buttonModes[disMode][2].dis}
           onClick={editViewHandler}
