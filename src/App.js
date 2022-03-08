@@ -83,13 +83,6 @@ function App() {
     return (
         <>
             <div className="logo">MicroTex ERP Solutions</div>
-            <Route path="/">
-                {isLoggedIn === "true" ? (
-                    <Redirect to="/dashboard" />
-                ) : (
-                    <Redirect to="/login" />
-                )}
-            </Route>
             <Route path="/login">
                 <Login onLogin={loginHandler} />
             </Route>
@@ -98,6 +91,13 @@ function App() {
                     userDetails={user}
                     logoutHandler={logoutHandler}
                 />
+            </Route>
+            <Route path="/">
+                {isLoggedIn === "true" ? (
+                    <Redirect to="/dashboard" />
+                ) : (
+                    <Redirect to="/login" />
+                )}
             </Route>
             <BottomBar />
         </>

@@ -1,11 +1,11 @@
 const AdminSideBarData = [
     {
         title: "City Master",
-        link: "/cityMaster",
+        link: "/dashboard/cityMaster",
     },
     {
         title: "Account Master",
-        link: "/accountMaster",
+        link: "/dashboard/accountMaster",
     },
     {
         title: "Design Master",

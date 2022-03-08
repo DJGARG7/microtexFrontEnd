@@ -20,9 +20,9 @@ function SideBar({ SideBarData, userDetails, logoutHandler }) {
                 })}
             </ul>
             <ul className="user-details">
-                <li className="row">{userDetails.name}</li>
-                <li className="row">{userDetails.u_id}</li>
-                <li className="row">{userDetails.c_id}</li>
+                <li className="row">{userDetails.userName}</li>
+                <li className="row">{userDetails.userID}</li>
+                <li className="row">{userDetails.corporateID}</li>
                 <button className="row" onClick={logoutHandler}>
                     Logout
                 </button>
