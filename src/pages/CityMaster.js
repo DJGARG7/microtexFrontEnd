@@ -10,9 +10,9 @@ function CityMaster({ userDetails }) {
   const [city, setCitychange] = useState("");
   const [state, setStatechange] = useState("");
   const [editMode, setEditMode] = useState(false);
-  const headers = {
-    accessToken: userDetails.token,
-  };
+  // const headers = {
+  //   accessToken: userDetails.token,
+  // };
 
   // // for gettig the data when the page loads for the first time
   useEffect(() => {
@@ -29,7 +29,7 @@ function CityMaster({ userDetails }) {
         console.log(e);
       }
     })();
-  }, [userDetails.token]);
+  }, []);
 
   const TableColData = [
     {
@@ -56,9 +56,9 @@ function CityMaster({ userDetails }) {
                   {
                     City: tableProps.row.values.CityName,
                   },
-                  {
-                    headers: headers,
-                  }
+                  // {
+                  //   headers: headers,
+                  // }
                 );
                 const dataCopy = [...tabledata];
                 console.log(result);
