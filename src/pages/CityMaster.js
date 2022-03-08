@@ -9,29 +9,26 @@ function CityMaster({ userDetails }) {
   const [city, setCitychange] = useState("");
   const [state, setStatechange] = useState("");
   const [editMode, setEditMode] = useState(false);
-  const headers = {
-    accessToken: userDetails.token,
-  };
+  // const headers = {
+  //   accessToken: userDetails.token,
+  // };
 
   // // for gettig the data when the page loads for the first time
   useEffect(() => {
     (async function fetchdata() {
       try {
-        const res = await Axios.post(
+        const res = await Axios.get(
           "http://localhost:3001/cityMaster/getdata",
           {
-            firmname: userDetails.c_id,
+            withCredentials: true,
           },
-          {
-            headers: headers,
-          }
         );
         setTabledata(res.data);
       } catch (e) {
         console.log(e);
       }
     })();
-  }, [userDetails.token]);
+  }, []);
 
   const TableColData = [
     {
@@ -58,9 +55,9 @@ function CityMaster({ userDetails }) {
                   {
                     City: tableProps.row.values.CityName,
                   },
-                  {
-                    headers: headers,
-                  }
+                  // {
+                  //   headers: headers,
+                  // }
                 );
                 const dataCopy = [...tabledata];
                 dataCopy.splice(tableProps.row.index, 1);
@@ -131,9 +128,9 @@ function CityMaster({ userDetails }) {
             State: state.trim(),
             oldcity: oldcity.trim(),
           },
-          {
-            headers: headers,
-          }
+          // {
+          //   headers: headers,
+          // }
         );
         preExpense[index].CityName = newData.CityName;
         preExpense[index].StateName = newData.StateName;
@@ -158,9 +155,9 @@ function CityMaster({ userDetails }) {
             City: city.trim(),
             State: state.trim(),
           },
-          {
-            headers: headers,
-          }
+          // {
+          //   headers: headers,
+          // }
         );
         return [...preExpense, newData];
       });
