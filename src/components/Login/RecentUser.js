@@ -6,8 +6,8 @@ function RecentUser(props) {
     // On execution autofills the form inputs.
     const clickHandler = () => {
         if (props.type === "firm")
-            props.savedClickHandler(props.user.c_id, props.user.u_id);
-        else props.savedClickHandler(props.user.u_id);
+            props.savedUserHandler(props.user.c_id, props.user.u_id);
+        else props.savedUserHandler(props.user.u_id);
     };
 
     return (

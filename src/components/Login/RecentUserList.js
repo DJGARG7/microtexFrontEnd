@@ -1,22 +1,40 @@
 // This component renders a list of recent users.
 
+import React, { useState } from "react";
 import RecentUser from "./RecentUser";
 import styles from "./styles/RecentUserList.module.css";
 
 function RecentUserList(props) {
-    const firms = props.savedFirm;
-    const proprietors = props.savedPro;
+    // For persisting recent users.
+    localStorage.getItem("savedFirms") === null &&
+        localStorage.setItem("savedFirms", JSON.stringify({}));
+
+    localStorage.getItem("savedProprietors") === null &&
+        localStorage.setItem("savedProprietors", JSON.stringify({}));
+
+    // Saving recent users from local storage as current state.
+    const [firms, saveFirm] = useState(
+        JSON.parse(localStorage.getItem("savedFirms"))
+    );
+    const [proprietors, saveProprietor] = useState(
+        JSON.parse(localStorage.getItem("savedProprietors"))
+    );
 
     // On execution deletes user from state & localStorage.
     const deleteUser = (key, type) => {
         if (type === "firm") {
             delete firms[key];
-            localStorage.setItem("savedFirm", JSON.stringify(firms));
-            props.setSavedFirm(JSON.parse(localStorage.getItem("savedFirm")));
+            localStorage.setItem("savedFirms", JSON.stringify(firms));
+            saveFirm(JSON.parse(localStorage.getItem("savedFirms")));
         } else if (type === "proprietor") {
             delete proprietors[key];
-            localStorage.setItem("savedPro", JSON.stringify(proprietors));
-            props.setSavedPro(JSON.parse(localStorage.getItem("savedPro")));
+            localStorage.setItem(
+                "savedProprietors",
+                JSON.stringify(proprietors)
+            );
+            saveProprietor(
+                JSON.parse(localStorage.getItem("savedProprietors"))
+            );
         }
     };
 
@@ -35,7 +53,7 @@ function RecentUserList(props) {
                             user={firms[key]}
                             type="firm"
                             key={key}
-                            savedClickHandler={props.savedClickHandler}
+                            savedUserHandler={props.savedFirmHandler}
                         />
                     </div>
                 );
@@ -53,7 +71,7 @@ function RecentUserList(props) {
                             user={proprietors[key]}
                             type="proprietor"
                             key={key}
-                            savedClickHandler={props.savedProClickHandler}
+                            savedUserHandler={props.savedProprietorHandler}
                         />
                     </div>
                 );

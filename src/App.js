@@ -1,69 +1,106 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-import "./style.css";
 import { useEffect, useState } from "react";
+import { Route, Redirect } from "react-router";
+
 import Login from "./components/Login/Login";
 import AdminDashboard from "./components/Admin_components/AdminDashboard";
 import BottomBar from "./components/BottomBar";
-import UserDashboard from "./components/User_components/UserDashboard";
+
+import axiosAuth from "./components/Login/api/axios";
+
+import "./style.css";
+
 function App() {
-    localStorage.getItem("savedPro") === null &&
-        localStorage.setItem("savedPro", JSON.stringify({}));
-    localStorage.getItem("savedFirm") === null &&
-        localStorage.setItem("savedFirm", JSON.stringify({}));
+    // Storing user details in localStorage and as state.
+    localStorage.getItem("userDetails") === null &&
+        localStorage.setItem("userDetails", JSON.stringify({}));
 
-    const [isLogged, setIsLogged] = useState(false);
-    const [isType, setIsType] = useState();
-    const [isUser, setIsUser] = useState({
-        u_id: "userId",
-        name: "UserName",
-        c_id: "corpId",
-        token: "",
-    });
+    const [user, setUser] = useState(
+        JSON.parse(localStorage.getItem("userDetails"))
+    );
 
-    const loggedInHandler = (status, type, corpId, userId, token) => {
-        if (status === "fail") {
-            //show appropriate message of login failed try again in red @dhairya like in php
-            setIsLogged("false");
-            console.log("inside");
-            return;
+    // Storing login status in localStorage and as state.
+    localStorage.getItem("isLoggedIn") === null &&
+        localStorage.setItem("isLoggedIn", "false");
+
+    const [isLoggedIn, setIsLoggedIn] = useState(
+        localStorage.getItem("isLoggedIn")
+    );
+
+    // Change localStorage with state changes.
+    useEffect(() => {
+        localStorage.setItem("isLoggedIn", isLoggedIn);
+    }, [isLoggedIn]);
+
+    useEffect(() => {
+        localStorage.setItem("userDetails", JSON.stringify(user));
+    }, [user]);
+
+    const loginHandler = (
+        status,
+        uuid,
+        type,
+        corporateID,
+        userID,
+        userName
+    ) => {
+        if (status === "false") {
+            setIsLoggedIn("false");
+        } else {
+            // Setting user details.
+            setUser({
+                uuid: uuid,
+                type: type,
+                corporateID: corporateID,
+                userID: userID,
+                userName: userName,
+            });
+
+            // Setting login status.
+            setIsLoggedIn("true");
         }
-        console.log("outside");
-        setIsLogged(status);
-        setIsType(type);
-        setIsUser({ u_id: userId, token: token, c_id: corpId });
     };
 
-    const logoutHandler = () => {
-        console.log("Logout");
-        setIsLogged(false);
-        setIsType("");
-        setIsUser({ u_id: "", token: "", c_id: "" });
-        window.location.reload();
+    const logoutHandler = async () => {
+        try {
+            const res = await axiosAuth.get("/logout", {
+                headers: {
+                    userID: JSON.parse(localStorage.getItem("userDetails"))
+                        .userID,
+                },
+            });
+
+            // Remove user details and change login status.
+            setIsLoggedIn("false");
+            setUser(JSON.stringify({}));
+        } catch (error) {
+            console.log(error);
+
+            <Redirect to="/login" />;
+            setIsLoggedIn("false");
+            setUser(JSON.stringify({}));
+        }
     };
-    console.log("app.js");
     return (
-        <div>
+        <>
             <div className="logo">MicroTex ERP Solutions</div>
-            {!isLogged && <Login onLogged={loggedInHandler} />}
-            
-            {isLogged && isUser.u_id!=='user1' && (
+            <Route path="/">
+                {isLoggedIn === "true" ? (
+                    <Redirect to="/dashboard" />
+                ) : (
+                    <Redirect to="/login" />
+                )}
+            </Route>
+            <Route path="/login">
+                <Login onLogin={loginHandler} />
+            </Route>
+            <Route path="/dashboard">
                 <AdminDashboard
-                    userDetails={isUser}
+                    userDetails={user}
                     logoutHandler={logoutHandler}
                 />
-            )}
-            {isLogged && isUser.u_id==='user1' && (
-                <UserDashboard
-                    userDetails={isUser}
-                    logoutHandler={logoutHandler}
-                />
-            )}
-            {/* <AdminDashboard
-                    userDetails={isUser}
-                    logoutHandler={logoutHandler}
-                /> */}
+            </Route>
             <BottomBar />
-        </div>
+        </>
     );
 }
 
