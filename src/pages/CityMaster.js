@@ -23,10 +23,7 @@ function CityMaster({ userDetails }) {
         (async function fetchdata() {
             try {
                 const res = await Axios.get(
-                    "http://localhost:3001/cityMaster/get",
-                    {
-                        withCredentials: true,
-                    }
+                    "http://localhost:3001/cityMaster/get"
                 );
                 setTabledata(res.data);
             } catch (e) {
