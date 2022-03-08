@@ -3,6 +3,7 @@ import TableComponent from "../components/Reuse_components/TableComponent";
 import { useState, useEffect } from "react";
 import "../styles/CityMaster.css";
 import Axios from "axios";
+import { SortingMode } from "ka-table/enums";
 let index, oldcity;
 function CityMaster({ userDetails }) {
   const [tabledata, setTabledata] = useState([]);
@@ -17,13 +18,10 @@ function CityMaster({ userDetails }) {
   useEffect(() => {
     (async function fetchdata() {
       try {
-        const res = await Axios.post(
+        const res = await Axios.get(
           "http://localhost:3001/cityMaster/getdata",
           {
-            firmname: userDetails.c_id,
-          },
-          {
-            headers: headers,
+            withCredentials: true,
           }
         );
         setTabledata(res.data);
@@ -51,9 +49,9 @@ function CityMaster({ userDetails }) {
             style={{
               cursor: "pointer",
             }}
-            onClick={() => {
+            onClick={async () => {
               try {
-                Axios.post(
+                var result = await Axios.post(
                   "http://localhost:3001/cityMaster/Delete",
                   {
                     City: tableProps.row.values.CityName,
@@ -63,6 +61,7 @@ function CityMaster({ userDetails }) {
                   }
                 );
                 const dataCopy = [...tabledata];
+                console.log(result);
                 dataCopy.splice(tableProps.row.index, 1);
                 setTabledata(dataCopy);
               } catch (e) {
@@ -103,67 +102,93 @@ function CityMaster({ userDetails }) {
   // funtion executes when the form is submitted
   const onClickHandler = (event) => {
     event.preventDefault();
-    if (city.length === 0) return alert("Enter City Name");
-    if (state.length === 0) return alert("Enter State Name");
     const newData = {
       CityName: city.trim(),
       StateName: state.trim(),
     };
     // checks wether the mode is edit or not if edit --> updates the exsisting selected row in the table and if !edit-> adds new data into the table if not present.
     if (editMode) {
-      setTabledata((preExpense) => {
-        for (let i = 0; i < preExpense.length; i++) {
-          if (i === index) continue;
-
-          if (
-            preExpense[i].CityName.toLowerCase() ===
-            newData.CityName.toLowerCase()
-          ) {
-            alert("City present");
-            return [...preExpense];
-          }
+      const editData = async()=> {
+        try {
+          var result = await Axios.post(
+            "http://localhost:3001/cityMaster/Update",
+            {
+              City: city.trim(),
+              State: state.trim(),
+              oldcity: oldcity.trim(),
+            }
+          );
+          return result;
+        } catch (e) {
+          console.log(e);
+          return e;
         }
-        // updates the backend table
-        Axios.post(
-          "http://localhost:3001/cityMaster/Update",
-          {
-            City: city.trim(),
-            State: state.trim(),
-            oldcity: oldcity.trim(),
-          },
-          {
-            headers: headers,
+      };
+      editData()
+        .then((result) => {
+          if (result.data == 1) {
+            setEditMode(false);
+            setTabledata((preExpense) => {
+              preExpense[index].CityName = newData.CityName;
+              preExpense[index].StateName = newData.StateName;
+              return [...preExpense];
+            });
+          } else {
+            if(result.data.sqlMessage)
+              alert("City Already prenet");
+            console.log(result.data.sqlMessage);
           }
-        );
-        preExpense[index].CityName = newData.CityName;
-        preExpense[index].StateName = newData.StateName;
-        setEditMode(false);
-        return [...preExpense];
-      });
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     } else {
-      setTabledata((preExpense) => {
-        for (const i in preExpense) {
-          if (
-            preExpense[i].CityName.toLowerCase() ===
-            newData.CityName.toLowerCase()
-          ) {
-            alert("City present");
-            return [...preExpense];
-          }
+      // function to add the data
+      const addData = async function () {
+        try {
+          var result = await Axios.post(
+            "http://localhost:3001/cityMaster/Add",
+            {
+              City: city.trim(),
+              State: state.trim(),
+            }
+          );
+          return result;
+        } catch (e) {
+          console.log(e);
+          return e;
         }
-        // adds value to the backend table
-        Axios.post(
-          "http://localhost:3001/cityMaster/Add",
-          {
-            City: city.trim(),
-            State: state.trim(),
-          },
-          {
-            headers: headers,
+      };
+      addData()
+        .then((result) => {
+          if (result.data == 1) {
+            setTabledata((prestate) => {
+              return [...prestate, newData];
+            });
+          } else {
+            if(result.data.sqlMessage)
+              alert("City Already prenet");
+            console.log(result.data.sqlMessage);
           }
-        );
-        return [...preExpense, newData];
-      });
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
+      // setTabledata((preExpense) => {
+      //   // for (const i in preExpense) {
+      //   //   if (
+      //   //     preExpense[i].CityName.toLowerCase() ===
+      //   //     newData.CityName.toLowerCase()
+      //   //   ) {
+      //   //     alert("City present");
+      //   //     return [...preExpense];
+      //   //   }
+      //   // }
+      //   // adds value to the backend table
+      //   // console.log(result);
+      //   return [...preExpense, newData];
+      // });
     }
   };
   return (
@@ -171,9 +196,9 @@ function CityMaster({ userDetails }) {
       <div className="Inputs">
         <form onSubmit={onClickHandler}>
           <label>City Name</label>{" "}
-          <input type="text" onChange={cityHandler} value={city}></input>
+          <input type="text" onChange={cityHandler} value={city} required></input>
           <label>State Name</label>{" "}
-          <input type="text" onChange={stateHandler} value={state}></input>
+          <input type="text" onChange={stateHandler} value={state} required></input>
           {!editMode && <button> Add </button>}
           {editMode && <button> Update </button>}
         </form>

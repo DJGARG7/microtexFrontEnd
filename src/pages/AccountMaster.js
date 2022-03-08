@@ -4,9 +4,6 @@ import styles from "../styles/AccountMaster.module.css";
 import Axios from "axios";
 const instance = Axios.create({
   baseURL: "http://localhost:3003/accountMaster/",
-  headers: {
-    authtoken: "djnnbfn",
-  },
 });
 var oldaccountname;
 
@@ -77,26 +74,20 @@ const AccountMaster = ({ userDetails }) => {
   useEffect(() => {
     (async function fetchdata() {
       try {
-        const res = await Axios.post(
+        var res = await Axios.get(
           "http://localhost:3001/cityMaster/getdata",
-          {
-            firmname: userDetails.c_id,
-          },
-          {
-            headers: headers,
-          }
         );
         for (var ch in res.data) {
           // console.log(res.data[ch].CityName);
           data1.push(res.data[ch].CityName);
         }
         setcitydata(data1);
-        console.log("inside useeffect", data1);
       } catch (e) {
         console.log(e);
       }
+      console.log(res);
     })();
-  }, [userDetails.token]);
+  }, []);
 
   const submitHandler = (e) => {
     e.preventDefault();
