@@ -6,6 +6,12 @@ import Axios from "axios";
 import { SortingMode } from "ka-table/enums";
 import toast from "react-hot-toast";
 
+// Include header and cookie with every request.
+Axios.defaults.headers.common["userID"] = JSON.parse(
+    localStorage.getItem("userDetails")
+).userID;
+Axios.defaults.withCredentials = true;
+
 let index, oldcity;
 function CityMaster({ userDetails }) {
     const [tabledata, setTabledata] = useState([]);
@@ -56,7 +62,7 @@ function CityMaster({ userDetails }) {
                                     }
                                 );
                                 const dataCopy = [...tabledata];
-                                console.log(result);
+                                // console.log(result);
                                 dataCopy.splice(tableProps.row.index, 1);
                                 setTabledata(dataCopy);
                                 toast.success(
@@ -183,6 +189,9 @@ function CityMaster({ userDetails }) {
                         {
                             City: city.trim(),
                             State: state.trim(),
+                        },
+                        {
+                            withCredentials: true,
                         }
                     );
                     return result;
