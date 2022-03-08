@@ -9,7 +9,7 @@ export default function LoginForm({
     setCorporateID,
     userID,
     setUserID,
-    onLogged,
+    onLogin,
 }) {
     const [rememberUser, setRememberUser] = useState(false);
     const types = ["Firm", "Proprietor"];
@@ -28,7 +28,7 @@ export default function LoginForm({
         // Prevent refreshing the page
         event.preventDefault();
 
-        // Send request ot backend.
+        // Send request to backend.
         try {
             const res = await axios.post("/login", {
                 userType: type === "Proprietor" ? "proprietor" : "firm",
@@ -80,10 +80,19 @@ export default function LoginForm({
             }
 
             // Change state to logged in.
-            onLogged("true", type, corporateID, userID, res.data.accessToken);
+            onLogin(
+                "true",
+                res.data.uuid,
+                type,
+                corporateID,
+                userID,
+                res.data.userName
+            );
 
             console.log(res);
         } catch (error) {
+            console.log(error);
+
             // Toast on failure.
             toast.error("Log in failed!", {
                 style: {

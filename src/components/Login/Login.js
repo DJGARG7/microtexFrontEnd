@@ -4,7 +4,7 @@ import LoginForm from "./LoginForm";
 import "./styles/Login.css";
 import { Toaster } from "react-hot-toast";
 
-export default function Login({ onLogged }) {
+export default function Login({ onLogin }) {
     const [corporateID, setCorporateID] = useState("");
     const [userID, setUserID] = useState("");
     const [type, setType] = useState("Firm");
@@ -41,7 +41,7 @@ export default function Login({ onLogged }) {
                             setCorporateID={setCorporateID}
                             userID={userID}
                             setUserID={setUserID}
-                            onLogged={onLogged}
+                            onLogin={onLogin}
                         />
                     </div>
                 </div>
