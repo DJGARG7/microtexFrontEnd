@@ -24,12 +24,17 @@ function RecentUserList(props) {
     const deleteUser = (key, type) => {
         if (type === "firm") {
             delete firms[key];
-            localStorage.setItem("savedFirm", JSON.stringify(firms));
-            saveFirm(JSON.parse(localStorage.getItem("savedFirm")));
+            localStorage.setItem("savedFirms", JSON.stringify(firms));
+            saveFirm(JSON.parse(localStorage.getItem("savedFirms")));
         } else if (type === "proprietor") {
             delete proprietors[key];
-            localStorage.setItem("savedPro", JSON.stringify(proprietors));
-            saveProprietor(JSON.parse(localStorage.getItem("savedPro")));
+            localStorage.setItem(
+                "savedProprietors",
+                JSON.stringify(proprietors)
+            );
+            saveProprietor(
+                JSON.parse(localStorage.getItem("savedProprietors"))
+            );
         }
     };
 

@@ -1,150 +1,28 @@
 import React, { useState } from "react";
-import axios from "./api/axios";
-import toast from "react-hot-toast";
 import RecentUserList from "./RecentUserList";
+import LoginForm from "./LoginForm";
 import "./styles/Login.css";
+import { Toaster } from "react-hot-toast";
 
 export default function Login({ onLogged }) {
-    const [rememberUser, setRememberUser] = useState(false);
-
     const [corporateID, setCorporateID] = useState("");
     const [userID, setUserID] = useState("");
-    const [type, setType] = useState("firm");
-
-    const types = ["firm", "proprietor"];
+    const [type, setType] = useState("Firm");
 
     const savedFirmHandler = (c_id, u_id) => {
         setCorporateID(c_id);
         setUserID(u_id);
-        setType("firm");
-        setRememberUser(true);
+        setType("Firm");
     };
 
     const savedProprietorHandler = (u_id) => {
         setUserID(u_id);
-        setType("proprietor");
-        setRememberUser(true);
-    };
-
-    const rememberHandler = () => {
-        setRememberUser(!rememberUser);
-    };
-
-    const radioHandler = (event) => {
-        setType(event.currentTarget.value);
-        setUserID("");
-        setCorporateID("");
-    };
-
-    const loginHandler = async (event) => {
-        // Prevent refreshing the page
-        event.preventDefault();
-
-        // Check user type.
-        if (type === "proprietor") {
-            try {
-                // Send request to backend.
-                // try {
-                const res = await axios.post("/login", {
-                    userType: "proprietor",
-                    userID: userID,
-                    password: document.getElementById("password").value,
-                });
-
-                console.log(res);
-
-                // Save user in recents list if the user chooses so.
-                var UserName = "fromBackend";
-
-                if (rememberUser) {
-                    const savedProprietors = JSON.parse(
-                        localStorage.getItem("savedProprietors")
-                    );
-
-                    // name in prompt remaining
-                    if (!(userID in savedProprietors)) {
-                        localStorage.setItem(
-                            "savedProprietors",
-                            JSON.stringify({
-                                [userID]: { name: UserName, u_id: userID },
-                                ...savedProprietors,
-                            })
-                        );
-                    }
-                }
-
-                localStorage.setItem("accessToken", res.data.accessToken);
-
-                // Change state to logged in.
-                onLogged(true, type, corporateID, userID, res.data.accessToken);
-            } catch (err) {
-                // Toast on failure.
-                toast.error("Log in failed!", {
-                    style: {
-                        borderRadius: "15px",
-                        background: "#333",
-                        color: "#fff",
-                    },
-                });
-            }
-        } else if (type === "firm") {
-            try {
-                // Send request to backend.
-                // const res = await axios.post({
-                //     userType: "firm",
-                //     corporateID: corporateID,
-                //     userID: userID,
-                //     password: document.getElementById("password").value,
-                // });
-
-                // Save user in recents list if the user chooses so.
-                // var UserName = "fromBackend";
-
-                if (rememberUser) {
-                    const savedFirms = JSON.parse(
-                        localStorage.getItem("savedFirms")
-                    );
-
-                    // name in prompt remaining
-                    if (!(userID in savedFirms)) {
-                        localStorage.setItem(
-                            "savedFirms",
-                            JSON.stringify({
-                                [userID]: {
-                                    name: UserName,
-                                    c_id: corporateID,
-                                    u_id: userID,
-                                },
-                                ...savedFirms,
-                            })
-                        );
-                    }
-                }
-
-                // Change state to logged in.
-                // onLogged(
-                //     "true",
-                //     type,
-                //     corporateID,
-                //     userID,
-                //     res.data.accessToken
-                // );
-            } catch (err) {
-                // Toast on failure.
-                toast.error("Log in failed!", {
-                    style: {
-                        borderRadius: "15px",
-                        background: "#333",
-                        color: "#fff",
-                    },
-                });
-            }
-        }
+        setType("Proprietor");
     };
 
     return (
         <>
-            {/* <Toaster /> */}
+            <Toaster />
             <div className="mainParent">
                 <div className="blackbox">
                     <div className="leftPart">
@@ -156,65 +34,15 @@ export default function Login({ onLogged }) {
                     </div>
                     <div className="rightPart">
                         <h2>Login</h2>
-                        <form onSubmit={loginHandler}>
-                            <div className="form">
-                                <div className="switch-field">
-                                    {types.map((t) => (
-                                        <>
-                                            <input
-                                                type="radio"
-                                                id={t}
-                                                value={t}
-                                                checked={type === t}
-                                                onChange={radioHandler}
-                                            />
-                                            <label htmlFor={t}>
-                                                <span>{t}</span>
-                                            </label>
-                                        </>
-                                    ))}
-                                </div>
-                                {type === "firm" && (
-                                    <input
-                                        type="text"
-                                        value={corporateID}
-                                        placeholder="Corporate ID"
-                                        onChange={(e) =>
-                                            setCorporateID(e.target.value)
-                                        }
-                                        required
-                                    />
-                                )}
-                                <input
-                                    type="text"
-                                    value={userID}
-                                    placeholder="User ID"
-                                    onChange={(e) => setUserID(e.target.value)}
-                                    required
-                                />
-                                <input
-                                    id="password"
-                                    type="password"
-                                    placeholder="Password"
-                                    required
-                                />
-
-                                <div className="rememberMe">
-                                    <input
-                                        type="checkbox"
-                                        checked={rememberUser}
-                                        onChange={rememberHandler}
-                                        id="rememberMe"
-                                    />
-                                    <label htmlFor="rememberMe">
-                                        Remember me
-                                    </label>
-                                </div>
-                                <button type="submit" className="btn btn-login">
-                                    Login
-                                </button>
-                            </div>
-                        </form>
+                        <LoginForm
+                            type={type}
+                            setType={setType}
+                            corporateID={corporateID}
+                            setCorporateID={setCorporateID}
+                            userID={userID}
+                            setUserID={setUserID}
+                            onLogged={onLogged}
+                        />
                     </div>
                 </div>
             </div>

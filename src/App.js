@@ -1,12 +1,11 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import "./style.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Login from "./components/Login/Login";
 import AdminDashboard from "./components/Admin_components/AdminDashboard";
 import BottomBar from "./components/BottomBar";
 import { Route, Redirect } from "react-router";
-import { Toaster } from "react-hot-toast";
-import axios from "./components/Login/api/axios";
+import axiosAuth from "./components/Login/api/axios";
 
 function App() {
     localStorage.getItem("loggedIn") === null &&
@@ -22,7 +21,7 @@ function App() {
     });
 
     const loggedInHandler = (status, type, corpId, userId, token) => {
-        if (status == "false") {
+        if (status === "false") {
             //show appropriate message of login failed try again in red @dhairya like in php
             setIsLogged("false");
             console.log("inside");
@@ -39,7 +38,7 @@ function App() {
     const logoutHandler = () => {
         console.log("Logout");
 
-        const res = axios.get("/logout", {
+        const res = axiosAuth.get("/logout", {
             headers: {
                 userID: "test11",
             },
@@ -54,11 +53,10 @@ function App() {
     };
     return (
         <>
-            <Toaster />
             {console.log(`State: ${isLogged}`)}
             <div className="logo">MicroTex ERP Solutions</div>
             <Route path="/">
-                {isLogged == "true" ? (
+                {isLogged === "true" ? (
                     <Redirect to="/dashboard" />
                 ) : (
                     <Redirect to="/login" />
