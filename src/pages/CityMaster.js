@@ -55,7 +55,7 @@ function CityMaster({ userDetails }) {
                   "http://localhost:3001/cityMaster/Delete",
                   {
                     City: tableProps.row.values.CityName,
-                  },
+                  }
                   // {
                   //   headers: headers,
                   // }
@@ -108,7 +108,8 @@ function CityMaster({ userDetails }) {
     };
     // checks wether the mode is edit or not if edit --> updates the exsisting selected row in the table and if !edit-> adds new data into the table if not present.
     if (editMode) {
-      const editData = async()=> {
+      // function to edit the data and creating an edit request
+      const editData = async () => {
         try {
           var result = await Axios.post(
             "http://localhost:3001/cityMaster/Update",
@@ -124,25 +125,24 @@ function CityMaster({ userDetails }) {
           return e;
         }
       };
-      editData()
-        .then((result) => {
-          if (result.data == 1) {
-            setEditMode(false);
-            setTabledata((preExpense) => {
-              preExpense[index].CityName = newData.CityName;
-              preExpense[index].StateName = newData.StateName;
-              return [...preExpense];
-            });
-          } else {
-            if(result.data.sqlMessage)
-              alert("City Already prenet");
-            console.log(result.data.sqlMessage);
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      editData().then((result) => {
+        // this will recice 1 as data if exwcuted successfully
+        if (result.data == 1) {
+          setEditMode(false);
+          setCitychange("");
+          setStatechange("");
+          setTabledata((preExpense) => {
+            preExpense[index].CityName = newData.CityName;
+            preExpense[index].StateName = newData.StateName;
+            return [...preExpense];
+          });
+        } else {
+          if (result.data.sqlMessage) alert("City Already prenet");
+          console.log(result.data.sqlMessage);
+        }
+      });
     } else {
+      //  this handles if the edit mode is off ie add mode is on
       // function to add the data
       const addData = async function () {
         try {
@@ -159,36 +159,18 @@ function CityMaster({ userDetails }) {
           return e;
         }
       };
-      addData()
-        .then((result) => {
-          if (result.data == 1) {
-            setTabledata((prestate) => {
-              return [...prestate, newData];
-            });
-          } else {
-            if(result.data.sqlMessage)
-              alert("City Already prenet");
-            console.log(result.data.sqlMessage);
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-
-      // setTabledata((preExpense) => {
-      //   // for (const i in preExpense) {
-      //   //   if (
-      //   //     preExpense[i].CityName.toLowerCase() ===
-      //   //     newData.CityName.toLowerCase()
-      //   //   ) {
-      //   //     alert("City present");
-      //   //     return [...preExpense];
-      //   //   }
-      //   // }
-      //   // adds value to the backend table
-      //   // console.log(result);
-      //   return [...preExpense, newData];
-      // });
+      addData().then((result) => {
+        if (result.data == 1) {
+          setCitychange("");
+          setStatechange("");
+          setTabledata((prestate) => {
+            return [...prestate, newData];
+          });
+        } else {
+          if (result.data.sqlMessage) alert("City Already prenet");
+          console.log(result.data.sqlMessage);
+        }
+      });
     }
   };
   return (
@@ -196,9 +178,19 @@ function CityMaster({ userDetails }) {
       <div className="Inputs">
         <form onSubmit={onClickHandler}>
           <label>City Name</label>{" "}
-          <input type="text" onChange={cityHandler} value={city} required></input>
+          <input
+            type="text"
+            onChange={cityHandler}
+            value={city}
+            required
+          ></input>
           <label>State Name</label>{" "}
-          <input type="text" onChange={stateHandler} value={state} required></input>
+          <input
+            type="text"
+            onChange={stateHandler}
+            value={state}
+            required
+          ></input>
           {!editMode && <button> Add </button>}
           {editMode && <button> Update </button>}
         </form>
