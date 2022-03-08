@@ -99,7 +99,7 @@ function App() {
                     <Redirect to="/login" />
                 )}
             </Route>
-            <BottomBar />
+            {/* <BottomBar /> */}
         </>
     );
 }
