@@ -231,25 +231,32 @@ function CityMaster({ userDetails }) {
         }
     };
     return (
-        <div className="Citymaster">
+        <div className="citymaster">
+            <h2>City Master</h2>
             <div className="Inputs">
                 <form onSubmit={onClickHandler}>
-                    <label>City Name</label>{" "}
+                    {/* <label>City Name</label>{" "} */}
                     <input
                         type="text"
                         onChange={cityHandler}
                         value={city}
+                        placeholder="City"
                         required
                     ></input>
-                    <label>State Name</label>{" "}
+                    {/* <label>State Name</label>{" "} */}
                     <input
                         type="text"
                         onChange={stateHandler}
                         value={state}
+                        placeholder="State"
                         required
                     ></input>
-                    {!editMode && <button> Add </button>}
-                    {editMode && <button> Update </button>}
+                    {!editMode && (
+                        <button className="btn add-btn"> Add </button>
+                    )}
+                    {editMode && (
+                        <button className="btn update-btn"> Update </button>
+                    )}
                 </form>
             </div>
             <div className="table">

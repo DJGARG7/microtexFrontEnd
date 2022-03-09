@@ -1,15 +1,72 @@
-.Citymaster{
+.citymaster {
     display: flex;
     flex-direction: column;
+
+    width: 100%;
+    height: 100%;
+
+    padding: 25px;
 }
-.Inputs{
+.Inputs {
+    width: 75%;
+
+    margin-top: 4vh;
+    margin-bottom: 4vh;
+
+    align-self: center;
+}
+.Inputs form {
     display: flex;
     flex-direction: row;
-    padding: 50px;
+    align-items: center;
     justify-content: space-between;
+
+    width: 100%;
+}
+
+.Inputs .btn {
+    width: 80px;
+    height: 40px;
+
+    border: 2.5px solid black;
+    border-radius: 5px;
+
+    font-family: "Karla", sans-serif;
+    font-size: 1rem;
+    padding: 5px;
+}
+
+.Inputs .add-btn {
+    background-color: #40916c;
+    color: white;
+}
+
+.Inputs .add-btn:hover {
+    filter: brightness(125%);
+}
+
+.Inputs .update-btn {
+    background-color: #219ebc;
+    color: white;
+}
+
+.Inputs .update-btn:hover {
+    filter: brightness(110%);
 }
 
 .table {
     height: 500px;
-    overflow:auto;
+    overflow: auto;
+}
+
+input[type="text"] {
+    background: #edf2f4;
+    width: 40%;
+    color: #212121;
+    font-family: "Karla", sans-serif;
+    font-size: 1rem;
+    padding: 10px;
+    border-radius: 5px;
+    height: 40px;
+    border: 2.5px solid black;
 }
