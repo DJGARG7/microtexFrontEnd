@@ -46,11 +46,9 @@ function CityMaster({ userDetails }) {
             Header: "Action",
             accessor: (str) => "delete",
             Cell: (tableProps) => (
-                <div>
+                <div className="btn-grp">
                     <button
-                        style={{
-                            cursor: "pointer",
-                        }}
+                        className="btn del-btn"
                         onClick={async () => {
                             try {
                                 var result = await Axios.post(
@@ -88,9 +86,7 @@ function CityMaster({ userDetails }) {
                         Delete
                     </button>
                     <button
-                        style={{
-                            cursor: "pointer",
-                        }}
+                        className="btn edit-btn"
                         onClick={() => {
                             const dataCopy = [...tabledata];
 
