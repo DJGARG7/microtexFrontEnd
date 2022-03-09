@@ -1,6 +1,6 @@
 .Sidebar {
     align-items: left;
-    background-color: #a7ccf0;
+    background-color: #480ca8;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -53,9 +53,9 @@
 a {
     color: white;
     text-decoration: none;
-  }
-.SBactive li{
-  background-color: #0817f3;
-  padding-bottom: 0.25rem;
-  border-bottom: 4px solid #95bcf0;
+}
+.SBactive li {
+    background-color: #0817f3;
+    padding-bottom: 0.25rem;
+    border-bottom: 4px solid #95bcf0;
 }

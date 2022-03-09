@@ -82,7 +82,9 @@ function App() {
     };
     return (
         <>
-            <div className="logo">MicroTex ERP Solutions</div>
+            <div className="logo">
+                <h1>MicroTex ERP Solutions</h1>
+            </div>
             <Route path="/login">
                 <Login onLogin={loginHandler} />
             </Route>
@@ -99,7 +101,6 @@ function App() {
                     <Redirect to="/login" />
                 )}
             </Route>
-            {/* <BottomBar /> */}
         </>
     );
 }
