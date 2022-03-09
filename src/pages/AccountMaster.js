@@ -98,12 +98,6 @@ const AccountMaster = ({ userDetails }) => {
 
     const addSaveHandler = async (event) => {
         event.preventDefault();
-        // sanity check
-        // if (!accName || accType === "none") {
-        //     alert("Enter account name or select account type");
-        //     return;
-        // }
-        //getting required data to send the request
         const data = {
             AccName: accName.trim(),
             AccType: accType.trim(),
