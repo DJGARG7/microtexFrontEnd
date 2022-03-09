@@ -71,7 +71,7 @@
 }
 
 .rightPart .switch-field label {
-    background-color: #e4e4e4;
+    background-color: #edf2f4;
     color: #000000;
     font-size: 14px;
     line-height: 1;
@@ -81,6 +81,9 @@
     border: 1px solid rgba(0, 0, 0, 0.2);
 
     transition: all 0.25s ease-in-out;
+
+    font-weight: 600;
+    text-transform: uppercase;
 }
 
 .rightPart .switch-field label:hover {
@@ -88,7 +91,7 @@
 }
 
 .rightPart .switch-field input:checked + label {
-    background-color: #a5dc86;
+    background-color: #80ed99;
     box-shadow: none;
 }
 
@@ -102,11 +105,11 @@
 
 .rightPart .form input[type="text"],
 form input[type="password"] {
-    background: #dcdcdc;
+    background: #edf2f4;
     border: none;
     width: 100%;
     color: #212121;
-    font-family: "Manrope", sans-serif;
+    font-family: "Karla", sans-serif;
     padding: 10px;
     margin-top: 25px;
     border-radius: 5px;

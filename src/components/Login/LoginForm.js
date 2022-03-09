@@ -3,6 +3,8 @@ import axios from "./api/axios";
 import toast from "react-hot-toast";
 
 export default function LoginForm({
+    rememberUser,
+    rememberHandler,
     type,
     setType,
     corporateID,
@@ -11,12 +13,7 @@ export default function LoginForm({
     setUserID,
     onLogin,
 }) {
-    const [rememberUser, setRememberUser] = useState(false);
     const types = ["Firm", "Proprietor"];
-
-    const rememberHandler = () => {
-        setRememberUser(!rememberUser);
-    };
 
     const radioHandler = (event) => {
         setType(event.currentTarget.value);

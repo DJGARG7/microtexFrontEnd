@@ -18,8 +18,10 @@ function SideBar({ SideBarData, userDetails, logoutHandler }) {
                 })}
             </div>
             <ul className="sidebar--user">
-                <li className="sidebar--user-detail">{userDetails.userName}</li>
-                <li className="sidebar--user-detail">
+                <li className="sidebar--user-detail sidebar--user-name">
+                    {userDetails.userName}
+                </li>
+                <li className="sidebar--user-detail sidebar--user-id">
                     {userDetails.corporateID !== ""
                         ? `${userDetails.corporateID} // ${userDetails.userID}`
                         : `${userDetails.userID}`}

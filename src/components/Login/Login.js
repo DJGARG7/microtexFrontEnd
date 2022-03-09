@@ -9,15 +9,23 @@ export default function Login({ onLogin }) {
     const [userID, setUserID] = useState("");
     const [type, setType] = useState("Firm");
 
+    const [rememberUser, setRememberUser] = useState(false);
+
+    const rememberHandler = () => {
+        setRememberUser(!rememberUser);
+    };
+
     const savedFirmHandler = (c_id, u_id) => {
         setCorporateID(c_id);
         setUserID(u_id);
         setType("Firm");
+        setRememberUser(true);
     };
 
     const savedProprietorHandler = (u_id) => {
         setUserID(u_id);
         setType("Proprietor");
+        setRememberUser(true);
     };
 
     return (
@@ -34,6 +42,8 @@ export default function Login({ onLogin }) {
                 <div className="rightPart">
                     <h2>Login</h2>
                     <LoginForm
+                        rememberUser={rememberUser}
+                        rememberHandler={rememberHandler}
                         type={type}
                         setType={setType}
                         corporateID={corporateID}
