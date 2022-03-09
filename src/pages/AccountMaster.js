@@ -17,6 +17,7 @@ const AccountMaster = ({ userDetails }) => {
         accessToken: userDetails.token,
     };
     const [isEntering, setIsEntering] = useState(true);
+    const [uuid,setuuid] = useState(0);
 
     const [accName, setAccName] = useState("");
     const [accType, setType] = useState("none");
@@ -27,22 +28,22 @@ const AccountMaster = ({ userDetails }) => {
     const [pinCode, setPinCode] = useState(0);
     const [city, setCity] = useState("none");
 
-    const [phone, setPhone] = useState("");
+    const [phone, setPhone] = useState(0);
     const [email, setEmail] = useState("");
 
     const [gstin, setGstin] = useState("");
     const [regDate, setRegDate] = useState("");
     const [propName, setPropName] = useState("");
     const [pan, setPan] = useState("");
-    const [dist, setDist] = useState("");
+    const [dist, setDist] = useState(0);
 
     const [transport, setTransport] = useState("");
 
-    const [openBal, setOpenBal] = useState("");
+    const [openBal, setOpenBal] = useState(0);
     const [crdr, setCrdr] = useState("");
 
     const [beneficiary, setBeneficiary] = useState("");
-    const [accNum, setAccNum] = useState("");
+    const [accNum, setAccNum] = useState(0);
     const [ifsc, setIfsc] = useState("");
 
     const [share, setShare] = useState(0);
@@ -126,7 +127,13 @@ const AccountMaster = ({ userDetails }) => {
             // axios requet to add the data
             try {
                 const res = await instance.post("postdata", data);
-                if (res.status === 200) console.log("data added to db");
+                setuuid(res.data.uuid);
+                // console.log(res.data.status,res.data.uuid);
+                if (res.data.status == 1){
+                    console.log("data added to db");
+                    
+                } 
+                    
             } catch (error) {
                 console.log(error);
             }
