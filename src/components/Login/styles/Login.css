@@ -1,9 +1,9 @@
 .mainParent {
-    width: 95vw;
+    width: 97.5vw;
     height: 85vh;
     display: flex;
     flex-direction: row;
-    margin-top: 3vh;
+    margin-top: 3.5vh;
     margin-bottom: 0vh;
 }
 
