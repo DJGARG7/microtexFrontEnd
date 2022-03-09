@@ -24,26 +24,24 @@ export default function Login({ onLogin }) {
         <>
             <Toaster />
             <div className="mainParent">
-                <div className="blackbox">
-                    <div className="leftPart">
-                        <h2>Saved Users</h2>
-                        <RecentUserList
-                            savedFirmHandler={savedFirmHandler}
-                            savedProprietorHandler={savedProprietorHandler}
-                        />
-                    </div>
-                    <div className="rightPart">
-                        <h2>Login</h2>
-                        <LoginForm
-                            type={type}
-                            setType={setType}
-                            corporateID={corporateID}
-                            setCorporateID={setCorporateID}
-                            userID={userID}
-                            setUserID={setUserID}
-                            onLogin={onLogin}
-                        />
-                    </div>
+                <div className="leftPart">
+                    <h2>Saved Users</h2>
+                    <RecentUserList
+                        savedFirmHandler={savedFirmHandler}
+                        savedProprietorHandler={savedProprietorHandler}
+                    />
+                </div>
+                <div className="rightPart">
+                    <h2>Login</h2>
+                    <LoginForm
+                        type={type}
+                        setType={setType}
+                        corporateID={corporateID}
+                        setCorporateID={setCorporateID}
+                        userID={userID}
+                        setUserID={setUserID}
+                        onLogin={onLogin}
+                    />
                 </div>
             </div>
         </>

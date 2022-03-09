@@ -8,4 +8,11 @@ html {
 
 body {
     margin: 0;
+    background-color: #353535;
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
