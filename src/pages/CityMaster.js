@@ -212,6 +212,7 @@ function CityMaster({ userDetails }) {
     };
     return (
         <div className="citymaster">
+            <h2>City Master</h2>
             <div className="Inputs">
                 <form onSubmit={onClickHandler}>
                     {/* <label>City Name</label>{" "} */}
