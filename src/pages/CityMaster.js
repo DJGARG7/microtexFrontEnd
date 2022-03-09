@@ -7,9 +7,10 @@ import { SortingMode } from "ka-table/enums";
 import toast from "react-hot-toast";
 
 // Include header and cookie with every request.
-Axios.defaults.headers.common["userID"] = JSON.parse(
-    localStorage.getItem("userDetails")
-).userID;
+if (localStorage.getItem("userDetails") != null)
+    Axios.defaults.headers.common["userID"] = JSON.parse(
+        localStorage.getItem("userDetails")
+    ).userID;
 Axios.defaults.withCredentials = true;
 
 let index, oldcity;

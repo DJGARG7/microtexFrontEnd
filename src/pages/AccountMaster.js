@@ -3,9 +3,10 @@ import AccountTypeData from "../jsonData/AccountTypeData";
 import styles from "../styles/AccountMaster.module.css";
 import Axios from "axios";
 
-Axios.defaults.headers.common["userID"] = JSON.parse(
-    localStorage.getItem("userDetails")
-).userID;
+if (localStorage.getItem("userDetails") != null)
+    Axios.defaults.headers.common["userID"] = JSON.parse(
+        localStorage.getItem("userDetails")
+    ).userID;
 Axios.defaults.withCredentials = true;
 const instance = Axios.create({
     baseURL: "http://localhost:3003/accountMaster/",
@@ -130,7 +131,7 @@ const AccountMaster = ({ userDetails }) => {
                 console.log(error);
             }
         }
-        
+
         if (disMode === 2) {
             // axios request to update the data
             try {
@@ -138,9 +139,9 @@ const AccountMaster = ({ userDetails }) => {
             } catch (error) {
                 console.log(error);
             }
-            res1.then((res)=>{
+            res1.then((res) => {
                 console.log(res);
-            })
+            });
             const status = res1.request.status;
             if (status === 200) console.log("data added to db");
             else alert("error occured");
