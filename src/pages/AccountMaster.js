@@ -2,10 +2,14 @@ import { useState, useEffect } from "react";
 import AccountTypeData from "../jsonData/AccountTypeData";
 import styles from "../styles/AccountMaster.module.css";
 import Axios from "axios";
+
+Axios.defaults.headers.common["userID"] = JSON.parse(
+    localStorage.getItem("userDetails")
+).userID;
+Axios.defaults.withCredentials = true;
 const instance = Axios.create({
-  baseURL: "http://localhost:3003/accountMaster/",
+    baseURL: "http://localhost:3003/accountMaster/",
 });
-var oldaccountname;
 
 const AccountMaster = ({ userDetails }) => {
     const headers = {
@@ -20,7 +24,7 @@ const AccountMaster = ({ userDetails }) => {
     const [addline2, setAddLine2] = useState("");
     const [addline3, setAddLine3] = useState("");
     const [pinCode, setPinCode] = useState(0);
-    const [city, setCity] = useState("");
+    const [city, setCity] = useState("none");
 
     const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
@@ -45,59 +49,110 @@ const AccountMaster = ({ userDetails }) => {
     const [boolList, setBoolList] = useState([]);
     const [disMode, setDisMode] = useState(0);
 
-  const [citydata, setcitydata] = useState([]);
-  const buttonModes = {
-    0: [
-      { dis: true, label: "delete" },
-      { dis: false, label: "add" },
-      { dis: false, label: "view all data" },
-      { dis: true, label: "cancel" },
-      { dis: false, label: "exit" },
-    ],
-    1: [
-      { dis: false, label: "delete" },
-      { dis: true, label: "add" },
-      { dis: false, label: "edit" },
-      { dis: true, label: "cancel" },
-      { dis: false, label: "exit" },
-    ],
-    2: [
-      { dis: true, label: "delete" },
-      { dis: false, label: "save" },
-      { dis: true, label: "edit" },
-      { dis: false, label: "cancel" },
-      { dis: false, label: "exit" },
-    ],
-  };
-  //from city service in useeffect
-  var data1 = [];
-  useEffect(() => {
-    (async function fetchdata() {
-      try {
-        var res = await Axios.get(
-          "http://localhost:3001/cityMaster/getdata",
-        );
-        for (var ch in res.data) {
-          // console.log(res.data[ch].CityName);
-          data1.push(res.data[ch].CityName);
-        }
-        setcitydata(data1);
-      } catch (e) {
-        console.log(e);
-      }
-      console.log(res);
-    })();
-  }, []);
-
-    const submitHandler = (e) => {
-        e.preventDefault();
-        console.log(accName);
-        console.log(accType);
-        console.log(boolList);
+    const [citydata, setcitydata] = useState([]);
+    const buttonModes = {
+        0: [
+            { dis: true, label: "delete" },
+            { dis: false, label: "add" },
+            { dis: false, label: "view all data" },
+            { dis: true, label: "cancel" },
+            { dis: false, label: "exit" },
+        ],
+        1: [
+            { dis: false, label: "delete" },
+            { dis: true, label: "add" },
+            { dis: false, label: "edit" },
+            { dis: true, label: "cancel" },
+            { dis: false, label: "exit" },
+        ],
+        2: [
+            { dis: true, label: "delete" },
+            { dis: false, label: "save" },
+            { dis: true, label: "edit" },
+            { dis: false, label: "cancel" },
+            { dis: false, label: "exit" },
+        ],
     };
+    //fetch cities from cityService
+    useEffect(() => {
+        (async function fetchdata() {
+            try {
+                const res = await Axios.get(
+                    "http://localhost:3001/cityMaster/get"
+                );
+                setcitydata(
+                    Object.keys(res.data).map((city) => {
+                        return res.data[city].CityName;
+                    })
+                );
+            } catch (e) {
+                console.log(e);
+            }
+        })();
+    }, []);
+
     const changeHandler = (e) => {
         setBoolList(AccountTypeData[e.target.value]);
         setType(e.target.value);
+    };
+
+    const addSaveHandler = async (event) => {
+        event.preventDefault();
+        // sanity check
+        // if (!accName || accType === "none") {
+        //     alert("Enter account name or select account type");
+        //     return;
+        // }
+        //getting required data to send the request
+        const data = {
+            AccName: accName.trim(),
+            AccType: accType.trim(),
+            address1: addline1.trim(),
+            address2: addline2.trim(),
+            address3: addline3.trim(),
+            city: city.trim(),
+            pincode: pinCode,
+            phoneNo: phone,
+            email: email.trim(),
+            GSTIN: gstin.trim(),
+            RegDate: regDate,
+            propName: propName.trim(),
+            PAN: pan.trim(),
+            dist: dist,
+            transport: transport.trim(),
+            openingBal: openBal,
+            CrDr: crdr.trim(),
+            beneName: beneficiary.trim(),
+            AccountNum: accNum,
+            IFSC: ifsc.trim(),
+            shares: share,
+        };
+        if (disMode === 0) {
+            // axios requet to add the data
+            try {
+                const res = await instance.post("postdata", data);
+                if (res.status === 200) console.log("data added to db");
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        
+        if (disMode === 2) {
+            // axios request to update the data
+            try {
+                var res1 = await instance.post("updatedata", data);
+            } catch (error) {
+                console.log(error);
+            }
+            res1.then((res)=>{
+                console.log(res);
+            })
+            const status = res1.request.status;
+            if (status === 200) console.log("data added to db");
+            else alert("error occured");
+        }
+        setDisMode(1);
+        setIsEntering(false);
     };
     const deleteHandler = async () => {
         if (disMode === 1) {
@@ -120,60 +175,6 @@ const AccountMaster = ({ userDetails }) => {
             exitHandler();
         }
     };
-    const addSaveHandler = async () => {
-        // sanity check
-        if (!accName || accType === "none") {
-            alert("Enter account name or select account type");
-            return;
-        }
-        //getting required data to send the request
-        const data = {
-            accountname: accName.trim(),
-            accounttype: accType.trim(),
-            address_1: addline1.trim(),
-            address_2: addline2.trim(),
-            address_3: addline3.trim(),
-            city: city.trim(),
-            pincode: pinCode,
-        };
-        if (disMode === 0) {
-            oldaccountname = accName.trim();
-            // axios requet to add the data
-            try {
-                var res = await instance.post("postdata", data);
-            } catch (error) {
-                console.log(error);
-            }
-            // res.then((res1)=>{
-            //     console.log(res1);
-            // })
-            console.log(res.data);
-            if (res.data == 1){
-                console.log("data added to db");
-            } 
-            else alert(res.data.sqlMessage);
-        }
-        if (disMode === 2) {
-            const data1 = {
-                ...data,
-                oldaccountname: oldaccountname,
-            };
-            // axios request to update the data
-            try {
-                var res1 = await instance.post("updatedata", data1);
-            } catch (error) {
-                console.log(error);
-            }
-            res1.then((res)=>{
-                console.log(res);
-            })
-            const status = res1.request.status;
-            if (status === 200) console.log("data added to db");
-            else alert("error occured");
-        }
-        setDisMode(1);
-        setIsEntering(false);
-    };
     const editViewHandler = () => {
         if (disMode === 0) {
             // select * all data in modal
@@ -187,7 +188,6 @@ const AccountMaster = ({ userDetails }) => {
     const cancelHandler = () => {
         if (disMode === 2) {
             setDisMode(1);
-            setAccName(oldaccountname);
             setIsEntering(false);
         }
     };
@@ -238,7 +238,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={addline1}
                                 placeholder="Address line1"
                                 onChange={(e) => setAddLine1(e.target.value)}
-                                required
+                                //required
                                 disabled={!isEntering}
                             />
                             <input
@@ -247,7 +247,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={addline2}
                                 placeholder="Address line2"
                                 onChange={(e) => setAddLine2(e.target.value)}
-                                required
+                                //required
                                 disabled={!isEntering}
                             />
                             <input
@@ -256,7 +256,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={addline3}
                                 placeholder="Address line3"
                                 onChange={(e) => setAddLine3(e.target.value)}
-                                required
+                                //required
                                 disabled={!isEntering}
                             />
                             <select
@@ -280,7 +280,7 @@ const AccountMaster = ({ userDetails }) => {
                                 onChange={(e) => setPinCode(e.target.value)}
                                 min={100000}
                                 max={999999}
-                                required
+                                //required
                                 disabled={!isEntering}
                             />
                         </div>
@@ -293,7 +293,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={phone}
                                 placeholder="Phone No."
                                 onChange={(e) => setPhone(e.target.value)}
-                                required
+                                //required
                                 disabled={!isEntering}
                             />
                             <input
@@ -302,7 +302,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={email}
                                 placeholder="Email"
                                 onChange={(e) => setEmail(e.target.value)}
-                                required
+                                //required
                                 disabled={!isEntering}
                             />
                         </div>
@@ -316,7 +316,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={gstin}
                                 placeholder="GSTIN"
                                 onChange={(e) => setGstin(e.target.value)}
-                                required
+                                //required
                                 disabled={!isEntering}
                             />
                             <input
@@ -325,7 +325,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={regDate}
                                 placeholder="RegDate"
                                 onChange={(e) => setRegDate(e.target.value)}
-                                required
+                                //required
                                 disabled
                             />
                             <input
@@ -334,7 +334,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={propName}
                                 placeholder="prop Name"
                                 onChange={(e) => setPropName(e.target.value)}
-                                required
+                                //required
                                 disabled
                             />
                             <input
@@ -343,7 +343,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={pan}
                                 placeholder="PAN no."
                                 onChange={(e) => setPan(e.target.value)}
-                                required
+                                //required
                                 disabled
                             />
                             <input
@@ -352,7 +352,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={dist}
                                 placeholder="Distance"
                                 onChange={(e) => setDist(e.target.value)}
-                                required
+                                //required
                                 disabled
                             />
                         </div>
@@ -365,7 +365,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={transport}
                                 placeholder="Transport"
                                 onChange={(e) => setTransport(e.target.value)}
-                                required
+                                //required
                                 disabled={!isEntering}
                             />
                         </div>
@@ -378,7 +378,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={openBal}
                                 placeholder="Opening Bal"
                                 onChange={(e) => setOpenBal(e.target.value)}
-                                required
+                                //required
                                 disabled={!isEntering}
                             />
                             <select
@@ -406,7 +406,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={beneficiary}
                                 placeholder="beneficiary name"
                                 onChange={(e) => setBeneficiary(e.target.value)}
-                                required
+                                //required
                                 disabled={!isEntering}
                             />
                             <input
@@ -415,7 +415,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={accNum}
                                 placeholder="Account Number"
                                 onChange={(e) => setAccNum(e.target.value)}
-                                required
+                                //required
                                 disabled={!isEntering}
                             />
                             <input
@@ -424,7 +424,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={ifsc}
                                 placeholder="IFSC code"
                                 onChange={(e) => setIfsc(e.target.value)}
-                                required
+                                //required
                                 disabled={!isEntering}
                             />
                         </div>
@@ -438,7 +438,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={share}
                                 placeholder="Share %"
                                 onChange={(e) => setShare(e.target.value)}
-                                required
+                                //required
                                 disabled={!isEntering}
                                 min={0}
                                 max={100}
@@ -446,10 +446,7 @@ const AccountMaster = ({ userDetails }) => {
                         </div>
                     )}
                 </div>
-                <button
-                    disabled={buttonModes[disMode][1].dis}
-                    onClick={addSaveHandler}
-                >
+                <button disabled={buttonModes[disMode][1].dis}>
                     {buttonModes[disMode][1].label}
                 </button>
             </form>

@@ -1,29 +1,33 @@
 import { NavLink } from "react-router-dom";
-import "../../styles/SideBar.css";
 
 function SideBar({ SideBarData, userDetails, logoutHandler }) {
     return (
-        <div className="Sidebar">
-            <ul className="MenuBarList">
+        <div className="sidebar">
+            <div className="sidebar--nav-links">
                 {SideBarData.data.map((val, key) => {
                     return (
                         <NavLink
-                            activeClassName="SBactive"
+                            className="sidebar--nav-link"
+                            activeClassName="sidebar--active-nav-link"
                             to={val.link}
                             key={key}
                         >
-                            <li key={key} className="row">
-                                {val.title}
-                            </li>
+                            <li>{val.title}</li>
                         </NavLink>
                     );
                 })}
-            </ul>
-            <ul className="user-details">
-                <li className="row">{userDetails.userName}</li>
-                <li className="row">{userDetails.userID}</li>
-                <li className="row">{userDetails.corporateID}</li>
-                <button className="row" onClick={logoutHandler}>
+            </div>
+            <ul className="sidebar--user">
+                <li className="sidebar--user-detail sidebar--user-name">
+                    {userDetails.userName}
+                </li>
+                <li className="sidebar--user-detail sidebar--user-id">
+                    {userDetails.corporateID !== ""
+                        ? `${userDetails.corporateID} // ${userDetails.userID}`
+                        : `${userDetails.userID}`}
+                </li>
+
+                <button className="sidebar--logout-btn" onClick={logoutHandler}>
                     Logout
                 </button>
             </ul>

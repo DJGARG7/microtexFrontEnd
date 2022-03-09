@@ -9,15 +9,11 @@ const AdminSideBarData = [
     },
     {
         title: "Design Master",
-        link: "/designMaster",
-    },
-    {
-        title: "Account Type Master",
-        link: "/accountTypeMaster",
+        link: "/dashboard/designMaster",
     },
     {
         title: "User Management",
-        link: "/userManagement",
+        link: "/dashboard/userManagement",
     },
 ];
 
