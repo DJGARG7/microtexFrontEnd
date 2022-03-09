@@ -120,7 +120,7 @@ function CityMaster({ userDetails }) {
     };
 
     // funtion executes when the form is submitted
-    const onClickHandler = (event) => {
+    const onClickHandler = async (event) => {
         event.preventDefault();
         const newData = {
             CityName: city.trim(),
@@ -128,111 +128,90 @@ function CityMaster({ userDetails }) {
         };
         // checks wether the mode is edit or not if edit --> updates the exsisting selected row in the table and if !edit-> adds new data into the table if not present.
         if (editMode) {
-            const editData = async () => {
-                try {
-                    var result = await Axios.post(
-                        "http://localhost:3001/cityMaster/update",
+            try {
+                const result = await Axios.post(
+                    "http://localhost:3001/cityMaster/update",
+                    {
+                        City: city.trim(),
+                        State: state.trim(),
+                        oldcity: oldcity.trim(),
+                    }
+                );
+                if (result.data == 1) {
+                    setEditMode(false);
+                    setTabledata((preExpense) => {
+                        preExpense[index].CityName = newData.CityName;
+                        preExpense[index].StateName = newData.StateName;
+                        return [...preExpense];
+                    });
+                    toast.success(
+                        `${newData.CityName}, ${newData.StateName} added successfully!`,
                         {
-                            City: city.trim(),
-                            State: state.trim(),
-                            oldcity: oldcity.trim(),
+                            style: {
+                                borderRadius: "15px",
+                                background: "#333",
+                                color: "#fff",
+                            },
                         }
                     );
-                    return result;
-                } catch (e) {
-                    console.log(e);
-                    return e;
-                }
-            };
-            editData()
-                .then((result) => {
-                    if (result.data == 1) {
-                        setEditMode(false);
-                        setTabledata((preExpense) => {
-                            preExpense[index].CityName = newData.CityName;
-                            preExpense[index].StateName = newData.StateName;
-                            return [...preExpense];
+                } else {
+                    if (result.data)
+                        toast.error(result.data, {
+                            style: {
+                                borderRadius: "15px",
+                                background: "#333",
+                                color: "#fff",
+                            },
                         });
-                        toast.success(
-                            `${newData.CityName}, ${newData.StateName} added successfully!`,
-                            {
-                                style: {
-                                    borderRadius: "15px",
-                                    background: "#333",
-                                    color: "#fff",
-                                },
-                            }
-                        );
-                    } else {
-                        if (result.data.sqlMessage)
-                            toast.error(result.data.sqlMessage, {
-                                style: {
-                                    borderRadius: "15px",
-                                    background: "#333",
-                                    color: "#fff",
-                                },
-                            });
-                        console.log(result.data.sqlMessage);
-                    }
-                })
-                .catch((e) => {
-                    console.log(e);
-                });
+                    console.log(result.data);
+                }
+            } catch (e) {
+                console.log(e);
+            }
         } else {
             // function to add the data
-            const addData = async function () {
-                try {
-                    var result = await Axios.post(
-                        "http://localhost:3001/cityMaster/Add",
+            try {
+                const result = await Axios.post(
+                    "http://localhost:3001/cityMaster/Add",
+                    {
+                        City: city.trim(),
+                        State: state.trim(),
+                    },
+                    {
+                        withCredentials: true,
+                    }
+                );
+                if (result.data == 1) {
+                    setTabledata((prestate) => {
+                        return [...prestate, newData];
+                    });
+                    toast.success(
+                        `${newData.CityName}, ${newData.StateName} added successfully!`,
                         {
-                            City: city.trim(),
-                            State: state.trim(),
-                        },
-                        {
-                            withCredentials: true,
+                            style: {
+                                borderRadius: "15px",
+                                background: "#333",
+                                color: "#fff",
+                            },
                         }
                     );
-                    return result;
-                } catch (e) {
-                    console.log(e);
-                    return e;
-                }
-            };
-            addData()
-                .then((result) => {
-                    if (result.data == 1) {
-                        setTabledata((prestate) => {
-                            return [...prestate, newData];
+                } else {
+                    if (result.data.sqlMessage)
+                        toast.error(result.data.sqlMessage, {
+                            style: {
+                                borderRadius: "15px",
+                                background: "#333",
+                                color: "#fff",
+                            },
                         });
-                        toast.success(
-                            `${newData.CityName}, ${newData.StateName} added successfully!`,
-                            {
-                                style: {
-                                    borderRadius: "15px",
-                                    background: "#333",
-                                    color: "#fff",
-                                },
-                            }
-                        );
-                    } else {
-                        if (result.data.sqlMessage)
-                            toast.error(result.data.sqlMessage, {
-                                style: {
-                                    borderRadius: "15px",
-                                    background: "#333",
-                                    color: "#fff",
-                                },
-                            });
-                    }
-                })
-                .catch((e) => {
-                    console.log(e);
-                });
+                }
+            } catch (e) {
+                console.log(e);
+            }
         }
     };
     return (
         <div className="citymaster">
-            <h2>City Master</h2>
             <div className="Inputs">
                 <form onSubmit={onClickHandler}>
                     {/* <label>City Name</label>{" "} */}
