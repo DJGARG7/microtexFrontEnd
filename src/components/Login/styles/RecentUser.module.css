@@ -10,8 +10,8 @@
     align-items: center;
     justify-content: space-between;
     /* Appearance */
-    font-family: "Inter", sans-serif;
-    font-size: 15px;
+    font-family: "Karla", sans-serif;
+    font-size: 1.1rem;
     background-color: red;
     border: 0;
     border-radius: 0 10px 10px 0;
@@ -25,19 +25,20 @@
 }
 
 .firm {
-    background-color: #d5b8ff;
+    background-color: #c4a484;
 }
 
 .firm:hover {
-    background-color: #bf55ec;
+    filter: brightness(110%);
 }
 
 .proprietor {
-    background-color: #77a4ce;
+    background-color: #538bc1;
+    color: white;
 }
 
 .proprietor:hover {
-    background-color: #538bc1;
+    filter: brightness(110%);
 }
 
 .recent-user .proprietor-id {

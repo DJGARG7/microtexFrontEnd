@@ -13,10 +13,14 @@
 .delete-user {
     width: 10%;
     color: white;
-    background-color: #f6404f;
+    background-color: #ca2b53;
     border: 0;
     border-radius: 10px 0 0 10px;
     box-shadow: 0 9px #999;
+}
+
+.delete-user:hover {
+    filter: brightness(110%);
 }
 
 .delete-user:active {
