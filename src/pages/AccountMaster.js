@@ -144,9 +144,12 @@ const AccountMaster = ({ userDetails }) => {
             } catch (error) {
                 console.log(error);
             }
+            res1.then((res)=>{
+                console.log(res);
+            })
             const status = res1.request.status;
             if (status === 200) console.log("data added to db");
-            else console.log("error occured");
+            else alert("error occured");
         }
         setDisMode(1);
         setIsEntering(false);
