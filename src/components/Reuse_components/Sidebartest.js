@@ -1,19 +1,19 @@
 import styled from "styled-components";
 
-
 // import { SidebarDataUserTest } from "../../jsonData/SideBarUserTest";
 import UserSubmenu from "./UserSubmenu";
 import { IconContext } from "react-icons/lib";
 
 const SidebarNav = styled.nav`
-  background: #15171c;
-  width: 250px;
-  height: 89vh;
   display: flex;
-  justify-content: center;
-  position: fixed;
-  margin-top:5vh;
-  top: 0;
+  flex-direction: column;
+  justify-content: space-between;
+
+  width: 17.5vw;
+  height: 100%;
+
+  background-color: #480ca8;
+  border-radius: 15px;
   left: ${({ sidebar }) => (sidebar ? "0" : "-100%")};
   transition: 350ms;
   z-index: 10;
@@ -24,7 +24,6 @@ const SidebarWrap = styled.div`
 `;
 
 const Sidebartest = ({ SidebarDataUserTest, userDetails, logoutHandler }) => {
-
   return (
     <>
       <IconContext.Provider value={{ color: "#fff" }}>
@@ -33,15 +32,19 @@ const Sidebartest = ({ SidebarDataUserTest, userDetails, logoutHandler }) => {
             {SidebarDataUserTest.map((item, index) => {
               return <UserSubmenu item={item} key={index} />;
             })}
-            <ul className="user-details">
-              <li className="row">{userDetails.name}</li>
-              <li className="row">{userDetails.u_id}</li>
-              <li className="row">{userDetails.c_id}</li>
-              <button type="submit" className="row" onClick={logoutHandler}>
-                Logout
-              </button>
-            </ul>
           </SidebarWrap>
+            <ul className="user-details">
+              <li className="row">{userDetails.userName}</li>
+              <li className="row">{userDetails.userID}</li>
+              <li className="row">{userDetails.corporateID}</li>
+            </ul>
+          <button
+            type="submit"
+            className="sidebartest--logoutbutton"
+            onClick={logoutHandler}
+          >
+            Logout
+          </button>
         </SidebarNav>
       </IconContext.Provider>
     </>

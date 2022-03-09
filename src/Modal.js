@@ -1,3 +1,4 @@
+
 const MODAL_STYLES = {
     position: "fixed",
     top: "50%",
