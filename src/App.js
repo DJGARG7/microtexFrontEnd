@@ -83,7 +83,7 @@ function App() {
     return (
         <>
             <div className="logo">
-                <h1>MicroTex ERP Solutions</h1>
+                <h1>MicroTex</h1>
             </div>
             <Route path="/login">
                 <Login onLogin={loginHandler} />

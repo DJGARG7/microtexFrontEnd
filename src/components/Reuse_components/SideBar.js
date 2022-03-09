@@ -17,7 +17,7 @@ function SideBar({ SideBarData, userDetails, logoutHandler }) {
                     );
                 })}
             </div>
-            <ul className="sidebar--user">
+            <div className="sidebar--user">
                 <li className="sidebar--user-detail sidebar--user-name">
                     {userDetails.userName}
                 </li>
@@ -30,7 +30,7 @@ function SideBar({ SideBarData, userDetails, logoutHandler }) {
                 <button className="sidebar--logout-btn" onClick={logoutHandler}>
                     Logout
                 </button>
-            </ul>
+            </div>
         </div>
     );
 }
