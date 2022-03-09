@@ -12,7 +12,7 @@
     position: relative;
     height: 100%;
     width: 15vw;
-    align-items: left;
+    align-items: center;
     background-color: #480ca8;
     flex-direction: column;
     justify-content: space-between;
@@ -35,15 +35,12 @@
     color: white;
     justify-content: center;
     align-items: center;
-    /* font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-        "Lucida Sans", Arial, sans-serif; */
 }
 
 .MenuBarList .row:hover {
     background-color: #480ca8;
     cursor: pointer;
     border-radius: 15px;
-    padding: -10px;
     filter: brightness(125%);
     margin: 0px;
 }
