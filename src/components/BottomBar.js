@@ -6,7 +6,7 @@ export default function BottomBar() {
     useEffect(() => {
         setInterval(() => {
             setTime(new Date());
-        }, 1000);
+        }, 60000);
     }, [time]);
 
     return (
@@ -14,7 +14,7 @@ export default function BottomBar() {
             <a className="active">support@microtex.in</a>
             <a>Contact: 1800 5654 7868</a>
             <a>{time.toLocaleDateString()}</a>
-            <a>{time.toLocaleTimeString()}</a>
+            {/* <a>{time.toLocaleTimeString()}</a> */}
         </div>
     );
 }

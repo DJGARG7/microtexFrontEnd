@@ -3,7 +3,7 @@ import AccountTypeData from "../jsonData/AccountTypeData";
 import styles from "../styles/AccountMaster.module.css";
 import Axios from "axios";
 const instance = Axios.create({
-  baseURL: "http://localhost:3003/accountMaster/",
+    baseURL: "http://localhost:3003/accountMaster/",
 });
 var oldaccountname;
 
@@ -20,7 +20,7 @@ const AccountMaster = ({ userDetails }) => {
     const [addline2, setAddLine2] = useState("");
     const [addline3, setAddLine3] = useState("");
     const [pinCode, setPinCode] = useState(0);
-    const [city, setCity] = useState("");
+    const [city, setCity] = useState("none");
 
     const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
@@ -45,56 +45,48 @@ const AccountMaster = ({ userDetails }) => {
     const [boolList, setBoolList] = useState([]);
     const [disMode, setDisMode] = useState(0);
 
-  const [citydata, setcitydata] = useState([]);
-  const buttonModes = {
-    0: [
-      { dis: true, label: "delete" },
-      { dis: false, label: "add" },
-      { dis: false, label: "view all data" },
-      { dis: true, label: "cancel" },
-      { dis: false, label: "exit" },
-    ],
-    1: [
-      { dis: false, label: "delete" },
-      { dis: true, label: "add" },
-      { dis: false, label: "edit" },
-      { dis: true, label: "cancel" },
-      { dis: false, label: "exit" },
-    ],
-    2: [
-      { dis: true, label: "delete" },
-      { dis: false, label: "save" },
-      { dis: true, label: "edit" },
-      { dis: false, label: "cancel" },
-      { dis: false, label: "exit" },
-    ],
-  };
-  //from city service in useeffect
-  var data1 = [];
-  useEffect(() => {
-    (async function fetchdata() {
-      try {
-        var res = await Axios.get(
-          "http://localhost:3001/cityMaster/getdata",
-        );
-        for (var ch in res.data) {
-          // console.log(res.data[ch].CityName);
-          data1.push(res.data[ch].CityName);
-        }
-        setcitydata(data1);
-      } catch (e) {
-        console.log(e);
-      }
-      console.log(res);
-    })();
-  }, []);
-
-    const submitHandler = (e) => {
-        e.preventDefault();
-        console.log(accName);
-        console.log(accType);
-        console.log(boolList);
+    const [citydata, setcitydata] = useState([]);
+    const buttonModes = {
+        0: [
+            { dis: true, label: "delete" },
+            { dis: false, label: "add" },
+            { dis: false, label: "view all data" },
+            { dis: true, label: "cancel" },
+            { dis: false, label: "exit" },
+        ],
+        1: [
+            { dis: false, label: "delete" },
+            { dis: true, label: "add" },
+            { dis: false, label: "edit" },
+            { dis: true, label: "cancel" },
+            { dis: false, label: "exit" },
+        ],
+        2: [
+            { dis: true, label: "delete" },
+            { dis: false, label: "save" },
+            { dis: true, label: "edit" },
+            { dis: false, label: "cancel" },
+            { dis: false, label: "exit" },
+        ],
     };
+    //fetch cities from cityService
+    useEffect(() => {
+        (async function fetchdata() {
+            try {
+                const res = await Axios.get(
+                    "http://localhost:3001/cityMaster/getdata"
+                );
+                setcitydata(
+                    Object.keys(res.data).map((city) => {
+                        return res.data[city].CityName;
+                    })
+                );
+            } catch (e) {
+                console.log(e);
+            }
+        })();
+    }, []);
+
     const changeHandler = (e) => {
         setBoolList(AccountTypeData[e.target.value]);
         setType(e.target.value);
@@ -120,7 +112,8 @@ const AccountMaster = ({ userDetails }) => {
             exitHandler();
         }
     };
-    const addSaveHandler = async () => {
+    const addSaveHandler = async (event) => {
+        event.preventDefault();
         // sanity check
         if (!accName || accType === "none") {
             alert("Enter account name or select account type");
@@ -439,10 +432,7 @@ const AccountMaster = ({ userDetails }) => {
                         </div>
                     )}
                 </div>
-                <button
-                    disabled={buttonModes[disMode][1].dis}
-                    onClick={addSaveHandler}
-                >
+                <button disabled={buttonModes[disMode][1].dis}>
                     {buttonModes[disMode][1].label}
                 </button>
             </form>
