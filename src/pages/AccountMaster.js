@@ -138,16 +138,20 @@ const AccountMaster = ({ userDetails }) => {
         };
         if (disMode === 0) {
             oldaccountname = accName.trim();
-            console.log(data);
             // axios requet to add the data
             try {
                 var res = await instance.post("postdata", data);
             } catch (error) {
                 console.log(error);
             }
-            const status = res.request.status;
-            if (status === 200) console.log("data added to db");
-            else console.log("error occured");
+            // res.then((res1)=>{
+            //     console.log(res1);
+            // })
+            console.log(res.data);
+            if (res.data == 1){
+                console.log("data added to db");
+            } 
+            else alert(res.data.sqlMessage);
         }
         if (disMode === 2) {
             const data1 = {
@@ -160,9 +164,12 @@ const AccountMaster = ({ userDetails }) => {
             } catch (error) {
                 console.log(error);
             }
+            res1.then((res)=>{
+                console.log(res);
+            })
             const status = res1.request.status;
             if (status === 200) console.log("data added to db");
-            else console.log("error occured");
+            else alert("error occured");
         }
         setDisMode(1);
         setIsEntering(false);

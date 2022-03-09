@@ -10,10 +10,6 @@ function CityMaster({ userDetails }) {
   const [city, setCitychange] = useState("");
   const [state, setStatechange] = useState("");
   const [editMode, setEditMode] = useState(false);
-  // const headers = {
-  //   accessToken: userDetails.token,
-  // };
-
   // // for gettig the data when the page loads for the first time
   useEffect(() => {
     (async function fetchdata() {
@@ -56,9 +52,6 @@ function CityMaster({ userDetails }) {
                   {
                     City: tableProps.row.values.CityName,
                   }
-                  // {
-                  //   headers: headers,
-                  // }
                 );
                 const dataCopy = [...tabledata];
                 console.log(result);
@@ -137,7 +130,7 @@ function CityMaster({ userDetails }) {
             return [...preExpense];
           });
         } else {
-          if (result.data.sqlMessage) alert("City Already prenet");
+          if (result.data.sqlMessage) alert("City Already present");
           console.log(result.data.sqlMessage);
         }
       });
@@ -167,7 +160,7 @@ function CityMaster({ userDetails }) {
             return [...prestate, newData];
           });
         } else {
-          if (result.data.sqlMessage) alert("City Already prenet");
+          if (result.data.sqlMessage) alert("City Already present");
           console.log(result.data.sqlMessage);
         }
       });
