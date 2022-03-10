@@ -1,4 +1,10 @@
+import styles from "../styles/AdminLandingPage.module.css";
+
 const AdminLandingPage = () => {
-    return <h1>This is  AdminDashboard Landing Page</h1>
-}
+    return (
+        <div className={styles["main"]}>
+            <h2>Admin Dashboard</h2>
+        </div>
+    );
+};
 export default AdminLandingPage;

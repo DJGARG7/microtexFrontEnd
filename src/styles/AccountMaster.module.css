@@ -78,11 +78,6 @@
     margin: 0 10px 0 10px;
 }
 
-.main .form input,
-.main .form select {
-    /* margin: 10px 10px 10px 10px; */
-}
-
 .main .button-group {
     display: flex;
     flex-direction: row;
