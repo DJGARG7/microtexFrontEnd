@@ -4,7 +4,7 @@ import AccountTypeData from "../jsonData/AccountTypeData";
 import styles from "../styles/AccountMaster.module.css";
 import Axios from "axios";
 import toast from "react-hot-toast";
-
+import AccountMasterTable from "../components/Admin_components/AccountMasterTable";
 if (localStorage.getItem("userDetails") != null)
     Axios.defaults.headers.common["userID"] = JSON.parse(
         localStorage.getItem("userDetails")
@@ -188,9 +188,9 @@ const AccountMaster = ({ userDetails }) => {
     const editViewHandler = async () => {
         if (disMode === 0) {
             // select * all data in modal
-            const res = await instance.get("FetchAll");
-            console.log(res);
-            setIsOpen(true)
+            // const res = await instance.get("FetchAll");
+            // console.log(res);
+            setIsOpen(true);
         }
         if (disMode === 1) {
             setDisMode(2);
@@ -483,7 +483,7 @@ const AccountMaster = ({ userDetails }) => {
               {buttonModes[disMode][4].label}
             </button>
           </div>
-          <Modal open={isOpen} onClose={closeHandler}></Modal>
+          <Modal open={isOpen} onClose={closeHandler}><AccountMasterTable/></Modal>
         </div>
     );
 };

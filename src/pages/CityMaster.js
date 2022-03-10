@@ -3,7 +3,6 @@ import TableComponent from "../components/Reuse_components/TableComponent";
 import { useState, useEffect } from "react";
 import "../styles/CityMaster.css";
 import Axios from "axios";
-import { SortingMode } from "ka-table/enums";
 import toast from "react-hot-toast";
 
 // Include header and cookie with every request.

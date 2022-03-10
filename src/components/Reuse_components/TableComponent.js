@@ -13,13 +13,13 @@ The component accepts two props
 
 function TableComponent({ TableCol, TableData, Unique }) {
 
-  const Tableinsatance = useTable({
+  const Tableinstance = useTable({
     columns : TableCol,
     data : TableData,
   });
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    Tableinsatance;
+    Tableinstance;
   return (
     <table {...getTableProps()}>
       <thead>
