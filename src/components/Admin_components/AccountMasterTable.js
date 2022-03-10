@@ -1,6 +1,9 @@
 import React from "react";
 import TableComponent from "../Reuse_components/TableComponent";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useFilters } from "react-table/dist/react-table.development";
+import Axios from "axios";
+import "../../styles/Accountmastertable.css";
 const TableColData = [
   {
     Header: "Action",
@@ -101,20 +104,25 @@ const TableColData = [
     Header: "Shares",
     accessor: "shares",
   },
-  
-];
-const tabledata = [
-  {
-    AccountName: "Hello",
-    AccountType: "fbjfbf",
-    Address1: "lfnbrwjfw",
-    Address2: "jgnrwjlbwgwr",
-    Address3: "ggrgrgrgr",
-  },
 ];
 function AccountMasterTable({ data }) {
+  const [tabledata, settabledata] = useState([]);
+  useEffect(() => {
+    (async function fetchdata() {
+      try {
+        const res = await Axios.get(
+          "http://localhost:3003/accountMaster/FetchAll"
+        );
+        console.log(res);
+        settabledata(res.data);
+      } catch (e) {
+        console.log(e);
+      }
+    })();
+  }, []);
+
   return (
-    <div>
+    <div className="accout--master--table">
       <TableComponent TableCol={TableColData} TableData={tabledata} />
     </div>
   );
