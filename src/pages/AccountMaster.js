@@ -214,6 +214,15 @@ const AccountMaster = ({ userDetails }) => {
     const closeHandler = () => {
         setIsOpen(false);
     };
+    const showHandler = (rowdetails)=>{
+        console.log(rowdetails);
+        setDisMode(1);
+        setIsEntering(false);
+        setIsOpen(false);
+        setAccName(rowdetails.AccName)
+        setType(rowdetails.AccType)
+        setBoolList(AccountTypeData[rowdetails.AccType]);
+    }
     // console.log(isopen)
     return (
         <div className={styles["main"]}>
@@ -500,7 +509,9 @@ const AccountMaster = ({ userDetails }) => {
                     {buttonModes[disMode][4].label}
                 </button>
             </div>
-            <Modal open={isOpen} onClose={closeHandler}><AccountMasterTable/></Modal>
+            <Modal open={isOpen} onClose={closeHandler}>
+                <AccountMasterTable showclick={showHandler}/>
+            </Modal>
         </div>
     );
 };
