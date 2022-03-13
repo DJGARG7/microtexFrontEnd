@@ -1,9 +1,7 @@
 import React from "react";
-import TableComponent from "../Reuse_components/TableComponent";
 import { useState, useEffect } from "react";
-import { useFilters } from "react-table/dist/react-table.development";
 import Axios from "axios";
-import "../../styles/Accountmastertable.css";
+import StickyTable from "../Reuse_components/StickyTable"
 
 function AccountMasterTable({ showclick }) {
     const [tabledata, settabledata] = useState([]);
@@ -19,14 +17,14 @@ function AccountMasterTable({ showclick }) {
                             cursor: "pointer",
                         }}
                         onClick={() => {
-                            showclick(tabledata[tableProps.row.index]);
+                            // showclick(tabledata[tableProps.row.index]); 
                         }}
                     >
                         Show
                     </button>
                 </div>
             ),
-            // fixed:"left"
+           sticky : "left",
         },
         {
             Header: "Unique Id",
@@ -117,6 +115,7 @@ function AccountMasterTable({ showclick }) {
             accessor: "shares",
         },
     ];
+    
     useEffect(() => {
         (async function fetchdata() {
             try {
@@ -131,10 +130,7 @@ function AccountMasterTable({ showclick }) {
         })();
     }, []);
 
-    return (
-        <div className="accout--master--table">
-            <TableComponent TableCol={TableColData} TableData={tabledata} />
-        </div>
+    return ( <StickyTable TableCol={TableColData} TableData={tabledata} />
     );
 }
 
