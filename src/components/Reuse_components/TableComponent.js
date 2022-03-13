@@ -1,7 +1,7 @@
 import "../../styles/TableComponent.css";
 import { useTable } from "react-table";
 import React from "react";
-
+import { useMemo } from "react/cjs/react.development";
 
 /* this module is used to create resuable tables
 
@@ -12,10 +12,12 @@ The component accepts two props
  */
 
 function TableComponent({ TableCol, TableData, Unique }) {
+  const columns = useMemo(() => [...TableCol], [TableCol]);
+  const data = useMemo(() => [...TableData], [TableData]);
 
   const Tableinstance = useTable({
-    columns : TableCol,
-    data : TableData,
+    columns,
+    data,
   });
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
@@ -37,7 +39,11 @@ function TableComponent({ TableCol, TableData, Unique }) {
           return (
             <tr {...row.getRowProps()}>
               {row.cells.map((cells) => {
-                return <td key = {Math.random()} {...cells.getCellProps}>{cells.render("Cell")}</td>;
+                return (
+                  <td key={Math.random()} {...cells.getCellProps}>
+                    {cells.render("Cell")}
+                  </td>
+                );
               })}
             </tr>
           );

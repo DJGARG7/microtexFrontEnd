@@ -4,16 +4,18 @@ import { useState, useEffect } from "react";
 import { useFilters } from "react-table/dist/react-table.development";
 import Axios from "axios";
 import "../../styles/Accountmastertable.css";
+
 const TableColData = [
   {
     Header: "Action",
-    accessor: (str) => "delete",
+    accessor: (str) => "Show",
     Cell: (tableProps) => (
       <div>
         <button
           style={{
             cursor: "pointer",
           }}
+          // onClick = {showdata}
         >
           Show
         </button>
@@ -106,6 +108,9 @@ const TableColData = [
   },
 ];
 function AccountMasterTable({ data }) {
+  // const showdata = (tbldata)=>{
+  //   console.log(tbldata);
+  // }
   const [tabledata, settabledata] = useState([]);
   useEffect(() => {
     (async function fetchdata() {

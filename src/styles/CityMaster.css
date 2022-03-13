@@ -57,6 +57,9 @@
 .table {
     height: 100%;
     overflow: auto;
+    width: 50;
+    display: flex;
+    flex-direction: column;
 }
 
 .table table {
