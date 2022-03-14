@@ -77,8 +77,8 @@
     line-height: 1;
     text-align: center;
     padding: 8px 16px;
-    margin-right: -1px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
+    margin-right: -2px;
+    border: 2.5px solid black;
 
     transition: all 0.25s ease-in-out;
 
@@ -115,6 +115,7 @@ form input[type="password"] {
     margin-top: 25px;
     border-radius: 5px;
     height: 40px;
+    border: 2.5px solid black;
 }
 
 .rightPart .form .btn {
@@ -124,14 +125,35 @@ form input[type="password"] {
     margin-top: 50px;
 }
 
+.btn {
+    width: 80px;
+    height: 40px;
+
+    border: 2.5px solid black;
+    border-radius: 5px;
+
+    font-family: "Karla", sans-serif;
+    font-size: 1rem;
+    padding: 5px;
+}
+
 .rightPart .form .btn-login {
+    width: 80px;
+    height: 40px;
+
+    border: 2.5px solid black;
+    border-radius: 5px;
+
+    font-family: "Karla", sans-serif;
+    font-size: 1rem;
+    padding: 5px;
+
     display: block;
-    border: 2px solid #0ba360;
-    border-radius: 25px;
+    /*border: 2px solid #0ba360;
+    border-radius: 25px; */
     color: #0ba360;
-    padding: 10px 25px;
+    /* padding: 10px 25px; */
     cursor: pointer;
-    font-family: "Manrope", sans-serif;
     background-color: #fafafa;
     font-weight: 400;
 }

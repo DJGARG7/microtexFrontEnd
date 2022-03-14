@@ -214,15 +214,15 @@ const AccountMaster = ({ userDetails }) => {
     const closeHandler = () => {
         setIsOpen(false);
     };
-    const showHandler = (rowdetails)=>{
+    const showHandler = (rowdetails) => {
         console.log(rowdetails);
         setDisMode(1);
         setIsEntering(false);
         setIsOpen(false);
-        setAccName(rowdetails.AccName)
-        setType(rowdetails.AccType)
+        setAccName(rowdetails.AccName);
+        setType(rowdetails.AccType);
         setBoolList(AccountTypeData[rowdetails.AccType]);
-    }
+    };
     // console.log(isopen)
     return (
         <div className={styles["main"]}>
@@ -497,20 +497,20 @@ const AccountMaster = ({ userDetails }) => {
                 <button
                     disabled={buttonModes[disMode][3].dis}
                     onClick={cancelHandler}
-                    className={`${styles["btn"]}`}
+                    className={`${styles["btn"]} ${styles["del-btn"]}`}
                 >
                     {buttonModes[disMode][3].label}
                 </button>
                 <button
                     disabled={buttonModes[disMode][4].dis}
                     onClick={exitHandler}
-                    className={`${styles["btn"]}`}
+                    className={`${styles["btn"]} ${styles["del-btn"]}`}
                 >
                     {buttonModes[disMode][4].label}
                 </button>
             </div>
             <Modal open={isOpen} onClose={closeHandler}>
-                <AccountMasterTable showclick={showHandler}/>
+                <AccountMasterTable showclick={showHandler} />
             </Modal>
         </div>
     );
