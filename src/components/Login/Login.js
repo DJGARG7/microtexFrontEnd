@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import RecentUserList from "./RecentUserList";
 import LoginForm from "./LoginForm";
-import "./styles/Login.css";
+// import "./styles/Login.css";
 import { Toaster } from "react-hot-toast";
+
+import styles from "./styles/Login.module.css";
 
 export default function Login({ onLogin }) {
     const [corporateID, setCorporateID] = useState("");
@@ -31,16 +33,16 @@ export default function Login({ onLogin }) {
     return (
         <>
             <Toaster />
-            <div className="mainParent">
-                <div className="leftPart">
-                    <h2>Saved Users</h2>
+            <div className={styles["body"]}>
+                <div className={styles["left"]}>
+                    <h2 className={styles["left--title"]}>Saved Users</h2>
                     <RecentUserList
                         savedFirmHandler={savedFirmHandler}
                         savedProprietorHandler={savedProprietorHandler}
                     />
                 </div>
-                <div className="rightPart">
-                    <h2>Login</h2>
+                <div className={styles["right"]}>
+                    <h2 className={styles["right--title"]}>Login</h2>
                     <LoginForm
                         rememberUser={rememberUser}
                         rememberHandler={rememberHandler}
