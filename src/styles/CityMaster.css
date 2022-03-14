@@ -101,7 +101,8 @@
     filter: brightness(110%);
 }
 
-/* input[type="text"] {
+.input-city,
+.input-state {
     background: #edf2f4;
     width: 40%;
     color: #212121;
@@ -111,4 +112,4 @@
     border-radius: 5px;
     height: 40px;
     border: 2.5px solid black;
-} */
+}

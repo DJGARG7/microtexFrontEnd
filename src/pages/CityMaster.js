@@ -216,6 +216,7 @@ function CityMaster({ userDetails }) {
                         onChange={cityHandler}
                         value={city}
                         placeholder="City"
+                        className="input-city"
                         required
                     ></input>
                     {/* <label>State Name</label>{" "} */}
@@ -224,6 +225,7 @@ function CityMaster({ userDetails }) {
                         onChange={stateHandler}
                         value={state}
                         placeholder="State"
+                        className="input-state"
                         required
                     ></input>
                     {!editMode && (

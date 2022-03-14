@@ -64,6 +64,16 @@
     padding: 10px;
 }
 
+.main .form .input-select:disabled {
+    color: #212121;
+    background-color: grey;
+}
+
+.main .form .input-text:disabled {
+    color: #212121;
+    background-color: grey;
+}
+
 .main .form .input-grid {
     display: flex;
     flex-direction: row;

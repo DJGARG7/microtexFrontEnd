@@ -237,6 +237,7 @@ const AccountMaster = ({ userDetails }) => {
                         placeholder="Account Name"
                         onChange={(e) => setAccName(e.target.value)}
                         disabled={!isEntering}
+                        className={styles["input-text"]}
                         required
                     />
                     <select
@@ -264,6 +265,7 @@ const AccountMaster = ({ userDetails }) => {
                                 placeholder="Address line1"
                                 onChange={(e) => setAddLine1(e.target.value)}
                                 //required
+                                className={styles["input-text"]}
                                 disabled={!isEntering}
                             />
                             <input
@@ -272,6 +274,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={addline2}
                                 placeholder="Address line2"
                                 onChange={(e) => setAddLine2(e.target.value)}
+                                className={styles["input-text"]}
                                 //required
                                 disabled={!isEntering}
                             />
@@ -281,6 +284,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={addline3}
                                 placeholder="Address line3"
                                 onChange={(e) => setAddLine3(e.target.value)}
+                                className={styles["input-text"]}
                                 //required
                                 disabled={!isEntering}
                             />
@@ -289,6 +293,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={city}
                                 onChange={(e) => setCity(e.target.value)}
                                 disabled={!isEntering}
+                                className={styles["input-select"]}
                             >
                                 <option value="none" selected disabled hidden>
                                     Select City
@@ -305,6 +310,7 @@ const AccountMaster = ({ userDetails }) => {
                                 onChange={(e) => setPinCode(e.target.value)}
                                 min={100000}
                                 max={999999}
+                                className={styles["input-text"]}
                                 //required
                                 disabled={!isEntering}
                             />
@@ -318,6 +324,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={phone}
                                 placeholder="Phone No."
                                 onChange={(e) => setPhone(e.target.value)}
+                                className={styles["input-text"]}
                                 //required
                                 disabled={!isEntering}
                             />
@@ -327,6 +334,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={email}
                                 placeholder="Email"
                                 onChange={(e) => setEmail(e.target.value)}
+                                className={styles["input-text"]}
                                 //required
                                 disabled={!isEntering}
                             />
@@ -341,6 +349,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={gstin}
                                 placeholder="GSTIN"
                                 onChange={(e) => setGstin(e.target.value)}
+                                className={styles["input-text"]}
                                 //required
                                 disabled={!isEntering}
                             />
@@ -350,6 +359,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={regDate}
                                 placeholder="RegDate"
                                 onChange={(e) => setRegDate(e.target.value)}
+                                className={styles["input-text"]}
                                 //required
                                 disabled
                             />
@@ -359,6 +369,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={propName}
                                 placeholder="prop Name"
                                 onChange={(e) => setPropName(e.target.value)}
+                                className={styles["input-text"]}
                                 //required
                                 disabled
                             />
@@ -368,6 +379,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={pan}
                                 placeholder="PAN no."
                                 onChange={(e) => setPan(e.target.value)}
+                                className={styles["input-text"]}
                                 //required
                                 disabled
                             />
@@ -377,6 +389,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={dist}
                                 placeholder="Distance"
                                 onChange={(e) => setDist(e.target.value)}
+                                className={styles["input-text"]}
                                 //required
                                 disabled
                             />
@@ -390,6 +403,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={transport}
                                 placeholder="Transport"
                                 onChange={(e) => setTransport(e.target.value)}
+                                className={styles["input-text"]}
                                 //required
                                 disabled={!isEntering}
                             />
@@ -403,6 +417,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={openBal}
                                 placeholder="Opening Bal"
                                 onChange={(e) => setOpenBal(e.target.value)}
+                                className={styles["input-text"]}
                                 //required
                                 disabled={!isEntering}
                             />
@@ -410,6 +425,7 @@ const AccountMaster = ({ userDetails }) => {
                                 name="crdr"
                                 value={crdr}
                                 onChange={(e) => setCrdr(e.target.value)}
+                                className={styles["input-select"]}
                                 disabled={!isEntering}
                             >
                                 <option value="none" selected disabled hidden>
@@ -431,6 +447,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={beneficiary}
                                 placeholder="beneficiary name"
                                 onChange={(e) => setBeneficiary(e.target.value)}
+                                className={styles["input-text"]}
                                 //required
                                 disabled={!isEntering}
                             />
@@ -440,6 +457,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={accNum}
                                 placeholder="Account Number"
                                 onChange={(e) => setAccNum(e.target.value)}
+                                className={styles["input-text"]}
                                 //required
                                 disabled={!isEntering}
                             />
@@ -449,6 +467,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={ifsc}
                                 placeholder="IFSC code"
                                 onChange={(e) => setIfsc(e.target.value)}
+                                className={styles["input-text"]}
                                 //required
                                 disabled={!isEntering}
                             />
@@ -463,6 +482,7 @@ const AccountMaster = ({ userDetails }) => {
                                 value={share}
                                 placeholder="Share %"
                                 onChange={(e) => setShare(e.target.value)}
+                                className={styles["input-text"]}
                                 //required
                                 disabled={!isEntering}
                                 min={0}
