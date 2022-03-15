@@ -89,14 +89,14 @@ function App() {
                 <Login onLogin={loginHandler} />
             </Route>
             <Route path="/dashboard">
-                {/* <UserDashboard
-                    userDetails={user}
-                    logoutHandler={logoutHandler}
-                /> */}
-                <AdminDashboard
+                <UserDashboard
                     userDetails={user}
                     logoutHandler={logoutHandler}
                 />
+                {/* <AdminDashboard
+                    userDetails={user}
+                    logoutHandler={logoutHandler}
+                /> */}
             </Route>
             <Route path="/">
                 {isLoggedIn === "true" ? (

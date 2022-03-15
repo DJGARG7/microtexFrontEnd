@@ -1,18 +1,16 @@
 import { Route } from "react-router-dom";
-
+import Revenue from "./user_pages/Revenue";
+import SendJobForWork from "./user_pages/SendJobForWork";
 const UserContent = ({ userDetails }) => {
     return (
         <>
-            <Route path="/cityMaster" exact>
-         
+            <Route path="/dashboard/transaction/jobforwork" exact>
+                <SendJobForWork />
             </Route>
-            <Route path="/accountMaster" exact>
-
+            <Route path="/dashboard/transaction/revenue" exact>
+                <Revenue/>
             </Route>
-            {/* <Route path="/accountTypeMaster" exact>
-                <AccountTypeMaster/>
-            </Route> */}
-            <Route path="/" exact>
+            <Route path="/dashboard" exact>
                 <h1>Welcome to Microtex</h1>
             </Route>
         </>

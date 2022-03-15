@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import Axios from "axios";
-import StickyTable from "../Reuse_components/StickyTable"
+import StickyTable from "../Reuse_components//Table/StickyTable"
 
 function AccountMasterTable({ showclick }) {
     const [tabledata, settabledata] = useState([]);

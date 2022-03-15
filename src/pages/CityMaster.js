@@ -1,5 +1,5 @@
 import React from "react";
-import TableComponent from "../components/Reuse_components/TableComponent";
+import TableComponent from "../components/Reuse_components/Table/TableComponent";
 import { useState, useEffect } from "react";
 import "../styles/CityMaster.css";
 import Axios from "axios";

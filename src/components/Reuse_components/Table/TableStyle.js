@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const Styles = styled.div`
   .table--sticky {
     border: 1px solid #ddd;
-
+    
     .tr--sticky {
       :last-child {
         .td--sticky {
@@ -69,6 +69,4 @@ export const Styles = styled.div`
       }
     }
   }
-
-
 `;

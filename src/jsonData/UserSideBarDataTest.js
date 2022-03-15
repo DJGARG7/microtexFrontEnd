@@ -4,18 +4,31 @@ import * as RiIcons from "react-icons/ri";
 export const UserSideBarDataTest = [
   {
     title: "Transaction",
-    path: "/transaction",
+    path: "/dashboard",
     iconClosed: <RiIcons.RiArrowDownSFill />,
     iconOpened: <RiIcons.RiArrowUpSFill />,
 
     subNav: [
       {
+        title: "Sale",
+        path: "/dashboard/transaction/sale",
+        iconClosed: <RiIcons.RiArrowDownSFill />,
+        iconOpened: <RiIcons.RiArrowUpSFill />,
+        subNav:[
+          {
+            title : "Normal sales",
+            path : "/dashboard/transaction/sale/normalsale",
+          }
+        ]
+      },
+      {
         title: "Send Job for work",
-        path: "/transaction/jobforwork",
+        path: "/dashboard/transaction/jobforwork",
+  
       },
       {
         title: "Revenue",
-        path: "/overview/revenue",
+        path: "/dashboard/transaction/revenue",
       },
     ],
   },
@@ -68,5 +81,9 @@ export const UserSideBarDataTest = [
         path: "/reports/reports3",
       },
     ],
+  },
+  {
+    title: "xyz",
+    path: "/xyz",
   },
 ];
