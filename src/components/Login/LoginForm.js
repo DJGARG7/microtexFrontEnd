@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "./api/axios";
 import toast from "react-hot-toast";
 
+import styles from "./styles/LoginForm.module.css";
+
 export default function LoginForm({
     rememberUser,
     rememberHandler,
@@ -100,30 +102,35 @@ export default function LoginForm({
     };
 
     return (
-        <form onSubmit={loginHandler}>
-            <div className="form">
-                <div className="switch-field">
-                    {types.map((t) => (
-                        <React.Fragment key={t}>
-                            <input
-                                type="radio"
-                                id={t}
-                                value={t}
-                                checked={type === t}
-                                onChange={radioHandler}
-                            />
-                            <label htmlFor={t}>
-                                <span>{t}</span>
-                            </label>
-                        </React.Fragment>
-                    ))}
-                </div>
+        <form className={styles["form"]} onSubmit={loginHandler}>
+            <div className={styles["form--user-type"]}>
+                {types.map((t) => (
+                    <React.Fragment key={t}>
+                        <input
+                            type="radio"
+                            id={t}
+                            value={t}
+                            checked={type === t}
+                            onChange={radioHandler}
+                            className={styles["form--user-type-c"]}
+                        />
+                        <label
+                            htmlFor={t}
+                            className={styles["form--user-type-c"]}
+                        >
+                            <span>{t}</span>
+                        </label>
+                    </React.Fragment>
+                ))}
+            </div>
+            <div className={styles["form--input"]}>
                 {type === "Firm" && (
                     <input
                         type="text"
                         value={corporateID}
                         placeholder="Corporate ID"
                         onChange={(e) => setCorporateID(e.target.value)}
+                        className={styles["form--input-t"]}
                         required
                     />
                 )}
@@ -132,28 +139,31 @@ export default function LoginForm({
                     value={userID}
                     placeholder="User ID"
                     onChange={(e) => setUserID(e.target.value)}
+                    className={styles["form--input-t"]}
                     required
                 />
                 <input
                     id="password"
                     type="password"
                     placeholder="Password"
+                    className={styles["form--input-p"]}
                     required
                 />
-
-                <div className="rememberMe">
-                    <input
-                        type="checkbox"
-                        checked={rememberUser}
-                        onChange={rememberHandler}
-                        id="rememberMe"
-                    />
-                    <label htmlFor="rememberMe">Remember me?</label>
-                </div>
-                <button type="submit" className="btn btn-login">
-                    Login
-                </button>
             </div>
+
+            <div className={styles["form--remember-me"]}>
+                <label htmlFor="form--remember-me">Remember me? </label>
+                <input
+                    type="checkbox"
+                    checked={rememberUser}
+                    onChange={rememberHandler}
+                    id="form--remember-me"
+                />
+            </div>
+
+            <button type="submit" className={styles["form--btn"]}>
+                Login
+            </button>
         </form>
     );
 }

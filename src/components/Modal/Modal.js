@@ -4,9 +4,9 @@ const MODAL_STYLES = {
     left: "50%",
     transform: "translate(-50%,-50%)",
     backgroundColor: "#edf2f4",
-    padding: "50px",
+    padding: "40px",
     zIndex: 1000,
-    borderRadius: "10px",
+    borderRadius: "15px",
 };
 const OVERLAY_STYLES = {
     position: "fixed",

@@ -101,7 +101,8 @@
     filter: brightness(110%);
 }
 
-input[type="text"] {
+.input-city,
+.input-state {
     background: #edf2f4;
     width: 40%;
     color: #212121;

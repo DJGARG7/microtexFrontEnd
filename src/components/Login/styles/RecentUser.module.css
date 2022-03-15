@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
-
 .recent-user {
     /* Size. */
     width: 350px;
@@ -13,15 +11,16 @@
     font-family: "Karla", sans-serif;
     font-size: 1.1rem;
     background-color: red;
-    border: 0;
+    border: 2.5px solid black;
     border-radius: 0 10px 10px 0;
-    box-shadow: 0 9px #999;
+    /* box-shadow: 0 9px #999; */
     padding: 25px;
+    transition: all 0.1s;
 }
 
 .recent-user:active {
-    box-shadow: 0 5px #666;
-    transform: translateY(4px);
+    /* box-shadow: 0 5px #666; */
+    transform: scale(1.025, 1.025);
 }
 
 .firm {
@@ -29,7 +28,7 @@
 }
 
 .firm:hover {
-    filter: brightness(110%);
+    filter: brightness(120%);
 }
 
 .proprietor {
@@ -38,7 +37,7 @@
 }
 
 .proprietor:hover {
-    filter: brightness(110%);
+    filter: brightness(120%);
 }
 
 .recent-user .proprietor-id {

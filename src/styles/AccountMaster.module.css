@@ -64,6 +64,16 @@
     padding: 10px;
 }
 
+.main .form .input-select:disabled {
+    color: #212121;
+    background-color: grey;
+}
+
+.main .form .input-text:disabled {
+    color: #212121;
+    background-color: grey;
+}
+
 .main .form .input-grid {
     display: flex;
     flex-direction: row;
@@ -100,6 +110,14 @@
     padding: 5px;
 }
 
+.btn:disabled {
+    background-color: grey;
+}
+
+.btn:disabled:hover {
+    background-color: grey;
+}
+
 .add-btn {
     width: 390px;
     background-color: #40916c;
@@ -127,12 +145,4 @@
 
 .del-btn:hover {
     filter: brightness(125%);
-}
-
-.btn:disabled {
-    background-color: grey;
-}
-
-.btn:disabled:hover {
-    background-color: grey;
 }
