@@ -27,5 +27,5 @@
 
 .delete-user:active {
     /* box-shadow: 0 5px #666; */
-    transform: scale(1.05, 1.05);
+    transform: scale(0.95, 0.95);
 }

@@ -4,7 +4,7 @@ import { Route, Redirect } from "react-router";
 import Login from "./components/Login/Login";
 import AdminDashboard from "./components/Admin_components/AdminDashboard";
 import BottomBar from "./components/BottomBar";
-import UserDashboard from "./components/User_components/UserDashboard"
+import UserDashboard from "./components/User_components/UserDashboard";
 import axiosAuth from "./components/Login/api/axios";
 
 import "./style.css";
@@ -89,14 +89,14 @@ function App() {
                 <Login onLogin={loginHandler} />
             </Route>
             <Route path="/dashboard">
-                <UserDashboard
-                    userDetails={user}
-                    logoutHandler={logoutHandler}
-                />
-                {/* <AdminDashboard
+                {/* <UserDashboard
                     userDetails={user}
                     logoutHandler={logoutHandler}
                 /> */}
+                <AdminDashboard
+                    userDetails={user}
+                    logoutHandler={logoutHandler}
+                />
             </Route>
             <Route path="/">
                 {isLoggedIn === "true" ? (

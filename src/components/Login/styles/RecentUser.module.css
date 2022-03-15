@@ -20,7 +20,7 @@
 
 .recent-user:active {
     /* box-shadow: 0 5px #666; */
-    transform: scale(1.025, 1.025);
+    transform: scale(0.975, 0.975);
 }
 
 .firm {

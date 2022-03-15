@@ -26,17 +26,17 @@ const AccountMaster = ({ userDetails }) => {
     const [addline1, setAddLine1] = useState("");
     const [addline2, setAddLine2] = useState("");
     const [addline3, setAddLine3] = useState("");
-    const [pinCode, setPinCode] = useState(0);
+    const [pinCode, setPinCode] = useState("");
     const [city, setCity] = useState("none");
 
-    const [phone, setPhone] = useState(0);
+    const [phone, setPhone] = useState("");
     const [email, setEmail] = useState("");
 
     const [gstin, setGstin] = useState("");
     const [regDate, setRegDate] = useState("");
     const [propName, setPropName] = useState("");
     const [pan, setPan] = useState("");
-    const [dist, setDist] = useState(0);
+    const [dist, setDist] = useState("");
 
     const [transport, setTransport] = useState("");
 
@@ -131,7 +131,7 @@ const AccountMaster = ({ userDetails }) => {
                 setuuid(res.data.uuid);
                 if (res.data.status == 1) {
                     console.log("data added to db");
-                    toast.success("added successfully!", {
+                    toast.success("Account added successfully!", {
                         style: {
                             borderRadius: "15px",
                             background: "#333",
@@ -141,6 +141,13 @@ const AccountMaster = ({ userDetails }) => {
                 }
             } catch (error) {
                 console.log(error);
+                toast.error("Addition failed!", {
+                    style: {
+                        borderRadius: "15px",
+                        background: "#333",
+                        color: "#fff",
+                    },
+                });
             }
         }
 
@@ -227,307 +234,350 @@ const AccountMaster = ({ userDetails }) => {
     return (
         <div className={styles["main"]}>
             <h2>Account Master</h2>
+            <div className={styles["form-main"]}>
+                <form onSubmit={addSaveHandler} className={styles["form"]}>
+                    <div className={styles["input-section"]}>
+                        <input
+                            type="text"
+                            name="AccName"
+                            value={accName}
+                            placeholder="Account Name"
+                            onChange={(e) => setAccName(e.target.value)}
+                            disabled={!isEntering}
+                            className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
+                            required
+                        />
+                        <select
+                            className={`${styles["in-top-bar"]} ${styles["input-select"]}`}
+                            name="AccType"
+                            value={accType}
+                            onChange={changeHandler}
+                            disabled={!isEntering}
+                        >
+                            <option value="none" selected disabled hidden>
+                                Account type...
+                            </option>
+                            {Object.keys(AccountTypeData).map((key1) => {
+                                return <option value={key1}>{key1}</option>;
+                            })}
+                        </select>
+                    </div>
+                    <div className={styles["input-grid"]}>
+                        {boolList.includes("AddressGroup") && (
+                            <div className={styles["input-group"]}>
+                                <h3 className={styles["input-group-title"]}>
+                                    Address
+                                </h3>
+                                <input
+                                    type="text"
+                                    name="addline1"
+                                    value={addline1}
+                                    placeholder="Address line 1"
+                                    onChange={(e) =>
+                                        setAddLine1(e.target.value)
+                                    }
+                                    //required
+                                    className={styles["input-text"]}
+                                    disabled={!isEntering}
+                                />
+                                <input
+                                    type="text"
+                                    name="addline2"
+                                    value={addline2}
+                                    placeholder="Address line 2"
+                                    onChange={(e) =>
+                                        setAddLine2(e.target.value)
+                                    }
+                                    className={styles["input-text"]}
+                                    //required
+                                    disabled={!isEntering}
+                                />
+                                <input
+                                    type="text"
+                                    name="addline2"
+                                    value={addline3}
+                                    placeholder="Address line 3"
+                                    onChange={(e) =>
+                                        setAddLine3(e.target.value)
+                                    }
+                                    className={styles["input-text"]}
+                                    //required
+                                    disabled={!isEntering}
+                                />
+                                <select
+                                    name="cityName"
+                                    value={city}
+                                    onChange={(e) => setCity(e.target.value)}
+                                    disabled={!isEntering}
+                                    className={styles["input-select"]}
+                                >
+                                    <option
+                                        value="none"
+                                        selected
+                                        disabled
+                                        hidden
+                                    >
+                                        City...
+                                    </option>
+                                    {citydata.map((city) => {
+                                        return (
+                                            <option value={city}>{city}</option>
+                                        );
+                                    })}
+                                </select>
+                                <input
+                                    type="text"
+                                    name="pincode"
+                                    value={pinCode}
+                                    placeholder="Pincode"
+                                    onChange={(e) => setPinCode(e.target.value)}
+                                    pattern="[0-9]{6}"
+                                    className={styles["input-text"]}
+                                    //required
+                                    disabled={!isEntering}
+                                />
+                            </div>
+                        )}
+                        {boolList.includes("ContactGroup") && (
+                            <div className={styles["input-group"]}>
+                                <h3 className={styles["input-group-title"]}>
+                                    Contact
+                                </h3>
+                                <input
+                                    type="text"
+                                    name="Phone number"
+                                    value={phone}
+                                    placeholder="Phone No."
+                                    onChange={(e) => setPhone(e.target.value)}
+                                    className={styles["input-text"]}
+                                    //required
+                                    disabled={!isEntering}
+                                />
+                                <input
+                                    type="text"
+                                    name="Email"
+                                    value={email}
+                                    placeholder="Email"
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className={styles["input-text"]}
+                                    //required
+                                    disabled={!isEntering}
+                                />
+                            </div>
+                        )}
 
-            <form onSubmit={addSaveHandler} className={styles["form"]}>
-                <div className={styles["input-section"]}>
-                    <input
-                        type="text"
-                        name="AccName"
-                        value={accName}
-                        placeholder="Account Name"
-                        onChange={(e) => setAccName(e.target.value)}
-                        disabled={!isEntering}
-                        className={styles["input-text"]}
-                        required
-                    />
-                    <select
-                        className={styles["input-select"]}
-                        name="AccType"
-                        value={accType}
-                        onChange={changeHandler}
-                        disabled={!isEntering}
-                    >
-                        <option value="none" selected disabled hidden>
-                            Account Type...
-                        </option>
-                        {Object.keys(AccountTypeData).map((key1) => {
-                            return <option value={key1}>{key1}</option>;
-                        })}
-                    </select>
-                </div>
-                <div className={styles["input-grid"]}>
-                    {boolList.includes("AddressGroup") && (
-                        <div className={styles["input-group"]}>
-                            <input
-                                type="text"
-                                name="addline1"
-                                value={addline1}
-                                placeholder="Address line1"
-                                onChange={(e) => setAddLine1(e.target.value)}
-                                //required
-                                className={styles["input-text"]}
-                                disabled={!isEntering}
-                            />
-                            <input
-                                type="text"
-                                name="addline2"
-                                value={addline2}
-                                placeholder="Address line2"
-                                onChange={(e) => setAddLine2(e.target.value)}
-                                className={styles["input-text"]}
-                                //required
-                                disabled={!isEntering}
-                            />
-                            <input
-                                type="text"
-                                name="addline2"
-                                value={addline3}
-                                placeholder="Address line3"
-                                onChange={(e) => setAddLine3(e.target.value)}
-                                className={styles["input-text"]}
-                                //required
-                                disabled={!isEntering}
-                            />
-                            <select
-                                name="cityName"
-                                value={city}
-                                onChange={(e) => setCity(e.target.value)}
-                                disabled={!isEntering}
-                                className={styles["input-select"]}
-                            >
-                                <option value="none" selected disabled hidden>
-                                    Select City
-                                </option>
-                                {citydata.map((city) => {
-                                    return <option value={city}>{city}</option>;
-                                })}
-                            </select>
-                            <input
-                                type="number"
-                                name="pincode"
-                                value={pinCode}
-                                placeholder="pincode"
-                                onChange={(e) => setPinCode(e.target.value)}
-                                min={100000}
-                                max={999999}
-                                className={styles["input-text"]}
-                                //required
-                                disabled={!isEntering}
-                            />
-                        </div>
-                    )}
-                    {boolList.includes("ContactGroup") && (
-                        <div className={styles["input-group"]}>
-                            <input
-                                type="text"
-                                name="Phone No."
-                                value={phone}
-                                placeholder="Phone No."
-                                onChange={(e) => setPhone(e.target.value)}
-                                className={styles["input-text"]}
-                                //required
-                                disabled={!isEntering}
-                            />
-                            <input
-                                type="text"
-                                name="Email"
-                                value={email}
-                                placeholder="Email"
-                                onChange={(e) => setEmail(e.target.value)}
-                                className={styles["input-text"]}
-                                //required
-                                disabled={!isEntering}
-                            />
-                        </div>
-                    )}
-
-                    {boolList.includes("GstGroup") && (
-                        <div className={styles["input-group"]}>
-                            <input
-                                type="text"
-                                name="gstin"
-                                value={gstin}
-                                placeholder="GSTIN"
-                                onChange={(e) => setGstin(e.target.value)}
-                                className={styles["input-text"]}
-                                //required
-                                disabled={!isEntering}
-                            />
-                            <input
-                                type="text"
-                                name="RegDate"
-                                value={regDate}
-                                placeholder="RegDate"
-                                onChange={(e) => setRegDate(e.target.value)}
-                                className={styles["input-text"]}
-                                //required
-                                disabled
-                            />
-                            <input
-                                type="text"
-                                name="propName"
-                                value={propName}
-                                placeholder="prop Name"
-                                onChange={(e) => setPropName(e.target.value)}
-                                className={styles["input-text"]}
-                                //required
-                                disabled
-                            />
-                            <input
-                                type="text"
-                                name="PAN"
-                                value={pan}
-                                placeholder="PAN no."
-                                onChange={(e) => setPan(e.target.value)}
-                                className={styles["input-text"]}
-                                //required
-                                disabled
-                            />
-                            <input
-                                type="number"
-                                name="dist"
-                                value={dist}
-                                placeholder="Distance"
-                                onChange={(e) => setDist(e.target.value)}
-                                className={styles["input-text"]}
-                                //required
-                                disabled
-                            />
-                        </div>
-                    )}
-                    {boolList.includes("transport") && (
-                        <div className={styles["input-group"]}>
-                            <input
-                                type="text"
-                                name="transport"
-                                value={transport}
-                                placeholder="Transport"
-                                onChange={(e) => setTransport(e.target.value)}
-                                className={styles["input-text"]}
-                                //required
-                                disabled={!isEntering}
-                            />
-                        </div>
-                    )}
-                    {boolList.includes("OBGroup") && (
-                        <div className={styles["input-group"]}>
-                            <input
-                                type="number"
-                                name="openBal"
-                                value={openBal}
-                                placeholder="Opening Bal"
-                                onChange={(e) => setOpenBal(e.target.value)}
-                                className={styles["input-text"]}
-                                //required
-                                disabled={!isEntering}
-                            />
-                            <select
-                                name="crdr"
-                                value={crdr}
-                                onChange={(e) => setCrdr(e.target.value)}
-                                className={styles["input-select"]}
-                                disabled={!isEntering}
-                            >
-                                <option value="none" selected disabled hidden>
-                                    Cr./Dr.
-                                </option>
-                                <option value="CR">Cr.</option>
-                                <option value="DR">Dr.</option>
-                                {/* {CityData.map((city) => {
+                        {boolList.includes("GstGroup") && (
+                            <div className={styles["input-group"]}>
+                                <h3 className={styles["input-group-title"]}>
+                                    GST Information
+                                </h3>
+                                <input
+                                    type="text"
+                                    name="gstin"
+                                    value={gstin}
+                                    placeholder="GSTIN"
+                                    onChange={(e) => setGstin(e.target.value)}
+                                    className={styles["input-text"]}
+                                    //required
+                                    disabled={!isEntering}
+                                />
+                                <input
+                                    type="date"
+                                    name="RegDate"
+                                    value={regDate}
+                                    placeholder="Registration date"
+                                    onChange={(e) => setRegDate(e.target.value)}
+                                    className={styles["input-text"]}
+                                    //required
+                                    disabled
+                                />
+                                <input
+                                    type="text"
+                                    name="propName"
+                                    value={propName}
+                                    placeholder="prop Name"
+                                    onChange={(e) =>
+                                        setPropName(e.target.value)
+                                    }
+                                    className={styles["input-text"]}
+                                    //required
+                                    disabled
+                                />
+                                <input
+                                    type="text"
+                                    name="PAN"
+                                    value={pan}
+                                    placeholder="PAN"
+                                    onChange={(e) => setPan(e.target.value)}
+                                    className={styles["input-text"]}
+                                    //required
+                                    disabled
+                                />
+                                <input
+                                    type="text"
+                                    name="dist"
+                                    value={dist}
+                                    placeholder="Distance"
+                                    onChange={(e) => setDist(e.target.value)}
+                                    className={styles["input-text"]}
+                                    pattern="[0-9]*"
+                                    //required
+                                    disabled
+                                />
+                            </div>
+                        )}
+                        {boolList.includes("transport") && (
+                            <div className={styles["input-group"]}>
+                                <h3 className={styles["input-group-title"]}>
+                                    Transport Information
+                                </h3>
+                                <input
+                                    type="text"
+                                    name="transport"
+                                    value={transport}
+                                    placeholder="Transport"
+                                    onChange={(e) =>
+                                        setTransport(e.target.value)
+                                    }
+                                    className={styles["input-text"]}
+                                    //required
+                                    disabled={!isEntering}
+                                />
+                            </div>
+                        )}
+                        {boolList.includes("OBGroup") && (
+                            <div className={styles["input-group"]}>
+                                <h3 className={styles["input-group-title"]}>
+                                    Opening Balance
+                                </h3>
+                                <input
+                                    type="number"
+                                    name="openBal"
+                                    value={openBal}
+                                    placeholder="Opening Bal"
+                                    onChange={(e) => setOpenBal(e.target.value)}
+                                    className={styles["input-text"]}
+                                    //required
+                                    disabled={!isEntering}
+                                />
+                                <select
+                                    name="crdr"
+                                    value={crdr}
+                                    onChange={(e) => setCrdr(e.target.value)}
+                                    className={styles["input-select"]}
+                                    disabled={!isEntering}
+                                >
+                                    <option
+                                        value="none"
+                                        selected
+                                        disabled
+                                        hidden
+                                    >
+                                        Cr./Dr.
+                                    </option>
+                                    <option value="CR">Cr.</option>
+                                    <option value="DR">Dr.</option>
+                                    {/* {CityData.map((city) => {
                                         return <option value={city}>{city}</option>;
                                     })} */}
-                            </select>
-                        </div>
-                    )}
-                    {boolList.includes("bankdetail") && (
-                        <div className={styles["input-group"]}>
-                            <input
-                                type="text"
-                                name="beneficiary"
-                                value={beneficiary}
-                                placeholder="beneficiary name"
-                                onChange={(e) => setBeneficiary(e.target.value)}
-                                className={styles["input-text"]}
-                                //required
-                                disabled={!isEntering}
-                            />
-                            <input
-                                type="number"
-                                name="accNum"
-                                value={accNum}
-                                placeholder="Account Number"
-                                onChange={(e) => setAccNum(e.target.value)}
-                                className={styles["input-text"]}
-                                //required
-                                disabled={!isEntering}
-                            />
-                            <input
-                                type="text"
-                                name="ifsc"
-                                value={ifsc}
-                                placeholder="IFSC code"
-                                onChange={(e) => setIfsc(e.target.value)}
-                                className={styles["input-text"]}
-                                //required
-                                disabled={!isEntering}
-                            />
-                        </div>
-                    )}
-                    {/* {boolList.includes("GstCat") && <p>GstCat</p>} */}
-                    {boolList.includes("shares") && (
-                        <div className={styles["input-group"]}>
-                            <input
-                                type="number"
-                                name="share"
-                                value={share}
-                                placeholder="Share %"
-                                onChange={(e) => setShare(e.target.value)}
-                                className={styles["input-text"]}
-                                //required
-                                disabled={!isEntering}
-                                min={0}
-                                max={100}
-                            />
-                        </div>
-                    )}
-                </div>
-                <button
-                    disabled={buttonModes[disMode][1].dis}
-                    className={`${styles["add-btn"]} ${styles["btn"]}`}
-                >
-                    {buttonModes[disMode][1].label}
-                </button>
-            </form>
-            <div className={styles["button-group"]}>
-                <button
-                    disabled={buttonModes[disMode][0].dis}
-                    onClick={deleteHandler}
-                    className={`${styles["btn"]} ${styles["del-btn"]}`}
-                >
-                    {buttonModes[disMode][0].label}
-                </button>
+                                </select>
+                            </div>
+                        )}
+                        {boolList.includes("bankdetail") && (
+                            <div className={styles["input-group"]}>
+                                <h3 className={styles["input-group-title"]}>
+                                    Bank Information
+                                </h3>
+                                <input
+                                    type="text"
+                                    name="beneficiary"
+                                    value={beneficiary}
+                                    placeholder="beneficiary name"
+                                    onChange={(e) =>
+                                        setBeneficiary(e.target.value)
+                                    }
+                                    className={styles["input-text"]}
+                                    //required
+                                    disabled={!isEntering}
+                                />
+                                <input
+                                    type="number"
+                                    name="accNum"
+                                    value={accNum}
+                                    placeholder="Account Number"
+                                    onChange={(e) => setAccNum(e.target.value)}
+                                    className={styles["input-text"]}
+                                    //required
+                                    disabled={!isEntering}
+                                />
+                                <input
+                                    type="text"
+                                    name="ifsc"
+                                    value={ifsc}
+                                    placeholder="IFSC code"
+                                    onChange={(e) => setIfsc(e.target.value)}
+                                    className={styles["input-text"]}
+                                    //required
+                                    disabled={!isEntering}
+                                />
+                            </div>
+                        )}
+                        {/* {boolList.includes("GstCat") && <p>GstCat</p>} */}
+                        {boolList.includes("shares") && (
+                            <div className={styles["input-group"]}>
+                                <input
+                                    type="number"
+                                    name="share"
+                                    value={share}
+                                    placeholder="Share %"
+                                    onChange={(e) => setShare(e.target.value)}
+                                    className={styles["input-text"]}
+                                    //required
+                                    disabled={!isEntering}
+                                    min={0}
+                                    max={100}
+                                />
+                            </div>
+                        )}
+                    </div>
+                    <button
+                        disabled={buttonModes[disMode][1].dis}
+                        className={`${styles["add-btn"]} ${styles["btn"]}`}
+                    >
+                        {buttonModes[disMode][1].label}
+                    </button>
+                </form>
+                <div className={styles["button-group"]}>
+                    <button
+                        disabled={buttonModes[disMode][0].dis}
+                        onClick={deleteHandler}
+                        className={`${styles["btn"]} ${styles["del-btn"]}`}
+                    >
+                        {buttonModes[disMode][0].label}
+                    </button>
 
-                <button
-                    disabled={buttonModes[disMode][2].dis}
-                    onClick={editViewHandler}
-                    className={`${styles["btn"]} ${styles["view-all-data-btn"]}`}
-                >
-                    {buttonModes[disMode][2].label}
-                </button>
-                <button
-                    disabled={buttonModes[disMode][3].dis}
-                    onClick={cancelHandler}
-                    className={`${styles["btn"]} ${styles["del-btn"]}`}
-                >
-                    {buttonModes[disMode][3].label}
-                </button>
-                <button
-                    disabled={buttonModes[disMode][4].dis}
-                    onClick={exitHandler}
-                    className={`${styles["btn"]} ${styles["del-btn"]}`}
-                >
-                    {buttonModes[disMode][4].label}
-                </button>
+                    <button
+                        disabled={buttonModes[disMode][2].dis}
+                        onClick={editViewHandler}
+                        className={`${styles["btn"]} ${styles["view-all-data-btn"]}`}
+                    >
+                        {buttonModes[disMode][2].label}
+                    </button>
+                    <button
+                        disabled={buttonModes[disMode][3].dis}
+                        onClick={cancelHandler}
+                        className={`${styles["btn"]} ${styles["del-btn"]}`}
+                    >
+                        {buttonModes[disMode][3].label}
+                    </button>
+                    <button
+                        disabled={buttonModes[disMode][4].dis}
+                        onClick={exitHandler}
+                        className={`${styles["btn"]} ${styles["del-btn"]}`}
+                    >
+                        {buttonModes[disMode][4].label}
+                    </button>
+                </div>
             </div>
             <Modal open={isOpen} onClose={closeHandler}>
                 <AccountMasterTable showclick={showHandler} />
