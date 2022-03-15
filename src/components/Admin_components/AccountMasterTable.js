@@ -18,6 +18,7 @@ function AccountMasterTable({ showclick }) {
                         }}
                         onClick={() => {
                             // showclick(tabledata[tableProps.row.index]); 
+                            console.log(tableProps);
                         }}
                     >
                         Show
@@ -29,6 +30,7 @@ function AccountMasterTable({ showclick }) {
         {
             Header: "Unique Id",
             accessor: "uid",
+            show : false
         },
         {
             Header: "Account Name",

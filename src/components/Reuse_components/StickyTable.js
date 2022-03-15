@@ -1,6 +1,6 @@
 import { useTable, useBlockLayout } from "react-table";
 import React from "react";
-import { useSticky } from "react-table-sticky";
+import { columnIsLastLeftSticky, useSticky } from "react-table-sticky";
 import { useMemo } from "react/cjs/react.development";
 import { Styles } from "./TableStyle";
 
@@ -20,7 +20,13 @@ function StickyTable({ TableCol, TableData}) {
       {
         columns,
         data,
+        initialState:{
+          hiddenColumns : columns.map(column => {
+            if(column.show === false) return column.accessor || column.id;
+          }),
+        },
       },
+
       useBlockLayout,
       useSticky
     );
