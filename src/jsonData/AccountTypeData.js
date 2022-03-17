@@ -27,6 +27,7 @@ const transport = {};
 const GstCat = { "Gst Category": "dropD" };
 const commGrp = ["GstGroup", "AddressGroup", "ContactGroup", "OBGroup"];
 const AccountTypeData = {
+    "none":[],
     "P&L Expenses": ["GstCat"],
     "P&L Income": ["GstCat"],
 
