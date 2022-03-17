@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Route, Redirect } from "react-router";
+import { Route, Redirect, BrowserRouter as Router } from "react-router-dom";
 
 import Login from "./components/Login/Login";
 import AdminDashboard from "./components/Admin_components/AdminDashboard";
@@ -10,6 +10,10 @@ import axiosAuth from "./components/Login/api/axios";
 import "./style.css";
 
 function App() {
+    useEffect(() => {
+        console.log("hello");
+    }, []);
+
     // Storing user details in localStorage and as state.
     localStorage.getItem("userDetails") === null &&
         localStorage.setItem("userDetails", JSON.stringify({}));
@@ -85,26 +89,28 @@ function App() {
             <div className="logo">
                 <h1>MicroTex</h1>
             </div>
-            <Route path="/login">
-                <Login onLogin={loginHandler} />
-            </Route>
-            <Route path="/dashboard">
-                {/* <UserDashboard
+            <Router>
+                <Route path="/login">
+                    <Login onLogin={loginHandler} />
+                </Route>
+                <Route path="/dashboard">
+                    {/* <UserDashboard
                     userDetails={user}
                     logoutHandler={logoutHandler}
                 /> */}
-                <AdminDashboard
-                    userDetails={user}
-                    logoutHandler={logoutHandler}
-                />
-            </Route>
-            <Route path="/">
-                {isLoggedIn === "true" ? (
-                    <Redirect to="/dashboard" />
-                ) : (
-                    <Redirect to="/login" />
-                )}
-            </Route>
+                    <AdminDashboard
+                        userDetails={user}
+                        logoutHandler={logoutHandler}
+                    />
+                </Route>
+                <Route path="/">
+                    {isLoggedIn === "true" ? (
+                        <Redirect to="/dashboard" />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}
+                </Route>
+            </Router>
         </>
     );
 }
