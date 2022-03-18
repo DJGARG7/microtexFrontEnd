@@ -23,13 +23,13 @@ const AdminContent = ({ userDetails }) => {
                 <UserManagementIndex />
             </Route>
             <Route path="/dashboard/user-management/add-user" exact>
-                <AddUser />
+                <AddUser userDetails={userDetails} />
             </Route>
             <Route path="/dashboard/user-management/delete-user" exact>
-                <DeleteUser />
+                <DeleteUser userDetails={userDetails} />
             </Route>
             <Route path="/dashboard/user-management/manage-permissions" exact>
-                <ManagePermissions />
+                <ManagePermissions userDetails={userDetails} />
             </Route>
             <Route path="/dashboard" exact>
                 <AdminLandingPage />

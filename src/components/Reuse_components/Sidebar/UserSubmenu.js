@@ -58,7 +58,7 @@ const UserSubmenu = ({ item }) => {
             </SidebarLink>
             {subnav &&
                 item.subNav.map((item, index) => {
-                    return <Usersubmenu2 item={item} />;
+                    return <Usersubmenu2 item={item} key={index} />;
                 })}
         </div>
     );

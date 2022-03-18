@@ -1,5 +1,8 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
+
+import axios from "./api/axios";
+
 import commonStyles from "./styles/common.module.css";
 
 const toastStyle = {
@@ -10,16 +13,35 @@ const toastStyle = {
     },
 };
 
-export default function UserManagementIndex() {
+export default function UserManagementIndex({ userDetails }) {
+    const [userID, setUserID] = useState();
     const [userName, setUserName] = useState();
 
-    const addUserHandler = (event) => {
+    const addUserHandler = async (event) => {
         event.preventDefault();
-        try {
-            // Backend request.
-            toast.success("User added successfully!", toastStyle);
-        } catch (error) {
-            toast.error(error, toastStyle);
+
+        if (
+            document.getElementById("registerPassword").value !==
+            document.getElementById("confirmPassword").value
+        )
+            toast.error("Passwords do not match!", toastStyle);
+        else {
+            try {
+                const res = await axios.post("/register", {
+                    corporateID: userDetails.corporateID,
+                    userID: userID,
+                    userName: userName,
+                    password: document.getElementById("registerPassword").value,
+                    isAdmin: 0,
+                });
+
+                console.log(res);
+
+                toast.success("User added successfully!", toastStyle);
+            } catch (error) {
+                console.log(error);
+                toast.error(error, toastStyle);
+            }
         }
     };
 
@@ -29,21 +51,34 @@ export default function UserManagementIndex() {
             <form onSubmit={addUserHandler} className={commonStyles["form"]}>
                 <input
                     type="text"
-                    placeholder="User ID"
+                    placeholder="User Name"
                     onChange={(e) => setUserName(e.target.value)}
                     className={commonStyles["form--inp-t"]}
+                    required
+                />
+                <input
+                    type="text"
+                    placeholder="User ID"
+                    onChange={(e) => setUserID(e.target.value)}
+                    className={commonStyles["form--inp-t"]}
+                    required
                 />
                 <input
                     type="password"
                     placeholder="Password"
+                    id="registerPassword"
                     className={commonStyles["form--inp-p"]}
+                    required
                 />
                 <input
                     type="password"
                     placeholder="Confirm Password"
+                    id="confirmPassword"
                     className={commonStyles["form--inp-p"]}
+                    required
                 />
                 <button
+                    type="submit"
                     className={`${commonStyles["form--btn"]} ${commonStyles["form--add-btn"]}`}
                 >
                     Add

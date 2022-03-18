@@ -92,7 +92,6 @@ function App() {
                     <Login onLogin={loginHandler} />
                 </Route>
                 <Route path="/dashboard">
-                    {console.log(user)};
                     {user.isAdmin == 1 ? (
                         <AdminDashboard
                             userDetails={user}
