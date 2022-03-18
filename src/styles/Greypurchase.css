@@ -1,0 +1,25 @@
+.main{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-top : 230px;
+}
+.main .firstline--greypurchase{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding : 20px;
+    height: 100%;
+    width: 100%;
+
+}
+.main .secondline--greypurchase{
+    display: flex;
+    flex-direction: row;
+    padding : 10px;
+
+}
+.DropdownList{
+
+    width: 400px;
+}

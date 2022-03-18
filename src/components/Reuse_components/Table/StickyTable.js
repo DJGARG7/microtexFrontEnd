@@ -1,4 +1,4 @@
-import { useTable, useBlockLayout } from "react-table";
+import { useTable, useBlockLayout,useFilters,useGlobalFilter } from "react-table";
 import React from "react";
 import { columnIsLastLeftSticky, useSticky } from "react-table-sticky";
 import { useMemo } from "react/cjs/react.development";
@@ -10,25 +10,47 @@ The component accepts two props
  2. TableData - the rows in jason format. 
  */
 
-function StickyTable({ TableCol, TableData}) {
+function DefaultColumnFilter({
+  column: { filterValue, preFilteredRows, setFilter },
+}) {
+  const count = preFilteredRows.length;
+
+  return (
+    <input
+      value={filterValue || ""}
+      onChange={(e) => {
+        setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
+      }}
+      placeholder={`Search ${count} records...`}
+    />
+  );
+}
+function StickyTable({ TableCol, TableData }) {
   // use memo is used to stop running table everysecond and the [] is dependecy added and when it should run
   const columns = useMemo(() => [...TableCol], [TableCol]);
   const data = useMemo(() => [...TableData], [TableData]);
-
+  const defaultColumn = React.useMemo(
+    () => ({
+      Filter: DefaultColumnFilter,
+    }),
+    []
+  );
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable(
       {
         columns,
         data,
-        initialState:{
-          hiddenColumns : columns.map(column => {
-            if(column.show === false) return column.accessor || column.id;
+        initialState: {
+          hiddenColumns: columns.map((column) => {
+            if (column.show === false) return column.accessor || column.id;
           }),
         },
+        defaultColumn
       },
-
       useBlockLayout,
-      useSticky
+      useSticky,
+      useFilters,
+      useGlobalFilter
     );
   return (
     <Styles>
@@ -43,6 +65,7 @@ function StickyTable({ TableCol, TableData}) {
               {headerGroup.headers.map((column) => (
                 <div {...column.getHeaderProps()} className="th--sticky">
                   {column.render("Header")}
+                  <div style={{width:"100px"}}>{column.canFilter ? column.render('Filter') : null}</div>
                 </div>
               ))}
             </div>

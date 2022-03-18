@@ -10,21 +10,40 @@ export const UserSideBarDataTest = [
 
     subNav: [
       {
-        title: "Sale",
-        path: "/dashboard/transaction/sale",
+        title : "Purchase",
+        path : "/dashboard/transaction/purchase",
         iconClosed: <RiIcons.RiArrowDownSFill />,
         iconOpened: <RiIcons.RiArrowUpSFill />,
-        subNav:[
+        subNav : [
           {
-            title : "Normal sales",
-            path : "/dashboard/transaction/sale/normalsale",
+            title : "Grey purchase",
+            path : "/dashboard/transaction/purchase/greypurchase",
+          },
+          {
+            title : "Finished purchase",
+            path : "/dashboard/transaction/purchase/greypurchase",
+          },
+          {
+            title : "General purchase",
+            path : "/dashboard/transaction/purchase/greypurchase",
           }
         ]
       },
       {
+        title: "Sale",
+        path: "/dashboard/transaction/sale",
+        iconClosed: <RiIcons.RiArrowDownSFill />,
+        iconOpened: <RiIcons.RiArrowUpSFill />,
+        subNav: [
+          {
+            title: "Normal sales",
+            path: "/dashboard/transaction/sale/normalsale",
+          },
+        ],
+      },
+      {
         title: "Send Job for work",
         path: "/dashboard/transaction/jobforwork",
-  
       },
       {
         title: "Revenue",

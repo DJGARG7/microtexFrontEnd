@@ -4,15 +4,18 @@ import { NavLink } from "react-router-dom";
 const SidebarLink = styled(NavLink)`
 background: #414757;
 height: 60px;
+display : flex;
+justify-content : space-between;
 padding-left: 3rem;
-display: flex;
 align-items: center;
+padding-right : 1rem;
 text-decoration: none;
 color: #f5f5f5;
 font-size: 18px;
 &:hover {
   background: #632ce4;
   cursor: pointer;
+  border-left: 4px solid #632ce4;
 }
 `;
 
@@ -21,9 +24,9 @@ const SidebarLabel = styled.span`
 `;
 
 const DropdownLink = styled(NavLink)`
-  background: #414757;
+  background: #708090	;
   height: 60px;
-  padding-left: 4rem;
+  padding-left: 3rem;
   display: flex;
   align-items: center;
   text-decoration: none;
@@ -57,7 +60,7 @@ function Usersubmenu2({ item }) {
     {subnav &&
       item.subNav.map((item, index) => {
         return (
-          <div>
+          <div key={index}>
             <DropdownLink
               to={item.path}
               key={index}

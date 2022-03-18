@@ -3,6 +3,7 @@ import Modal from "../components/Modal/Modal";
 import AccountTypeData from "../jsonData/AccountTypeData";
 import styles from "../styles/AccountMaster.module.css";
 import Axios from "axios";
+import Form from "../components/Reuse_components/UI/Form";
 import toast from "react-hot-toast";
 import AccountMasterTable from "../components/Admin_components/AccountMasterTable";
 if (localStorage.getItem("userDetails") != null)

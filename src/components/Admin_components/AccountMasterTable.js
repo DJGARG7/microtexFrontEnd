@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Axios from "axios";
 import StickyTable from "../Reuse_components//Table/StickyTable"
 
+
 function AccountMasterTable({ showclick }) {
     const [tabledata, settabledata] = useState([]);
 
@@ -26,6 +27,7 @@ function AccountMasterTable({ showclick }) {
                 </div>
             ),
            sticky : "left",
+           Filter: "",
         },
         {
             Header: "Unique Id",
@@ -43,14 +45,17 @@ function AccountMasterTable({ showclick }) {
         {
             Header: "Address 1",
             accessor: "address1",
+            Filter: "",
         },
         {
             Header: "Address 2",
             accessor: "address2",
+            Filter: "",
         },
         {
             Header: "Address 3",
             accessor: "address3",
+            Filter: "",
         },
         {
             Header: "City",
@@ -59,6 +64,7 @@ function AccountMasterTable({ showclick }) {
         {
             Header: "Pincode",
             accessor: "pincode",
+            Filter: "",
         },
         {
             Header: "Phone No",
@@ -98,6 +104,7 @@ function AccountMasterTable({ showclick }) {
         },
         {
             Header: "Cr/Dr",
+            Filter: "",
             accessor: "Cr/Dr",
         },
         {
@@ -111,12 +118,15 @@ function AccountMasterTable({ showclick }) {
         {
             Header: "IFSC",
             accessor: "IFSC",
+            Filter: "",
         },
         {
             Header: "Shares",
             accessor: "shares",
+            Filter: "",
         },
     ];
+    
     
     useEffect(() => {
         (async function fetchdata() {
