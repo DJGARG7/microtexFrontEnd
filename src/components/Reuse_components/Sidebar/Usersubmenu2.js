@@ -1,18 +1,25 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
+
 const SidebarLink = styled(NavLink)`
-    background: #414757;
-    height: 50px;
-    padding-left: 3rem;
     display: flex;
+    justify-content: space-between;
     align-items: center;
+
+    list-style: none;
+    height: 50px;
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 1px;
     text-decoration: none;
-    color: #f5f5f5;
-    font-size: 18px;
+    text-transform: uppercase;
+    background-color: #5a0fd2;
+    border-radius: 0px;
     &:hover {
-        background: #632ce4;
         cursor: pointer;
+        filter: brightness(125%);
     }
 `;
 
@@ -27,17 +34,23 @@ const SidebarLabel = styled.span`
 `;
 
 const DropdownLink = styled(NavLink)`
-    background: #414757;
-    height: 60px;
-    padding-left: 4rem;
     display: flex;
+    justify-content: space-between;
     align-items: center;
+
+    list-style: none;
+    height: 50px;
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: 1px;
     text-decoration: none;
-    color: #f5f5f5;
-    font-size: 18px;
+    text-transform: uppercase;
+    background-color: #7113ff;
+    border-radius: 0px;
     &:hover {
-        background: #632ce4;
         cursor: pointer;
+        filter: brightness(125%);
     }
 `;
 function Usersubmenu2({ item }) {
@@ -47,12 +60,18 @@ function Usersubmenu2({ item }) {
 
     return (
         <>
-            <SidebarLink to={item.path} onClick={item.subNav && showSubnav}>
+            <SidebarLink
+                to={item.path}
+                onClick={item.subNav && showSubnav}
+                style={{ backgroundColor: subnav ? "#7113FF" : "#5A0FD2" }}
+            >
                 <div>
                     {item.icon}
-                    <SidebarLabel>{item.title}</SidebarLabel>
+                    <SidebarLabel style={{ marginLeft: "40px" }}>
+                        {item.title}
+                    </SidebarLabel>
                 </div>
-                <div>
+                <div style={{ marginRight: "10px" }}>
                     {item.subNav && subnav
                         ? item.iconOpened
                         : item.subNav
@@ -67,7 +86,11 @@ function Usersubmenu2({ item }) {
                             <DropdownLink to={item.path} key={index}>
                                 <div>
                                     {item.icon}
-                                    <SidebarLabel>{item.title}</SidebarLabel>
+                                    <SidebarLabel
+                                        style={{ marginLeft: "60px" }}
+                                    >
+                                        {item.title}
+                                    </SidebarLabel>
                                 </div>
                             </DropdownLink>
                         </div>

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import Usersubmenu2 from "./Usersubmenu2";
+
 const SidebarLink = styled(NavLink)`
     display: flex;
     justify-content: space-between;
@@ -33,7 +34,7 @@ const UserSubmenu = ({ item }) => {
     const showSubnav = () => setSubnav(!subnav);
 
     return (
-        <div style={{ borderRadius: "0px 0px 15px 15px" }}>
+        <div style={{ marginBottom: "10px" }}>
             <SidebarLink
                 to={item.path}
                 onClick={item.subNav && showSubnav}
