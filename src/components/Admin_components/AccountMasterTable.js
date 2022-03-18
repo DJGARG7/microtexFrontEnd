@@ -69,38 +69,47 @@ function AccountMasterTable({ showclick }) {
         {
             Header: "Phone No",
             accessor: "phoneNo",
+            Filter: "",
         },
         {
             Header: "Email",
             accessor: "email",
+            Filter: "",
         },
         {
             Header: "GSTIN",
             accessor: "GSTIN",
+            Filter: "",
         },
         {
             Header: "RegDate",
             accessor: "RegDate",
+            Filter: "",
         },
         {
             Header: "propName",
             accessor: "propName",
+            Filter: "",
         },
         {
             Header: "PAN",
             accessor: "PAN",
+            Filter: "",
         },
         {
             Header: "dist",
             accessor: "dist",
+            Filter: "",
         },
         {
             Header: "Transport",
             accessor: "transport",
+            Filter: "",
         },
         {
             Header: "OpeningBal",
             accessor: "openingBal",
+            Filter: "",
         },
         {
             Header: "Cr/Dr",
@@ -110,11 +119,14 @@ function AccountMasterTable({ showclick }) {
         {
             Header: "BeneName",
             accessor: "beneName",
+            Filter: "",
         },
         {
             Header: "Account Number",
             accessor: "AccountNum",
+            Filter: "",
         },
+
         {
             Header: "IFSC",
             accessor: "IFSC",
