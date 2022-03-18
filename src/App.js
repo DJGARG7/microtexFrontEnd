@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Route, Redirect } from "react-router";
+import { Route, Redirect, BrowserRouter as Router } from "react-router-dom";
 
 import Login from "./components/Login/Login";
 import AdminDashboard from "./components/Admin_components/AdminDashboard";
@@ -41,7 +41,8 @@ function App() {
         type,
         corporateID,
         userID,
-        userName
+        userName,
+        isAdmin
     ) => {
         if (status === "false") {
             setIsLoggedIn("false");
@@ -53,6 +54,7 @@ function App() {
                 corporateID: corporateID,
                 userID: userID,
                 userName: userName,
+                isAdmin: isAdmin,
             });
 
             // Setting login status.
@@ -75,7 +77,7 @@ function App() {
         } catch (error) {
             console.log(error);
 
-            <Redirect to="/login" />;
+            // <Redirect to="/login" />;
             setIsLoggedIn("false");
             setUser(JSON.stringify({}));
         }
@@ -85,26 +87,31 @@ function App() {
             <div className="logo">
                 <h1>MicroTex</h1>
             </div>
-            <Route path="/login">
-                <Login onLogin={loginHandler} />
-            </Route>
-            <Route path="/dashboard">
-                {/* <UserDashboard
-                    userDetails={user}
-                    logoutHandler={logoutHandler}
-                /> */}
-                <AdminDashboard
-                    userDetails={user}
-                    logoutHandler={logoutHandler}
-                />
-            </Route>
-            <Route path="/">
-                {isLoggedIn === "true" ? (
-                    <Redirect to="/dashboard" />
-                ) : (
-                    <Redirect to="/login" />
-                )}
-            </Route>
+            <Router>
+                <Route path="/login">
+                    <Login onLogin={loginHandler} />
+                </Route>
+                <Route path="/dashboard">
+                    {user.isAdmin === 1 ? (
+                        <AdminDashboard
+                            userDetails={user}
+                            logoutHandler={logoutHandler}
+                        />
+                    ) : (
+                        <UserDashboard
+                            userDetails={user}
+                            logoutHandler={logoutHandler}
+                        />
+                    )}
+                </Route>
+                <Route path="/">
+                    {isLoggedIn === "true" ? (
+                        <Redirect to="/dashboard" />
+                    ) : (
+                        <Redirect to="/login" />
+                    )}
+                </Route>
+            </Router>
         </>
     );
 }

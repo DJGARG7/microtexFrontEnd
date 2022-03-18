@@ -18,8 +18,8 @@ function AccountMasterTable({ showclick }) {
                             cursor: "pointer",
                         }}
                         onClick={() => {
-                            // showclick(tabledata[tableProps.row.index]); 
-                            console.log(tableProps);
+                            showclick(tabledata[tableProps.row.index]); 
+                            // console.log(tableProps);
                         }}
                     >
                         Show

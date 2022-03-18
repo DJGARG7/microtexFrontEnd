@@ -20,46 +20,14 @@ const OVERLAY_STYLES = {
 
 const Modal = ({ open, children, onClose, onWin }) => {
     if (!open) return null;
-
     return (
-        <div>
-            <div style={OVERLAY_STYLES}>
-                <div style={MODAL_STYLES}>
-                    <div class="container">
-                        <label for="uname">
-                            <b>Username</b>
-                        </label>
-                        <input
-                            type="text"
-                            placeholder="Enter Username"
-                            name="uname"
-                            required
-                        />
-
-                        <label for="psw">
-                            <b>Password</b>
-                        </label>
-                        <input
-                            type="password"
-                            placeholder="Enter Password"
-                            name="psw"
-                            required
-                        />
-
-                        <button type="submit">Login</button>
-                        <label>
-                            <input
-                                type="checkbox"
-                                checked="checked"
-                                name="remember"
-                            />{" "}
-                            Remember me
-                        </label>
-                    </div>
+        <div style={OVERLAY_STYLES}>
+            <div style={MODAL_STYLES}>
+                <div className="container">
+                    <div>{children}</div>
                     <button className="btn del-btn" onClick={onClose}>
                         Exit
                     </button>
-                    <div>{children}</div>
                 </div>
             </div>
         </div>

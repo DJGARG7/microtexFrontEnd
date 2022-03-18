@@ -34,11 +34,18 @@
     font-family: "Karla", sans-serif;
     font-size: 1rem;
     padding: 5px;
+
+    transition: 200ms;
+}
+
+.btn:active {
+    transform: scale(0.95, 0.95);
 }
 
 .Inputs .add-btn {
     background-color: #40916c;
     color: white;
+    transition: 200ms;
 }
 
 .Inputs .add-btn:hover {

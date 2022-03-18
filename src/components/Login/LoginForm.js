@@ -85,7 +85,8 @@ export default function LoginForm({
                 type,
                 corporateID,
                 userID,
-                res.data.userName
+                res.data.userName,
+                res.data.isAdmin
             );
         } catch (error) {
             console.log(error);
