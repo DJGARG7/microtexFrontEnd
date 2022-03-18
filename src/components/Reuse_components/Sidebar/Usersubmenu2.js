@@ -21,6 +21,9 @@ const SidebarLink = styled(NavLink)`
         cursor: pointer;
         filter: brightness(125%);
     }
+    &:last-child {
+        border-radius: 0px 0px 15px 15px;
+    }
 `;
 
 const SidebarLabel = styled.span`
@@ -64,6 +67,7 @@ function Usersubmenu2({ item }) {
                 to={item.path}
                 onClick={item.subNav && showSubnav}
                 style={{ backgroundColor: subnav ? "#7113FF" : "#5A0FD2" }}
+                activeStyle={{ backgroundColor: "#7113FF" }}
             >
                 <div>
                     {item.icon}

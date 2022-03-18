@@ -11,10 +11,6 @@ const AdminSideBarData = [
         title: "Design Master",
         link: "/dashboard/designMaster",
     },
-    {
-        title: "User Management",
-        link: "/dashboard/userManagement",
-    },
 ];
 
 export default AdminSideBarData;
