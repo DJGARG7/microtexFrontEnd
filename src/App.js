@@ -10,10 +10,6 @@ import axiosAuth from "./components/Login/api/axios";
 import "./style.css";
 
 function App() {
-    useEffect(() => {
-        console.log("hello");
-    }, []);
-
     // Storing user details in localStorage and as state.
     localStorage.getItem("userDetails") === null &&
         localStorage.setItem("userDetails", JSON.stringify({}));
@@ -45,7 +41,8 @@ function App() {
         type,
         corporateID,
         userID,
-        userName
+        userName,
+        isAdmin
     ) => {
         if (status === "false") {
             setIsLoggedIn("false");
@@ -57,6 +54,7 @@ function App() {
                 corporateID: corporateID,
                 userID: userID,
                 userName: userName,
+                isAdmin: isAdmin,
             });
 
             // Setting login status.
@@ -79,7 +77,7 @@ function App() {
         } catch (error) {
             console.log(error);
 
-            <Redirect to="/login" />;
+            // <Redirect to="/login" />;
             setIsLoggedIn("false");
             setUser(JSON.stringify({}));
         }
@@ -94,14 +92,17 @@ function App() {
                     <Login onLogin={loginHandler} />
                 </Route>
                 <Route path="/dashboard">
-                    {/* <UserDashboard
-                    userDetails={user}
-                    logoutHandler={logoutHandler}
-                /> */}
-                    <AdminDashboard
-                        userDetails={user}
-                        logoutHandler={logoutHandler}
-                    />
+                    {user.isAdmin === 1 ? (
+                        <AdminDashboard
+                            userDetails={user}
+                            logoutHandler={logoutHandler}
+                        />
+                    ) : (
+                        <UserDashboard
+                            userDetails={user}
+                            logoutHandler={logoutHandler}
+                        />
+                    )}
                 </Route>
                 <Route path="/">
                     {isLoggedIn === "true" ? (
