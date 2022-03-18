@@ -8,6 +8,8 @@
 
     background-color: #480ca8;
     border-radius: 15px;
+
+    transition: 350ms;
 }
 
 .sidebar a {
