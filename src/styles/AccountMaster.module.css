@@ -142,6 +142,8 @@
     font-family: "Karla", sans-serif;
     font-size: 1rem;
     padding: 5px;
+
+    transition: 200ms;
 }
 
 .btn:disabled {
@@ -150,6 +152,10 @@
 
 .btn:disabled:hover {
     background-color: grey;
+}
+
+.btn:active {
+    transform: scale(0.95, 0.95);
 }
 
 .add-btn {

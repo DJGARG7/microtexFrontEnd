@@ -3,6 +3,7 @@
     flex-direction: column;
     justify-content: space-between;
 
+    min-width: 240px;
     width: 17.5vw;
     height: 100%;
 

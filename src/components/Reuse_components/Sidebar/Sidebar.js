@@ -15,6 +15,10 @@ const UserManagementData = {
             path: "/dashboard/user-management/add-user",
         },
         {
+            title: "Delete User",
+            path: "/dashboard/user-management/delete-user",
+        },
+        {
             title: "Manage permissions",
             path: "/dashboard/user-management/manage-permissions",
         },

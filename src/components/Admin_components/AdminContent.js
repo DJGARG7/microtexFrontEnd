@@ -6,6 +6,7 @@ import DesignMaster from "../../pages/DesignMaster";
 import UserManagementIndex from "../UserManagement/UserManagementIndex";
 import AddUser from "../UserManagement/AddUser";
 import ManagePermissions from "../UserManagement/ManagePermissions";
+import DeleteUser from "../UserManagement/DeleteUser";
 const AdminContent = ({ userDetails }) => {
     return (
         <>
@@ -23,6 +24,9 @@ const AdminContent = ({ userDetails }) => {
             </Route>
             <Route path="/dashboard/user-management/add-user" exact>
                 <AddUser />
+            </Route>
+            <Route path="/dashboard/user-management/delete-user" exact>
+                <DeleteUser />
             </Route>
             <Route path="/dashboard/user-management/manage-permissions" exact>
                 <ManagePermissions />

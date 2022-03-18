@@ -71,7 +71,7 @@ function Usersubmenu2({ item }) {
             >
                 <div>
                     {item.icon}
-                    <SidebarLabel style={{ marginLeft: "40px" }}>
+                    <SidebarLabel style={{ marginLeft: "1vw" }}>
                         {item.title}
                     </SidebarLabel>
                 </div>
@@ -91,7 +91,7 @@ function Usersubmenu2({ item }) {
                                 <div>
                                     {item.icon}
                                     <SidebarLabel
-                                        style={{ marginLeft: "60px" }}
+                                        style={{ marginLeft: "1.5vw" }}
                                     >
                                         {item.title}
                                     </SidebarLabel>
