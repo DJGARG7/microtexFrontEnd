@@ -21,6 +21,7 @@ function DefaultColumnFilter({
       onChange={(e) => {
         setFilter(e.target.value || undefined); // Set undefined to remove the filter entirely
       }}
+      style={{height:"20px",width: "100%",border: "2.5px solid black",borderRadius:"5px"}}
       placeholder={`Search ${count} records...`}
     />
   );
@@ -65,7 +66,7 @@ function StickyTable({ TableCol, TableData }) {
               {headerGroup.headers.map((column) => (
                 <div {...column.getHeaderProps()} className="th--sticky">
                   {column.render("Header")}
-                  <div style={{width:"100px"}}>{column.canFilter ? column.render('Filter') : null}</div>
+                  <div>{column.canFilter ? column.render('Filter') : null}</div>
                 </div>
               ))}
             </div>

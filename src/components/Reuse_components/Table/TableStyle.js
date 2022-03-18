@@ -29,6 +29,7 @@ export const Styles = styled.div`
       padding-bottom: 12px;
       text-align: center;
       background-color: #04aa6d;
+
       color: white;
     }
 

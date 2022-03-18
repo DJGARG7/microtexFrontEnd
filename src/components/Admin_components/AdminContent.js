@@ -3,10 +3,10 @@ import CityMaster from "../../pages/CityMaster";
 import AccountMaster from "../../pages/AccountMaster";
 import AdminLandingPage from "../../pages/AdminLandingPage";
 import DesignMaster from "../../pages/DesignMaster";
-import UserManagementIndex from "../UserManagement/UserManagementIndex";
-import AddUser from "../UserManagement/AddUser";
-import ManagePermissions from "../UserManagement/ManagePermissions";
-import DeleteUser from "../UserManagement/DeleteUser";
+// import UserManagementIndex from "../UserManagement/UserManagementIndex";
+// import AddUser from "../UserManagement/AddUser";
+// import ManagePermissions from "../UserManagement/ManagePermissions";
+// import DeleteUser from "../UserManagement/DeleteUser";
 const AdminContent = ({ userDetails }) => {
     return (
         <>
@@ -19,7 +19,7 @@ const AdminContent = ({ userDetails }) => {
             <Route path="/dashboard/designMaster" exact>
                 <DesignMaster userDetails={userDetails} />
             </Route>
-            <Route path="/dashboard/user-management" exact>
+            {/* <Route path="/dashboard/user-management" exact>
                 <UserManagementIndex />
             </Route>
             <Route path="/dashboard/user-management/add-user" exact>
@@ -30,7 +30,7 @@ const AdminContent = ({ userDetails }) => {
             </Route>
             <Route path="/dashboard/user-management/manage-permissions" exact>
                 <ManagePermissions />
-            </Route>
+            </Route> */}
             <Route path="/dashboard" exact>
                 <AdminLandingPage />
             </Route>
