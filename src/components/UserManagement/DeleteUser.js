@@ -17,7 +17,7 @@ export default function DeleteUser() {
     const [users, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState("DEFAULT");
 
-    useEffect(async () => {
+    const fetchData = async () => {
         try {
             const res = await axios.get("/fetchUsers", {
                 signal: controller.signal,
@@ -34,19 +34,33 @@ export default function DeleteUser() {
             if (error.name === "AbortError") return;
             toast.error("Error loading user data", toastStyle);
         }
+    };
+
+    useEffect(async () => {
+        fetchData();
 
         return () => {
             controller.abort();
         };
     }, []);
 
-    const deleteUserHandler = (event) => {
+    const deleteUserHandler = async (event) => {
         event.preventDefault();
-        try {
-            // Backend request.
-            toast.success(`${selectedUser} deleted successfully!`, toastStyle);
-        } catch (error) {
-            toast.error(error, toastStyle);
+
+        if (selectedUser === "DEFAULT") {
+            toast.error("Please select a user to delete", toastStyle);
+        } else {
+            try {
+                const res = await axios.post("/deleteUser", {
+                    uuid: selectedUser,
+                });
+                toast.success(res.data, toastStyle);
+            } catch (error) {
+                toast.error(error.response.data, toastStyle);
+            }
+
+            setSelectedUser("DEFAULT");
+            fetchData();
         }
     };
 

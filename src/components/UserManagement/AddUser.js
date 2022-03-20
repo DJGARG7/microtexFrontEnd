@@ -23,9 +23,11 @@ export default function UserManagementIndex({ userDetails }) {
         if (
             document.getElementById("registerPassword").value !==
             document.getElementById("confirmPassword").value
-        )
+        ) {
             toast.error("Passwords do not match!", toastStyle);
-        else {
+            document.getElementById("registerPassword").value = "";
+            document.getElementById("confirmPassword").value = "";
+        } else {
             try {
                 const res = await axios.post("/register", {
                     userType: "firm",
@@ -36,7 +38,17 @@ export default function UserManagementIndex({ userDetails }) {
                     isAdmin: false,
                 });
 
+                console.log(document.getElementById("registerPassword").value);
+
                 toast.success(res.data, toastStyle);
+
+                setUserID("");
+                setUserName("");
+
+                document.getElementById("userName").value = "";
+                document.getElementById("userID").value = "";
+                document.getElementById("registerPassword").value = "";
+                document.getElementById("confirmPassword").value = "";
             } catch (error) {
                 toast.error(error.response.data, toastStyle);
             }
@@ -52,6 +64,7 @@ export default function UserManagementIndex({ userDetails }) {
                     placeholder="User Name"
                     onChange={(e) => setUserName(e.target.value)}
                     className={commonStyles["form--inp-t"]}
+                    id="userName"
                     required
                 />
                 <input
@@ -59,6 +72,7 @@ export default function UserManagementIndex({ userDetails }) {
                     placeholder="User ID"
                     onChange={(e) => setUserID(e.target.value)}
                     className={commonStyles["form--inp-t"]}
+                    id="userID"
                     required
                 />
                 <input
