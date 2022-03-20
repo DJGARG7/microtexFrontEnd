@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import axios from "./api/axios";
 import commonStyles from "./styles/common.module.css";
 
 const toastStyle = {
@@ -10,14 +11,40 @@ const toastStyle = {
     },
 };
 
+const controller = new AbortController();
+
 export default function DeleteUser() {
-    const [userName, setUserName] = useState();
+    const [users, setUsers] = useState([]);
+    const [selectedUser, setSelectedUser] = useState("DEFAULT");
+
+    useEffect(async () => {
+        try {
+            const res = await axios.get("/fetchUsers", {
+                signal: controller.signal,
+            });
+
+            let temp = [];
+
+            res.data.map((user) => {
+                temp.push({ [user.uuid]: user.user_id });
+            });
+
+            setUsers(temp);
+        } catch (error) {
+            if (error.name === "AbortError") return;
+            toast.error("Error loading user data", toastStyle);
+        }
+
+        return () => {
+            controller.abort();
+        };
+    }, []);
 
     const deleteUserHandler = (event) => {
         event.preventDefault();
         try {
             // Backend request.
-            toast.success("User deleted successfully!", toastStyle);
+            toast.success(`${selectedUser} deleted successfully!`, toastStyle);
         } catch (error) {
             toast.error(error, toastStyle);
         }
@@ -27,12 +54,28 @@ export default function DeleteUser() {
         <div className={commonStyles["main"]}>
             <h2>Delete User</h2>
             <form onSubmit={deleteUserHandler} className={commonStyles["form"]}>
-                <input
-                    type="text"
+                <select
                     placeholder="User ID"
-                    onChange={(e) => setUserName(e.target.value)}
-                    className={commonStyles["form--inp-t"]}
-                />
+                    className={commonStyles["form--inp-s"]}
+                    value={selectedUser}
+                    onChange={(e) => {
+                        setSelectedUser(e.target.value);
+                    }}
+                >
+                    <option disabled hidden value="DEFAULT">
+                        Select user...
+                    </option>
+                    {users.map((user) => {
+                        return (
+                            <option
+                                value={Object.keys(user)[0]}
+                                key={Object.keys(user)[0]}
+                            >
+                                {Object.values(user)[0]}
+                            </option>
+                        );
+                    })}
+                </select>
                 <button
                     className={`${commonStyles["form--btn"]} ${commonStyles["form--del-btn"]}`}
                 >

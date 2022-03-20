@@ -28,19 +28,17 @@ export default function UserManagementIndex({ userDetails }) {
         else {
             try {
                 const res = await axios.post("/register", {
+                    userType: "firm",
                     corporateID: userDetails.corporateID,
                     userID: userID,
                     userName: userName,
                     password: document.getElementById("registerPassword").value,
-                    isAdmin: 0,
+                    isAdmin: false,
                 });
 
-                console.log(res);
-
-                toast.success("User added successfully!", toastStyle);
+                toast.success(res.data, toastStyle);
             } catch (error) {
-                console.log(error);
-                toast.error(error, toastStyle);
+                toast.error(error.response.data, toastStyle);
             }
         }
     };

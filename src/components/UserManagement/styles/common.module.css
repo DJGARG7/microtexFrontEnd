@@ -39,6 +39,22 @@
     margin-bottom: 10px;
 }
 
+.form--inp-s {
+    width: 30%;
+    height: 40px;
+
+    color: #212121;
+    background-color: #edf2f4;
+    border: 2.5px solid black;
+    border-radius: 5px;
+
+    font-family: "Karla", sans-serif;
+    font-size: 1rem;
+    padding: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 .form--btn {
     width: 80px;
     height: 40px;
