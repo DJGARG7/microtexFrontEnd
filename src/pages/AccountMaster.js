@@ -15,6 +15,8 @@ const instance = Axios.create({
     baseURL: "http://localhost:3003/accountMaster/",
 });
 
+const controller = new AbortController();
+
 const AccountMaster = ({ userDetails }) => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -83,6 +85,9 @@ const AccountMaster = ({ userDetails }) => {
             try {
                 const res = await Axios.get(
                     "http://localhost:3001/cityMaster/get"
+                    // {
+                    //     signal: controller.signal,
+                    // }
                 );
                 setcitydata(
                     Object.keys(res.data).map((city) => {
@@ -90,9 +95,20 @@ const AccountMaster = ({ userDetails }) => {
                     })
                 );
             } catch (e) {
-                console.log(e);
+                // if (e.name === "AbortError") return;
+                toast.error("Error loading city data", {
+                    style: {
+                        borderRadius: "15px",
+                        background: "#333",
+                        color: "#fff",
+                    },
+                });
             }
         })();
+
+        return () => {
+            // controller.abort();
+        };
     }, []);
 
     const changeHandler = (e) => {
@@ -255,11 +271,15 @@ const AccountMaster = ({ userDetails }) => {
                             onChange={changeHandler}
                             disabled={!isEntering}
                         >
-                            <option value="none" selected disabled hidden>
+                            <option value="none" disabled hidden>
                                 Account type...
                             </option>
                             {Object.keys(AccountTypeData).map((key1) => {
-                                return <option value={key1}>{key1}</option>;
+                                return (
+                                    <option value={key1} key={key1}>
+                                        {key1}
+                                    </option>
+                                );
                             })}
                         </select>
                     </div>
@@ -312,12 +332,7 @@ const AccountMaster = ({ userDetails }) => {
                                     disabled={!isEntering}
                                     className={styles["input-select"]}
                                 >
-                                    <option
-                                        value="none"
-                                        selected
-                                        disabled
-                                        hidden
-                                    >
+                                    <option value="none" disabled hidden>
                                         City...
                                     </option>
                                     {citydata.map((city) => {
@@ -468,12 +483,7 @@ const AccountMaster = ({ userDetails }) => {
                                     className={styles["input-select"]}
                                     disabled={!isEntering}
                                 >
-                                    <option
-                                        value="none"
-                                        selected
-                                        disabled
-                                        hidden
-                                    >
+                                    <option value="none" disabled hidden>
                                         Cr./Dr.
                                     </option>
                                     <option value="CR">Cr.</option>

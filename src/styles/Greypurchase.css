@@ -1,25 +1,83 @@
-.main{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    margin-top : 230px;
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: powderblue;
+  margin-top: 50px;
+  border: 1px solid black;
 }
-.main .firstline--greypurchase{
+.main .firstline--greypurchase {
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+
+  overflow: auto;
+  justify-content:space-evenly;
+  width: 100%;
+}.input{
+    width: 100px;
+}
+.main .secondline--greypurchase {
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+
+  overflow: auto;
+}
+.main .secondline--greypurchase input {
+    width: 100px;
+}
+.main .secondline--greypurchase select {
+  width: 160px;
+}
+
+
+
+.thirdline--greypurchase {
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  height: 60px;
+  justify-content:space-evenly;
+  overflow: auto;
+}
+
+.fourthline--greypurchase {
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  justify-content:space-evenly;
+  overflow: auto;
+}
+.main .fourthline--greypurchase select {
+    width: 160px;
+  }
+  
+
+.fifthline--greypurchase {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    padding : 20px;
-    height: 100%;
-    width: 100%;
+    padding: 10px;
+    justify-content:space-evenly;  
+    overflow: auto;
+  }
 
-}
-.main .secondline--greypurchase{
+  .sixthline--greypurchase {
     display: flex;
     flex-direction: row;
-    padding : 10px;
+    padding: 10px;
+    justify-content:space-evenly;  
+    overflow: auto;
+  }
 
-}
-.DropdownList{
+  .sixthline--greypurchase input{
+    width: 100px;
+  }
 
-    width: 400px;
-}
+  .seventline--greypurchase{
+    padding: 10px;
+    overflow: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content:center;  
+  }
