@@ -121,32 +121,39 @@ const AccountMaster = ({ userDetails }) => {
         const data = {
             AccName: accName.trim(),
             AccType: accType.trim(),
+
             address1: addline1.trim(),
             address2: addline2.trim(),
             address3: addline3.trim(),
             city: city.trim(),
             pincode: pinCode,
+
             phoneNo: phone,
             email: email.trim(),
+
             GSTIN: gstin.trim(),
             RegDate: regDate,
             propName: propName.trim(),
             PAN: pan.trim(),
             dist: dist,
-            transport: transport.trim(),
+
             openingBal: openBal,
             CrDr: crdr.trim(),
+
+            transport: transport.trim(),
+
             beneName: beneficiary.trim(),
             AccountNum: accNum,
             IFSC: ifsc.trim(),
+
             shares: share,
         };
+        //data insert
         if (disMode === 0) {
-            // axios requet to add the data
             try {
-                const res = await instance.post("postdata", data);
-                setuuid(res.data.uuid);
+                const res = await instance.post("", data);
                 if (res.data.status == 1) {
+                    setuuid(res.data.uuid);
                     console.log("data added to db");
                     toast.success("Account added successfully!", {
                         style: {
@@ -155,6 +162,10 @@ const AccountMaster = ({ userDetails }) => {
                             color: "#fff",
                         },
                     });
+                    setDisMode(1);
+                    setIsEntering(false);
+                } else {
+                    throw res.data;
                 }
             } catch (error) {
                 console.log(error);
@@ -167,33 +178,41 @@ const AccountMaster = ({ userDetails }) => {
                 });
             }
         }
-
+        // data update
         if (disMode === 2) {
-            // axios request to update the data
             try {
-                var res1 = await instance.post("updatedata", data);
+                var res = await instance.put(uuid, data);
+                if (res.data.status == 1) {
+                    console.log("data updated in  db");
+                    toast.success("Account updated successfully!", {
+                        style: {
+                            borderRadius: "15px",
+                            background: "#333",
+                            color: "#fff",
+                        },
+                    });
+                    setDisMode(1);
+                    setIsEntering(false);
+                } else {
+                    throw res.data;
+                }
             } catch (error) {
                 console.log(error);
+                toast.error("Updation failed!", {
+                    style: {
+                        borderRadius: "15px",
+                        background: "#333",
+                        color: "#fff",
+                    },
+                });
             }
-            res1.then((res) => {
-                console.log(res);
-            });
-            const status = res1.request.status;
-            if (status === 200) console.log("data added to db");
-            else alert("error occured");
         }
-        setDisMode(1);
-        setIsEntering(false);
     };
+    //delete data
     const deleteHandler = async () => {
-        // uuid i am getting when i add a data to the database and using it to delete that data from the database
         if (disMode === 1) {
-            const data = {
-                uuid: uuid,
-            };
-            // axios to delete the data
             try {
-                const res = await instance.post("deletedata", data);
+                const res = await instance.delete(uuid);
                 if (res.data == 1) {
                     toast.success("Deleted successfully!", {
                         style: {
@@ -202,11 +221,20 @@ const AccountMaster = ({ userDetails }) => {
                             color: "#fff",
                         },
                     });
+                    exitHandler();
+                } else {
+                    throw res.data;
                 }
-            } catch (err) {
-                console.log(err);
+            } catch (error) {
+                console.log(error);
+                toast.error("Deletion failed!", {
+                    style: {
+                        borderRadius: "15px",
+                        background: "#333",
+                        color: "#fff",
+                    },
+                });
             }
-            exitHandler();
         }
     };
     const editViewHandler = async () => {
@@ -243,11 +271,31 @@ const AccountMaster = ({ userDetails }) => {
         setDisMode(1);
         setIsEntering(false);
         setIsOpen(false);
+
+        setBoolList(AccountTypeData[rowdetails.AccType]);
+        
+        setuuid(rowdetails.uid);
         setAccName(rowdetails.AccName);
         setType(rowdetails.AccType);
-        setBoolList(AccountTypeData[rowdetails.AccType]);
+        setAddLine1(rowdetails.address1)
+        setAddLine2(rowdetails.address2)
+        setAddLine3(rowdetails.address3)
+        setCity(rowdetails.city)
+        setPinCode(rowdetails.pincode)
+        setPhone(rowdetails.phoneNo)
+        setEmail(rowdetails.email)
+        setGstin(rowdetails.GSTIN)
+        setRegDate(rowdetails.RegDate)
+        setPan(rowdetails.PAN)
+        setDist(rowdetails.dist)
+        setTransport(rowdetails.transport)
+        setOpenBal(rowdetails.openingBal)
+        setCrdr(rowdetails.CrDr)
+        setBeneficiary(rowdetails.beneName)
+        setAccNum(rowdetails.AccountNum)
+        setIfsc(rowdetails.IFSC)
+        setShare(rowdetails.shares)
     };
-    // console.log(isopen)
     return (
         <div className={styles["main"]}>
             <h2>Account Master</h2>
