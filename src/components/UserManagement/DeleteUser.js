@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import ReactLoading from "react-loading";
 import axios from "./api/axios";
 import commonStyles from "./styles/common.module.css";
 
@@ -14,12 +15,13 @@ const toastStyle = {
 const controller = new AbortController();
 
 export default function DeleteUser() {
+    const [isLoading, setIsLoading] = useState(true);
     const [users, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState("DEFAULT");
 
     const fetchData = async () => {
         try {
-            const res = await axios.get("/fetchUsers", {
+            const res = await axios.get("/", {
                 signal: controller.signal,
             });
 
@@ -30,6 +32,7 @@ export default function DeleteUser() {
             });
 
             setUsers(temp);
+            setIsLoading(false);
         } catch (error) {
             if (error.name === "AbortError") return;
             toast.error("Error loading user data", toastStyle);
@@ -37,7 +40,9 @@ export default function DeleteUser() {
     };
 
     useEffect(async () => {
-        fetchData();
+        setTimeout(() => {
+            fetchData();
+        }, 1000);
 
         return () => {
             controller.abort();
@@ -51,9 +56,7 @@ export default function DeleteUser() {
             toast.error("Please select a user to delete", toastStyle);
         } else {
             try {
-                const res = await axios.post("/deleteUser", {
-                    uuid: selectedUser,
-                });
+                const res = await axios.delete(`/${selectedUser}`);
                 toast.success(res.data, toastStyle);
             } catch (error) {
                 toast.error(error.response.data, toastStyle);
@@ -63,6 +66,18 @@ export default function DeleteUser() {
             fetchData();
         }
     };
+
+    if (isLoading) {
+        return (
+            <div
+                style={{
+                    marginTop: "10vh",
+                }}
+            >
+                <ReactLoading type="bubbles" color="#212121" />
+            </div>
+        );
+    }
 
     return (
         <div className={commonStyles["main"]}>

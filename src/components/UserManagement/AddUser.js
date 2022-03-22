@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-
+import ReactLoading from "react-loading";
+import AddUserForm from "./AddUserForm";
 import axios from "./api/axios";
-
 import commonStyles from "./styles/common.module.css";
 
 const toastStyle = {
@@ -13,89 +13,60 @@ const toastStyle = {
     },
 };
 
-export default function UserManagementIndex({ userDetails }) {
-    const [userID, setUserID] = useState();
-    const [userName, setUserName] = useState();
+const controller = new AbortController();
 
-    const addUserHandler = async (event) => {
-        event.preventDefault();
+export default function AddUser({ userDetails }) {
+    const [isLoading, setIsLoading] = useState(true);
+    const [permissionsData, setPermissionsData] = useState();
 
-        if (
-            document.getElementById("registerPassword").value !==
-            document.getElementById("confirmPassword").value
-        ) {
-            toast.error("Passwords do not match!", toastStyle);
-            document.getElementById("registerPassword").value = "";
-            document.getElementById("confirmPassword").value = "";
-        } else {
-            try {
-                const res = await axios.post("/register", {
-                    userType: "firm",
-                    corporateID: userDetails.corporateID,
-                    userID: userID,
-                    userName: userName,
-                    password: document.getElementById("registerPassword").value,
-                    isAdmin: false,
-                });
+    const fetchData = async () => {
+        try {
+            const res = await axios.get("../permissions/", {
+                signal: controller.signal,
+            });
+            let temp = [];
 
-                console.log(document.getElementById("registerPassword").value);
+            res.data.map((permission) => {
+                temp.push({ [permission.p_id]: permission.p_name });
+            });
 
-                toast.success(res.data, toastStyle);
-
-                setUserID("");
-                setUserName("");
-
-                document.getElementById("userName").value = "";
-                document.getElementById("userID").value = "";
-                document.getElementById("registerPassword").value = "";
-                document.getElementById("confirmPassword").value = "";
-            } catch (error) {
-                toast.error(error.response.data, toastStyle);
-            }
+            setPermissionsData(temp);
+            setIsLoading(false);
+        } catch (error) {
+            if (error.name === "AbortError") return;
+            toast.error("Error loading user data", toastStyle);
         }
     };
+
+    useEffect(async () => {
+        setTimeout(() => {
+            fetchData();
+        }, 1000);
+
+        return () => {
+            controller.abort();
+        };
+    }, []);
+
+    if (isLoading) {
+        return (
+            <div
+                style={{
+                    marginTop: "10vh",
+                }}
+            >
+                <ReactLoading type="bubbles" color="#212121" />
+            </div>
+        );
+    }
 
     return (
         <div className={commonStyles["main"]}>
             <h2>Add New User</h2>
-            <form onSubmit={addUserHandler} className={commonStyles["form"]}>
-                <input
-                    type="text"
-                    placeholder="User Name"
-                    onChange={(e) => setUserName(e.target.value)}
-                    className={commonStyles["form--inp-t"]}
-                    id="userName"
-                    required
-                />
-                <input
-                    type="text"
-                    placeholder="User ID"
-                    onChange={(e) => setUserID(e.target.value)}
-                    className={commonStyles["form--inp-t"]}
-                    id="userID"
-                    required
-                />
-                <input
-                    type="password"
-                    placeholder="Password"
-                    id="registerPassword"
-                    className={commonStyles["form--inp-p"]}
-                    required
-                />
-                <input
-                    type="password"
-                    placeholder="Confirm Password"
-                    id="confirmPassword"
-                    className={commonStyles["form--inp-p"]}
-                    required
-                />
-                <button
-                    type="submit"
-                    className={`${commonStyles["form--btn"]} ${commonStyles["form--add-btn"]}`}
-                >
-                    Add
-                </button>
-            </form>
+            <AddUserForm
+                corporateID={userDetails.corporateID}
+                permissionsData={permissionsData}
+            />
         </div>
     );
 }

@@ -12,72 +12,80 @@
   padding: 10px;
 
   overflow: auto;
-  justify-content:space-evenly;
+  justify-content: space-evenly;
   width: 100%;
-}.input{
-    width: 100px;
+}
+
+.main .firstline--greypurchase input {
+  width: 100px;
 }
 .main .secondline--greypurchase {
   display: flex;
   flex-direction: row;
   padding: 10px;
-
   overflow: auto;
 }
 .main .secondline--greypurchase input {
-    width: 100px;
+  width: 100px;
 }
 .main .secondline--greypurchase select {
   width: 160px;
 }
-
-
 
 .thirdline--greypurchase {
   display: flex;
   flex-direction: row;
   padding: 10px;
   height: 60px;
-  justify-content:space-evenly;
+  justify-content: space-evenly;
   overflow: auto;
+}
+
+.thirdline--greypurchase input {
+  width: 100px;
 }
 
 .fourthline--greypurchase {
   display: flex;
   flex-direction: row;
   padding: 10px;
-  justify-content:space-evenly;
+  justify-content: space-evenly;
   overflow: auto;
 }
 .main .fourthline--greypurchase select {
-    width: 160px;
-  }
-  
+  width: 150px;
+}
+.fourthline--greypurchase input {
+  width: 100px;
+}
 
 .fifthline--greypurchase {
-    display: flex;
-    flex-direction: row;
-    padding: 10px;
-    justify-content:space-evenly;  
-    overflow: auto;
-  }
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  justify-content: space-evenly;
+  overflow: auto;
+}
+.fifthline--greypurchase input{
+  width: 100px;
+}
 
-  .sixthline--greypurchase {
-    display: flex;
-    flex-direction: row;
-    padding: 10px;
-    justify-content:space-evenly;  
-    overflow: auto;
-  }
+.sixthline--greypurchase {
+  display: flex;
+  flex-direction: row;
+  padding: 10px;
+  justify-content: space-evenly;
+  overflow: auto;
+}
 
-  .sixthline--greypurchase input{
-    width: 100px;
-  }
+.sixthline--greypurchase input {
+  width: 100px;
+}
 
-  .seventline--greypurchase{
-    padding: 10px;
-    overflow: auto;
-    display: flex;
-    flex-direction: row;
-    justify-content:center;  
-  }
+.seventline--greypurchase {
+  padding: 10px;
+  overflow: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}

@@ -33,33 +33,38 @@ function Greypurchase() {
     ItemName: "",
     Marka: "",
     Taka: "",
-    Mts: "",
+    Mts: 0,
     Fold: "",
     ActMts: 0,
-    Rate: "",
+    Rate:0,
     Amount: 0,
-    Discount: "",
-    DiscountAmt: "",
-    IGST: "",
-    CGST: "",
-    SGST: "",
-    IGSTamt: "",
-    CGSTamt: "",
-    SGSTamt: "",
-    NetAmount: "",
+    Discount: 0,
+    DiscountAmt: 0,
+    IGST: 0,
+    CGST: 0,
+    SGST: 0,
+    IGSTamt: 0,
+    CGSTamt: 0,
+    SGSTamt: 0,
+    NetAmount: 0,
   });
   // function to handle any changes
   const onchangeHandler = (event) => {
-    console.log(event.target.name);
-    const value = event.target.value;
+    
+    let value = event.target.value;
+    if(!Number.isNaN(parseFloat(value))){
+      value = parseFloat(value);
+    }
+    console.log(typeof(value));
     setState({
       ...state,
       [event.target.name]: value,
     });
-  };
+  };      
   // function to handle onsubmit form request
   const onSubmithandler = (event) => {
     event.preventDefault();
+    console.log(state);
   };
   //   useEffect to fetch the account names
   useEffect(() => {
@@ -70,13 +75,6 @@ function Greypurchase() {
     })();
   }, []);
 
-  const amountCalc = (e)=>{
-    const amt = state.ActMts * e.target.value;
-    setState({
-      ...state,
-      Amount:amt,
-    });
-  }
   return (
     <form onSubmit={onSubmithandler} className="form--greypurchase">
       <div className="main">
@@ -107,7 +105,7 @@ function Greypurchase() {
             Bill date
             <input
               type="date"
-              style={{ width: "150px" }}
+              style={{ width: "140px" }}
               required
               value={state.BillDate}
               name="BillDate"
@@ -152,7 +150,7 @@ function Greypurchase() {
           />
           <label>Challan date</label>
           <input
-            style={{ width: "150px" }}
+            style={{ width: "140px" }}
             type="date"
             value={state.ChallanDate}
             name="challanDate"
@@ -256,6 +254,8 @@ function Greypurchase() {
               type="number"
               name="ActMts"
               value={state.ActMts}
+              id="mts"
+              required
               onChange={onchangeHandler}
             />
           </label>
@@ -263,10 +263,10 @@ function Greypurchase() {
             Rate
             <input
               type="number"
+              id="rate"
               name="Rate"
               value={state.Rate}
               onChange={onchangeHandler}
-              onInput={amountCalc}
             />
           </label>
           <label>
@@ -274,8 +274,11 @@ function Greypurchase() {
             <input
               type="number"
               name="Amount"
-              value={state.Rate * state.ActMts}
-              disabled
+              value={state.ActMts * state.Rate}
+              readOnly
+              onSelect={onchangeHandler}
+              id="Amount"
+              required
             />
           </label>
         </div>
@@ -291,9 +294,9 @@ function Greypurchase() {
             <input
               type="text"
               name="DiscountAmt"
-              value={state.DiscountAmt}
-              onChange={onchangeHandler}
-              disabled
+              readOnly
+              value={(state.Discount / 100) * state.Amount}
+              onSelect={onchangeHandler}
             />
           </label>
           <label>
@@ -307,9 +310,9 @@ function Greypurchase() {
             <input
               type="text"
               name="IGSTamt"
-              value={state.IGSTamt}
-              onChange={onchangeHandler}
-              disabled
+              readOnly
+              value={((state.Amount - state.DiscountAmt) * state.IGST) / 100}
+              onSelect={onchangeHandler}
             />
           </label>
           <label>
@@ -323,9 +326,9 @@ function Greypurchase() {
             <input
               type="text"
               name="CGSTamt"
-              value={state.CGSTamt}
-              onChange={onchangeHandler}
-              disabled
+              readOnly
+              value={((state.Amount - state.DiscountAmt) * state.CGST) / 100}
+              onSelect={onchangeHandler}
             />
           </label>
           <label>
@@ -339,9 +342,9 @@ function Greypurchase() {
             <input
               type="text"
               name="SGSTamt"
-              value={state.SGSTamt}
-              onChange={onchangeHandler}
-              disabled
+              readOnly
+              value={((state.Amount - state.DiscountAmt) * state.SGST) / 100}
+              onSelect={onchangeHandler}
             />
           </label>
         </div>
@@ -350,16 +353,18 @@ function Greypurchase() {
             Net Amount
             <input
               type="number"
-              disabled
               name="NetAmount"
-              value={state.NetAmount}
-              onChange={onchangeHandler}
+              readOnly
+              value={state.Amount-state.DiscountAmt+state.CGSTamt+state.IGSTamt+state.SGSTamt}
+              onSelect={onchangeHandler}
+              required
             />
           </label>
           <button>Add Purchase</button>
           <button type="button">View all purchase</button>
         </div>
         <div className="greypurchase--table"></div>
+        
       </div>
     </form>
   );
