@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import ReactLoading from "react-loading";
 import axios from "./api/axios";
 import commonStyles from "./styles/common.module.css";
 
@@ -39,7 +40,9 @@ export default function DeleteUser() {
     };
 
     useEffect(async () => {
-        fetchData();
+        setTimeout(() => {
+            fetchData();
+        }, 1000);
 
         return () => {
             controller.abort();
@@ -65,7 +68,15 @@ export default function DeleteUser() {
     };
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return (
+            <div
+                style={{
+                    marginTop: "10vh",
+                }}
+            >
+                <ReactLoading type="bubbles" color="#212121" />
+            </div>
+        );
     }
 
     return (

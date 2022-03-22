@@ -20,10 +20,10 @@ export default function AddUserForm({ corporateID, permissionsData }) {
         let temp = selectedPermissions;
 
         if (event.target.checked) {
-            setSelectedPermissions(temp.add(event.target.value));
+            setSelectedPermissions(temp.add(parseInt(event.target.value)));
             console.log(selectedPermissions);
         } else {
-            temp.delete(event.target.value);
+            temp.delete(parseInt(event.target.value));
             temp.size === 0
                 ? setSelectedPermissions(new Set())
                 : setSelectedPermissions(temp);
@@ -51,14 +51,22 @@ export default function AddUserForm({ corporateID, permissionsData }) {
                     userName: userName,
                     password: document.getElementById("registerPassword").value,
                     isAdmin: false,
+                    permissions: Array.from(selectedPermissions),
                 });
 
                 toast.success(res.data, toastStyle);
 
+                // Clearing fields.
                 setUserID("");
                 setUserName("");
                 document.getElementById("registerPassword").value = "";
                 document.getElementById("confirmPassword").value = "";
+
+                // Clearing checkboxes.
+                let checkboxes = document.getElementsByName("permissions");
+                for (var i = 0; i < checkboxes.length; i++)
+                    checkboxes[i].checked = false;
+                setSelectedPermissions(new Set());
             } catch (error) {
                 toast.error(error.response.data, toastStyle);
             }
@@ -101,19 +109,27 @@ export default function AddUserForm({ corporateID, permissionsData }) {
                 required
             />
             <h3 className={commonStyles["form--subtitle"]}>Permissions</h3>
-            {permissionsData.map((permission) => {
-                return (
-                    <div key={Object.keys(permission)[0]}>
-                        <p>{Object.values(permission)[0]}</p>
-                        <input
-                            type="checkbox"
-                            name="permissions"
-                            value={Object.keys(permission)[0]}
-                            onChange={selectPermissionHandler}
-                        />
-                    </div>
-                );
-            })}
+            <div className={commonStyles["form--permissions"]}>
+                {permissionsData.map((permission) => {
+                    return (
+                        <div
+                            key={Object.keys(permission)[0]}
+                            className={commonStyles["form--permission"]}
+                        >
+                            <label htmlFor={Object.keys(permission)[0]}>
+                                {Object.values(permission)[0]}
+                            </label>
+                            <input
+                                type="checkbox"
+                                name="permissions"
+                                id={Object.keys(permission)[0]}
+                                value={Object.keys(permission)[0]}
+                                onChange={selectPermissionHandler}
+                            />
+                        </div>
+                    );
+                })}
+            </div>
 
             <button
                 type="submit"
