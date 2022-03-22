@@ -7,7 +7,17 @@ const DesignMaster = () => {
     const [isEntering, setIsEntering] = useState(true);
     const [disMode, setDisMode] = useState(0);
 
+    const [Dno,setDno] = useState("");
     const [DName, setDName] = useState("");
+    const [clothType,setClothType] = useState("");
+    const [bcost,setBcost] = useState("");
+    const [wcost,setWcost] = useState("");
+    const [jcost,setJcost] = useState("");
+    const [lcost,setLcost] = useState("");
+    const [dcost,setDcost] = useState("");
+    const [pcost,setPcost] = useState("");
+    const [mu,setMU] = useState("");
+
     const buttonModes = {
         0: [
             { dis: true, label: "Delete" },
@@ -36,6 +46,7 @@ const DesignMaster = () => {
     };
     const addSaveHandler = async (event) => {
         event.preventDefault();
+        //code
     };
     const deleteHandler = async () => {
         if (disMode === 1) {
@@ -90,7 +101,17 @@ const DesignMaster = () => {
             <h2>Design Master</h2>
             <div className={styles["form-main"]}>
                 <form onSubmit={addSaveHandler} className={styles["form"]}>
-                    <div className={styles["input-section"]}>
+                    {/* <div className={styles["input-section"]}> */}
+                        <input
+                            type="number"
+                            name="Dno"
+                            value={Dno}
+                            placeholder="Design Number"
+                            onChange={(e) => setDno(e.target.value)}
+                            disabled={!isEntering}
+                            className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
+                            required
+                        />
                         <input
                             type="text"
                             name="DName"
@@ -101,7 +122,80 @@ const DesignMaster = () => {
                             className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
                             required
                         />
-                    </div>
+                        <input
+                            type="text"
+                            name="clothType"
+                            value={clothType}
+                            placeholder="Cloth Type"
+                            onChange={(e) => setClothType(e.target.value)}
+                            disabled={!isEntering}
+                            className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
+                            required
+                        />
+                        <input
+                            type="number"
+                            name="bcost"
+                            value={bcost}
+                            placeholder="Basic Cost"
+                            onChange={(e) => setBcost(e.target.value)}
+                            disabled={!isEntering}
+                            className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
+                            required
+                        />
+                        <input
+                            type="number"
+                            name="wcost"
+                            value={wcost}
+                            placeholder="Work Cost"
+                            onChange={(e) => setWcost(e.target.value)}
+                            disabled={!isEntering}
+                            className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
+                            required
+                        />
+                        <input
+                            type="number"
+                            name="lcost"
+                            value={lcost}
+                            placeholder="Lace Cost"
+                            onChange={(e) => setLcost(e.target.value)}
+                            disabled={!isEntering}
+                            className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
+                            required
+                        />
+                        <input
+                            type="number"
+                            name="dcost"
+                            value={dcost}
+                            placeholder="Diamond Cost"
+                            onChange={(e) => setDcost(e.target.value)}
+                            disabled={!isEntering}
+                            className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
+                            required
+                        />
+                        <input
+                            type="number"
+                            name="pcost"
+                            value={pcost}
+                            placeholder="Packing Cost"
+                            onChange={(e) => setPcost(e.target.value)}
+                            disabled={!isEntering}
+                            className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
+                            required
+                        />
+                        
+                    
+                    
+                    <input
+                            type="text"
+                            name="clothType"
+                            value={clothType}
+                            placeholder="Cloth Type"
+                            onChange={(e) => setClothType(e.target.value)}
+                            disabled={!isEntering}
+                            className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
+                            required
+                        />
+                    
                     <button
                         disabled={buttonModes[disMode][1].dis}
                         className={`${styles["add-btn"]} ${styles["btn"]}`}
