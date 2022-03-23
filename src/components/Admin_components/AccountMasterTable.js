@@ -114,7 +114,7 @@ function AccountMasterTable({ showclick }) {
         {
             Header: "Cr/Dr",
             Filter: "",
-            accessor: "Cr/Dr",
+            accessor: "CrDr",
         },
         {
             Header: "BeneName",
@@ -144,7 +144,7 @@ function AccountMasterTable({ showclick }) {
         (async function fetchdata() {
             try {
                 const res = await Axios.get(
-                    "http://localhost:3003/accountMaster/FetchAll"
+                    "http://localhost:3003/accountMaster"
                 );
                 console.log(res);
                 settabledata(res.data);
