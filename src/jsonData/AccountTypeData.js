@@ -19,7 +19,7 @@ const GstGroup = {
 };
 const OBGroup = {
     "Opening Balance": "text",
-    "Cr/Dr": "dropD",
+    "CrDr": "dropD",
 };
 const shares = { "Share %": "number" };
 const bankdetail = {};

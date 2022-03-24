@@ -1,95 +1,123 @@
 import React, { useState, useEffect } from "react";
-import styles from "../../../styles/AccountMaster.module.css";
 import "react-widgets/styles.css";
 import "../../../styles/Greypurchase.css";
+import Modal from "../../Modal/Modal";
 import Axios from "axios";
+import toast from "react-hot-toast";
+
 if (localStorage.getItem("userDetails") != null)
   Axios.defaults.headers.common["userID"] = JSON.parse(
     localStorage.getItem("userDetails")
   ).userID;
+
+//axios instances
 Axios.defaults.withCredentials = true;
-const instance = Axios.create({
+const accinstance = Axios.create({
   baseURL: "http://localhost:3003/accountMaster/",
 });
+const usrinstance = Axios.create({
+  baseURL: "http://localhost:3004/userservice/",
+});
+
+
+
 function Greypurchase() {
+  // For getting the current date
   const current = new Date();
   const date = `${current.getFullYear()}-0${
     current.getMonth() + 1
   }-${current.getDate()}`;
+
   const [accntdata, setacctdata] = useState([]); // for setting the account name returend in useEffect
   const [state, setState] = useState({
-    SrNo: "0",
     BillNo: 0,
     BillDate: date,
     accntnames: "",
     RevCharge: "",
-    RcmInvNo: "",
-    ChallanNo: "",
+    RcmInvNo: 0,
+    ChallanNo: 0,
     ChallanDate: date,
     Agent: "",
     Haste: "",
-    OrderForm: "",
-    EntryNo: "",
+    OrderForm: 0,
+    EntryNo: 0,
     ItemName: "",
-    Marka: "",
-    Taka: "",
-    Mts: "",
-    Fold: "",
-    ActMts: 0,
+    Marka: 0,
+    Taka: 0,
+    Mts: 0,
+    Fold: 0,
+    ActMts: "",
     Rate: "",
     Amount: 0,
-    Discount: "",
-    DiscountAmt: "",
-    IGST: "",
-    CGST: "",
-    SGST: "",
-    IGSTamt: "",
-    CGSTamt: "",
-    SGSTamt: "",
-    NetAmount: "",
+    Discount: 0,
+    DiscountAmt: 0,
+    IGST: 0,
+    CGST: 0,
+    SGST: 0,
+    IGSTamt: 0,
+    CGSTamt: 0,
+    SGSTamt: 0,
+    NetAmount: 0,
   });
+
+  const [modalstate, setmodalstate] = useState(false); // use state to handle modal toggle
   // function to handle any changes
   const onchangeHandler = (event) => {
-    console.log(event.target.name);
-    const value = event.target.value;
+    let value = event.target.value;
+    if (!Number.isNaN(parseFloat(value))) {
+      value = parseFloat(value);
+    }
+    console.log(typeof value);
     setState({
       ...state,
       [event.target.name]: value,
     });
   };
-  // function to handle onsubmit form request
-  const onSubmithandler = (event) => {
-    event.preventDefault();
+
+  // funtion to close modal
+  const closeHandler = () => {
+    setmodalstate(false);
   };
+
+  // function to handle onsubmit form request
+  const onSubmithandler = async (event) => {
+    event.preventDefault();
+    console.log(state);
+    const res = await usrinstance.post("addgreypurchase", state);
+    console.log(res.data.status);
+    if (res.data.status === "1") {
+      console.log("toast");
+      toast.success("Purchase added successfully!", {
+        style: {
+          borderRadius: "15px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+    } else {
+      toast.success(`Error ${res.data}`, {
+        style: {
+          borderRadius: "15px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+    }
+  };
+
   //   useEffect to fetch the account names
   useEffect(() => {
     (async function fetchaccntname() {
-      const result = await instance.get("FetchAll");
+      const result = await accinstance.get("FetchAll");
 
       setacctdata(result.data);
     })();
   }, []);
 
-  const amountCalc = (e)=>{
-    const amt = state.ActMts * e.target.value;
-    setState({
-      ...state,
-      Amount:amt,
-    });
-  }
   return (
     <form onSubmit={onSubmithandler} className="form--greypurchase">
       <div className="main">
         <div className="firstline--greypurchase">
-          <label>
-            SrNo
-            <input
-              type="text"
-              value={state.SrNo}
-              name="SrNo"
-              onChange={onchangeHandler}
-            />
-          </label>
           <label>
             Purchase Type
             <input type="text" disabled value="Grey Purchase" />
@@ -107,20 +135,26 @@ function Greypurchase() {
             Bill date
             <input
               type="date"
-              style={{ width: "150px" }}
+              style={{ width: "140px" }}
               required
               value={state.BillDate}
               name="BillDate"
               onChange={onchangeHandler}
             />
           </label>
+          <label>Challan date</label>
+          <input
+            style={{ width: "140px" }}
+            type="date"
+            value={state.ChallanDate}
+            name="challanDate"
+            onChange={onchangeHandler}
+          />
         </div>
         <div className="secondline--greypurchase">
           <label>Supplier</label>
-          <select name="accntnames" onChange={onchangeHandler}>
-            <option value="none" selected disabled>
-              Account Name...
-            </option>
+          <select name="accntnames" onChange={onchangeHandler} required>
+            <option value="">Account Names</option>
             {accntdata.map((acct, index) => {
               return (
                 <option value={acct.AccName} key={index}>
@@ -148,14 +182,6 @@ function Greypurchase() {
             type="text"
             value={state.ChallanNo}
             name="ChallanNo"
-            onChange={onchangeHandler}
-          />
-          <label>Challan date</label>
-          <input
-            style={{ width: "150px" }}
-            type="date"
-            value={state.ChallanDate}
-            name="challanDate"
             onChange={onchangeHandler}
           />
         </div>
@@ -205,9 +231,7 @@ function Greypurchase() {
               value={state.ItemName}
               onChange={onchangeHandler}
             >
-              <option value="none" selected disabled>
-                Item Name
-              </option>
+              <option value="">Item Names</option>
             </select>
             <button type="button">Add Item</button>
           </label>
@@ -256,6 +280,8 @@ function Greypurchase() {
               type="number"
               name="ActMts"
               value={state.ActMts}
+              id="mts"
+              required
               onChange={onchangeHandler}
             />
           </label>
@@ -263,10 +289,10 @@ function Greypurchase() {
             Rate
             <input
               type="number"
+              id="rate"
               name="Rate"
               value={state.Rate}
               onChange={onchangeHandler}
-              onInput={amountCalc}
             />
           </label>
           <label>
@@ -274,8 +300,11 @@ function Greypurchase() {
             <input
               type="number"
               name="Amount"
-              value={state.Rate * state.ActMts}
-              disabled
+              value={state.ActMts * state.Rate}
+              readOnly
+              onSelect={onchangeHandler}
+              id="Amount"
+              required
             />
           </label>
         </div>
@@ -291,9 +320,9 @@ function Greypurchase() {
             <input
               type="text"
               name="DiscountAmt"
-              value={state.DiscountAmt}
-              onChange={onchangeHandler}
-              disabled
+              readOnly
+              value={Math.round((state.Discount / 100) * state.Amount)}
+              onSelect={onchangeHandler}
             />
           </label>
           <label>
@@ -307,9 +336,11 @@ function Greypurchase() {
             <input
               type="text"
               name="IGSTamt"
-              value={state.IGSTamt}
-              onChange={onchangeHandler}
-              disabled
+              readOnly
+              value={Math.round(
+                ((state.Amount - state.DiscountAmt) * state.IGST) / 100
+              )}
+              onSelect={onchangeHandler}
             />
           </label>
           <label>
@@ -323,9 +354,11 @@ function Greypurchase() {
             <input
               type="text"
               name="CGSTamt"
-              value={state.CGSTamt}
-              onChange={onchangeHandler}
-              disabled
+              readOnly
+              value={Math.round(
+                ((state.Amount - state.DiscountAmt) * state.CGST) / 100
+              )}
+              onSelect={onchangeHandler}
             />
           </label>
           <label>
@@ -339,9 +372,11 @@ function Greypurchase() {
             <input
               type="text"
               name="SGSTamt"
-              value={state.SGSTamt}
-              onChange={onchangeHandler}
-              disabled
+              readOnly
+              value={Math.round(
+                ((state.Amount - state.DiscountAmt) * state.SGST) / 100
+              )}
+              onSelect={onchangeHandler}
             />
           </label>
         </div>
@@ -350,16 +385,32 @@ function Greypurchase() {
             Net Amount
             <input
               type="number"
-              disabled
               name="NetAmount"
-              value={state.NetAmount}
-              onChange={onchangeHandler}
+              readOnly
+              value={Math.round(
+                state.Amount -
+                  state.DiscountAmt +
+                  state.CGSTamt +
+                  state.IGSTamt +
+                  state.SGSTamt
+              )}
+              onSelect={onchangeHandler}
+              required
             />
           </label>
-          <button>Add Purchase</button>
-          <button type="button">View all purchase</button>
+          <input type="submit" value="Add Purchase" />
+          <button
+            onClick={() => {
+              setmodalstate(true);
+            }}
+            type="button"
+          >
+            View all purchase
+          </button>
         </div>
-        <div className="greypurchase--table"></div>
+        <Modal open={modalstate} onClose={closeHandler}>
+          
+        </Modal>
       </div>
     </form>
   );
