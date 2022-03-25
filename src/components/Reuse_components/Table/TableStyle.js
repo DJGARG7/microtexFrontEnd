@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Styles = styled.div`
   .table--sticky {
-    border: 1px solid #ddd;
+    // border: 1px solid #ddd;
     
     .tr--sticky {
       :last-child {
@@ -17,7 +17,7 @@ export const Styles = styled.div`
       border-bottom: 1px solid #ddd;
       border-right: 1px solid #ddd;
       background-color: #fff;
-      overflow: hidden;
+      overflow: auto;
 
       :last-child {
         border-right: 0;
@@ -25,8 +25,8 @@ export const Styles = styled.div`
     }
 
     .th--sticky {
-      padding-top: 12px;
-      padding-bottom: 12px;
+      // padding-top: 12px;
+      // padding-bottom: 12px;
       text-align: center;
       background-color: #04aa6d;
 
@@ -34,7 +34,7 @@ export const Styles = styled.div`
     }
 
     &.sticky {
-      overflow: scroll;
+      overflow: auto;
       .header,
       .footer {
         position: sticky;
@@ -44,12 +44,7 @@ export const Styles = styled.div`
 
       .header--sticky {
         top: 0;
-        box-shadow: 0px 3px 3px #ccc;
-      }
-
-      .footer {
-        bottom: 0;
-        box-shadow: 0px -3px 3px #ccc;
+        // box-shadow: 0px 3px 3px #ccc;
       }
 
       .body--sticky {
@@ -62,11 +57,11 @@ export const Styles = styled.div`
       }
 
       [data-sticky-last-left-td--sticky] {
-        box-shadow: 2px 0px 3px #ccc;
+        // box-shadow: 2px 0px 3px #ccc;
       }
 
       [data-sticky-first-right-td--sticky] {
-        box-shadow: -2px 0px 3px #ccc;
+        // box-shadow: -2px 0px 3px #ccc;
       }
     }
   }

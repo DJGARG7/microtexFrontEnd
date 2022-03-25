@@ -4,6 +4,9 @@ import "../../../styles/Greypurchase.css";
 import Modal from "../../Modal/Modal";
 import Axios from "axios";
 import toast from "react-hot-toast";
+import StickyTable from "../../Reuse_components/Table/StickyTable";
+import { GSTdescription } from "../../../jsonData/GSTdescription";
+
 
 if (localStorage.getItem("userDetails") != null)
   Axios.defaults.headers.common["userID"] = JSON.parse(
@@ -19,18 +22,262 @@ const usrinstance = Axios.create({
   baseURL: "http://localhost:3004/userservice/",
 });
 
-
-
 function Greypurchase() {
+  const TableColData = [
+    {
+      Header: "Action",
+      accessor: (str) => "edit",
+      Cell: (tableProps) => (
+        <div>
+          <button
+            style={{
+              cursor: "pointer",
+            }}
+            type="submit"
+            onClick={() => {
+              onEditHandler(tableProps);
+            }}
+          >
+            edit
+          </button>
+        </div>
+      ),
+      sticky: "left",
+      Filter: "",
+    },
+    {
+      Header: "Unique Id",
+      accessor: "uid",
+      show: false,
+    },
+    {
+      Header: "Bill No",
+      accessor: "BillNo",
+    },
+    {
+      Header: "Account Name",
+      accessor: "accntnames",
+    },
+    {
+      Header: "Rev Charge",
+      accessor: "RevCharge",
+      Filter: "",
+    },
+    {
+      Header: "RcmInvNo",
+      accessor: "RcmInvNo",
+      Filter: "",
+    },
+    {
+      Header: "Challan No",
+      accessor: "ChallanNo",
+      Filter: "",
+    },
+    {
+      Header: "ChallanDate",
+      accessor: "ChallanDate",
+    },
+    {
+      Header: "Agent",
+      accessor: "Agent",
+      Filter: "",
+    },
+    {
+      Header: "Haste",
+      accessor: "Haste",
+      Filter: "",
+    },
+    {
+      Header: "OrderForm",
+      accessor: "OrderForm",
+      Filter: "",
+    },
+    {
+      Header: "EntryNo",
+      accessor: "EntryNo",
+      Filter: "",
+    },
+    {
+      Header: "ItemName",
+      accessor: "ItemName",
+      Filter: "",
+    },
+    {
+      Header: "Marka",
+      accessor: "Marka",
+      Filter: "",
+    },
+    {
+      Header: "Taka",
+      accessor: "Taka",
+      Filter: "",
+    },
+    {
+      Header: "Mts",
+      accessor: "Mts",
+      Filter: "",
+    },
+    {
+      Header: "Fold",
+      accessor: "Fold",
+      Filter: "",
+    },
+    {
+      Header: "ActMts",
+      accessor: "ActMts",
+      Filter: "",
+    },
+    {
+      Header: "Rate",
+      Filter: "",
+      accessor: "Rate",
+    },
+    {
+      Header: "Amount",
+      accessor: "Amount",
+      Filter: "",
+    },
+    {
+      Header: "Discount",
+      accessor: "Discount",
+      Filter: "",
+    },
+
+    {
+      Header: "IGST",
+      accessor: "IGST",
+      Filter: "",
+    },
+    {
+      Header: "CGST",
+      accessor: "CGST",
+      Filter: "",
+    },
+    {
+      Header: "SGST",
+      accessor: "SGST",
+      Filter: "",
+    },
+    {
+      Header: "NetAmount",
+      accessor: "NetAmount",
+      Filter: "",
+    },
+  ];
+
+  // col data for purchased items
+  const purchasedListCol = [
+    {
+      Header: "Action",
+      accessor: (str) => "edit",
+      Cell: (tableProps) => (
+        <div>
+          <button
+            style={{
+              cursor: "pointer",
+            }}
+            type="submit"
+            onClick={() => {
+              onEditHandler(tableProps);
+            }}
+          >
+            Edit
+          </button>
+        </div>
+      ),
+      sticky: "left",
+      Filter: "",
+      maxWidth:10 ,
+      minWidth:60,
+      width: 40,
+    },
+    {
+      Header: "Unique Id",
+      accessor: "uid",
+      show: false,
+      maxWidth:10 ,
+      minWidth:60,
+      width: 40,
+    },
+    {
+      Header: "Item",
+      accessor: "Item",
+      Filter: "",
+      maxWidth:250,
+      minWidth:200,
+      width:100,
+    },
+    {
+      Header: "Marka",
+      accessor: "Marka",
+      Filter: "",
+      maxWidth:150 ,
+      minWidth:100,
+      width: 100,
+    },
+    {
+      Header: "Taka",
+      accessor: "Taka",
+      Filter: "",
+      maxWidth:150 ,
+      minWidth:100,
+      width: 100,
+    },
+    {
+      Header: "Mts",
+      accessor: "Mts",
+      Filter: "",
+      maxWidth:150 ,
+      minWidth:100,
+      width: 100,
+    },
+    {
+      Header: "Fold",
+      accessor: "Fold",
+      Filter: "",
+      maxWidth:150 ,
+      minWidth:100,
+      width: 100,
+    },
+    {
+      Header: "ActMts",
+      accessor: "ActMts",
+      Filter: "",
+      maxWidth:150 ,
+      minWidth:100,
+      width: 100,
+    },
+    {
+      Header: "Rate",
+      Filter: "",
+      accessor: "Rate",
+      maxWidth:150 ,
+      minWidth:100,
+      width: 40,
+    },
+    {
+      Header: "Amount",
+      accessor: "Amount",
+      Filter: "",
+      maxWidth:150 ,
+      minWidth:100,
+      width: 100,
+    },
+  ];
+
   // For getting the current date
   const current = new Date();
   const date = `${current.getFullYear()}-0${
     current.getMonth() + 1
   }-${current.getDate()}`;
 
+
+  const [tabledata, settabledata] = useState([]); // for modal table
+  const [purchaseditems, setpurchaseditems] = useState([]); // list of purchased items
+
   const [accntdata, setacctdata] = useState([]); // for setting the account name returend in useEffect
   const [state, setState] = useState({
-    BillNo: 0,
+    BillNo: "",
     BillDate: date,
     accntnames: "",
     RevCharge: "",
@@ -46,8 +293,8 @@ function Greypurchase() {
     Taka: 0,
     Mts: 0,
     Fold: 0,
-    ActMts: "",
-    Rate: "",
+    ActMts: 0,
+    Rate: 0,
     Amount: 0,
     Discount: 0,
     DiscountAmt: 0,
@@ -59,7 +306,8 @@ function Greypurchase() {
     SGSTamt: 0,
     NetAmount: 0,
   });
-
+  
+  const [greyitemadd,setgretitemadd] = useState(false); //toggles modal for greyitem adder
   const [modalstate, setmodalstate] = useState(false); // use state to handle modal toggle
   // function to handle any changes
   const onchangeHandler = (event) => {
@@ -79,12 +327,41 @@ function Greypurchase() {
     setmodalstate(false);
   };
 
+
   // function to handle onsubmit form request
   const onSubmithandler = async (event) => {
     event.preventDefault();
-    console.log(state);
-    const res = await usrinstance.post("addgreypurchase", state);
-    console.log(res.data.status);
+    // const res = await usrinstance.post("addgreypurchase", state);
+    const res = 1;
+
+    const newItem = {
+      ItemName: state.ItemName,
+      Marka: state.Marka,
+      Taka: state.Taka,
+      Mts: state.Mts,
+      Fold: state.Fold,
+      ActMts: state.ActMts,
+      Rate: state.Rate,
+      Amount: state.Amount,
+    };
+    setpurchaseditems((preitems) => {
+      setState({
+        ...state,
+        ItemName:"",
+        Taka : "",
+        Mts : "",
+        Fold : "",
+        ActMts : "",
+        Rate :"",
+        Amount:"",
+        Discount:"",
+        IGST:"",
+        CGST:"",
+        SGST:"",
+      })
+      return [...preitems, newItem];
+    });
+
     if (res.data.status === "1") {
       console.log("toast");
       toast.success("Purchase added successfully!", {
@@ -95,7 +372,7 @@ function Greypurchase() {
         },
       });
     } else {
-      toast.success(`Error ${res.data}`, {
+      toast.error(`Error ${res.data.sqlMessage}`, {
         style: {
           borderRadius: "15px",
           background: "#333",
@@ -103,17 +380,39 @@ function Greypurchase() {
         },
       });
     }
+
+    //for clearing out the field 
+    
   };
 
   //   useEffect to fetch the account names
   useEffect(() => {
     (async function fetchaccntname() {
-      const result = await accinstance.get("FetchAll");
+      const result = await accinstance.get(" ");
 
       setacctdata(result.data);
     })();
   }, []);
 
+  // if edit is selected when the edit button is clicked on the table
+  const onEditHandler = (tableprops) => {
+    setmodalstate(false);
+    const data = tableprops.row.original;
+    const disamt = Math.round((data.Discount / 100) * data.Amount);
+    // setting the data back to the form
+    setState({
+      ...data,
+      DiscountAmt: Math.round((data.Discount / 100) * data.Amount),
+      IGSTamt: ((data.Amount - disamt) * data.IGST) / 100,
+      CGSTamt: ((data.Amount - disamt) * data.CGST) / 100,
+      SGSTamt: ((data.Amount - disamt) * data.SGST) / 100,
+    });
+  };
+
+  //to handle greyitem add handler
+  const greyitemcloseHandler = ()=>{
+    setgretitemadd(false);
+  }
   return (
     <form onSubmit={onSubmithandler} className="form--greypurchase">
       <div className="main">
@@ -129,6 +428,7 @@ function Greypurchase() {
               value={state.BillNo}
               name="BillNo"
               onChange={onchangeHandler}
+              required
             />
           </label>
           <label>
@@ -153,7 +453,12 @@ function Greypurchase() {
         </div>
         <div className="secondline--greypurchase">
           <label>Supplier</label>
-          <select name="accntnames" onChange={onchangeHandler} required>
+          <select
+            name="accntnames"
+            onChange={onchangeHandler}
+            required
+            value={state.accntnames}
+          >
             <option value="">Account Names</option>
             {accntdata.map((acct, index) => {
               return (
@@ -233,7 +538,7 @@ function Greypurchase() {
             >
               <option value="">Item Names</option>
             </select>
-            <button type="button">Add Item</button>
+            <button type="button" onClick={()=>{setgretitemadd(true)}}>Add Item</button>
           </label>
           <label>
             Marka
@@ -279,7 +584,7 @@ function Greypurchase() {
             <input
               type="number"
               name="ActMts"
-              value={state.ActMts}
+              value={parseInt(state.ActMts)}
               id="mts"
               required
               onChange={onchangeHandler}
@@ -291,7 +596,7 @@ function Greypurchase() {
               type="number"
               id="rate"
               name="Rate"
-              value={state.Rate}
+              value={parseInt(state.Rate)}
               onChange={onchangeHandler}
             />
           </label>
@@ -300,7 +605,7 @@ function Greypurchase() {
             <input
               type="number"
               name="Amount"
-              value={state.ActMts * state.Rate}
+              value={parseInt(state.ActMts * state.Rate)}
               readOnly
               onSelect={onchangeHandler}
               id="Amount"
@@ -320,6 +625,7 @@ function Greypurchase() {
             <input
               type="text"
               name="DiscountAmt"
+              id="DiscountAmt"
               readOnly
               value={Math.round((state.Discount / 100) * state.Amount)}
               onSelect={onchangeHandler}
@@ -336,6 +642,7 @@ function Greypurchase() {
             <input
               type="text"
               name="IGSTamt"
+              id="IGSTamt"
               readOnly
               value={Math.round(
                 ((state.Amount - state.DiscountAmt) * state.IGST) / 100
@@ -354,6 +661,7 @@ function Greypurchase() {
             <input
               type="text"
               name="CGSTamt"
+              id="CGSTamt"
               readOnly
               value={Math.round(
                 ((state.Amount - state.DiscountAmt) * state.CGST) / 100
@@ -373,6 +681,7 @@ function Greypurchase() {
               type="text"
               name="SGSTamt"
               readOnly
+              id="SGSTamt"
               value={Math.round(
                 ((state.Amount - state.DiscountAmt) * state.SGST) / 100
               )}
@@ -387,8 +696,9 @@ function Greypurchase() {
               type="number"
               name="NetAmount"
               readOnly
+              id="NetAmount"
               value={Math.round(
-                state.Amount -
+                parseInt(state.Amount) -
                   state.DiscountAmt +
                   state.CGSTamt +
                   state.IGSTamt +
@@ -400,7 +710,9 @@ function Greypurchase() {
           </label>
           <input type="submit" value="Add Purchase" />
           <button
-            onClick={() => {
+            onClick={async () => {
+              const res = await usrinstance.get("fetchall");
+              settabledata(res.data);
               setmodalstate(true);
             }}
             type="button"
@@ -409,7 +721,52 @@ function Greypurchase() {
           </button>
         </div>
         <Modal open={modalstate} onClose={closeHandler}>
-          
+          <StickyTable TableCol={TableColData} TableData={tabledata} />
+        </Modal>
+        <div className="greypurchase--itemtable">
+          <StickyTable TableCol={purchasedListCol} TableData={purchaseditems} />
+        </div>
+        <Modal open={greyitemadd} onClose={greyitemcloseHandler}>
+          <form className="greypurchase--itemadd">
+            <label>
+              Item Name:
+              <input type="text" required />
+            </label>
+            <label>
+              Opening pcs:
+              <input type="number" />
+            </label>
+            <label>
+              Opening Mts:
+              <input type="number" />
+            </label>
+            <label>
+              Opening Value:
+              <input type="number" />
+            </label>
+            <label>
+              Rate per pcs:
+              <input type="number" />
+            </label>
+            <label>
+              Rate per Mts:
+              <input type="number" />
+            </label>
+            <label>
+              HSN code:
+              <input type="number" required />
+            </label>
+            <label>
+              GST (%):
+              <input type="number" required />
+            </label>
+            <select required>
+              <option value="" >Description for GST</option>
+              {GSTdescription.map((Item,Index)=>{
+                return <option value={Item} key={Index}>{Item}</option>
+              })}
+            </select>
+          </form>
         </Modal>
       </div>
     </form>
