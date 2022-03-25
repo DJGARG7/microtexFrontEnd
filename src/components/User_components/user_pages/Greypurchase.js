@@ -6,6 +6,7 @@ import Axios from "axios";
 import toast from "react-hot-toast";
 import StickyTable from "../../Reuse_components/Table/StickyTable";
 import { GSTdescription } from "../../../jsonData/GSTdescription";
+import { flexRender } from "react-table/dist/react-table.development";
 
 
 if (localStorage.getItem("userDetails") != null)
@@ -169,9 +170,9 @@ function Greypurchase() {
   const purchasedListCol = [
     {
       Header: "Action",
-      accessor: (str) => "edit",
+      accessor: (str) => "delete/edit",
       Cell: (tableProps) => (
-        <div>
+        <div style={{display:"flex",flexDirection:"row"}}>
           <button
             style={{
               cursor: "pointer",
@@ -183,13 +184,27 @@ function Greypurchase() {
           >
             Edit
           </button>
+          <button
+            style={{
+              cursor: "pointer",
+            }}
+            type="submit"
+            onClick={() => {
+              setpurchaseditems((prestate)=>{
+                prestate.splice(tableProps.row.index, 1);
+                return [...prestate]
+              })
+            }}
+          >
+            Delete
+          </button>
         </div>
       ),
       sticky: "left",
       Filter: "",
-      maxWidth:10 ,
-      minWidth:60,
-      width: 40,
+      maxWidth:100,
+      minWidth:100,
+      width: 100,
     },
     {
       Header: "Unique Id",

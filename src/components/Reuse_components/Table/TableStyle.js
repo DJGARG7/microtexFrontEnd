@@ -17,7 +17,7 @@ export const Styles = styled.div`
       border-bottom: 1px solid #ddd;
       border-right: 1px solid #ddd;
       background-color: #fff;
-      overflow: auto;
+      overflow: hidden;
 
       :last-child {
         border-right: 0;
