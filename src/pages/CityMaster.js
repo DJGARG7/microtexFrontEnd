@@ -50,7 +50,7 @@ function CityMaster({ userDetails }) {
                         className="btn del-btn"
                         onClick={async () => {
                             try {
-                                var result = await Axios.post(
+                                const result = await Axios.post(
                                     "http://localhost:3001/cityMaster/delete",
                                     {
                                         City: tableProps.row.values.CityName,
