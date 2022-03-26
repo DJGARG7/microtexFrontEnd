@@ -104,4 +104,24 @@
   display: flex;
   flex-direction: column;
   padding: 10%;
+  justify-content: space-around;
+
+}
+
+.greypurchase--itemadd button{
+  position: relative;
+  margin-top:10px;
+  width: 100px;
+  height: 50px;
+}
+.greypurchase--itemadd select{
+  position: relative;
+  margin-top:10px;
+}
+
+.form--button{
+  align-items: center;
+  margin-left:490px;
+  position: relative;
+  margin-top: 30px;
 }
