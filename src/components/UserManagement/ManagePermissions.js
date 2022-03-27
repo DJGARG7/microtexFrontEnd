@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import ReactLoading from "react-loading";
 import axios from "./api/axios";
+import PermissionsForm from "./PermissionsForm";
 import commonStyles from "./styles/common.module.css";
 
 const toastStyle = {
@@ -18,11 +19,12 @@ export default function UserManagementIndex() {
     const [isLoading, setIsLoading] = useState(true);
     const [users, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState("DEFAULT");
+    const [permissionsData, setPermissionsData] = useState();
 
-    const fetchData = async () => {
+    const fetchUsers = async () => {
         try {
             const res = await axios.get("/", {
-                signal: controller.signal,
+                // signal: controller.signal,
             });
 
             let temp = [];
@@ -32,43 +34,41 @@ export default function UserManagementIndex() {
             });
 
             setUsers(temp);
-            setIsLoading(false);
         } catch (error) {
-            if (error.name === "AbortError") return;
+            // if (error.name === "AbortError") return;
             toast.error("Error loading user data", toastStyle);
         }
     };
 
-    useEffect(async () => {
+    const fetchPermissions = async () => {
+        try {
+            const res = await axios.get("../permissions/", {
+                // signal: controller.signal,
+            });
+            let temp = [];
+
+            res.data.map((permission) => {
+                temp.push({ [permission.p_id]: permission.p_name });
+            });
+
+            setPermissionsData(temp);
+        } catch (error) {
+            // if (error.name === "AbortError") return;
+            toast.error("Error loading permission data", toastStyle);
+        }
+    };
+
+    useEffect(() => {
         setTimeout(() => {
-            fetchData();
-        }, 1000);
+            fetchUsers();
+            fetchPermissions();
+            setIsLoading(false);
+        }, 500);
 
         return () => {
             controller.abort();
         };
     }, []);
-
-    const updatePermissionsHandler = async (event) => {
-        event.preventDefault();
-
-        if (selectedUser === "DEFAULT") {
-            toast.error(
-                "Please select a user to update permissions",
-                toastStyle
-            );
-        } else {
-            try {
-                // const res = await axios.delete(`/${selectedUser}`);
-                toast.success("Hello!", toastStyle);
-            } catch (error) {
-                toast.error(error.response.data, toastStyle);
-            }
-
-            setSelectedUser("DEFAULT");
-            fetchData();
-        }
-    };
 
     if (isLoading) {
         return (
@@ -85,10 +85,7 @@ export default function UserManagementIndex() {
     return (
         <div className={commonStyles["main"]}>
             <h2>Manage User Permissions</h2>
-            <form
-                onSubmit={updatePermissionsHandler}
-                className={commonStyles["form"]}
-            >
+            <form className={commonStyles["form"]}>
                 <select
                     placeholder="User ID"
                     className={commonStyles["form--inp-s"]}
@@ -112,11 +109,18 @@ export default function UserManagementIndex() {
                     })}
                 </select>
 
-                <button
+                {selectedUser !== "DEFAULT" && (
+                    <PermissionsForm
+                        selectedUser={selectedUser}
+                        permissionsData={permissionsData}
+                    />
+                )}
+
+                {/* <button
                     className={`${commonStyles["form--btn"]} ${commonStyles["form--add-btn"]}`}
                 >
                     Update
-                </button>
+                </button> */}
             </form>
         </div>
     );
