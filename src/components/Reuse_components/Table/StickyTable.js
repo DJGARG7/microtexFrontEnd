@@ -64,7 +64,9 @@ function StickyTable({ TableCol, TableData }) {
           {headerGroups.map((headerGroup) => (
             <div {...headerGroup.getHeaderGroupProps()} className="tr--sticky">
               {headerGroup.headers.map((column) => (
-                <div {...column.getHeaderProps()} className="th--sticky">
+                <div {...column.getHeaderProps({
+                  style: { minWidth: column.minWidth, width: column.width },
+                })} className="th--sticky">
                   {column.render("Header")}
                   <div>{column.canFilter ? column.render('Filter') : null}</div>
                 </div>
@@ -78,7 +80,12 @@ function StickyTable({ TableCol, TableData }) {
             return (
               <div {...row.getRowProps()} className="tr--sticky">
                 {row.cells.map((cell) => (
-                  <div {...cell.getCellProps()} className="td--sticky">
+                  <div {...cell.getCellProps({
+                    style: {
+                      minWidth: cell.column.minWidth,
+                      width: cell.column.width,
+                    },
+                  })} className="td--sticky">
                     {cell.render("Cell")}
                   </div>
                 ))}

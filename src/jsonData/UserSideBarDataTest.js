@@ -20,34 +20,38 @@ export const UserSideBarDataTest = [
             path : "/dashboard/transaction/purchase/greypurchase",
           },
           {
-            title : "Finished purchase",
-            path : "/dashboard/transaction/purchase/greypurchase",
-          },
-          {
             title : "General purchase",
             path : "/dashboard/transaction/purchase/greypurchase",
           }
         ]
       },
+      // {
+      //   title: "Sale",
+      //   path: "/dashboard/transaction/sale",
+      //   iconClosed: <RiIcons.RiArrowDownSFill />,
+      //   iconOpened: <RiIcons.RiArrowUpSFill />,
+      //   subNav: [
+      //     {
+      //       title: "Normal sales",
+      //       path: "/dashboard/transaction/sale/normalsale",
+      //     },
+      //   ],
+      // },
       {
-        title: "Sale",
-        path: "/dashboard/transaction/sale",
+        title: "JOB",
+        path: "/dashboard/transaction/jobforwork",
         iconClosed: <RiIcons.RiArrowDownSFill />,
         iconOpened: <RiIcons.RiArrowUpSFill />,
         subNav: [
           {
-            title: "Normal sales",
-            path: "/dashboard/transaction/sale/normalsale",
+            title : "Send",
+            path : "/dashboard/transaction/job/send"
           },
-        ],
-      },
-      {
-        title: "Send Job for work",
-        path: "/dashboard/transaction/jobforwork",
-      },
-      {
-        title: "Revenue",
-        path: "/dashboard/transaction/revenue",
+          {
+            title : "Receive",
+            path : "/dashboard/transaction/job/receive"
+          }
+        ]
       },
     ],
   },
