@@ -1,9 +1,15 @@
 import { useEffect, useState } from "react";
 import Modal from "../components/Modal/Modal";
-import AccountMasterTable from "../components/Admin_components/AccountMasterTable";
 import styles from "../styles/AccountMaster.module.css";
 import Axios from "axios";
 import toast from "react-hot-toast";
+
+import AccountMasterTable from "../components/Admin_components/AccountMasterTable";
+
+const instance = Axios.create({
+    baseURL: "http://localhost:3004/designMaster/",
+});
+
 const DesignMaster = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isEntering, setIsEntering] = useState(true);
@@ -11,17 +17,22 @@ const DesignMaster = () => {
 
     const [Dno, setDno] = useState("");
     const [DName, setDName] = useState("");
-    const [clothType, setClothType] = useState("");
+
     const [bcost, setBcost] = useState("");
+    const [clothType, setClothType] = useState("");
+
     const [wcost, setWcost] = useState("");
     const [wname, setWname] = useState("none");
+
     const [lcost, setLcost] = useState("");
     const [lname, setLname] = useState("none");
+
     const [dcost, setDcost] = useState("");
     const [diamname, setDiamname] = useState("none");
-    const [pcost, setPcost] = useState("");
 
+    const [pcost, setPcost] = useState("");
     const [mu, setMU] = useState("");
+
     const [calPrice, setCalPrice] = useState(0);
 
     const [cfjlist, setCfjlist] = useState([]);
@@ -49,14 +60,13 @@ const DesignMaster = () => {
             { dis: false, label: "Exit" },
         ],
     };
-    const type = "Creditors For Job"
+    const type = "Creditors For Job";
     useEffect(async () => {
         try {
             const res = await Axios.get(
                 `http://localhost:3003/accountMaster/${type}`
             );
-            console.log(res.data);
-            setCfjlist(res.data)
+            setCfjlist(res.data);
         } catch (e) {
             toast.error("Error loading CFJ data", {
                 style: {
@@ -68,33 +78,135 @@ const DesignMaster = () => {
         }
     }, []);
 
-    const closeHandler = () => {
-        setIsOpen(false);
-    };
     const addSaveHandler = async (event) => {
         event.preventDefault();
-        console.log("add clicked");
-        //code
+        const data = [
+            Dno,
+            DName,
+            clothType,
+            bcost,
+            wcost,
+            lcost,
+            dcost,
+            pcost,
+            mu,
+            calPrice,
+            wname,
+            lname,
+            diamname,
+        ];
+        //data insert
+        if (disMode === 0) {
+            try {
+                const res = await Axios.post(
+                    "http://localhost:3004/designMaster/",
+                    data
+                );
+                // const res = await instance.post("", data);
+                if (res.data == 1) {
+                    console.log("data added to db");
+                    toast.success("Account added successfully!", {
+                        style: {
+                            borderRadius: "15px",
+                            background: "#333",
+                            color: "#fff",
+                        },
+                    });
+                    setDisMode(1);
+                    setIsEntering(false);
+                } else {
+                    throw res.data;
+                }
+            } catch (error) {
+                console.log(error);
+                toast.error("Addition failed!", {
+                    style: {
+                        borderRadius: "15px",
+                        background: "#333",
+                        color: "#fff",
+                    },
+                });
+            }
+        }
+        if (disMode === 2) {
+            try {
+                const res = await instance.put(Dno, data);
+                if (res.data === 1) {
+                    console.log("data updated in  db");
+                    toast.success("Account updated successfully!", {
+                        style: {
+                            borderRadius: "15px",
+                            background: "#333",
+                            color: "#fff",
+                        },
+                    });
+                    setDisMode(1);
+                    setIsEntering(false);
+                } else {
+                    throw res.data;
+                }
+            } catch (error) {
+                console.log(error);
+                toast.error("Updation failed!", {
+                    style: {
+                        borderRadius: "15px",
+                        background: "#333",
+                        color: "#fff",
+                    },
+                });
+            }
+        }
     };
+    //delete data
     const deleteHandler = async () => {
         if (disMode === 1) {
-            // axios to delete the data
-            // try {
-            //     const res = await instance.post("deletedata", data);
-            //     if (res.data == 1) {
-            //         toast.success("Deleted successfully!", {
-            //             style: {
-            //                 borderRadius: "15px",
-            //                 background: "#333",
-            //                 color: "#fff",
-            //             },
-            //         });
-            //     }
-            // } catch (err) {
-            //     console.log(err);
-            // }
-            exitHandler();
+            try {
+                const res = await instance.delete(Dno);
+                if (res.data == 1) {
+                    toast.success("Deleted successfully!", {
+                        style: {
+                            borderRadius: "15px",
+                            background: "#333",
+                            color: "#fff",
+                        },
+                    });
+                    exitHandler();
+                } else {
+                    throw res.data;
+                }
+            } catch (error) {
+                console.log(error);
+                toast.error("Deletion failed!", {
+                    style: {
+                        borderRadius: "15px",
+                        background: "#333",
+                        color: "#fff",
+                    },
+                });
+            }
         }
+    };
+
+    // return to default screen like on reload
+    const exitHandler = () => {
+        setDisMode(0);
+        setIsEntering(true);
+
+        setDName("");
+        //reset other states too
+    };
+    const showHandler = (rowdetails) => {
+        console.log(rowdetails);
+        setDisMode(1);
+        setIsEntering(false);
+        setIsOpen(false);
+
+        setDName(rowdetails.AccName);
+        //set other states too
+    };
+    //closes modal
+    const closeHandler = () => {
+        setIsOpen(false);
     };
     const editViewHandler = async () => {
         if (disMode === 0) {
@@ -111,19 +223,7 @@ const DesignMaster = () => {
             setIsEntering(false);
         }
     };
-    const exitHandler = () => {
-        // return to default screen like on reload
-        setDisMode(0);
-        setIsEntering(true);
-        setDName("");
-    };
-    const showHandler = (rowdetails) => {
-        console.log(rowdetails);
-        setDisMode(1);
-        setIsEntering(false);
-        setIsOpen(false);
-        setDName(rowdetails.AccName);
-    };
+
     useEffect(() => {
         calcHandler();
     }, [bcost, wcost, lcost, dcost, pcost, mu]);
@@ -205,7 +305,11 @@ const DesignMaster = () => {
                             work job by...
                         </option>
                         {cfjlist.map((cfj) => {
-                            return <option value={cfj.uid}>{cfj.AccName}</option>;
+                            return (
+                                <option value={cfj.uid} key={cfj.uid}>
+                                    {cfj.AccName}
+                                </option>
+                            );
                         })}
                     </select>
                     <input
@@ -229,7 +333,11 @@ const DesignMaster = () => {
                             Lace job by...
                         </option>
                         {cfjlist.map((cfj) => {
-                            return <option value={cfj.uid}>{cfj.AccName}</option>;
+                            return (
+                                <option value={cfj.uid} key={cfj.uid}>
+                                    {cfj.AccName}
+                                </option>
+                            );
                         })}
                     </select>
                     <input
@@ -253,7 +361,11 @@ const DesignMaster = () => {
                             Diamond job by...
                         </option>
                         {cfjlist.map((cfj) => {
-                            return <option value={cfj.uid}>{cfj.AccName}</option>;
+                            return (
+                                <option value={cfj.uid} key={cfj.uid}>
+                                    {cfj.AccName}
+                                </option>
+                            );
                         })}
                     </select>
                     <input

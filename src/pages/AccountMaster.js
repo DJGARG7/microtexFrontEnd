@@ -4,7 +4,9 @@ import AccountTypeData from "../jsonData/AccountTypeData";
 import styles from "../styles/AccountMaster.module.css";
 import Axios from "axios";
 import toast from "react-hot-toast";
+
 import AccountMasterTable from "../components/Admin_components/AccountMasterTable";
+
 if (localStorage.getItem("userDetails") != null)
     Axios.defaults.headers.common["userID"] = JSON.parse(
         localStorage.getItem("userDetails")
@@ -13,8 +15,6 @@ Axios.defaults.withCredentials = true;
 const instance = Axios.create({
     baseURL: "http://localhost:3003/accountMaster/",
 });
-
-const controller = new AbortController();
 
 const AccountMaster = ({ userDetails }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -91,7 +91,6 @@ const AccountMaster = ({ userDetails }) => {
                     })
                 );
             } catch (e) {
-                // if (e.name === "AbortError") return;
                 toast.error("Error loading city data", {
                     style: {
                         borderRadius: "15px",
@@ -101,9 +100,6 @@ const AccountMaster = ({ userDetails }) => {
                 });
             }
         })();
-        return () => {
-            // controller.abort();
-        };
     }, []);
 
     //show fields according to change in Account type
@@ -237,33 +233,19 @@ const AccountMaster = ({ userDetails }) => {
             }
         }
     };
-    const editViewHandler = async () => {
-        if (disMode === 0) {
-            setIsOpen(true);
-        }
-        if (disMode === 1) {
-            setDisMode(2);
-            setIsEntering(true);
-        }
-    };
-    const cancelHandler = () => {
-        if (disMode === 2) {
-            setDisMode(1);
-            setIsEntering(false);
-        }
-    };
+    
     // return to default screen like on reload
     const exitHandler = () => {
         setDisMode(0);
-        setType("none");
-        setBoolList([]);
         setIsEntering(true);
+
+        setBoolList([]);
+
         setAccName("");
+        setType("none");
+        //reset other states too
     };
-    //closes modal
-    const closeHandler = () => {
-        setIsOpen(false);
-    };
+
     const showHandler = (rowdetails) => {
         setDisMode(1);
         setIsEntering(false);
@@ -292,6 +274,25 @@ const AccountMaster = ({ userDetails }) => {
         setAccNum(rowdetails.AccountNum);
         setIfsc(rowdetails.IFSC);
         setShare(rowdetails.shares);
+    };
+	//closes modal
+    const closeHandler = () => {
+        setIsOpen(false);
+    };
+    const editViewHandler = async () => {
+        if (disMode === 0) {
+            setIsOpen(true);
+        }
+        if (disMode === 1) {
+            setDisMode(2);
+            setIsEntering(true);
+        }
+    };
+    const cancelHandler = () => {
+        if (disMode === 2) {
+            setDisMode(1);
+            setIsEntering(false);
+        }
     };
     return (
         <div className={styles["main"]}>
