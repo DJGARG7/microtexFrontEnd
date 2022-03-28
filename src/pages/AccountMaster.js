@@ -84,9 +84,6 @@ const AccountMaster = ({ userDetails }) => {
             try {
                 const res = await Axios.get(
                     "http://localhost:3001/cityMaster/get"
-                    // {
-                    //     signal: controller.signal,
-                    // }
                 );
                 setcitydata(
                     Object.keys(res.data).map((city) => {
@@ -263,7 +260,7 @@ const AccountMaster = ({ userDetails }) => {
         setIsEntering(true);
         setAccName("");
     };
-	//closes modal
+    //closes modal
     const closeHandler = () => {
         setIsOpen(false);
     };
@@ -536,9 +533,6 @@ const AccountMaster = ({ userDetails }) => {
                                     </option>
                                     <option value="CR">Cr.</option>
                                     <option value="DR">Dr.</option>
-                                    {/* {CityData.map((city) => {
-                                        return <option value={city}>{city}</option>;
-                                    })} */}
                                 </select>
                             </div>
                         )}

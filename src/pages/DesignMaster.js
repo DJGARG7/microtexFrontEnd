@@ -1,27 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "../components/Modal/Modal";
 import AccountMasterTable from "../components/Admin_components/AccountMasterTable";
 import styles from "../styles/AccountMaster.module.css";
+import Axios from "axios";
+import toast from "react-hot-toast";
 const DesignMaster = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isEntering, setIsEntering] = useState(true);
     const [disMode, setDisMode] = useState(0);
 
-    const [Dno,setDno] = useState("");
+    const [Dno, setDno] = useState("");
     const [DName, setDName] = useState("");
-    const [clothType,setClothType] = useState("");
-    const [bcost,setBcost] = useState("");
-    const [wcost,setWcost] = useState("");
-    const [jcost,setJcost] = useState("");
-    const [lcost,setLcost] = useState("");
-    const [dcost,setDcost] = useState("");
-    const [pcost,setPcost] = useState("");
-    const [mu,setMU] = useState("");
+    const [clothType, setClothType] = useState("");
+    const [bcost, setBcost] = useState("");
+    const [wcost, setWcost] = useState("");
+    const [wname, setWname] = useState("none");
+    const [lcost, setLcost] = useState("");
+    const [lname, setLname] = useState("none");
+    const [dcost, setDcost] = useState("");
+    const [diamname, setDiamname] = useState("none");
+    const [pcost, setPcost] = useState("");
+
+    const [mu, setMU] = useState("");
+    const [calPrice, setCalPrice] = useState(0);
+
+    const [cfjlist, setCfjlist] = useState([]);
 
     const buttonModes = {
         0: [
             { dis: true, label: "Delete" },
-            { dis: false, label: "Add" },
+            { dis: isNaN(calPrice) ? true : false, label: "Add" },
             { dis: false, label: "View all data" },
             { dis: true, label: "Cancel" },
             { dis: false, label: "Exit" },
@@ -35,17 +43,37 @@ const DesignMaster = () => {
         ],
         2: [
             { dis: true, label: "Delete" },
-            { dis: false, label: "Save" },
+            { dis: isNaN(calPrice) ? true : false, label: "Save" },
             { dis: true, label: "Edit" },
             { dis: false, label: "Cancel" },
             { dis: false, label: "Exit" },
         ],
     };
+    const type = "Creditors For Job"
+    useEffect(async () => {
+        try {
+            const res = await Axios.get(
+                `http://localhost:3003/accountMaster/${type}`
+            );
+            console.log(res.data);
+            setCfjlist(res.data)
+        } catch (e) {
+            toast.error("Error loading CFJ data", {
+                style: {
+                    borderRadius: "15px",
+                    background: "#333",
+                    color: "#fff",
+                },
+            });
+        }
+    }, []);
+
     const closeHandler = () => {
         setIsOpen(false);
     };
     const addSaveHandler = async (event) => {
         event.preventDefault();
+        console.log("add clicked");
         //code
     };
     const deleteHandler = async () => {
@@ -96,106 +124,168 @@ const DesignMaster = () => {
         setIsOpen(false);
         setDName(rowdetails.AccName);
     };
+    useEffect(() => {
+        calcHandler();
+    }, [bcost, wcost, lcost, dcost, pcost, mu]);
+    const calcHandler = () => {
+        setCalPrice(
+            ((parseInt(bcost) +
+                parseInt(wcost) +
+                parseInt(lcost) +
+                parseInt(dcost) +
+                parseInt(pcost)) *
+                100) /
+                (100 - parseInt(mu))
+        );
+        console.log("running");
+    };
     return (
         <div className={styles["main"]}>
             <h2>Design Master</h2>
             <div className={styles["form-main"]}>
                 <form onSubmit={addSaveHandler} className={styles["form"]}>
-                    {/* <div className={styles["input-section"]}> */}
-                        <input
-                            type="number"
-                            name="Dno"
-                            value={Dno}
-                            placeholder="Design Number"
-                            onChange={(e) => setDno(e.target.value)}
-                            disabled={!isEntering}
-                            className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
-                            required
-                        />
-                        <input
-                            type="text"
-                            name="DName"
-                            value={DName}
-                            placeholder="Design Name"
-                            onChange={(e) => setDName(e.target.value)}
-                            disabled={!isEntering}
-                            className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
-                            required
-                        />
-                        <input
-                            type="text"
-                            name="clothType"
-                            value={clothType}
-                            placeholder="Cloth Type"
-                            onChange={(e) => setClothType(e.target.value)}
-                            disabled={!isEntering}
-                            className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
-                            required
-                        />
-                        <input
-                            type="number"
-                            name="bcost"
-                            value={bcost}
-                            placeholder="Basic Cost"
-                            onChange={(e) => setBcost(e.target.value)}
-                            disabled={!isEntering}
-                            className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
-                            required
-                        />
-                        <input
-                            type="number"
-                            name="wcost"
-                            value={wcost}
-                            placeholder="Work Cost"
-                            onChange={(e) => setWcost(e.target.value)}
-                            disabled={!isEntering}
-                            className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
-                            required
-                        />
-                        <input
-                            type="number"
-                            name="lcost"
-                            value={lcost}
-                            placeholder="Lace Cost"
-                            onChange={(e) => setLcost(e.target.value)}
-                            disabled={!isEntering}
-                            className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
-                            required
-                        />
-                        <input
-                            type="number"
-                            name="dcost"
-                            value={dcost}
-                            placeholder="Diamond Cost"
-                            onChange={(e) => setDcost(e.target.value)}
-                            disabled={!isEntering}
-                            className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
-                            required
-                        />
-                        <input
-                            type="number"
-                            name="pcost"
-                            value={pcost}
-                            placeholder="Packing Cost"
-                            onChange={(e) => setPcost(e.target.value)}
-                            disabled={!isEntering}
-                            className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
-                            required
-                        />
-                        
-                    
-                    
                     <input
-                            type="text"
-                            name="clothType"
-                            value={clothType}
-                            placeholder="Cloth Type"
-                            onChange={(e) => setClothType(e.target.value)}
-                            disabled={!isEntering}
-                            className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
-                            required
-                        />
-                    
+                        type="number"
+                        name="Dno"
+                        value={Dno}
+                        placeholder="Design Number"
+                        onChange={(e) => setDno(e.target.value)}
+                        disabled={!isEntering}
+                        className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
+                        required
+                    />
+                    <input
+                        type="text"
+                        name="DName"
+                        value={DName}
+                        placeholder="Design Name"
+                        onChange={(e) => setDName(e.target.value)}
+                        disabled={!isEntering}
+                        className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
+                        required
+                    />
+                    <input
+                        type="text"
+                        name="clothType"
+                        value={clothType}
+                        placeholder="Cloth Type"
+                        onChange={(e) => setClothType(e.target.value)}
+                        disabled={!isEntering}
+                        className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
+                        required
+                    />
+                    <input
+                        type="number"
+                        name="bcost"
+                        value={bcost}
+                        placeholder="Basic Cost"
+                        onChange={(e) => setBcost(e.target.value)}
+                        disabled={!isEntering}
+                        className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
+                        required
+                    />
+                    <input
+                        type="number"
+                        name="wcost"
+                        value={wcost}
+                        placeholder="Work Cost"
+                        onChange={(e) => setWcost(e.target.value)}
+                        disabled={!isEntering}
+                        className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
+                        required
+                    />
+                    <select
+                        className={styles["input-select"]}
+                        name="wname"
+                        value={wname}
+                        onChange={(e) => setWname(e.target.value)}
+                        disabled={!isEntering}
+                    >
+                        <option value="none" disabled hidden>
+                            work job by...
+                        </option>
+                        {cfjlist.map((cfj) => {
+                            return <option value={cfj.uid}>{cfj.AccName}</option>;
+                        })}
+                    </select>
+                    <input
+                        type="number"
+                        name="lcost"
+                        value={lcost}
+                        placeholder="Lace Cost"
+                        onChange={(e) => setLcost(e.target.value)}
+                        disabled={!isEntering}
+                        className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
+                        required
+                    />
+                    <select
+                        className={styles["input-select"]}
+                        name="lname"
+                        value={lname}
+                        onChange={(e) => setLname(e.target.value)}
+                        disabled={!isEntering}
+                    >
+                        <option value="none" disabled hidden>
+                            Lace job by...
+                        </option>
+                        {cfjlist.map((cfj) => {
+                            return <option value={cfj.uid}>{cfj.AccName}</option>;
+                        })}
+                    </select>
+                    <input
+                        type="number"
+                        name="dcost"
+                        value={dcost}
+                        placeholder="Diamond Cost"
+                        onChange={(e) => setDcost(e.target.value)}
+                        disabled={!isEntering}
+                        className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
+                        required
+                    />
+                    <select
+                        className={styles["input-select"]}
+                        name="diamname"
+                        value={diamname}
+                        onChange={(e) => setDiamname(e.target.value)}
+                        disabled={!isEntering}
+                    >
+                        <option value="none" disabled hidden>
+                            Diamond job by...
+                        </option>
+                        {cfjlist.map((cfj) => {
+                            return <option value={cfj.uid}>{cfj.AccName}</option>;
+                        })}
+                    </select>
+                    <input
+                        type="number"
+                        name="pcost"
+                        value={pcost}
+                        placeholder="Packing Cost"
+                        onChange={(e) => setPcost(e.target.value)}
+                        disabled={!isEntering}
+                        className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
+                        required
+                    />
+                    <input
+                        type="number"
+                        name="mu"
+                        value={mu}
+                        placeholder="Enter MU"
+                        onChange={(e) => setMU(e.target.value)}
+                        disabled={!isEntering}
+                        className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
+                        required
+                    />
+                    <input
+                        type="number"
+                        name="calPrice"
+                        value={isNaN(calPrice) ? "" : calPrice}
+                        placeholder="Calculated Price"
+                        onChange={(e) => setCalPrice(e.target.value)}
+                        // disabled
+                        className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
+                        required
+                    />
                     <button
                         disabled={buttonModes[disMode][1].dis}
                         className={`${styles["add-btn"]} ${styles["btn"]}`}
