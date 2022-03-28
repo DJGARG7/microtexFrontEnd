@@ -21,14 +21,14 @@ export default function AddUserForm({ corporateID, permissionsData }) {
 
         if (event.target.checked) {
             setSelectedPermissions(temp.add(parseInt(event.target.value)));
-            console.log(selectedPermissions);
+            // console.log(selectedPermissions);
         } else {
             temp.delete(parseInt(event.target.value));
             temp.size === 0
                 ? setSelectedPermissions(new Set())
                 : setSelectedPermissions(temp);
 
-            console.log(selectedPermissions);
+            // console.log(selectedPermissions);
         }
     };
 

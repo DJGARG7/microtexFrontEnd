@@ -41,7 +41,7 @@ export default function AddUser({ userDetails }) {
     useEffect(async () => {
         setTimeout(() => {
             fetchData();
-        }, 1000);
+        }, 500);
 
         return () => {
             controller.abort();

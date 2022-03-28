@@ -42,7 +42,7 @@ export default function DeleteUser() {
     useEffect(async () => {
         setTimeout(() => {
             fetchData();
-        }, 1000);
+        }, 500);
 
         return () => {
             controller.abort();
