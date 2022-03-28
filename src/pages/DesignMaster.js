@@ -4,7 +4,7 @@ import styles from "../styles/AccountMaster.module.css";
 import Axios from "axios";
 import toast from "react-hot-toast";
 
-import AccountMasterTable from "../components/Admin_components/AccountMasterTable";
+import DesignMasterTable from "../components/Admin_components/DesignMasterTable";
 
 const instance = Axios.create({
     baseURL: "http://localhost:3004/designMaster/",
@@ -84,13 +84,13 @@ const DesignMaster = () => {
             Dno,
             DName,
             clothType,
-            bcost,
-            wcost,
-            lcost,
-            dcost,
-            pcost,
-            mu,
-            calPrice,
+            parseInt(bcost),
+            parseInt(wcost),
+            parseInt(lcost),
+            parseInt(dcost),
+            parseInt(pcost),
+            parseInt(mu),
+            parseInt(calPrice),
             wname,
             lname,
             diamname,
@@ -128,6 +128,7 @@ const DesignMaster = () => {
                 });
             }
         }
+        //data update
         if (disMode === 2) {
             try {
                 const res = await instance.put(Dno, data);
@@ -192,8 +193,19 @@ const DesignMaster = () => {
         setDisMode(0);
         setIsEntering(true);
 
+        setDno("")
         setDName("");
-        //reset other states too
+        setClothType("");
+        setBcost("")
+        setWcost("")
+        setLcost("")
+        setDcost("")
+        setPcost("")
+        setMU("")
+        setCalPrice("")
+        setWname("none")
+        setLname("none")
+        setDiamname("none")
     };
     const showHandler = (rowdetails) => {
         console.log(rowdetails);
@@ -201,8 +213,19 @@ const DesignMaster = () => {
         setIsEntering(false);
         setIsOpen(false);
 
-        setDName(rowdetails.AccName);
-        //set other states too
+        setDno(rowdetails.Dno)
+        setDName(rowdetails.NAME);
+        setClothType(rowdetails.CLOTH_TYPE);
+        setBcost(rowdetails.BASIC_COST)
+        setWcost(rowdetails.WORK_COST)
+        setLcost(rowdetails.LACE_COST)
+        setDcost(rowdetails.DIAMOND_COST)
+        setPcost(rowdetails.PACKING_COST)
+        setMU(rowdetails.MU)
+        setCalPrice(rowdetails.CALC_PRICE)
+        setWname(rowdetails.WORK_JOB)
+        setLname(rowdetails.LACE_JOB)
+        setDiamname(rowdetails.DIAM_JOB)
     };
     //closes modal
     const closeHandler = () => {
@@ -438,7 +461,7 @@ const DesignMaster = () => {
                 </div>
             </div>
             <Modal open={isOpen} onClose={closeHandler}>
-                <AccountMasterTable showclick={showHandler} />
+                <DesignMasterTable showclick={showHandler} />
             </Modal>
         </div>
     );
