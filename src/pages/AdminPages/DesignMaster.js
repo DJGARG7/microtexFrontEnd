@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Modal from "../../components/Modal/Modal";
+import Modal from "../../components/Reuse_components/Modal";
 import styles from "../../styles/AccountMaster.module.css";
 import Axios from "axios";
 import toast from "react-hot-toast";

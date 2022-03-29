@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import Modal from "../../components/Modal/Modal";
-import AccountTypeData from "../../jsonData/AccountTypeData";
+import Modal from "../../components/Reuse_components/Modal";
+import AccountTypeData from "../../jsonData/adminData/AccountTypeData";
 import styles from "../../styles/AccountMaster.module.css"
 import Axios from "axios";
 import toast from "react-hot-toast";
