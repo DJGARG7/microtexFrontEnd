@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import Modal from "../components/Modal/Modal";
-import styles from "../styles/AccountMaster.module.css";
+import Modal from "../../components/Modal/Modal";
+import styles from "../../styles/AccountMaster.module.css";
 import Axios from "axios";
 import toast from "react-hot-toast";
 
-import DesignMasterTable from "../components/Admin_components/DesignMasterTable";
+import DesignMasterTable from "../../components/Admin_components/DesignMasterTable";
 
 const instance = Axios.create({
     baseURL: "http://localhost:3004/designMaster/",
@@ -441,7 +441,7 @@ const DesignMaster = () => {
                         value={isNaN(calPrice) ? "" : calPrice}
                         placeholder="Calculated Price"
                         onChange={(e) => setCalPrice(e.target.value)}
-                        onkeydown="return false"
+                        // onKeyDown="return false"
                         className={`${styles["input-text"]}`}
                         required
                         style={{
