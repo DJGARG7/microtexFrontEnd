@@ -115,12 +115,6 @@ export default function UserManagementIndex() {
                         permissionsData={permissionsData}
                     />
                 )}
-
-                {/* <button
-                    className={`${commonStyles["form--btn"]} ${commonStyles["form--add-btn"]}`}
-                >
-                    Update
-                </button> */}
             </form>
         </div>
     );

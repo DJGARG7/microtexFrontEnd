@@ -1,4 +1,4 @@
-import styles from "../styles/AdminLandingPage.module.css";
+import styles from "../../styles/AdminLandingPage.module.css";
 
 const AdminLandingPage = () => {
     return (

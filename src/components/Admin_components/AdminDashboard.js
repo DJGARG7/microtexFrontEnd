@@ -2,7 +2,7 @@ import AdminContent from "./AdminContent";
 import { Fragment } from "react/cjs/react.production.min";
 import "../../styles/AdminDashboard.css";
 import { Toaster } from "react-hot-toast";
-import AdminSideBarData from "../../jsonData/AdminSideBarData";
+import AdminSideBarData from "../../jsonData/adminData/AdminSideBarData";
 import SideBar from "../Reuse_components/Sidebar/Sidebar";
 
 const AdminDashboard = ({ userDetails, logoutHandler }) => {

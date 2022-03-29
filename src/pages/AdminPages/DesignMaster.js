@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import Modal from "../components/Modal/Modal";
-import styles from "../styles/AccountMaster.module.css";
+import Modal from "../../components/Reuse_components/Modal";
+import styles from "../../styles/AccountMaster.module.css";
 import Axios from "axios";
 import toast from "react-hot-toast";
 
-import DesignMasterTable from "../components/Admin_components/DesignMasterTable";
+import DesignMasterTable from "../../components/Admin_components/DesignMasterTable";
 
 const instance = Axios.create({
     baseURL: "http://localhost:3004/designMaster/",
@@ -193,19 +193,19 @@ const DesignMaster = () => {
         setDisMode(0);
         setIsEntering(true);
 
-        setDno("")
+        setDno("");
         setDName("");
         setClothType("");
-        setBcost("")
-        setWcost("")
-        setLcost("")
-        setDcost("")
-        setPcost("")
-        setMU("")
-        setCalPrice("")
-        setWname("none")
-        setLname("none")
-        setDiamname("none")
+        setBcost("");
+        setWcost("");
+        setLcost("");
+        setDcost("");
+        setPcost("");
+        setMU("");
+        setCalPrice("");
+        setWname("none");
+        setLname("none");
+        setDiamname("none");
     };
     const showHandler = (rowdetails) => {
         console.log(rowdetails);
@@ -213,19 +213,19 @@ const DesignMaster = () => {
         setIsEntering(false);
         setIsOpen(false);
 
-        setDno(rowdetails.Dno)
+        setDno(rowdetails.Dno);
         setDName(rowdetails.NAME);
         setClothType(rowdetails.CLOTH_TYPE);
-        setBcost(rowdetails.BASIC_COST)
-        setWcost(rowdetails.WORK_COST)
-        setLcost(rowdetails.LACE_COST)
-        setDcost(rowdetails.DIAMOND_COST)
-        setPcost(rowdetails.PACKING_COST)
-        setMU(rowdetails.MU)
-        setCalPrice(rowdetails.CALC_PRICE)
-        setWname(rowdetails.WORK_JOB)
-        setLname(rowdetails.LACE_JOB)
-        setDiamname(rowdetails.DIAM_JOB)
+        setBcost(rowdetails.BASIC_COST);
+        setWcost(rowdetails.WORK_COST);
+        setLcost(rowdetails.LACE_COST);
+        setDcost(rowdetails.DIAMOND_COST);
+        setPcost(rowdetails.PACKING_COST);
+        setMU(rowdetails.MU);
+        setCalPrice(rowdetails.CALC_PRICE);
+        setWname(rowdetails.WORK_JOB);
+        setLname(rowdetails.LACE_JOB);
+        setDiamname(rowdetails.DIAM_JOB);
     };
     //closes modal
     const closeHandler = () => {
@@ -267,159 +267,188 @@ const DesignMaster = () => {
             <h2>Design Master</h2>
             <div className={styles["form-main"]}>
                 <form onSubmit={addSaveHandler} className={styles["form"]}>
-                    <input
-                        type="number"
-                        name="Dno"
-                        value={Dno}
-                        placeholder="Design Number"
-                        onChange={(e) => setDno(e.target.value)}
-                        disabled={!isEntering}
-                        className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
-                        required
-                    />
-                    <input
-                        type="text"
-                        name="DName"
-                        value={DName}
-                        placeholder="Design Name"
-                        onChange={(e) => setDName(e.target.value)}
-                        disabled={!isEntering}
-                        className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
-                        required
-                    />
-                    <input
-                        type="text"
-                        name="clothType"
-                        value={clothType}
-                        placeholder="Cloth Type"
-                        onChange={(e) => setClothType(e.target.value)}
-                        disabled={!isEntering}
-                        className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
-                        required
-                    />
-                    <input
-                        type="number"
-                        name="bcost"
-                        value={bcost}
-                        placeholder="Basic Cost"
-                        onChange={(e) => setBcost(e.target.value)}
-                        disabled={!isEntering}
-                        className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
-                        required
-                    />
-                    <input
-                        type="number"
-                        name="wcost"
-                        value={wcost}
-                        placeholder="Work Cost"
-                        onChange={(e) => setWcost(e.target.value)}
-                        disabled={!isEntering}
-                        className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
-                        required
-                    />
-                    <select
-                        className={styles["input-select"]}
-                        name="wname"
-                        value={wname}
-                        onChange={(e) => setWname(e.target.value)}
-                        disabled={!isEntering}
-                    >
-                        <option value="none" disabled hidden>
-                            work job by...
-                        </option>
-                        {cfjlist.map((cfj) => {
-                            return (
-                                <option value={cfj.uid} key={cfj.uid}>
-                                    {cfj.AccName}
-                                </option>
-                            );
-                        })}
-                    </select>
-                    <input
-                        type="number"
-                        name="lcost"
-                        value={lcost}
-                        placeholder="Lace Cost"
-                        onChange={(e) => setLcost(e.target.value)}
-                        disabled={!isEntering}
-                        className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
-                        required
-                    />
-                    <select
-                        className={styles["input-select"]}
-                        name="lname"
-                        value={lname}
-                        onChange={(e) => setLname(e.target.value)}
-                        disabled={!isEntering}
-                    >
-                        <option value="none" disabled hidden>
-                            Lace job by...
-                        </option>
-                        {cfjlist.map((cfj) => {
-                            return (
-                                <option value={cfj.uid} key={cfj.uid}>
-                                    {cfj.AccName}
-                                </option>
-                            );
-                        })}
-                    </select>
-                    <input
-                        type="number"
-                        name="dcost"
-                        value={dcost}
-                        placeholder="Diamond Cost"
-                        onChange={(e) => setDcost(e.target.value)}
-                        disabled={!isEntering}
-                        className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
-                        required
-                    />
-                    <select
-                        className={styles["input-select"]}
-                        name="diamname"
-                        value={diamname}
-                        onChange={(e) => setDiamname(e.target.value)}
-                        disabled={!isEntering}
-                    >
-                        <option value="none" disabled hidden>
-                            Diamond job by...
-                        </option>
-                        {cfjlist.map((cfj) => {
-                            return (
-                                <option value={cfj.uid} key={cfj.uid}>
-                                    {cfj.AccName}
-                                </option>
-                            );
-                        })}
-                    </select>
-                    <input
-                        type="number"
-                        name="pcost"
-                        value={pcost}
-                        placeholder="Packing Cost"
-                        onChange={(e) => setPcost(e.target.value)}
-                        disabled={!isEntering}
-                        className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
-                        required
-                    />
-                    <input
-                        type="number"
-                        name="mu"
-                        value={mu}
-                        placeholder="Enter MU"
-                        onChange={(e) => setMU(e.target.value)}
-                        disabled={!isEntering}
-                        className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
-                        required
-                    />
+                    <div className={styles["form-group"]}>
+                        <input
+                            type="number"
+                            name="Dno"
+                            value={Dno}
+                            placeholder="Design Number"
+                            onChange={(e) => setDno(e.target.value)}
+                            disabled={!isEntering}
+                            className={`${styles["input-text"]}`}
+                            style={{ marginRight: "10%" }}
+                            required
+                        />
+                        <input
+                            type="text"
+                            name="DName"
+                            value={DName}
+                            placeholder="Design Name"
+                            onChange={(e) => setDName(e.target.value)}
+                            disabled={!isEntering}
+                            className={`${styles["input-text"]}`}
+                            style={{ marginLeft: "10%" }}
+                            required
+                        />
+                    </div>
+                    <div className={styles["form-group"]}>
+                        <input
+                            type="number"
+                            name="bcost"
+                            value={bcost}
+                            placeholder="Basic Cost"
+                            onChange={(e) => setBcost(e.target.value)}
+                            disabled={!isEntering}
+                            className={`${styles["input-text"]}`}
+                            style={{ marginRight: "10%" }}
+                            required
+                        />
+                        <input
+                            type="text"
+                            name="clothType"
+                            value={clothType}
+                            placeholder="Cloth Type"
+                            onChange={(e) => setClothType(e.target.value)}
+                            disabled={!isEntering}
+                            className={`${styles["input-text"]}`}
+                            style={{ marginLeft: "10%" }}
+                            required
+                        />
+                    </div>
+                    <div className={styles["form-group"]}>
+                        <input
+                            type="number"
+                            name="wcost"
+                            value={wcost}
+                            placeholder="Work Cost"
+                            onChange={(e) => setWcost(e.target.value)}
+                            disabled={!isEntering}
+                            className={`${styles["input-text"]}`}
+                            style={{ marginRight: "10%" }}
+                            required
+                        />
+                        <select
+                            className={styles["input-select"]}
+                            name="wname"
+                            value={wname}
+                            onChange={(e) => setWname(e.target.value)}
+                            disabled={!isEntering}
+                            style={{ marginLeft: "10%" }}
+                        >
+                            <option value="none" disabled hidden>
+                                work job by...
+                            </option>
+                            {cfjlist.map((cfj) => {
+                                return (
+                                    <option value={cfj.uid} key={cfj.uid}>
+                                        {cfj.AccName}
+                                    </option>
+                                );
+                            })}
+                        </select>
+                    </div>
+                    <div className={styles["form-group"]}>
+                        <input
+                            type="number"
+                            name="lcost"
+                            value={lcost}
+                            placeholder="Lace Cost"
+                            onChange={(e) => setLcost(e.target.value)}
+                            disabled={!isEntering}
+                            className={`${styles["input-text"]}`}
+                            style={{ marginRight: "10%" }}
+                            required
+                        />
+                        <select
+                            className={styles["input-select"]}
+                            name="lname"
+                            value={lname}
+                            onChange={(e) => setLname(e.target.value)}
+                            disabled={!isEntering}
+                            style={{ marginLeft: "10%" }}
+                        >
+                            <option value="none" disabled hidden>
+                                Lace job by...
+                            </option>
+                            {cfjlist.map((cfj) => {
+                                return (
+                                    <option value={cfj.uid} key={cfj.uid}>
+                                        {cfj.AccName}
+                                    </option>
+                                );
+                            })}
+                        </select>
+                    </div>
+                    <div className={styles["form-group"]}>
+                        <input
+                            type="number"
+                            name="dcost"
+                            value={dcost}
+                            placeholder="Diamond Cost"
+                            onChange={(e) => setDcost(e.target.value)}
+                            disabled={!isEntering}
+                            className={`${styles["input-text"]}`}
+                            style={{ marginRight: "10%" }}
+                            required
+                        />
+                        <select
+                            className={styles["input-select"]}
+                            name="diamname"
+                            value={diamname}
+                            onChange={(e) => setDiamname(e.target.value)}
+                            disabled={!isEntering}
+                            style={{ marginLeft: "10%" }}
+                        >
+                            <option value="none" disabled hidden>
+                                Diamond job by...
+                            </option>
+                            {cfjlist.map((cfj) => {
+                                return (
+                                    <option value={cfj.uid} key={cfj.uid}>
+                                        {cfj.AccName}
+                                    </option>
+                                );
+                            })}
+                        </select>
+                    </div>
+                    <div className={styles["form-group"]}>
+                        <input
+                            type="number"
+                            name="pcost"
+                            value={pcost}
+                            placeholder="Packing Cost"
+                            onChange={(e) => setPcost(e.target.value)}
+                            disabled={!isEntering}
+                            className={`${styles["input-text"]}`}
+                            style={{ marginRight: "10%" }}
+                            required
+                        />
+                        <input
+                            type="number"
+                            name="mu"
+                            value={mu}
+                            placeholder="Enter MU"
+                            onChange={(e) => setMU(e.target.value)}
+                            disabled={!isEntering}
+                            className={`${styles["input-text"]}`}
+                            style={{ marginLeft: "10%" }}
+                            required
+                        />
+                    </div>
                     <input
                         type="number"
                         name="calPrice"
                         value={isNaN(calPrice) ? "" : calPrice}
                         placeholder="Calculated Price"
                         onChange={(e) => setCalPrice(e.target.value)}
-                        // disabled
-                        className={`${styles["input-text"]} ${styles["in-top-bar"]}`}
+                        // onKeyDown="return false"
+                        className={`${styles["input-text"]}`}
                         required
+                        style={{
+                            width: "20%",
+                            alignSelf: "center",
+                            margin: "50px 0 50px 0",
+                        }}
                     />
                     <button
                         disabled={buttonModes[disMode][1].dis}

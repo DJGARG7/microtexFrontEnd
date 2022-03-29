@@ -1,8 +1,8 @@
 import { Route } from "react-router-dom";
-import CityMaster from "../../pages/CityMaster";
-import AccountMaster from "../../pages/AccountMaster";
-import AdminLandingPage from "../../pages/AdminLandingPage";
-import DesignMaster from "../../pages/DesignMaster";
+import CityMaster from "../../pages/AdminPages/CityMaster";
+import AccountMaster from "../../pages/AdminPages/AccountMaster";
+import AdminLandingPage from "../../pages/AdminPages/AdminLandingPage";
+import DesignMaster from "../../pages/AdminPages/DesignMaster";
 import UserManagementIndex from "../UserManagement/UserManagementIndex";
 import AddUser from "../UserManagement/AddUser";
 import ManagePermissions from "../UserManagement/ManagePermissions";

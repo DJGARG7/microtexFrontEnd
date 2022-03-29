@@ -1,7 +1,7 @@
 import React from "react";
-import TableComponent from "../components/Reuse_components/Table/TableComponent";
+import TableComponent from "../../components/Reuse_components/Table/TableComponent";
 import { useState, useEffect } from "react";
-import "../styles/CityMaster.css";
+import "../../styles/CityMaster.css";
 import Axios from "axios";
 import toast from "react-hot-toast";
 

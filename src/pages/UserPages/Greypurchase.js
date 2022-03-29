@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "react-widgets/styles.css";
-import "../../../styles/Greypurchase.css";
-import Modal from "../../Modal/Modal";
+import "../../styles/Greypurchase.css";
+import Modal from "../../components/Reuse_components/Modal";
 import Axios from "axios";
 import toast from "react-hot-toast";
-import StickyTable from "../../Reuse_components/Table/StickyTable";
-import { GSTdescription } from "../../../jsonData/GSTdescription";
+import StickyTable from "../../components/Reuse_components/Table/StickyTable";
+import {GSTdescription} from "../../jsonData/userData/GSTdescription"
 
 if (localStorage.getItem("userDetails") != null)
   Axios.defaults.headers.common["userID"] = JSON.parse(

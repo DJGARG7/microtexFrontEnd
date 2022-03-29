@@ -1,7 +1,7 @@
 import { Route } from "react-router-dom";
-import Greypurchase from "./user_pages/Greypurchase";
-import Revenue from "./user_pages/Revenue";
-import SendJobForWork from "./user_pages/SendJobForWork";
+import Greypurchase from "../../pages/UserPages/Greypurchase";
+import Revenue from "../../pages/UserPages/Revenue";
+import SendJobForWork from "../../pages/UserPages/SendJobForWork";
 const UserContent = ({ userDetails }) => {
   return (
     <>
