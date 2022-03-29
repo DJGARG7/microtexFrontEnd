@@ -284,6 +284,8 @@ function Greypurchase() {
     current.getMonth() + 1
   }-${current.getDate()}`;
 
+  const [totalamount, settotalamount] = useState(0); // THIS IS THE FINAL AMOUNT OF THE BILL
+
   const [tabledata, settabledata] = useState([]); // for modal table
   const [purchaseditems, setpurchaseditems] = useState([]); // list of purchased items
 
@@ -293,26 +295,26 @@ function Greypurchase() {
     BillDate: date,
     accntnames: "",
     RevCharge: "",
-    RcmInvNo: 0,
-    ChallanNo: 0,
+    RcmInvNo: null,
+    ChallanNo: null,
     ChallanDate: date,
     Agent: "",
     Haste: "",
-    OrderForm: 0,
-    EntryNo: 0,
+    OrderForm: null,
+    EntryNo: null,
     ItemName: "",
-    Marka: "",
-    Taka: "",
-    Mts: "",
-    Fold: "",
+    Marka: null,
+    Taka: null,
+    Mts: null,
+    Fold: null,
     ActMts: "",
     Rate: "",
     Amount: "",
-    Discount: "",
+    Discount: null,
     DiscountAmt: 0,
-    IGST: "",
-    CGST: "",
-    SGST: "",
+    IGST: null,
+    CGST: null,
+    SGST: null,
     IGSTamt: 0,
     CGSTamt: 0,
     SGSTamt: 0,
@@ -367,7 +369,12 @@ function Greypurchase() {
       Fold: state.Fold,
       ActMts: state.ActMts,
       Rate: state.Rate,
-      Amount: state.Amount,
+      Amount: state.NetAmount,
+      BillNo: state.BillNo,
+      Discount: state.Discount,
+      IGST: state.IGST,
+      CGST: state.CGST,
+      SGST: state.SGST,
     };
     setpurchaseditems((preitems) => {
       return [...preitems, newItem];
@@ -376,16 +383,16 @@ function Greypurchase() {
     setState({
       ...state,
       ItemName: "",
-      Taka: "",
-      Mts: "",
-      Fold: "",
+      Taka: null,
+      Mts: null,
+      Fold: null,
       ActMts: "",
       Rate: "",
       Amount: "",
-      Discount: "",
-      IGST: "",
-      CGST: "",
-      SGST: "",
+      Discount: null,
+      IGST: null,
+      CGST: null,
+      SGST: null,
     });
     if (1) {
       console.log("toast");
@@ -398,7 +405,9 @@ function Greypurchase() {
       });
     }
 
-    //for clearing out the field
+    settotalamount((presamount) => {
+      return presamount + parseInt(state.NetAmount);
+    });
   };
 
   //   useEffect to fetch the account names
@@ -432,8 +441,25 @@ function Greypurchase() {
   };
 
   const onMainSubmit = async () => {
-    // const res = await usrinstance.post("addgreypurchase",state);
-    // const res2 = await usrinstance.post("additem",purchaseditems);
+    const res = await usrinstance.post("additemdetails", purchaseditems);
+    const res2 = await usrinstance.post("addbilldetails", state);
+    if (res.data.status === "1" && res2.data.status === "1") {
+      toast.success("Purchase added successfully!", {
+        style: {
+          borderRadius: "15px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+    } else {
+      toast.error(`Error ${res.data.sqlMessage} ${res2.data.sqlMessage}`, {
+        style: {
+          borderRadius: "15px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+    }
   };
 
   // handles when new item is added to the db
@@ -441,7 +467,6 @@ function Greypurchase() {
     e.preventDefault();
     const res = await usrinstance.post("additems", itemdetails);
     if (res.data.status === "1") {
-      console.log("toast");
       toast.success("Item added successfully!", {
         style: {
           borderRadius: "15px",
@@ -590,6 +615,7 @@ function Greypurchase() {
                 name="ItemName"
                 value={state.ItemName}
                 onChange={onchangeHandler}
+                required
               >
                 <option value="">Item Names</option>
                 {listofitems.map((item, index) => {
@@ -780,9 +806,6 @@ function Greypurchase() {
             <input type="submit" value="Add Purchase" />
             <button
               onClick={async () => {
-                const res = await usrinstance.get("fetchall");
-                console.log(res.data);
-                settabledata(res.data);
                 setmodalstate(true);
               }}
               type="button"
@@ -800,9 +823,20 @@ function Greypurchase() {
             />
           </div>
         </div>
-        <button type="button" className="form--button" onClick={onMainSubmit}>
-          Save
-        </button>
+        <div className="form--button">
+          <label>
+            Final Amount:
+            <input
+              type="text"
+              disabled
+              placeholder="Total Amount"
+              value={totalamount}
+            />
+          </label>
+          <button type="button" onClick={onMainSubmit}>
+            Save Purchases
+          </button>
+        </div>
       </form>
       <Modal open={greyitemadd} onClose={greyitemcloseHandler}>
         <form className="greypurchase--itemadd" onSubmit={onItemaddform}>
