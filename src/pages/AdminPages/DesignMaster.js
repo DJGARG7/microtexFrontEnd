@@ -436,18 +436,21 @@ const DesignMaster = () => {
                         />
                     </div>
                     <input
-                        type="number"
+                        type="text"
                         name="calPrice"
-                        value={isNaN(calPrice) ? "" : calPrice}
-                        placeholder="Calculated Price"
-                        onChange={(e) => setCalPrice(e.target.value)}
-                        // onKeyDown="return false"
+                        value={isNaN(calPrice) ? "Calculated Price" : calPrice}
+                        // placeholder="Calculated Price"
+                        onChange={(e) => setCalPrice(parseInt(e.target.value))}
+                        disabled
                         className={`${styles["input-text"]}`}
                         required
                         style={{
                             width: "20%",
                             alignSelf: "center",
                             margin: "50px 0 50px 0",
+                            textAlign: "center",
+                            color: "white",
+                            fontWeight: "bold",
                         }}
                     />
                     <button

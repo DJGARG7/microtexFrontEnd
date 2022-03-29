@@ -71,7 +71,7 @@ function Usersubmenu2({ item }) {
             >
                 <div>
                     {item.icon}
-                    <SidebarLabel style={{ marginLeft: "1vw" }}>
+                    <SidebarLabel style={{ marginLeft: "20px" }}>
                         {item.title}
                     </SidebarLabel>
                 </div>
@@ -87,11 +87,15 @@ function Usersubmenu2({ item }) {
                 item.subNav.map((item, index) => {
                     return (
                         <div key={index}>
-                            <DropdownLink to={item.path} key={index}>
+                            <DropdownLink
+                                to={item.path}
+                                key={index}
+                                activeStyle={{ backgroundColor: "#8D18FF" }}
+                            >
                                 <div>
                                     {item.icon}
                                     <SidebarLabel
-                                        style={{ marginLeft: "1.5vw" }}
+                                        style={{ marginLeft: "30px" }}
                                     >
                                         {item.title}
                                     </SidebarLabel>
