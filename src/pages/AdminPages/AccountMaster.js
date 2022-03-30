@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Modal from "../../components/Reuse_components/Modal";
 import AccountTypeData from "../../jsonData/adminData/AccountTypeData";
-import styles from "../../styles/AccountMaster.module.css"
+import styles from "../../styles/AccountMaster.module.css";
 import Axios from "axios";
 import toast from "react-hot-toast";
 
@@ -233,7 +233,7 @@ const AccountMaster = ({ userDetails }) => {
             }
         }
     };
-    
+
     // return to default screen like on reload
     const exitHandler = () => {
         setDisMode(0);
@@ -275,7 +275,7 @@ const AccountMaster = ({ userDetails }) => {
         setIfsc(rowdetails.IFSC);
         setShare(rowdetails.shares);
     };
-	//closes modal
+    //closes modal
     const closeHandler = () => {
         setIsOpen(false);
     };
@@ -609,7 +609,6 @@ const AccountMaster = ({ userDetails }) => {
                     >
                         {buttonModes[disMode][0].label}
                     </button>
-
                     <button
                         disabled={buttonModes[disMode][2].dis}
                         onClick={editViewHandler}

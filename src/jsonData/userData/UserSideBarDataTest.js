@@ -4,7 +4,7 @@ import * as RiIcons from "react-icons/ri";
 export const UserSideBarDataTest = [
     {
         title: "Transaction",
-        path: "/dashboard",
+        path: "/dashboard/transaction",
         iconClosed: <RiIcons.RiArrowDownSFill />,
         iconOpened: <RiIcons.RiArrowUpSFill />,
 
@@ -17,17 +17,33 @@ export const UserSideBarDataTest = [
                 subNav: [
                     {
                         title: "Grey purchase",
-                        path: "/dashboard/transaction/purchase/greypurchase",
+                        path: "/dashboard/transaction/purchase/grey",
                     },
                     {
                         title: "General purchase",
-                        path: "/dashboard/transaction/purchase/greypurchase",
+                        path: "/dashboard/transaction/purchase/general",
+                    },
+                ],
+            },
+            {
+                title: "MILL",
+                path: "/dashboard/transaction/mill",
+                iconClosed: <RiIcons.RiArrowDownSFill />,
+                iconOpened: <RiIcons.RiArrowUpSFill />,
+                subNav: [
+                    {
+                        title: "Send to Mill",
+                        path: "/dashboard/transaction/mill/send",
+                    },
+                    {
+                        title: "Receive from Mill",
+                        path: "/dashboard/transaction/mill/receive",
                     },
                 ],
             },
             {
                 title: "JOB",
-                path: "/dashboard/transaction/jobforwork",
+                path: "/dashboard/transaction/job",
                 iconClosed: <RiIcons.RiArrowDownSFill />,
                 iconOpened: <RiIcons.RiArrowUpSFill />,
                 subNav: [
@@ -41,26 +57,25 @@ export const UserSideBarDataTest = [
                     },
                 ],
             },
-        ],
-    },
-    {
-        title: "Sale",
-        path: "/dashboard",
-        iconClosed: <RiIcons.RiArrowDownSFill />,
-        iconOpened: <RiIcons.RiArrowUpSFill />,
-
-        subNav: [
             {
-                title: "Sale Challan",
-                path: "/dashboard/saleChallan",
-            },
-            {
-                title: "Sale Billing",
-                path: "/dashboard/saleBilling",
-            },
-            {
-                title: "Display Bills",
-                path: "/dashboard/displayBills",
+                title: "Sale",
+                path: "/dashboard/transaction/sale",
+                iconClosed: <RiIcons.RiArrowDownSFill />,
+                iconOpened: <RiIcons.RiArrowUpSFill />,
+                subNav: [
+                    {
+                        title: "Sale Challan",
+                        path: "/dashboard/saleChallan",
+                    },
+                    {
+                        title: "Sale Billing",
+                        path: "/dashboard/saleBilling",
+                    },
+                    {
+                        title: "Display Bills",
+                        path: "/dashboard/displayBills",
+                    },
+                ],
             },
         ],
     },
