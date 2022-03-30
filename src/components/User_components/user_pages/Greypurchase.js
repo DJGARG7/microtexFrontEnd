@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "react-widgets/styles.css";
-import "../../styles/Greypurchase.css";
-import Modal from "../../components/Reuse_components/Modal";
+import "../../../styles/Greypurchase.css";
+import Modal from "../../Modal/Modal";
 import Axios from "axios";
 import toast from "react-hot-toast";
-import StickyTable from "../../components/Reuse_components/Table/StickyTable";
-import { GSTdescription } from "../../jsonData/userData/GSTdescription";
+import StickyTable from "../../Reuse_components/Table/StickyTable";
+import { GSTdescription } from "../../../jsonData/GSTdescription";
 
 if (localStorage.getItem("userDetails") != null)
   Axios.defaults.headers.common["userID"] = JSON.parse(
@@ -170,23 +170,24 @@ function Greypurchase() {
       Header: "Action",
       accessor: (str) => "delete",
       Cell: (tableProps) => (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            "justify-content": "center",
-          }}
-        >
+        <div style={{ display: "flex", flexDirection: "row" }}>
           <button
             style={{
               cursor: "pointer",
             }}
             type="submit"
             onClick={() => {
-              settotalamount((preamount) => {
-                return preamount - purchaseditems[tableProps.row.index].Amount;
-              });
-              console.log(purchaseditems[tableProps.row.index].Amount);
+              onEditHandler(tableProps);
+            }}
+          >
+            Delete
+          </button>
+          <button
+            style={{
+              cursor: "pointer",
+            }}
+            type="submit"
+            onClick={() => {
               setpurchaseditems((prestate) => {
                 prestate.splice(tableProps.row.index, 1);
                 return [...prestate];
@@ -379,6 +380,20 @@ function Greypurchase() {
       return [...preitems, newItem];
     });
 
+    setState({
+      ...state,
+      ItemName: "",
+      Taka: null,
+      Mts: null,
+      Fold: null,
+      ActMts: "",
+      Rate: "",
+      Amount: "",
+      Discount: null,
+      IGST: null,
+      CGST: null,
+      SGST: null,
+    });
     if (1) {
       console.log("toast");
       toast.success("Item added to the list!", {
@@ -387,21 +402,6 @@ function Greypurchase() {
           background: "#333",
           color: "#fff",
         },
-      });
-      setState({
-        ...state,
-        ItemName: "",
-        Taka: "",
-        Mts: "",
-        Fold: "",
-        ActMts: "",
-        Rate: "",
-        Amount: "",
-        Discount: "",
-        IGST: "",
-        CGST: "",
-        SGST: "",
-        Marka: "",
       });
     }
 
@@ -441,32 +441,18 @@ function Greypurchase() {
   };
 
   const onMainSubmit = async () => {
-    const datasend = {
-      state,
-      purchaseditems,
-    };
-    const res = await usrinstance.post("addbilldetails", datasend); // adds data about the bill
-    console.log(res);
-    if (res.data.status === "1") {
-      toast.success("Bill added successfully!", {
+    const res = await usrinstance.post("additemdetails", purchaseditems);
+    const res2 = await usrinstance.post("addbilldetails", state);
+    if (res.data.status === "1" && res2.data.status === "1") {
+      toast.success("Purchase added successfully!", {
         style: {
           borderRadius: "15px",
           background: "#333",
           color: "#fff",
         },
       });
-      setState({
-        ...state,
-        BillNo: "",
-        accntnames: "",
-        ChallanNo: "",
-        Agent: "",
-        EntryNo: "",
-      });
-      setpurchaseditems([]);
-      settotalamount(0);
     } else {
-      toast.error(`Error ${res.data.sqlMessage}`, {
+      toast.error(`Error ${res.data.sqlMessage} ${res2.data.sqlMessage}`, {
         style: {
           borderRadius: "15px",
           background: "#333",
@@ -514,7 +500,7 @@ function Greypurchase() {
             <label>
               Bill No
               <input
-                type="number"
+                type="text"
                 value={state.BillNo}
                 name="BillNo"
                 onChange={onchangeHandler}
@@ -551,15 +537,13 @@ function Greypurchase() {
                 value={state.accntnames}
               >
                 <option value="">Account Names</option>
-                {accntdata &&
-                  !!accntdata.length &&
-                  accntdata.map((acct, index) => {
-                    return (
-                      <option value={acct.AccName} key={index}>
-                        {acct.AccName}
-                      </option>
-                    );
-                  })}
+                {accntdata.map((acct, index) => {
+                  return (
+                    <option value={acct.AccName} key={index}>
+                      {acct.AccName}
+                    </option>
+                  );
+                })}
               </select>
             </label>
             {/* <label>Rev. Charge</label>
@@ -634,15 +618,13 @@ function Greypurchase() {
                 required
               >
                 <option value="">Item Names</option>
-                {listofitems &&
-                  !!listofitems.length &&
-                  listofitems.map((item, index) => {
-                    return (
-                      <option value={item.itemname} key={index}>
-                        {item.itemname}
-                      </option>
-                    );
-                  })}
+                {listofitems.map((item, index) => {
+                  return (
+                    <option value={item.itemname} key={index}>
+                      {item.itemname}
+                    </option>
+                  );
+                })}
               </select>
               <button
                 type="button"
