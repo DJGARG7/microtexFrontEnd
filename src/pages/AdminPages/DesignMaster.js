@@ -444,6 +444,7 @@ const DesignMaster = () => {
                         // onKeyDown="return false"
                         className={`${styles["input-text"]}`}
                         required
+                        disabled
                         style={{
                             width: "20%",
                             alignSelf: "center",
