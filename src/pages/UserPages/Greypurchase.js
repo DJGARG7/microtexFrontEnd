@@ -294,26 +294,26 @@ function Greypurchase() {
     BillDate: date,
     accntnames: "",
     RevCharge: "",
-    RcmInvNo: null,
-    ChallanNo: null,
+    RcmInvNo: "",
+    ChallanNo: "",
     ChallanDate: date,
     Agent: "",
     Haste: "",
-    OrderForm: null,
-    EntryNo: null,
+    OrderForm: "",
+    EntryNo: "",
     ItemName: "",
-    Marka: null,
-    Taka: null,
-    Mts: null,
-    Fold: null,
+    Marka: "",
+    Taka: "",
+    Mts: "",
+    Fold: "",
     ActMts: "",
     Rate: "",
     Amount: "",
-    Discount: null,
+    Discount: "",
     DiscountAmt: 0,
-    IGST: null,
-    CGST: null,
-    SGST: null,
+    IGST: "",
+    CGST: "",
+    SGST: "",
     IGSTamt: 0,
     CGSTamt: 0,
     SGSTamt: 0,
@@ -360,6 +360,7 @@ function Greypurchase() {
   const onSubmithandler = async (event) => {
     event.preventDefault();
     // const res = await usrinstance.post("addgreypurchase", state);
+  
     const newItem = {
       ItemName: state.ItemName,
       Marka: state.Marka,
@@ -368,7 +369,7 @@ function Greypurchase() {
       Fold: state.Fold,
       ActMts: state.ActMts,
       Rate: state.Rate,
-      Amount: state.NetAmount,
+      Amount: `${document.getElementById("NetAmount").value}`,
       BillNo: state.BillNo,
       Discount: state.Discount,
       IGST: state.IGST,
@@ -388,6 +389,10 @@ function Greypurchase() {
           color: "#fff",
         },
       });
+
+      settotalamount((presamount) => {
+        return presamount + parseInt(newItem.Amount);
+      });
       setState({
         ...state,
         ItemName: "",
@@ -402,12 +407,13 @@ function Greypurchase() {
         CGST: "",
         SGST: "",
         Marka: "",
+        NetAmount:"",
+        IGSTamt:0,
+        CGSTamt:0,
+        SGSTamt:0,
+        DiscountAmt:0
       });
-    }
-
-    settotalamount((presamount) => {
-      return presamount + parseInt(state.NetAmount);
-    });
+    }   
   };
 
   //   useEffect to fetch the account names
@@ -444,6 +450,7 @@ function Greypurchase() {
     const datasend = {
       state,
       purchaseditems,
+      totalamount
     };
     const res = await usrinstance.post("addbilldetails", datasend); // adds data about the bill
     console.log(res);
@@ -500,6 +507,13 @@ function Greypurchase() {
     greyitemcloseHandler();
     const items = await usrinstance.get("fetchitems");
     setlistofitems(items.data);
+  };
+
+  // when view all pucrchased isclicked
+  const onViewBillhandler = async () => {
+    setmodalstate(true);
+    const res = await usrinstance.get("fetchall");
+    settabledata(res.data);
   };
 
   return (
@@ -822,12 +836,7 @@ function Greypurchase() {
               />
             </label>
             <input type="submit" value="Add Purchase" />
-            <button
-              onClick={async () => {
-                setmodalstate(true);
-              }}
-              type="button"
-            >
+            <button onClick={onViewBillhandler} type="button">
               View all purchase
             </button>
           </div>
