@@ -64,8 +64,16 @@ export const UserSideBarDataTest = [
                 iconOpened: <RiIcons.RiArrowUpSFill />,
                 subNav: [
                     {
-                        title: "Normal sales",
-                        path: "/dashboard/transaction/sale/normal",
+                        title: "Sale Challan",
+                        path: "/dashboard/saleChallan",
+                    },
+                    {
+                        title: "Sale Billing",
+                        path: "/dashboard/saleBilling",
+                    },
+                    {
+                        title: "Display Bills",
+                        path: "/dashboard/displayBills",
                     },
                 ],
             },
@@ -73,51 +81,26 @@ export const UserSideBarDataTest = [
     },
     {
         title: "Reports",
-        path: "/reports",
+        path: "/dashboard",
         iconClosed: <RiIcons.RiArrowDownSFill />,
         iconOpened: <RiIcons.RiArrowUpSFill />,
 
         subNav: [
             {
-                title: "Reports",
-                path: "/reports/reports1",
+                title: "Reports 1",
+                path: "/dashboard/reports1",
 
                 cName: "sub-nav",
             },
             {
                 title: "Reports 2",
-                path: "/reports/reports2",
+                path: "/dashboard/reports2",
 
                 cName: "sub-nav",
             },
             {
                 title: "Reports 3",
-                path: "/reports/reports3",
-            },
-        ],
-    },
-    {
-        title: "Reports",
-        path: "/reports",
-        iconClosed: <RiIcons.RiArrowDownSFill />,
-        iconOpened: <RiIcons.RiArrowUpSFill />,
-
-        subNav: [
-            {
-                title: "Reports",
-                path: "/reports/reports1",
-
-                cName: "sub-nav",
-            },
-            {
-                title: "Reports 2",
-                path: "/reports/reports2",
-
-                cName: "sub-nav",
-            },
-            {
-                title: "Reports 3",
-                path: "/reports/reports3",
+                path: "/dashboard/reports3",
             },
         ],
     },

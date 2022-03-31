@@ -1,9 +1,10 @@
 import { Route } from "react-router-dom";
 import Greypurchase from "../../pages/UserPages/Greypurchase";
 import ReceiveFromMill from "../../pages/UserPages/ReceiveFromMill";
-import Revenue from "../../pages/UserPages/Revenue";
-import SendJobForWork from "../../pages/UserPages/SendJobForWork";
 import SendToMill from "../../pages/UserPages/SendToMill";
+import SendJobForWork from "../../pages/UserPages/SendJobForWork";
+import Revenue from "../../pages/UserPages/Revenue";
+import SaleChallan from "../../pages/UserPages/SaleChallan";
 const UserContent = ({ userDetails }) => {
     return (
         <>
@@ -28,6 +29,9 @@ const UserContent = ({ userDetails }) => {
             </Route>
             <Route path="/dashboard/transaction/revenue" exact>
                 <Revenue />
+            </Route>
+            <Route path="/dashboard/saleChallan" exact>
+                <SaleChallan />
             </Route>
             <Route path="/dashboard" exact>
                 <h1>Welcome to Microtex</h1>

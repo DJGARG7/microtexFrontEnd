@@ -6,19 +6,22 @@ import UserContent from "./UserContent";
 import { Toaster } from "react-hot-toast";
 import "../../styles/AdminDashboard.css";
 function UserDashboard({ userDetails, logoutHandler }) {
-  return (
-    <Fragment>
-      <Toaster />
-      <div className="body">
-        <div className="MainMenu">
-          <Sidebartest SidebarDataUserTest={UserSideBarDataTest} userDetails={userDetails} logoutHandler={logoutHandler}/>
-        </div>
-        <div className="content">
-            <UserContent/>
-        </div>
-      </div>
-    </Fragment>
-  );
+    return (
+        <Fragment>
+            <Toaster />
+            <div className="body">
+                <div className="MainMenu">
+                    <Sidebartest
+                        SidebarDataUserTest={UserSideBarDataTest}
+                        userDetails={userDetails}
+                        logoutHandler={logoutHandler}
+                    />
+                </div>
+                <div className="content">
+                    <UserContent />
+                </div>
+            </div>
+        </Fragment>
+    );
 }
-
 export default UserDashboard;

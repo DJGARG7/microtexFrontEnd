@@ -5,7 +5,7 @@ import Modal from "../../components/Reuse_components/Modal";
 import Axios from "axios";
 import toast from "react-hot-toast";
 import StickyTable from "../../components/Reuse_components/Table/StickyTable";
-import {GSTdescription} from "../../jsonData/userData/GSTdescription"
+import { GSTdescription } from "../../jsonData/userData/GSTdescription";
 
 if (localStorage.getItem("userDetails") != null)
   Axios.defaults.headers.common["userID"] = JSON.parse(
@@ -168,26 +168,25 @@ function Greypurchase() {
   const purchasedListCol = [
     {
       Header: "Action",
-      accessor: (str) => "delete/edit",
+      accessor: (str) => "delete",
       Cell: (tableProps) => (
-        <div style={{ display: "flex", flexDirection: "row" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            "justify-content": "center",
+          }}
+        >
           <button
             style={{
               cursor: "pointer",
             }}
             type="submit"
             onClick={() => {
-              onEditHandler(tableProps);
-            }}
-          >
-            Edit
-          </button>
-          <button
-            style={{
-              cursor: "pointer",
-            }}
-            type="submit"
-            onClick={() => {
+              settotalamount((preamount) => {
+                return preamount - purchaseditems[tableProps.row.index].Amount;
+              });
+              console.log(purchaseditems[tableProps.row.index].Amount);
               setpurchaseditems((prestate) => {
                 prestate.splice(tableProps.row.index, 1);
                 return [...prestate];
@@ -295,26 +294,26 @@ function Greypurchase() {
     BillDate: date,
     accntnames: "",
     RevCharge: "",
-    RcmInvNo: null,
-    ChallanNo: null,
+    RcmInvNo: "",
+    ChallanNo: "",
     ChallanDate: date,
     Agent: "",
     Haste: "",
-    OrderForm: null,
-    EntryNo: null,
+    OrderForm: "",
+    EntryNo: "",
     ItemName: "",
-    Marka: null,
-    Taka: null,
-    Mts: null,
-    Fold: null,
+    Marka: "",
+    Taka: "",
+    Mts: "",
+    Fold: "",
     ActMts: "",
     Rate: "",
     Amount: "",
-    Discount: null,
+    Discount: "",
     DiscountAmt: 0,
-    IGST: null,
-    CGST: null,
-    SGST: null,
+    IGST: "",
+    CGST: "",
+    SGST: "",
     IGSTamt: 0,
     CGSTamt: 0,
     SGSTamt: 0,
@@ -361,6 +360,7 @@ function Greypurchase() {
   const onSubmithandler = async (event) => {
     event.preventDefault();
     // const res = await usrinstance.post("addgreypurchase", state);
+  
     const newItem = {
       ItemName: state.ItemName,
       Marka: state.Marka,
@@ -369,7 +369,7 @@ function Greypurchase() {
       Fold: state.Fold,
       ActMts: state.ActMts,
       Rate: state.Rate,
-      Amount: state.NetAmount,
+      Amount: `${document.getElementById("NetAmount").value}`,
       BillNo: state.BillNo,
       Discount: state.Discount,
       IGST: state.IGST,
@@ -380,20 +380,6 @@ function Greypurchase() {
       return [...preitems, newItem];
     });
 
-    setState({
-      ...state,
-      ItemName: "",
-      Taka: null,
-      Mts: null,
-      Fold: null,
-      ActMts: "",
-      Rate: "",
-      Amount: "",
-      Discount: null,
-      IGST: null,
-      CGST: null,
-      SGST: null,
-    });
     if (1) {
       console.log("toast");
       toast.success("Item added to the list!", {
@@ -403,11 +389,31 @@ function Greypurchase() {
           color: "#fff",
         },
       });
-    }
 
-    settotalamount((presamount) => {
-      return presamount + parseInt(state.NetAmount);
-    });
+      settotalamount((presamount) => {
+        return presamount + parseInt(newItem.Amount);
+      });
+      setState({
+        ...state,
+        ItemName: "",
+        Taka: "",
+        Mts: "",
+        Fold: "",
+        ActMts: "",
+        Rate: "",
+        Amount: "",
+        Discount: "",
+        IGST: "",
+        CGST: "",
+        SGST: "",
+        Marka: "",
+        NetAmount:"",
+        IGSTamt:0,
+        CGSTamt:0,
+        SGSTamt:0,
+        DiscountAmt:0
+      });
+    }   
   };
 
   //   useEffect to fetch the account names
@@ -441,18 +447,33 @@ function Greypurchase() {
   };
 
   const onMainSubmit = async () => {
-    const res = await usrinstance.post("additemdetails", purchaseditems);
-    const res2 = await usrinstance.post("addbilldetails", state);
-    if (res.data.status === "1" && res2.data.status === "1") {
-      toast.success("Purchase added successfully!", {
+    const datasend = {
+      state,
+      purchaseditems,
+      totalamount
+    };
+    const res = await usrinstance.post("addbilldetails", datasend); // adds data about the bill
+    console.log(res);
+    if (res.data.status === "1") {
+      toast.success("Bill added successfully!", {
         style: {
           borderRadius: "15px",
           background: "#333",
           color: "#fff",
         },
       });
+      setState({
+        ...state,
+        BillNo: "",
+        accntnames: "",
+        ChallanNo: "",
+        Agent: "",
+        EntryNo: "",
+      });
+      setpurchaseditems([]);
+      settotalamount(0);
     } else {
-      toast.error(`Error ${res.data.sqlMessage} ${res2.data.sqlMessage}`, {
+      toast.error(`Error ${res.data.sqlMessage}`, {
         style: {
           borderRadius: "15px",
           background: "#333",
@@ -488,6 +509,13 @@ function Greypurchase() {
     setlistofitems(items.data);
   };
 
+  // when view all pucrchased isclicked
+  const onViewBillhandler = async () => {
+    setmodalstate(true);
+    const res = await usrinstance.get("fetchall");
+    settabledata(res.data);
+  };
+
   return (
     <div>
       <form onSubmit={onSubmithandler} className="form--greypurchase">
@@ -500,7 +528,7 @@ function Greypurchase() {
             <label>
               Bill No
               <input
-                type="text"
+                type="number"
                 value={state.BillNo}
                 name="BillNo"
                 onChange={onchangeHandler}
@@ -537,13 +565,15 @@ function Greypurchase() {
                 value={state.accntnames}
               >
                 <option value="">Account Names</option>
-                {accntdata.map((acct, index) => {
-                  return (
-                    <option value={acct.AccName} key={index}>
-                      {acct.AccName}
-                    </option>
-                  );
-                })}
+                {accntdata &&
+                  !!accntdata.length &&
+                  accntdata.map((acct, index) => {
+                    return (
+                      <option value={acct.AccName} key={index}>
+                        {acct.AccName}
+                      </option>
+                    );
+                  })}
               </select>
             </label>
             {/* <label>Rev. Charge</label>
@@ -618,13 +648,15 @@ function Greypurchase() {
                 required
               >
                 <option value="">Item Names</option>
-                {listofitems.map((item, index) => {
-                  return (
-                    <option value={item.itemname} key={index}>
-                      {item.itemname}
-                    </option>
-                  );
-                })}
+                {listofitems &&
+                  !!listofitems.length &&
+                  listofitems.map((item, index) => {
+                    return (
+                      <option value={item.itemname} key={index}>
+                        {item.itemname}
+                      </option>
+                    );
+                  })}
               </select>
               <button
                 type="button"
@@ -804,12 +836,7 @@ function Greypurchase() {
               />
             </label>
             <input type="submit" value="Add Purchase" />
-            <button
-              onClick={async () => {
-                setmodalstate(true);
-              }}
-              type="button"
-            >
+            <button onClick={onViewBillhandler} type="button">
               View all purchase
             </button>
           </div>
