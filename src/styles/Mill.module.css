@@ -1,0 +1,15 @@
+.main {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    height: 100%;
+
+    padding: 25px;
+
+    transition: 350ms;
+}
+
+.main h2 {
+    margin: 0;
+}

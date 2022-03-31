@@ -288,7 +288,37 @@ function Greypurchase() {
         current.getMonth() + 1
     }-${current.getDate()}`;
 
-    const [totalamount, settotalamount] = useState(0); // THIS IS THE FINAL AMOUNT OF THE BILL
+  const [accntdata, setacctdata] = useState([]); // for setting the account name returend in useEffect
+  const [state, setState] = useState({
+    BillNo: "",
+    BillDate: date,
+    accntnames: "",
+    RevCharge: "",
+    RcmInvNo: "",
+    ChallanNo: "",
+    ChallanDate: date,
+    Agent: "",
+    Haste: "",
+    OrderForm: "",
+    EntryNo: "",
+    ItemName: "",
+    Marka: "",
+    Taka: "",
+    Mts: "",
+    Fold: "",
+    ActMts: "",
+    Rate: "",
+    Amount: "",
+    Discount: "",
+    DiscountAmt: 0,
+    IGST: "",
+    CGST: "",
+    SGST: "",
+    IGSTamt: 0,
+    CGSTamt: 0,
+    SGSTamt: 0,
+    NetAmount: 0,
+  });
 
     const [tabledata, settabledata] = useState([]); // for modal table
     const [purchaseditems, setpurchaseditems] = useState([]); // list of purchased items
@@ -341,48 +371,62 @@ function Greypurchase() {
     // list of items to choose that will render from backend
     const [listofitems, setlistofitems] = useState([]);
 
-    const [greyitemadd, setgretitemadd] = useState(false); //toggles modal for greyitem adder
-    const [modalstate, setmodalstate] = useState(false); // use state to handle modal toggle
-    // function to handle any changes
-    const onchangeHandler = (event) => {
-        let value = event.target.value;
-        if (!Number.isNaN(parseFloat(value))) {
-            value = parseFloat(value);
-        }
-        console.log(typeof value);
-        setState({
-            ...state,
-            [event.target.name]: value,
-        });
+  // function to handle onsubmit form request
+  const onSubmithandler = async (event) => {
+    event.preventDefault();
+    // const res = await usrinstance.post("addgreypurchase", state);
+  
+    const newItem = {
+      ItemName: state.ItemName,
+      Marka: state.Marka,
+      Taka: state.Taka,
+      Mts: state.Mts,
+      Fold: state.Fold,
+      ActMts: state.ActMts,
+      Rate: state.Rate,
+      Amount: `${document.getElementById("NetAmount").value}`,
+      BillNo: state.BillNo,
+      Discount: state.Discount,
+      IGST: state.IGST,
+      CGST: state.CGST,
+      SGST: state.SGST,
     };
 
-    // funtion to close modal
-    const closeHandler = () => {
-        setmodalstate(false);
-    };
+    if (1) {
+      console.log("toast");
+      toast.success("Item added to the list!", {
+        style: {
+          borderRadius: "15px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
 
-    // function to handle onsubmit form request
-    const onSubmithandler = async (event) => {
-        event.preventDefault();
-        // const res = await usrinstance.post("addgreypurchase", state);
-        const newItem = {
-            ItemName: state.ItemName,
-            Marka: state.Marka,
-            Taka: state.Taka,
-            Mts: state.Mts,
-            Fold: state.Fold,
-            ActMts: state.ActMts,
-            Rate: state.Rate,
-            Amount: state.NetAmount,
-            BillNo: state.BillNo,
-            Discount: state.Discount,
-            IGST: state.IGST,
-            CGST: state.CGST,
-            SGST: state.SGST,
-        };
-        setpurchaseditems((preitems) => {
-            return [...preitems, newItem];
-        });
+      settotalamount((presamount) => {
+        return presamount + parseInt(newItem.Amount);
+      });
+      setState({
+        ...state,
+        ItemName: "",
+        Taka: "",
+        Mts: "",
+        Fold: "",
+        ActMts: "",
+        Rate: "",
+        Amount: "",
+        Discount: "",
+        IGST: "",
+        CGST: "",
+        SGST: "",
+        Marka: "",
+        NetAmount:"",
+        IGSTamt:0,
+        CGSTamt:0,
+        SGSTamt:0,
+        DiscountAmt:0
+      });
+    }   
+  };
 
         if (1) {
             console.log("toast");
@@ -425,19 +469,11 @@ function Greypurchase() {
         })();
     }, []);
 
-    // if edit is selected when the edit button is clicked on the table
-    const onEditHandler = (tableprops) => {
-        setmodalstate(false);
-        const data = tableprops.row.original;
-        const disamt = Math.round((data.Discount / 100) * data.Amount);
-        // setting the data back to the form
-        setState({
-            ...data,
-            DiscountAmt: Math.round((data.Discount / 100) * data.Amount),
-            IGSTamt: ((data.Amount - disamt) * data.IGST) / 100,
-            CGSTamt: ((data.Amount - disamt) * data.CGST) / 100,
-            SGSTamt: ((data.Amount - disamt) * data.SGST) / 100,
-        });
+  const onMainSubmit = async () => {
+    const datasend = {
+      state,
+      purchaseditems,
+      totalamount
     };
 
     //to handle greyitem add handler
@@ -445,132 +481,74 @@ function Greypurchase() {
         setgretitemadd(false);
     };
 
-    const onMainSubmit = async () => {
-        const datasend = {
-            state,
-            purchaseditems,
-        };
-        const res = await usrinstance.post("addbilldetails", datasend); // adds data about the bill
-        console.log(res);
-        if (res.data.status === "1") {
-            toast.success("Bill added successfully!", {
-                style: {
-                    borderRadius: "15px",
-                    background: "#333",
-                    color: "#fff",
-                },
-            });
-            setState({
-                ...state,
-                BillNo: "",
-                accntnames: "",
-                ChallanNo: "",
-                Agent: "",
-                EntryNo: "",
-            });
-            setpurchaseditems([]);
-            settotalamount(0);
-        } else {
-            toast.error(`Error ${res.data.sqlMessage}`, {
-                style: {
-                    borderRadius: "15px",
-                    background: "#333",
-                    color: "#fff",
-                },
-            });
-        }
-    };
+  // when view all pucrchased isclicked
+  const onViewBillhandler = async () => {
+    setmodalstate(true);
+    const res = await usrinstance.get("fetchall");
+    settabledata(res.data);
+  };
 
-    // handles when new item is added to the db
-    const onItemaddform = async (e) => {
-        e.preventDefault();
-        const res = await usrinstance.post("additems", itemdetails);
-        if (res.data.status === "1") {
-            toast.success("Item added successfully!", {
-                style: {
-                    borderRadius: "15px",
-                    background: "#333",
-                    color: "#fff",
-                },
-            });
-        } else {
-            toast.error(`Error ${res.data.sqlMessage}`, {
-                style: {
-                    borderRadius: "15px",
-                    background: "#333",
-                    color: "#fff",
-                },
-            });
-        }
-        greyitemcloseHandler();
-        const items = await usrinstance.get("fetchitems");
-        setlistofitems(items.data);
-    };
-
-    return (
-        <div>
-            <form onSubmit={onSubmithandler} className="form--greypurchase">
-                <div className="main">
-                    <div className="firstline--greypurchase">
-                        <label>
-                            Purchase Type
-                            <input type="text" disabled value="Grey Purchase" />
-                        </label>
-                        <label>
-                            Bill No
-                            <input
-                                type="number"
-                                value={state.BillNo}
-                                name="BillNo"
-                                onChange={onchangeHandler}
-                                required
-                            />
-                        </label>
-                        <label>
-                            Bill date
-                            <input
-                                type="date"
-                                style={{ width: "140px" }}
-                                required
-                                value={state.BillDate}
-                                name="BillDate"
-                                onChange={onchangeHandler}
-                            />
-                        </label>
-                        <label>Challan date</label>
-                        <input
-                            style={{ width: "140px" }}
-                            type="date"
-                            value={state.ChallanDate}
-                            name="challanDate"
-                            onChange={onchangeHandler}
-                        />
-                    </div>
-                    <div className="secondline--greypurchase">
-                        <label>
-                            Supplier
-                            <select
-                                name="accntnames"
-                                onChange={onchangeHandler}
-                                required
-                                value={state.accntnames}
-                            >
-                                <option value="">Account Names</option>
-                                {accntdata &&
-                                    !!accntdata.length &&
-                                    accntdata.map((acct, index) => {
-                                        return (
-                                            <option
-                                                value={acct.AccName}
-                                                key={index}
-                                            >
-                                                {acct.AccName}
-                                            </option>
-                                        );
-                                    })}
-                            </select>
-                        </label>
-                        {/* <label>Rev. Charge</label>
+  return (
+    <div>
+      <form onSubmit={onSubmithandler} className="form--greypurchase">
+        <div className="main">
+          <div className="firstline--greypurchase">
+            <label>
+              Purchase Type
+              <input type="text" disabled value="Grey Purchase" />
+            </label>
+            <label>
+              Bill No
+              <input
+                type="number"
+                value={state.BillNo}
+                name="BillNo"
+                onChange={onchangeHandler}
+                required
+              />
+            </label>
+            <label>
+              Bill date
+              <input
+                type="date"
+                style={{ width: "140px" }}
+                required
+                value={state.BillDate}
+                name="BillDate"
+                onChange={onchangeHandler}
+              />
+            </label>
+            <label>Challan date</label>
+            <input
+              style={{ width: "140px" }}
+              type="date"
+              value={state.ChallanDate}
+              name="challanDate"
+              onChange={onchangeHandler}
+            />
+          </div>
+          <div className="secondline--greypurchase">
+            <label>
+              Supplier
+              <select
+                name="accntnames"
+                onChange={onchangeHandler}
+                required
+                value={state.accntnames}
+              >
+                <option value="">Account Names</option>
+                {accntdata &&
+                  !!accntdata.length &&
+                  accntdata.map((acct, index) => {
+                    return (
+                      <option value={acct.AccName} key={index}>
+                        {acct.AccName}
+                      </option>
+                    );
+                  })}
+              </select>
+            </label>
+            {/* <label>Rev. Charge</label>
           <input
             type="text"
             name="RevCharge"
@@ -622,394 +600,241 @@ function Greypurchase() {
               onChange={onchangeHandler}
             />
           </label> */}
-                        <label>
-                            Entery No.:
-                            <input
-                                type="text"
-                                name="EntryNo"
-                                value={state.EntryNo}
-                                onChange={onchangeHandler}
-                            />
-                        </label>
-                    </div>
-                    <div className="fourthline--greypurchase">
-                        <label>
-                            Item Name
-                            <select
-                                name="ItemName"
-                                value={state.ItemName}
-                                onChange={onchangeHandler}
-                                required
-                            >
-                                <option value="">Item Names</option>
-                                {listofitems &&
-                                    !!listofitems.length &&
-                                    listofitems.map((item, index) => {
-                                        return (
-                                            <option
-                                                value={item.itemname}
-                                                key={index}
-                                            >
-                                                {item.itemname}
-                                            </option>
-                                        );
-                                    })}
-                            </select>
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    setgretitemadd(true);
-                                }}
-                            >
-                                Add Item
-                            </button>
-                        </label>
-                        <label>
-                            Marka
-                            <input
-                                type="number"
-                                name="Marka"
-                                value={state.Marka}
-                                onChange={onchangeHandler}
-                            />
-                        </label>
-                        <label>
-                            Taka
-                            <input
-                                type="number"
-                                name="Taka"
-                                value={state.Taka}
-                                onChange={onchangeHandler}
-                            />
-                            <button type="button">Add peices</button>
-                        </label>
-                    </div>
-                    <div className="fifthline--greypurchase">
-                        <label>
-                            Mts.
-                            <input
-                                type="number"
-                                name="Mts"
-                                value={state.Mts}
-                                onChange={onchangeHandler}
-                            />
-                        </label>
-                        <label>
-                            Fold
-                            <input
-                                type="number"
-                                name="Fold"
-                                value={state.Fold}
-                                onChange={onchangeHandler}
-                            />
-                        </label>
-                        <label>
-                            Act. Mts
-                            <input
-                                type="number"
-                                name="ActMts"
-                                value={parseInt(state.ActMts)}
-                                id="mts"
-                                required
-                                onChange={onchangeHandler}
-                            />
-                        </label>
-                        <label>
-                            Rate
-                            <input
-                                type="number"
-                                id="rate"
-                                name="Rate"
-                                value={parseInt(state.Rate)}
-                                onChange={onchangeHandler}
-                            />
-                        </label>
-                        <label>
-                            Amount
-                            <input
-                                type="number"
-                                name="Amount"
-                                value={state.ActMts * state.Rate}
-                                readOnly
-                                onSelect={onchangeHandler}
-                                id="Amount"
-                                required
-                            />
-                        </label>
-                    </div>
-                    <div className="sixthline--greypurchase">
-                        <label>
-                            Discount (%)
-                            <input
-                                type="text"
-                                name="Discount"
-                                value={state.Discount}
-                                onChange={onchangeHandler}
-                            />
-                            <input
-                                type="text"
-                                name="DiscountAmt"
-                                id="DiscountAmt"
-                                readOnly
-                                value={Math.round(
-                                    (state.Discount / 100) * state.Amount
-                                )}
-                                onSelect={onchangeHandler}
-                            />
-                        </label>
-                        <label>
-                            IGST(%)
-                            <input
-                                type="text"
-                                name="IGST"
-                                value={state.IGST}
-                                onChange={onchangeHandler}
-                            />
-                            <input
-                                type="text"
-                                name="IGSTamt"
-                                id="IGSTamt"
-                                readOnly
-                                value={Math.round(
-                                    ((state.Amount - state.DiscountAmt) *
-                                        state.IGST) /
-                                        100
-                                )}
-                                onSelect={onchangeHandler}
-                            />
-                        </label>
-                        <label>
-                            CGST(%)
-                            <input
-                                type="text"
-                                name="CGST"
-                                value={state.CGST}
-                                onChange={onchangeHandler}
-                            />
-                            <input
-                                type="text"
-                                name="CGSTamt"
-                                id="CGSTamt"
-                                readOnly
-                                value={Math.round(
-                                    ((state.Amount - state.DiscountAmt) *
-                                        state.CGST) /
-                                        100
-                                )}
-                                onSelect={onchangeHandler}
-                            />
-                        </label>
-                        <label>
-                            SGST(%)
-                            <input
-                                type="text"
-                                name="SGST"
-                                value={state.SGST}
-                                onChange={onchangeHandler}
-                            />
-                            <input
-                                type="text"
-                                name="SGSTamt"
-                                readOnly
-                                id="SGSTamt"
-                                value={Math.round(
-                                    ((state.Amount - state.DiscountAmt) *
-                                        state.SGST) /
-                                        100
-                                )}
-                                onSelect={onchangeHandler}
-                            />
-                        </label>
-                    </div>
-                    <div className="seventline--greypurchase">
-                        <label>
-                            Net Amount
-                            <input
-                                type="number"
-                                name="NetAmount"
-                                readOnly
-                                id="NetAmount"
-                                value={Math.round(
-                                    parseInt(state.Amount) -
-                                        state.DiscountAmt +
-                                        state.CGSTamt +
-                                        state.IGSTamt +
-                                        state.SGSTamt
-                                )}
-                                onSelect={onchangeHandler}
-                                required
-                            />
-                        </label>
-                        <input type="submit" value="Add Purchase" />
-                        <button
-                            onClick={async () => {
-                                setmodalstate(true);
-                            }}
-                            type="button"
-                        >
-                            View all purchase
-                        </button>
-                    </div>
-                    <Modal open={modalstate} onClose={closeHandler}>
-                        <StickyTable
-                            TableCol={TableColData}
-                            TableData={tabledata}
-                        />
-                    </Modal>
-                    <div className="greypurchase--itemtable">
-                        <StickyTable
-                            TableCol={purchasedListCol}
-                            TableData={purchaseditems}
-                        />
-                    </div>
-                </div>
-                <div className="form--button">
-                    <label>
-                        Final Amount:
-                        <input
-                            type="text"
-                            disabled
-                            placeholder="Total Amount"
-                            value={totalamount}
-                        />
-                    </label>
-                    <button type="button" onClick={onMainSubmit}>
-                        Save Purchases
-                    </button>
-                </div>
-            </form>
-            <Modal open={greyitemadd} onClose={greyitemcloseHandler}>
-                <form
-                    className="greypurchase--itemadd"
-                    onSubmit={onItemaddform}
-                >
-                    <label>
-                        Item Name:
-                        <input
-                            type="text"
-                            required
-                            value={itemdetails.itemname}
-                            onChange={(e) =>
-                                setItemdetails({
-                                    ...itemdetails,
-                                    itemname: e.target.value,
-                                })
-                            }
-                        />
-                    </label>
-                    <label>
-                        Opening pcs:
-                        <input
-                            type="number"
-                            value={itemdetails.openingpcs}
-                            onChange={(e) =>
-                                setItemdetails({
-                                    ...itemdetails,
-                                    openingpcs: e.target.value,
-                                })
-                            }
-                        />
-                    </label>
-                    <label>
-                        Opening Mts:
-                        <input
-                            type="number"
-                            value={itemdetails.openingmts}
-                            onChange={(e) =>
-                                setItemdetails({
-                                    ...itemdetails,
-                                    openingmts: e.target.value,
-                                })
-                            }
-                        />
-                    </label>
-                    <label>
-                        Opening Value:
-                        <input
-                            type="number"
-                            value={itemdetails.openingval}
-                            onChange={(e) =>
-                                setItemdetails({
-                                    ...itemdetails,
-                                    openingval: e.target.value,
-                                })
-                            }
-                        />
-                    </label>
-                    <label>
-                        Rate per pcs:
-                        <input
-                            type="number"
-                            value={itemdetails.rateperpcs}
-                            onChange={(e) =>
-                                setItemdetails({
-                                    ...itemdetails,
-                                    rateperpcs: e.target.value,
-                                })
-                            }
-                        />
-                    </label>
-                    <label>
-                        Rate per Mts:
-                        <input
-                            type="number"
-                            value={itemdetails.ratepermts}
-                            onChange={(e) =>
-                                setItemdetails({
-                                    ...itemdetails,
-                                    ratepermts: e.target.value,
-                                })
-                            }
-                        />
-                    </label>
-                    <label>
-                        HSN code:
-                        <input
-                            type="number"
-                            value={itemdetails.hsncode}
-                            onChange={(e) =>
-                                setItemdetails({
-                                    ...itemdetails,
-                                    hsncode: e.target.value,
-                                })
-                            }
-                        />
-                    </label>
-                    <label>
-                        GST (%):
-                        <input
-                            type="number"
-                            value={itemdetails.gst}
-                            onChange={(e) =>
-                                setItemdetails({
-                                    ...itemdetails,
-                                    gst: e.target.value,
-                                })
-                            }
-                        />
-                    </label>
-                    <select
-                        value={itemdetails.descriptiongst}
-                        onChange={(e) =>
-                            setItemdetails({
-                                ...itemdetails,
-                                descriptiongst: e.target.value,
-                            })
-                        }
-                        required
-                    >
-                        <option value="">Description for GST</option>
-                        {GSTdescription.map((Item, Index) => {
-                            return (
-                                <option value={Item} key={Index}>
-                                    {Item}
-                                </option>
-                            );
-                        })}
-                    </select>
-                    <button>Add item</button>
-                </form>
-            </Modal>
+            <label>
+              Entery No.:
+              <input
+                type="text"
+                name="EntryNo"
+                value={state.EntryNo}
+                onChange={onchangeHandler}
+              />
+            </label>
+          </div>
+          <div className="fourthline--greypurchase">
+            <label>
+              Item Name
+              <select
+                name="ItemName"
+                value={state.ItemName}
+                onChange={onchangeHandler}
+                required
+              >
+                <option value="">Item Names</option>
+                {listofitems &&
+                  !!listofitems.length &&
+                  listofitems.map((item, index) => {
+                    return (
+                      <option value={item.itemname} key={index}>
+                        {item.itemname}
+                      </option>
+                    );
+                  })}
+              </select>
+              <button
+                type="button"
+                onClick={() => {
+                  setgretitemadd(true);
+                }}
+              >
+                Add Item
+              </button>
+            </label>
+            <label>
+              Marka
+              <input
+                type="number"
+                name="Marka"
+                value={state.Marka}
+                onChange={onchangeHandler}
+              />
+            </label>
+            <label>
+              Taka
+              <input
+                type="number"
+                name="Taka"
+                value={state.Taka}
+                onChange={onchangeHandler}
+              />
+              <button type="button">Add peices</button>
+            </label>
+          </div>
+          <div className="fifthline--greypurchase">
+            <label>
+              Mts.
+              <input
+                type="number"
+                name="Mts"
+                value={state.Mts}
+                onChange={onchangeHandler}
+              />
+            </label>
+            <label>
+              Fold
+              <input
+                type="number"
+                name="Fold"
+                value={state.Fold}
+                onChange={onchangeHandler}
+              />
+            </label>
+            <label>
+              Act. Mts
+              <input
+                type="number"
+                name="ActMts"
+                value={parseInt(state.ActMts)}
+                id="mts"
+                required
+                onChange={onchangeHandler}
+              />
+            </label>
+            <label>
+              Rate
+              <input
+                type="number"
+                id="rate"
+                name="Rate"
+                value={parseInt(state.Rate)}
+                onChange={onchangeHandler}
+              />
+            </label>
+            <label>
+              Amount
+              <input
+                type="number"
+                name="Amount"
+                value={state.ActMts * state.Rate}
+                readOnly
+                onSelect={onchangeHandler}
+                id="Amount"
+                required
+              />
+            </label>
+          </div>
+          <div className="sixthline--greypurchase">
+            <label>
+              Discount (%)
+              <input
+                type="text"
+                name="Discount"
+                value={state.Discount}
+                onChange={onchangeHandler}
+              />
+              <input
+                type="text"
+                name="DiscountAmt"
+                id="DiscountAmt"
+                readOnly
+                value={Math.round((state.Discount / 100) * state.Amount)}
+                onSelect={onchangeHandler}
+              />
+            </label>
+            <label>
+              IGST(%)
+              <input
+                type="text"
+                name="IGST"
+                value={state.IGST}
+                onChange={onchangeHandler}
+              />
+              <input
+                type="text"
+                name="IGSTamt"
+                id="IGSTamt"
+                readOnly
+                value={Math.round(
+                  ((state.Amount - state.DiscountAmt) * state.IGST) / 100
+                )}
+                onSelect={onchangeHandler}
+              />
+            </label>
+            <label>
+              CGST(%)
+              <input
+                type="text"
+                name="CGST"
+                value={state.CGST}
+                onChange={onchangeHandler}
+              />
+              <input
+                type="text"
+                name="CGSTamt"
+                id="CGSTamt"
+                readOnly
+                value={Math.round(
+                  ((state.Amount - state.DiscountAmt) * state.CGST) / 100
+                )}
+                onSelect={onchangeHandler}
+              />
+            </label>
+            <label>
+              SGST(%)
+              <input
+                type="text"
+                name="SGST"
+                value={state.SGST}
+                onChange={onchangeHandler}
+              />
+              <input
+                type="text"
+                name="SGSTamt"
+                readOnly
+                id="SGSTamt"
+                value={Math.round(
+                  ((state.Amount - state.DiscountAmt) * state.SGST) / 100
+                )}
+                onSelect={onchangeHandler}
+              />
+            </label>
+          </div>
+          <div className="seventline--greypurchase">
+            <label>
+              Net Amount
+              <input
+                type="number"
+                name="NetAmount"
+                readOnly
+                id="NetAmount"
+                value={Math.round(
+                  parseInt(state.Amount) -
+                    state.DiscountAmt +
+                    state.CGSTamt +
+                    state.IGSTamt +
+                    state.SGSTamt
+                )}
+                onSelect={onchangeHandler}
+                required
+              />
+            </label>
+            <input type="submit" value="Add Purchase" />
+            <button onClick={onViewBillhandler} type="button">
+              View all purchase
+            </button>
+          </div>
+          <Modal open={modalstate} onClose={closeHandler}>
+            <StickyTable TableCol={TableColData} TableData={tabledata} />
+          </Modal>
+          <div className="greypurchase--itemtable">
+            <StickyTable
+              TableCol={purchasedListCol}
+              TableData={purchaseditems}
+            />
+          </div>
+        </div>
+        <div className="form--button">
+          <label>
+            Final Amount:
+            <input
+              type="text"
+              disabled
+              placeholder="Total Amount"
+              value={totalamount}
+            />
+          </label>
+          <button type="button" onClick={onMainSubmit}>
+            Save Purchases
+          </button>
         </div>
     );
 }

@@ -1,5 +1,7 @@
 import { Route } from "react-router-dom";
 import Greypurchase from "../../pages/UserPages/Greypurchase";
+import ReceiveFromMill from "../../pages/UserPages/ReceiveFromMill";
+import SendToMill from "../../pages/UserPages/SendToMill";
 import SendJobForWork from "../../pages/UserPages/SendJobForWork";
 import Revenue from "../../pages/UserPages/Revenue";
 import SaleChallan from "../../pages/UserPages/SaleChallan";
@@ -19,10 +21,10 @@ const UserContent = ({ userDetails }) => {
                 <h1>Mill</h1>
             </Route>
             <Route path="/dashboard/transaction/mill/send" exact>
-                <h1>Send to Mill</h1>
+                <SendToMill />
             </Route>
             <Route path="/dashboard/transaction/mill/receive" exact>
-                <h1>Receive from Mill</h1>
+                <ReceiveFromMill />
             </Route>
             <Route path="/dashboard/transaction/job" exact>
                 <SendJobForWork />

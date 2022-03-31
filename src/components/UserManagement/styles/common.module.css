@@ -10,6 +10,10 @@
     transition: 350ms;
 }
 
+.main h2 {
+    margin: 0;
+}
+
 .form {
     display: flex;
     flex-direction: column;
