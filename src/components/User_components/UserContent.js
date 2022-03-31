@@ -3,6 +3,8 @@ import Greypurchase from "../../pages/UserPages/Greypurchase";
 import SendJobForWork from "../../pages/UserPages/SendJobForWork";
 import Revenue from "../../pages/UserPages/Revenue";
 import SaleChallan from "../../pages/UserPages/SaleChallan";
+import SaleBilling from "../../pages/UserPages/SaleBilling";
+import SaleDisplay from "../../pages/UserPages/SaleDisplay";
 const UserContent = ({ userDetails }) => {
     return (
         <>
@@ -30,6 +32,12 @@ const UserContent = ({ userDetails }) => {
             </Route>
             <Route path="/dashboard/saleChallan" exact>
                 <SaleChallan />
+            </Route>
+            <Route path="/dashboard/saleBilling" exact>
+                <SaleBilling />
+            </Route>
+            <Route path="/dashboard/displayBills" exact>
+                <SaleDisplay />
             </Route>
             <Route path="/dashboard" exact>
                 <h1>Welcome to Microtex</h1>

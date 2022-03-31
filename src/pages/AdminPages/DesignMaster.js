@@ -444,7 +444,6 @@ const DesignMaster = () => {
                         disabled
                         className={`${styles["input-text"]}`}
                         required
-                        disabled
                         style={{
                             width: "20%",
                             alignSelf: "center",
