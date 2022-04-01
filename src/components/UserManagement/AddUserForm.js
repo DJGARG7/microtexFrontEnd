@@ -1,15 +1,7 @@
 import { useState } from "react";
-import toast from "react-hot-toast";
+import { toastError, toastSuccess } from "../Reuse_components/toast";
 import axios from "./api/axios";
 import commonStyles from "./styles/common.module.css";
-
-const toastStyle = {
-    style: {
-        borderRadius: "15px",
-        background: "#333",
-        color: "#fff",
-    },
-};
 
 export default function AddUserForm({ corporateID, permissionsData }) {
     const [userID, setUserID] = useState("");
@@ -21,14 +13,11 @@ export default function AddUserForm({ corporateID, permissionsData }) {
 
         if (event.target.checked) {
             setSelectedPermissions(temp.add(parseInt(event.target.value)));
-            // console.log(selectedPermissions);
         } else {
             temp.delete(parseInt(event.target.value));
             temp.size === 0
                 ? setSelectedPermissions(new Set())
                 : setSelectedPermissions(temp);
-
-            // console.log(selectedPermissions);
         }
     };
 
@@ -39,11 +28,15 @@ export default function AddUserForm({ corporateID, permissionsData }) {
             document.getElementById("registerPassword").value !==
             document.getElementById("confirmPassword").value
         ) {
-            toast.error("Passwords do not match!", toastStyle);
+            // Toast if passwords don't match.
+            toastError("Passwords do not match!");
+
+            // Clear password fields.
             document.getElementById("registerPassword").value = "";
             document.getElementById("confirmPassword").value = "";
         } else {
             try {
+                // Send request to backend.
                 const res = await axios.post("/", {
                     userType: "firm",
                     corporateID: corporateID,
@@ -54,7 +47,8 @@ export default function AddUserForm({ corporateID, permissionsData }) {
                     permissions: Array.from(selectedPermissions),
                 });
 
-                toast.success(res.data, toastStyle);
+                // Toast on success.
+                toastSuccess(res.data);
 
                 // Clearing fields.
                 setUserID("");
@@ -66,9 +60,11 @@ export default function AddUserForm({ corporateID, permissionsData }) {
                 let checkboxes = document.getElementsByName("permissions");
                 for (var i = 0; i < checkboxes.length; i++)
                     checkboxes[i].checked = false;
+
+                // Clear the selected permissions state.
                 setSelectedPermissions(new Set());
             } catch (error) {
-                toast.error(error.response.data, toastStyle);
+                toastError(error.response.data);
             }
         }
     };

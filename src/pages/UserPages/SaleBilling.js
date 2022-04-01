@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import {
     toastError,
     toastSuccess,
-} from "../../components/Reuse_components/toastError";
+} from "../../components/Reuse_components/toast";
 import "./temp.css";
 function SaleBilling() {
     const [salesList, setSalesList] = useState([]);

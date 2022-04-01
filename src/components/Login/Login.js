@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import RecentUserList from "./RecentUserList";
 import LoginForm from "./LoginForm";
-// import "./styles/Login.css";
 import { Toaster } from "react-hot-toast";
-
 import styles from "./styles/Login.module.css";
 
 export default function Login({ onLogin }) {

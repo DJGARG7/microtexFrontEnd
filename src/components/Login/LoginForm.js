@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import axios from "./api/axios";
-import toast from "react-hot-toast";
-
+import { toastError } from "../Reuse_components/toast";
 import styles from "./styles/LoginForm.module.css";
 
 export default function LoginForm({
@@ -92,13 +91,7 @@ export default function LoginForm({
             console.log(error);
 
             // Toast on failure.
-            toast.error("Log in failed!", {
-                style: {
-                    borderRadius: "15px",
-                    background: "#333",
-                    color: "#fff",
-                },
-            });
+            toastError("Login failed!");
         }
     };
 

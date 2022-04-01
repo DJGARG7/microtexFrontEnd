@@ -3,7 +3,7 @@ import Axios from "axios";
 import {
     toastError,
     toastSuccess,
-} from "../../components/Reuse_components/toastError";
+} from "../../components/Reuse_components/toast";
 import StickyTable from "../../components/Reuse_components/Table/StickyTable";
 const current = new Date();
 const SaleChallan = () => {

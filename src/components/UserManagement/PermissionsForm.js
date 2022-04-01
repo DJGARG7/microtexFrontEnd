@@ -46,6 +46,8 @@ export default function PermissionsForm({ selectedUser, permissionsData }) {
 
     function setCheckboxes() {
         let checkboxes = document.getElementsByName("permissions");
+
+        // Check checkboxes if included in userPermissions.
         for (var i = 0; i < checkboxes.length; i++) {
             if (userPermissions.includes(parseInt(checkboxes[i].value)))
                 checkboxes[i].checked = true;

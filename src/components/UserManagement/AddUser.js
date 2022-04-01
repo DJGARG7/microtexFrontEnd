@@ -1,17 +1,9 @@
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { toastError } from "../Reuse_components/toast";
 import ReactLoading from "react-loading";
 import AddUserForm from "./AddUserForm";
 import axios from "./api/axios";
 import commonStyles from "./styles/common.module.css";
-
-const toastStyle = {
-    style: {
-        borderRadius: "15px",
-        background: "#333",
-        color: "#fff",
-    },
-};
 
 const controller = new AbortController();
 
@@ -29,11 +21,11 @@ export default function AddUser({ userDetails }) {
             setIsLoading(false);
         } catch (error) {
             if (error.name === "AbortError") return;
-            toast.error("Error loading user data", toastStyle);
+            toastError("Error loading user data");
         }
     };
 
-    useEffect(async () => {
+    useEffect(() => {
         setTimeout(() => {
             fetchData();
         }, 500);

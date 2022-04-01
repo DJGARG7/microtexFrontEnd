@@ -1,16 +1,8 @@
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { toastError, toastSuccess } from "../Reuse_components/toast";
 import ReactLoading from "react-loading";
 import axios from "./api/axios";
 import commonStyles from "./styles/common.module.css";
-
-const toastStyle = {
-    style: {
-        borderRadius: "15px",
-        background: "#333",
-        color: "#fff",
-    },
-};
 
 const controller = new AbortController();
 
@@ -29,11 +21,11 @@ export default function DeleteUser() {
             setIsLoading(false);
         } catch (error) {
             if (error.name === "AbortError") return;
-            toast.error("Error loading user data", toastStyle);
+            toastError("Error loading user data");
         }
     };
 
-    useEffect(async () => {
+    useEffect(() => {
         setTimeout(() => {
             fetchData();
         }, 500);
@@ -47,13 +39,13 @@ export default function DeleteUser() {
         event.preventDefault();
 
         if (selectedUser === "DEFAULT") {
-            toast.error("Please select a user to delete", toastStyle);
+            toastError("Please select a user to delete");
         } else {
             try {
                 const res = await axios.delete(`/${selectedUser}`);
-                toast.success(res.data, toastStyle);
+                toastSuccess(res.data);
             } catch (error) {
-                toast.error(error.response.data, toastStyle);
+                toastError(error.response.data);
             }
 
             setSelectedUser("DEFAULT");
