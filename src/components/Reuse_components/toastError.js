@@ -9,4 +9,13 @@ const toastError = (message) => {
         },
     });
 };
-export default toastError;
+const toastSuccess = (message) => {
+    toast.success(message, {
+        style: {
+            borderRadius: "15px",
+            background: "#333",
+            color: "#fff",
+        },
+    });
+};
+export  {toastError,toastSuccess};
