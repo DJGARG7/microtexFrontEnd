@@ -14,13 +14,13 @@ export default function AddUser({ userDetails }) {
     const fetchData = async () => {
         try {
             const res = await axios.get("../permissions/", {
-                signal: controller.signal,
+                // signal: controller.signal,
             });
 
             setPermissionsData(res.data);
             setIsLoading(false);
         } catch (error) {
-            if (error.name === "AbortError") return;
+            // if (error.name === "AbortError") return;
             toastError("Error loading user data");
         }
     };

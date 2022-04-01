@@ -14,13 +14,13 @@ export default function DeleteUser() {
     const fetchData = async () => {
         try {
             const res = await axios.get("/", {
-                signal: controller.signal,
+                // signal: controller.signal,
             });
 
             setUsers(res.data);
             setIsLoading(false);
         } catch (error) {
-            if (error.name === "AbortError") return;
+            // if (error.name === "AbortError") return;
             toastError("Error loading user data");
         }
     };

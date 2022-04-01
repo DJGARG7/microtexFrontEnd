@@ -7,6 +7,7 @@ import UserManagementIndex from "../UserManagement/UserManagementIndex";
 import AddUser from "../UserManagement/AddUser";
 import ManagePermissions from "../UserManagement/ManagePermissions";
 import DeleteUser from "../UserManagement/DeleteUser";
+import ChangeAdminPassword from "../UserManagement/ChangeAdminPassword";
 const AdminContent = ({ userDetails }) => {
     return (
         <>
@@ -22,6 +23,12 @@ const AdminContent = ({ userDetails }) => {
             <Route path="/dashboard/user-management" exact>
                 <UserManagementIndex />
             </Route>
+            {/* <Route
+                path="/dashboard/user-management/change-admin-password"
+                exact
+            >
+                <ChangeAdminPassword userDetails={userDetails} />
+            </Route> */}
             <Route path="/dashboard/user-management/add-user" exact>
                 <AddUser userDetails={userDetails} />
             </Route>

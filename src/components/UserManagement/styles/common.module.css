@@ -69,6 +69,7 @@
     align-items: baseline;
 
     width: 100%;
+    overflow: auto;
 }
 
 .form--permission {
@@ -82,6 +83,18 @@
 
     margin-top: 5px;
     padding: 2.5px 0 2.5px 0;
+}
+
+.form--password-warning {
+    border: 2.5px solid black;
+    border-radius: 5px;
+
+    color: white;
+    background-color: #ca2b53;
+
+    font-size: 0.95rem;
+    padding: 10px;
+    margin-top: 10px;
 }
 
 .form--btn {

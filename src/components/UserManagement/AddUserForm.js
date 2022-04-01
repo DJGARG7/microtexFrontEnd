@@ -104,6 +104,12 @@ export default function AddUserForm({ corporateID, permissionsData }) {
                 className={commonStyles["form--inp-p"]}
                 required
             />
+
+            <strong className={commonStyles["form--password-warning"]}>
+                Password must be atleast 8 characters long and contain at least
+                one letter, one number and one special character.
+            </strong>
+
             <h3 className={commonStyles["form--subtitle"]}>Permissions</h3>
             <div className={commonStyles["form--permissions"]}>
                 {permissionsData.map((permission) => {

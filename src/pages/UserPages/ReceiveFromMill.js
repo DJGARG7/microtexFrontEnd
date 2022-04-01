@@ -52,7 +52,7 @@ export default function ReceiveFromMill() {
     useEffect(() => {
         fetchMillCloth();
         fetchAccounts();
-    });
+    }, []);
 
     const submitHandler = () => {
         console.log("Hello");
