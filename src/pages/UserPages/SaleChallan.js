@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import Axios from "axios";
-import toastError from "../../components/Reuse_components/toastError";
+import {
+    toastError,
+    toastSuccess,
+} from "../../components/Reuse_components/toastError";
 import StickyTable from "../../components/Reuse_components/Table/StickyTable";
 const current = new Date();
 const SaleChallan = () => {
@@ -91,10 +94,22 @@ const SaleChallan = () => {
         }
     };
     const deleteItemHandler = () => {};
-    const submitHandler = (e) => {
+    //insert into db
+    const submitHandler = async (e) => {
         e.preventDefault();
-        //data to send to db is challan,custName,SCdate,itemlist
-        //clear the states after that
+        const data = [challan, custName, SCdate, itemList];
+        try {
+            const res = await Axios.post("http://localhost:3005/sales/", data);
+            if (res.data != 1) throw res.data;
+            console.log("data added to db");
+            toastSuccess("Challan Added");
+            setChallan("");
+            setCustName("");
+            setItemList([]);
+        } catch (error) {
+            console.log(error);
+            toastError("Addition failed!");
+        }
     };
     return (
         <div>
@@ -120,9 +135,7 @@ const SaleChallan = () => {
                     // disabled={!isEntering}
                     style={{ marginLeft: "10%" }}
                 >
-                    <option value="" >
-                        Customer Name
-                    </option>
+                    <option value="">Customer Name</option>
                     {sdlist.map((sd) => {
                         return (
                             <option value={sd.uid} key={sd.uid}>
