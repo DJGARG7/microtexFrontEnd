@@ -4,6 +4,8 @@ export default axios.create({
     baseURL: "http://localhost:3002/users",
     withCredentials: true,
     headers: {
-        userID: JSON.parse(localStorage.getItem("userDetails")).userID,
+        userID: localStorage.getItem("userDetails")
+            ? JSON.parse(localStorage.getItem("userDetails")).userID
+            : "",
     },
 });

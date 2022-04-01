@@ -16,7 +16,8 @@ const toastStyle = {
 const controller = new AbortController();
 
 export default function UserManagementIndex() {
-    const [isLoading, setIsLoading] = useState(true);
+    const [isUsersLoading, setIsUsersLoading] = useState(true);
+    const [isPermissionsLoading, setIsPermissionsLoading] = useState(true);
     const [users, setUsers] = useState([]);
     const [selectedUser, setSelectedUser] = useState("DEFAULT");
     const [permissionsData, setPermissionsData] = useState();
@@ -34,6 +35,7 @@ export default function UserManagementIndex() {
             });
 
             setUsers(temp);
+            setIsUsersLoading(false);
         } catch (error) {
             // if (error.name === "AbortError") return;
             toast.error("Error loading user data", toastStyle);
@@ -52,6 +54,7 @@ export default function UserManagementIndex() {
             });
 
             setPermissionsData(temp);
+            setIsPermissionsLoading(false);
         } catch (error) {
             // if (error.name === "AbortError") return;
             toast.error("Error loading permission data", toastStyle);
@@ -62,7 +65,6 @@ export default function UserManagementIndex() {
         setTimeout(() => {
             fetchUsers();
             fetchPermissions();
-            setIsLoading(false);
         }, 500);
 
         return () => {
@@ -70,7 +72,7 @@ export default function UserManagementIndex() {
         };
     }, []);
 
-    if (isLoading) {
+    if (isUsersLoading || isPermissionsLoading) {
         return (
             <div
                 style={{

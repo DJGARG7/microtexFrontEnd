@@ -17,9 +17,7 @@ const UserContent = ({ userDetails }) => {
             <Route path="/dashboard/transaction/" exact>
                 <h1>Transaction</h1>
             </Route>
-            <Route path="/dashboard/transaction/mill" exact>
-                <h1>Mill</h1>
-            </Route>
+            <Route path="/dashboard/transaction/mill" exact />
             <Route path="/dashboard/transaction/mill/send" exact>
                 <SendToMill />
             </Route>
