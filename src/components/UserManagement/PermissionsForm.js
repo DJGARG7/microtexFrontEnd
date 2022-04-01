@@ -14,8 +14,6 @@ const toastStyle = {
 const controller = new AbortController();
 
 export default function PermissionsForm({ selectedUser, permissionsData }) {
-    console.log(selectedUser);
-
     const [userPermissions, setUserPermissions] = useState();
 
     const fetchUserPermissions = async () => {
@@ -102,17 +100,17 @@ export default function PermissionsForm({ selectedUser, permissionsData }) {
             {permissionsData.map((permission) => {
                 return (
                     <div
-                        key={Object.keys(permission)[0]}
+                        key={permission.p_id}
                         className={commonStyles["form--permission"]}
                     >
-                        <label htmlFor={Object.keys(permission)[0]}>
-                            {Object.values(permission)[0]}
+                        <label htmlFor={permission.p_id}>
+                            {permission.p_name}
                         </label>
                         <input
                             type="checkbox"
                             name="permissions"
-                            id={Object.keys(permission)[0]}
-                            value={Object.keys(permission)[0]}
+                            id={permission.p_id}
+                            value={permission.p_id}
                             onChange={selectPermissionHandler}
                         />
                     </div>

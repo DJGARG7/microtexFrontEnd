@@ -28,13 +28,7 @@ export default function UserManagementIndex() {
                 // signal: controller.signal,
             });
 
-            let temp = [];
-
-            res.data.map((user) => {
-                temp.push({ [user.uuid]: user.user_id });
-            });
-
-            setUsers(temp);
+            setUsers(res.data);
             setIsUsersLoading(false);
         } catch (error) {
             // if (error.name === "AbortError") return;
@@ -47,13 +41,8 @@ export default function UserManagementIndex() {
             const res = await axios.get("../permissions/", {
                 // signal: controller.signal,
             });
-            let temp = [];
 
-            res.data.map((permission) => {
-                temp.push({ [permission.p_id]: permission.p_name });
-            });
-
-            setPermissionsData(temp);
+            setPermissionsData(res.data);
             setIsPermissionsLoading(false);
         } catch (error) {
             // if (error.name === "AbortError") return;
@@ -101,11 +90,8 @@ export default function UserManagementIndex() {
                     </option>
                     {users.map((user) => {
                         return (
-                            <option
-                                value={Object.keys(user)[0]}
-                                key={Object.keys(user)[0]}
-                            >
-                                {Object.values(user)[0]}
+                            <option value={user.uuid} key={user.uuid}>
+                                {user.user_id}
                             </option>
                         );
                     })}

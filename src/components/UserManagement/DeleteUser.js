@@ -25,13 +25,7 @@ export default function DeleteUser() {
                 signal: controller.signal,
             });
 
-            let temp = [];
-
-            res.data.map((user) => {
-                temp.push({ [user.uuid]: user.user_id });
-            });
-
-            setUsers(temp);
+            setUsers(res.data);
             setIsLoading(false);
         } catch (error) {
             if (error.name === "AbortError") return;
@@ -96,11 +90,8 @@ export default function DeleteUser() {
                     </option>
                     {users.map((user) => {
                         return (
-                            <option
-                                value={Object.keys(user)[0]}
-                                key={Object.keys(user)[0]}
-                            >
-                                {Object.values(user)[0]}
+                            <option value={user.uuid} key={user.uuid}>
+                                {user.user_id}
                             </option>
                         );
                     })}

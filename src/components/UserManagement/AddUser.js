@@ -24,13 +24,8 @@ export default function AddUser({ userDetails }) {
             const res = await axios.get("../permissions/", {
                 signal: controller.signal,
             });
-            let temp = [];
 
-            res.data.map((permission) => {
-                temp.push({ [permission.p_id]: permission.p_name });
-            });
-
-            setPermissionsData(temp);
+            setPermissionsData(res.data);
             setIsLoading(false);
         } catch (error) {
             if (error.name === "AbortError") return;
