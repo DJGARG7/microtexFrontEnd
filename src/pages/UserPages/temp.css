@@ -1,0 +1,11 @@
+.sales_main {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    overflow: auto;
+}
+
+.sales_inside {
+    width: 40%;
+    overflow: auto;
+}
