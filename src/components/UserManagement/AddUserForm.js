@@ -1,7 +1,16 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { toastError, toastSuccess } from "../Reuse_components/toast";
 import axios from "./api/axios";
 import commonStyles from "./styles/common.module.css";
+
+const toastStyle = {
+    style: {
+        borderRadius: "15px",
+        background: "#333",
+        color: "#fff",
+    },
+};
 
 export default function AddUserForm({ corporateID, permissionsData }) {
     const [userID, setUserID] = useState("");
@@ -35,6 +44,9 @@ export default function AddUserForm({ corporateID, permissionsData }) {
             document.getElementById("registerPassword").value = "";
             document.getElementById("confirmPassword").value = "";
         } else {
+            // Send toast to indicate request is being processed.
+            const toastID = toast.loading("Registering...", toastStyle);
+
             try {
                 // Send request to backend.
                 const res = await axios.post("/", {
@@ -48,7 +60,9 @@ export default function AddUserForm({ corporateID, permissionsData }) {
                 });
 
                 // Toast on success.
-                toastSuccess(res.data);
+                setTimeout(() => {
+                    toast.success(res.data, { id: toastID });
+                }, 500);
 
                 // Clearing fields.
                 setUserID("");
@@ -64,7 +78,9 @@ export default function AddUserForm({ corporateID, permissionsData }) {
                 // Clear the selected permissions state.
                 setSelectedPermissions(new Set());
             } catch (error) {
-                toastError(error.response.data);
+                setTimeout(() => {
+                    toast.error(error.response.data, { id: toastID });
+                }, 500);
             }
         }
     };
@@ -106,8 +122,7 @@ export default function AddUserForm({ corporateID, permissionsData }) {
             />
 
             <strong className={commonStyles["form--password-warning"]}>
-                Password must be atleast 8 characters long and contain at least
-                one letter, one number and one special character.
+                ✱ Password must be atleast 8 characters long.
             </strong>
 
             <h3 className={commonStyles["form--subtitle"]}>Permissions</h3>
