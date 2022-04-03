@@ -12,17 +12,17 @@ const UserContent = ({ userDetails }) => {
         <>
             <Route path="/dashboard/transaction/purchase/grey" exact>
                 <h1>Grey Purchase</h1>
-                <Greypurchase />
+                <Greypurchase userDetails={userDetails} />
             </Route>
             <Route path="/dashboard/transaction/" exact>
                 <h1>Transaction</h1>
             </Route>
             <Route path="/dashboard/transaction/mill" exact />
             <Route path="/dashboard/transaction/mill/send" exact>
-                <SendToMill />
+                <SendToMill userDetails={userDetails} />
             </Route>
             <Route path="/dashboard/transaction/mill/receive" exact>
-                <ReceiveFromMill />
+                <ReceiveFromMill userDetails={userDetails} />
             </Route>
             <Route path="/dashboard/transaction/job" exact>
                 <SendJobForWork />

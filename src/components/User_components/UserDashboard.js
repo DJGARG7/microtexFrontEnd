@@ -18,7 +18,7 @@ function UserDashboard({ userDetails, logoutHandler }) {
                     />
                 </div>
                 <div className="content">
-                    <UserContent />
+                    <UserContent userDetails={userDetails} />
                 </div>
             </div>
         </Fragment>

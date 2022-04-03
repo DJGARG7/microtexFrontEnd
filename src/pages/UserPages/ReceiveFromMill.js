@@ -18,7 +18,8 @@ const toastStyle = {
     },
 };
 
-export default function ReceiveFromMill() {
+export default function ReceiveFromMill({ userDetails }) {
+    const [isAllowed, setIsAllowed] = useState(false);
     const [isMillLoading, setIsMillLoading] = useState(true);
     const [isAccountsLoading, setIsAccountsLoading] = useState(true);
     const [accounts, setAccounts] = useState();
@@ -26,6 +27,18 @@ export default function ReceiveFromMill() {
     // Form binding.
     const [selectedMill, setSelectedMill] = useState("DEFAULT");
     const [selectedAccount, setSelectedAccount] = useState("DEFAULT");
+
+    const checkPermission = async () => {
+        try {
+            const res = await axios.get(
+                `http://localhost:3002/permissions/${userDetails.uuid}`
+            );
+
+            setIsAllowed(res.data.some((permission) => permission.p_id === 4));
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const fetchMillCloth = async () => {
         // Get grey cloth.
@@ -50,6 +63,7 @@ export default function ReceiveFromMill() {
     };
 
     useEffect(() => {
+        checkPermission();
         fetchMillCloth();
         fetchAccounts();
     }, []);
@@ -58,14 +72,26 @@ export default function ReceiveFromMill() {
         console.log("Hello");
     };
 
-    if (isMillLoading || isAccountsLoading) {
+    if (isAllowed) {
+        if (isMillLoading || isAccountsLoading) {
+            return (
+                <div
+                    style={{
+                        marginTop: "10vh",
+                    }}
+                >
+                    <ReactLoading type="bubbles" color="#212121" />
+                </div>
+            );
+        }
+    } else {
         return (
             <div
                 style={{
                     marginTop: "10vh",
                 }}
             >
-                <ReactLoading type="bubbles" color="#212121" />
+                <strong>You are not allowed access to this area.</strong>
             </div>
         );
     }

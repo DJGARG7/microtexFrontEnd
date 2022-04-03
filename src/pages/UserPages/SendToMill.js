@@ -18,7 +18,8 @@ const toastStyle = {
     },
 };
 
-export default function SendToMill() {
+export default function SendToMill({ userDetails }) {
+    const [isAllowed, setIsAllowed] = useState(false);
     const [isGreyLoading, setIsGreyLoading] = useState(true);
     const [isAccountsLoading, setIsAccountsLoading] = useState(true);
     const [accounts, setAccounts] = useState();
@@ -26,6 +27,18 @@ export default function SendToMill() {
     // Form binding.
     const [selectedGrey, setSelectedGrey] = useState("DEFAULT");
     const [selectedAccount, setSelectedAccount] = useState("DEFAULT");
+
+    const checkPermission = async () => {
+        try {
+            const res = await axios.get(
+                `http://localhost:3002/permissions/${userDetails.uuid}`
+            );
+
+            setIsAllowed(res.data.some((permission) => permission.p_id === 3));
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const fetchGreyCloth = async () => {
         // Get grey cloth.
@@ -50,6 +63,7 @@ export default function SendToMill() {
     };
 
     useEffect(() => {
+        checkPermission();
         fetchGreyCloth();
         fetchAccounts();
     }, []);
@@ -58,14 +72,26 @@ export default function SendToMill() {
         console.log("Hello");
     };
 
-    if (isGreyLoading || isAccountsLoading) {
+    if (isAllowed) {
+        if (isGreyLoading || isAccountsLoading) {
+            return (
+                <div
+                    style={{
+                        marginTop: "10vh",
+                    }}
+                >
+                    <ReactLoading type="bubbles" color="#212121" />
+                </div>
+            );
+        }
+    } else {
         return (
             <div
                 style={{
                     marginTop: "10vh",
                 }}
             >
-                <ReactLoading type="bubbles" color="#212121" />
+                <strong>You are not allowed access to this area.</strong>
             </div>
         );
     }
