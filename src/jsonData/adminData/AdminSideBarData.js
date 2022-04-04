@@ -11,6 +11,10 @@ const AdminSideBarData = [
         title: "Design Master",
         link: "/dashboard/designMaster",
     },
+    {
+        title:"Access Log",
+        link : "/dashboard/accesslogs",
+    },
 ];
 
 export default AdminSideBarData;
