@@ -1,11 +1,22 @@
-.log--div{
+.log--main {
+    width: 100%;
+    padding: 25px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.log--div {
     border-radius: 12px;
     border: 2px solid black;
     max-height: 400px;
     overflow: auto;
     overflow-block: auto;
+    width: 515.5px;
+    align-self: center;
+    margin-top: 25px;
 }
-.log--main h1{
+.log--main h1 {
     display: flex;
     padding: 10px;
     justify-content: center;

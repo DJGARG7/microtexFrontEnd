@@ -6,7 +6,7 @@ import {
 } from "../../components/Reuse_components/toast";
 import StickyTable from "../../components/Reuse_components/Table/StickyTable";
 const current = new Date();
-const SaleChallan = () => {
+const SaleChallan = ({ userDetails }) => {
     const currDate = [
         current.getFullYear(),
         ("0" + (current.getMonth() + 1)).slice(-2),
@@ -51,6 +51,22 @@ const SaleChallan = () => {
     const [DNamelist, setDNamelist] = useState([]);
     const [clothlist, setClothlist] = useState([]);
     const type = "Creditors For Job";
+
+    const [isAllowed, setIsAllowed] = useState(false);
+
+    const checkPermission = async () => {
+        try {
+            const res = await Axios.get(
+                `http://localhost:3002/permissions/${userDetails.uuid}/5`
+            );
+
+            setIsAllowed(res.data);
+            console.log(res.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     useEffect(async () => {
         try {
             const res = await Axios.get(
@@ -111,6 +127,19 @@ const SaleChallan = () => {
             toastError("Addition failed!");
         }
     };
+
+    if (!isAllowed) {
+        return (
+            <div
+                style={{
+                    marginTop: "10vh",
+                }}
+            >
+                <strong>You are not allowed access to this area.</strong>
+            </div>
+        );
+    }
+
     return (
         <div>
             Sale Challan

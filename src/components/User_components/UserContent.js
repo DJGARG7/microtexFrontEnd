@@ -16,8 +16,7 @@ const UserContent = ({ userDetails }) => {
                 <Greypurchase userDetails={userDetails} />
             </Route>
             <Route path="/dashboard/transaction/purchase/general" exact>
-                <h1>General Purchases</h1>
-                <GeneralPurchases />
+                <GeneralPurchases userDetails={userDetails} />
             </Route>
             <Route path="/dashboard/transaction/" exact>
                 <h1>Transaction</h1>
@@ -30,22 +29,22 @@ const UserContent = ({ userDetails }) => {
                 <ReceiveFromMill userDetails={userDetails} />
             </Route>
             <Route path="/dashboard/transaction/job" exact>
-                <SendJobForWork />
+                <SendJobForWork userDetails={userDetails} />
             </Route>
             <Route path="/dashboard/transaction/revenue" exact>
-                <Revenue />
+                <Revenue userDetails={userDetails} />
             </Route>
             <Route path="/dashboard/saleChallan" exact>
-                <SaleChallan />
+                <SaleChallan userDetails={userDetails} />
             </Route>
             <Route path="/dashboard/saleBilling" exact>
-                <SaleBilling />
+                <SaleBilling userDetails={userDetails} />
             </Route>
             <Route path="/dashboard/displayBills" exact>
-                <SaleDisplay />
+                <SaleDisplay userDetails={userDetails} />
             </Route>
             <Route path="/dashboard" exact>
-                <h1>Welcome to Microtex</h1>
+                <h2>Welcome to Microtex</h2>
             </Route>
         </>
     );

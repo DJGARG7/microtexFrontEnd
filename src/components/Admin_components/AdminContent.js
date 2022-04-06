@@ -23,8 +23,6 @@ const AdminContent = ({ userDetails }) => {
             </Route>
             <Route path="/dashboard/user-management" exact>
                 <UserManagementIndex />
-            </Route><Route path="/dashboard/user-management" exact>
-                <UserManagementIndex />
             </Route>
             <Route path="/dashboard/accesslogs" exact>
                 <AccessLog />

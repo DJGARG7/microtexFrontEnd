@@ -21,7 +21,7 @@ const usrinstance = Axios.create({
     baseURL: "http://localhost:3005/userservice/",
 });
 
-function Greypurchase() {
+function Greypurchase({ userDetails }) {
     const TableColData = [
         {
             Header: "Action",
@@ -163,6 +163,20 @@ function Greypurchase() {
             Filter: "",
         },
     ];
+
+    const [isAllowed, setIsAllowed] = useState(false);
+
+    const checkPermission = async () => {
+        try {
+            const res = await Axios.get(
+                `http://localhost:3002/permissions/${userDetails.uuid}/1`
+            );
+
+            setIsAllowed(res.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     // col data for purchased items
     const purchasedListCol = [
@@ -437,6 +451,7 @@ function Greypurchase() {
             setlistofitems(items.data);
             setacctdata(result.data);
         })();
+        checkPermission();
     }, []);
 
     // if edit is selected when the edit button is clicked on the table
@@ -528,6 +543,18 @@ function Greypurchase() {
         const res = await usrinstance.get("fetchall");
         settabledata(res.data);
     };
+
+    if (!isAllowed) {
+        return (
+            <div
+                style={{
+                    marginTop: "10vh",
+                }}
+            >
+                <strong>You are not allowed access to this area.</strong>
+            </div>
+        );
+    }
 
     return (
         <div>
@@ -741,9 +768,13 @@ function Greypurchase() {
                                 name="DiscountAmt"
                                 id="DiscountAmt"
                                 readOnly
-                                value={Math.round(
-                                    (((state.Discount / 100) * state.Amount
-                                )+Number.EPSILON) * 100)/100}
+                                value={
+                                    Math.round(
+                                        ((state.Discount / 100) * state.Amount +
+                                            Number.EPSILON) *
+                                            100
+                                    ) / 100
+                                }
                                 onSelect={onchangeHandler}
                             />
                         </label>
@@ -781,12 +812,15 @@ function Greypurchase() {
                                 name="CGSTamt"
                                 id="CGSTamt"
                                 readOnly
-                                value={Math.round(
-                                    ((((state.Amount - state.DiscountAmt) *
-                                        state.CGST) /
-                                        100) 
-                                        + Number.EPSILON)*100
-                                )/100}
+                                value={
+                                    Math.round(
+                                        (((state.Amount - state.DiscountAmt) *
+                                            state.CGST) /
+                                            100 +
+                                            Number.EPSILON) *
+                                            100
+                                    ) / 100
+                                }
                                 onSelect={onchangeHandler}
                             />
                         </label>

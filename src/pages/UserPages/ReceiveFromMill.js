@@ -34,7 +34,7 @@ export default function ReceiveFromMill({ userDetails }) {
                 `http://localhost:3002/permissions/${userDetails.uuid}/4`
             );
 
-            setIsAllowed(res.date);
+            setIsAllowed(res.data);
         } catch (error) {
             console.log(error);
         }

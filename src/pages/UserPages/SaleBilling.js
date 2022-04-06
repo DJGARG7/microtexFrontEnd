@@ -6,10 +6,28 @@ import {
     toastSuccess,
 } from "../../components/Reuse_components/toast";
 import "./temp.css";
-function SaleBilling() {
+
+function SaleBilling({ userDetails }) {
     const [salesList, setSalesList] = useState([]);
     const [salesDetailList, setSalesDetailList] = useState([]);
+
+    const [isAllowed, setIsAllowed] = useState(false);
+
+    const checkPermission = async () => {
+        try {
+            const res = await Axios.get(
+                `http://localhost:3002/permissions/${userDetails.uuid}/7`
+            );
+
+            setIsAllowed(res.data);
+            console.log(res.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     useEffect(async () => {
+        checkPermission();
         try {
             const res = await Axios.get(
                 `http://localhost:3005/sales/sales_order`
@@ -68,6 +86,19 @@ function SaleBilling() {
         console.log(res.data);
         setSalesDetailList(res.data);
     };
+
+    if (!isAllowed) {
+        return (
+            <div
+                style={{
+                    marginTop: "10vh",
+                }}
+            >
+                <strong>You are not allowed access to this area.</strong>
+            </div>
+        );
+    }
+
     return (
         <div className="sales_main">
             <div className="sales_inside">
