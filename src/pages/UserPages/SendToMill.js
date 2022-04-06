@@ -31,10 +31,10 @@ export default function SendToMill({ userDetails }) {
     const checkPermission = async () => {
         try {
             const res = await axios.get(
-                `http://localhost:3002/permissions/${userDetails.uuid}`
+                `http://localhost:3002/permissions/${userDetails.uuid}/3`
             );
 
-            setIsAllowed(res.data.some((permission) => permission.p_id === 3));
+            setIsAllowed(res.data);
         } catch (error) {
             console.log(error);
         }

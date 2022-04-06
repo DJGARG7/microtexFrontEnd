@@ -31,10 +31,10 @@ export default function ReceiveFromMill({ userDetails }) {
     const checkPermission = async () => {
         try {
             const res = await axios.get(
-                `http://localhost:3002/permissions/${userDetails.uuid}`
+                `http://localhost:3002/permissions/${userDetails.uuid}/4`
             );
 
-            setIsAllowed(res.data.some((permission) => permission.p_id === 4));
+            setIsAllowed(res.date);
         } catch (error) {
             console.log(error);
         }
