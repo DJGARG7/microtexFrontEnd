@@ -356,7 +356,7 @@ function Greypurchase() {
         if (!Number.isNaN(parseFloat(value))) {
             value = parseFloat(value);
         }
-        console.log(typeof value);
+
         setState({
             ...state,
             [event.target.name]: value,
@@ -592,20 +592,6 @@ function Greypurchase() {
                                     })}
                             </select>
                         </label>
-                        {/* <label>Rev. Charge</label>
-          <input
-            type="text"
-            name="RevCharge"
-            onChange={onchangeHandler}
-            value={state.RevCharge}
-          /> */}
-                        {/* <label>RCM Inv.No</label>
-          <input
-            type="text"
-            value={state.RcmInvNo}
-            name="RcmInvNo"
-            onChange={onchangeHandler}
-          /> */}
                         <label>
                             Challan No.
                             <input
@@ -626,24 +612,6 @@ function Greypurchase() {
                                 onChange={onchangeHandler}
                             />
                         </label>
-                        {/* <label>
-            Haste:
-            <input
-              type="text"
-              name="Haste"
-              value={state.Haste}
-              onChange={onchangeHandler}
-            />
-          </label>
-          <label>
-            Order Form:
-            <input
-              type="text"
-              name="OrderForm"
-              value={state.OrderForm}
-              onChange={onchangeHandler}
-            />
-          </label> */}
                         <label>
                             Entery No.:
                             <input
@@ -774,8 +742,8 @@ function Greypurchase() {
                                 id="DiscountAmt"
                                 readOnly
                                 value={Math.round(
-                                    (state.Discount / 100) * state.Amount
-                                )}
+                                    (((state.Discount / 100) * state.Amount
+                                )+Number.EPSILON) * 100)/100}
                                 onSelect={onchangeHandler}
                             />
                         </label>
@@ -814,10 +782,11 @@ function Greypurchase() {
                                 id="CGSTamt"
                                 readOnly
                                 value={Math.round(
-                                    ((state.Amount - state.DiscountAmt) *
+                                    ((((state.Amount - state.DiscountAmt) *
                                         state.CGST) /
-                                        100
-                                )}
+                                        100) 
+                                        + Number.EPSILON)*100
+                                )/100}
                                 onSelect={onchangeHandler}
                             />
                         </label>

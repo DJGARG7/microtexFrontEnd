@@ -7,12 +7,17 @@ import Revenue from "../../pages/UserPages/Revenue";
 import SaleChallan from "../../pages/UserPages/SaleChallan";
 import SaleBilling from "../../pages/UserPages/SaleBilling";
 import SaleDisplay from "../../pages/UserPages/SaleDisplay";
+import GeneralPurchases from "../../pages/UserPages/GeneralPurchases";
 const UserContent = ({ userDetails }) => {
     return (
         <>
             <Route path="/dashboard/transaction/purchase/grey" exact>
                 <h1>Grey Purchase</h1>
                 <Greypurchase userDetails={userDetails} />
+            </Route>
+            <Route path="/dashboard/transaction/purchase/general" exact>
+                <h1>General Purchases</h1>
+                <GeneralPurchases />
             </Route>
             <Route path="/dashboard/transaction/" exact>
                 <h1>Transaction</h1>
