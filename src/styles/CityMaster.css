@@ -97,43 +97,25 @@
 
     margin-right: 5px;
 }
-.btn {
-    width: 60px;
-    height: 30px;
 
-    font-size: 0.9rem;
-
-    margin-right: 5px;
-}
 .table table .del-btn {
     background-color: #ca2b53;
     color: white;
 }
 
-.del-btn {
-    background-color: #ca2b53;
-    color: white;
-}
+
 .table table .del-btn:hover {
     filter: brightness(125%);
 }
-.del-btn:hover {
-    filter: brightness(125%);
-}
+
 
 .table table .edit-btn {
     background-color: #219ebc;
     color: white;
 }
-.edit-btn {
-    background-color: #219ebc;
-    color: white;
-}
+
 
 .table table .edit-btn:hover {
-    filter: brightness(110%);
-}
-.edit-btn:hover {
     filter: brightness(110%);
 }
 
