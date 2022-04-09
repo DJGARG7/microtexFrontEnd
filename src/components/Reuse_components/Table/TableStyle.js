@@ -39,7 +39,7 @@ export const Styles = styled.div`
       .footer {
         position: sticky;
         z-index: 1;
-        width: fit-content;
+
       }
 
       .header--sticky {

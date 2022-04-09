@@ -874,6 +874,7 @@ function Greypurchase({ userDetails }) {
                         <StickyTable
                             TableCol={TableColData}
                             TableData={tabledata}
+                            style={{width:"1000px",height:"500px"}}
                         />
                     </Modal>
                     <div className="greypurchase--itemtable">

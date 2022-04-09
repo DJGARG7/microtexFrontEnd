@@ -26,7 +26,7 @@ function DefaultColumnFilter({
     />
   );
 }
-function StickyTable({ TableCol, TableData }) {
+function StickyTable({ TableCol, TableData, style }) {
   // use memo is used to stop running table everysecond and the [] is dependecy added and when it should run
   const columns = useMemo(() => [...TableCol], [TableCol]);
   const data = useMemo(() => [...TableData], [TableData]);
@@ -58,14 +58,14 @@ function StickyTable({ TableCol, TableData }) {
       <div
         {...getTableProps()}
         className="table--sticky sticky"
-        style={{ width: 1000, height: 500 }}
+        style={style}
       >
         <div className="header--sticky">
           {headerGroups.map((headerGroup) => (
-            <div {...headerGroup.getHeaderGroupProps()} className="tr--sticky">
+            <div {...headerGroup.getHeaderGroupProps() }  className="tr--sticky">
               {headerGroup.headers.map((column) => (
                 <div {...column.getHeaderProps({
-                  style: { minWidth: column.minWidth, width: column.width },
+                  style: { minWidth: column.minWidth, width: column.width},
                 })} className="th--sticky">
                   {column.render("Header")}
                   <div>{column.canFilter ? column.render('Filter') : null}</div>
