@@ -8,7 +8,6 @@ import {
   toastSuccess,
 } from "../../components/Reuse_components/toast";
 import StickyTable from "../../components/Reuse_components/Table/StickyTable";
-import { GSTdescription } from "../../jsonData/userData/GSTdescription";
 
 if (localStorage.getItem("userDetails") != null)
   Axios.defaults.headers.common["userID"] = JSON.parse(
@@ -209,7 +208,7 @@ function Greypurchase({ userDetails }) {
 
   const [tabledata, settabledata] = useState([]); // for modal table
   const [purchaseditems, setpurchaseditems] = useState([]); // list of purchased items
-  const [challanNo, setChallanNo] = useState(); // fetches last challanNo from DB in UseEffect
+
 
   const [accntdata, setacctdata] = useState([]); // for setting the account name returend in useEffect
   const [state, setState] = useState({
@@ -243,14 +242,8 @@ function Greypurchase({ userDetails }) {
   // for adding a new item
   const [itemdetails, setItemdetails] = useState({
     itemname: "",
-    openingpcs: "",
     openingmts: "",
-    openingval: "",
-    rateperpcs: "",
     ratepermts: "",
-    hsncode: "",
-    gst: "",
-    descriptiongst: "",
   });
 
   // list of items to choose that will render from backend
@@ -489,12 +482,12 @@ function Greypurchase({ userDetails }) {
                 onChange={onchangeHandler}
                 required
               >
-                <option value="">Item Names</option>
+                <option value="" id="">Item Names</option>
                 {listofitems &&
                   !!listofitems.length &&
-                  listofitems.map((item, index) => {
+                  listofitems.map((item) => {
                     return (
-                      <option value={item.itemname} key={index}>
+                      <option value={item.itemname} key={item.uuid} id={item.uuid}>
                         {item.itemname}
                       </option>
                     );
@@ -644,19 +637,6 @@ function Greypurchase({ userDetails }) {
             />
           </label>
           <label>
-            Opening pcs:
-            <input
-              type="number"
-              value={itemdetails.openingpcs}
-              onChange={(e) =>
-                setItemdetails({
-                  ...itemdetails,
-                  openingpcs: e.target.value,
-                })
-              }
-            />
-          </label>
-          <label>
             Opening Mts:
             <input
               type="number"
@@ -665,32 +645,6 @@ function Greypurchase({ userDetails }) {
                 setItemdetails({
                   ...itemdetails,
                   openingmts: e.target.value,
-                })
-              }
-            />
-          </label>
-          <label>
-            Opening Value:
-            <input
-              type="number"
-              value={itemdetails.openingval}
-              onChange={(e) =>
-                setItemdetails({
-                  ...itemdetails,
-                  openingval: e.target.value,
-                })
-              }
-            />
-          </label>
-          <label>
-            Rate per pcs:
-            <input
-              type="number"
-              value={itemdetails.rateperpcs}
-              onChange={(e) =>
-                setItemdetails({
-                  ...itemdetails,
-                  rateperpcs: e.target.value,
                 })
               }
             />
@@ -708,51 +662,8 @@ function Greypurchase({ userDetails }) {
               }
             />
           </label>
-          <label>
-            HSN code:
-            <input
-              type="number"
-              value={itemdetails.hsncode}
-              onChange={(e) =>
-                setItemdetails({
-                  ...itemdetails,
-                  hsncode: e.target.value,
-                })
-              }
-            />
-          </label>
-          <label>
-            GST (%):
-            <input
-              type="number"
-              value={itemdetails.gst}
-              onChange={(e) =>
-                setItemdetails({
-                  ...itemdetails,
-                  gst: e.target.value,
-                })
-              }
-            />
-          </label>
-          <select
-            value={itemdetails.descriptiongst}
-            onChange={(e) =>
-              setItemdetails({
-                ...itemdetails,
-                descriptiongst: e.target.value,
-              })
-            }
-            required
-          >
-            <option value="">Description for GST</option>
-            {GSTdescription.map((Item, Index) => {
-              return (
-                <option value={Item} key={Index}>
-                  {Item}
-                </option>
-              );
-            })}
-          </select>
+          
+          
           <button>Add item</button>
         </form>
       </Modal>

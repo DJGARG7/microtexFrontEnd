@@ -1,1 +1,0 @@
-export const GSTdescription = ["Cotton Dhoti","Cotton Fabric","Cotton Kurti","Cotton Sari","Cotton Suit"];
