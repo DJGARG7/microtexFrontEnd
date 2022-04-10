@@ -3,7 +3,10 @@ import "react-widgets/styles.css";
 import "../../styles/Greypurchase.css";
 import Modal from "../../components/Reuse_components/Modal";
 import Axios from "axios";
-import toast from "react-hot-toast";
+import {
+    toastError,
+    toastSuccess,
+  } from "../../components/Reuse_components/toast";
 import StickyTable from "../../components/Reuse_components/Table/StickyTable";
 import { GSTdescription } from "../../jsonData/userData/GSTdescription";
 
@@ -58,16 +61,6 @@ function Greypurchase({ userDetails }) {
             accessor: "accntnames",
         },
         {
-            Header: "Rev Charge",
-            accessor: "RevCharge",
-            Filter: "",
-        },
-        {
-            Header: "RcmInvNo",
-            accessor: "RcmInvNo",
-            Filter: "",
-        },
-        {
             Header: "Challan No",
             accessor: "ChallanNo",
             Filter: "",
@@ -77,53 +70,14 @@ function Greypurchase({ userDetails }) {
             accessor: "ChallanDate",
         },
         {
-            Header: "Agent",
-            accessor: "Agent",
-            Filter: "",
-        },
-        {
-            Header: "Haste",
-            accessor: "Haste",
-            Filter: "",
-        },
-        {
-            Header: "OrderForm",
-            accessor: "OrderForm",
-            Filter: "",
-        },
-        {
-            Header: "EntryNo",
-            accessor: "EntryNo",
-            Filter: "",
-        },
-        {
             Header: "ItemName",
             accessor: "ItemName",
             Filter: "",
         },
-        {
-            Header: "Marka",
-            accessor: "Marka",
-            Filter: "",
-        },
-        {
-            Header: "Taka",
-            accessor: "Taka",
-            Filter: "",
-        },
+        
         {
             Header: "Mts",
             accessor: "Mts",
-            Filter: "",
-        },
-        {
-            Header: "Fold",
-            accessor: "Fold",
-            Filter: "",
-        },
-        {
-            Header: "ActMts",
-            accessor: "ActMts",
             Filter: "",
         },
         {
@@ -139,27 +93,6 @@ function Greypurchase({ userDetails }) {
         {
             Header: "Discount",
             accessor: "Discount",
-            Filter: "",
-        },
-
-        {
-            Header: "IGST",
-            accessor: "IGST",
-            Filter: "",
-        },
-        {
-            Header: "CGST",
-            accessor: "CGST",
-            Filter: "",
-        },
-        {
-            Header: "SGST",
-            accessor: "SGST",
-            Filter: "",
-        },
-        {
-            Header: "NetAmount",
-            accessor: "NetAmount",
             Filter: "",
         },
     ];
@@ -199,13 +132,10 @@ function Greypurchase({ userDetails }) {
                         onClick={() => {
                             settotalamount((preamount) => {
                                 return (
-                                    preamount -
-                                    purchaseditems[tableProps.row.index].Amount
+                                    parseInt(preamount -
+                                    purchaseditems[tableProps.row.index].Amount)
                                 );
                             });
-                            console.log(
-                                purchaseditems[tableProps.row.index].Amount
-                            );
                             setpurchaseditems((prestate) => {
                                 prestate.splice(tableProps.row.index, 1);
                                 return [...prestate];
@@ -239,40 +169,8 @@ function Greypurchase({ userDetails }) {
             width: 100,
         },
         {
-            Header: "Marka",
-            accessor: "Marka",
-            Filter: "",
-            maxWidth: 150,
-            minWidth: 100,
-            width: 100,
-        },
-        {
-            Header: "Taka",
-            accessor: "Taka",
-            Filter: "",
-            maxWidth: 150,
-            minWidth: 100,
-            width: 100,
-        },
-        {
             Header: "Mts",
             accessor: "Mts",
-            Filter: "",
-            maxWidth: 150,
-            minWidth: 100,
-            width: 100,
-        },
-        {
-            Header: "Fold",
-            accessor: "Fold",
-            Filter: "",
-            maxWidth: 150,
-            minWidth: 100,
-            width: 100,
-        },
-        {
-            Header: "ActMts",
-            accessor: "ActMts",
             Filter: "",
             maxWidth: 150,
             minWidth: 100,
@@ -307,6 +205,8 @@ function Greypurchase({ userDetails }) {
         );
     }
 
+
+    
     const date = convertDate(new Date());
 
     const [totalamount, settotalamount] = useState(0); // THIS IS THE FINAL AMOUNT OF THE BILL
@@ -319,43 +219,46 @@ function Greypurchase({ userDetails }) {
         BillNo: "",
         BillDate: date,
         accntnames: "",
-        RevCharge: "",
-        RcmInvNo: "",
+    
+
         ChallanNo: "",
         ChallanDate: date,
-        Agent: "",
-        Haste: "",
-        OrderForm: "",
-        EntryNo: "",
+
+
         ItemName: "",
-        Marka: "",
-        Taka: "",
         Mts: "",
-        Fold: "",
-        ActMts: "",
+
         Rate: "",
         Amount: "",
         Discount: "",
-        DiscountAmt: 0,
-        IGST: "",
-        CGST: "",
-        SGST: "",
-        IGSTamt: 0,
-        CGSTamt: 0,
-        SGSTamt: 0,
-        NetAmount: 0,
+        DiscountAmt: "",
+        NetAmount: "",
     });
+
+    // useeffect to upadte the data
+    useEffect(()=>{
+        const dis = Math.round(
+            ((state.Discount / 100) * state.Amount +
+                Number.EPSILON) *
+                100
+        ) / 100
+        setState({
+            ...state,
+            Amount : state.Rate * state.Mts,
+            DiscountAmt : dis,
+        })
+    },[state.Rate,state.Mts,state.Discount])
 
     // for adding a new item
     const [itemdetails, setItemdetails] = useState({
         itemname: "",
-        openingpcs: 0,
-        openingmts: 0,
-        openingval: 0,
-        rateperpcs: 0,
-        ratepermts: 0,
-        hsncode: 0,
-        gst: 0,
+        openingpcs: "",
+        openingmts: "",
+        openingval: "",
+        rateperpcs: "",
+        ratepermts: "",
+        hsncode: "",
+        gst: "",
         descriptiongst: "",
     });
 
@@ -370,7 +273,6 @@ function Greypurchase({ userDetails }) {
         if (!Number.isNaN(parseFloat(value))) {
             value = parseFloat(value);
         }
-
         setState({
             ...state,
             [event.target.name]: value,
@@ -389,55 +291,30 @@ function Greypurchase({ userDetails }) {
 
         const newItem = {
             ItemName: state.ItemName,
-            Marka: state.Marka,
-            Taka: state.Taka,
             Mts: state.Mts,
-            Fold: state.Fold,
-            ActMts: state.ActMts,
             Rate: state.Rate,
-            Amount: `${document.getElementById("NetAmount").value}`,
+            Amount: document.getElementById("NetAmount").value,
             BillNo: state.BillNo,
             Discount: state.Discount,
-            IGST: state.IGST,
-            CGST: state.CGST,
-            SGST: state.SGST,
         };
         setpurchaseditems((preitems) => {
             return [...preitems, newItem];
         });
 
         if (1) {
-            console.log("toast");
-            toast.success("Item added to the list!", {
-                style: {
-                    borderRadius: "15px",
-                    background: "#333",
-                    color: "#fff",
-                },
-            });
-
+            toastSuccess("Item Added to the list!")
             settotalamount((presamount) => {
-                return presamount + parseInt(newItem.Amount);
+                return parseInt(presamount + newItem.Amount);
             });
             setState({
                 ...state,
                 ItemName: "",
-                Taka: "",
                 Mts: "",
-                Fold: "",
-                ActMts: "",
                 Rate: "",
                 Amount: "",
                 Discount: "",
-                IGST: "",
-                CGST: "",
-                SGST: "",
-                Marka: "",
                 NetAmount: "",
-                IGSTamt: 0,
-                CGSTamt: 0,
-                SGSTamt: 0,
-                DiscountAmt: 0,
+                DiscountAmt: "",
             });
         }
     };
@@ -457,16 +334,6 @@ function Greypurchase({ userDetails }) {
     // if edit is selected when the edit button is clicked on the table
     const onEditHandler = (tableprops) => {
         setmodalstate(false);
-        const data = tableprops.row.original;
-        const disamt = Math.round((data.Discount / 100) * data.Amount);
-        // setting the data back to the form
-        setState({
-            ...data,
-            DiscountAmt: Math.round((data.Discount / 100) * data.Amount),
-            IGSTamt: ((data.Amount - disamt) * data.IGST) / 100,
-            CGSTamt: ((data.Amount - disamt) * data.CGST) / 100,
-            SGSTamt: ((data.Amount - disamt) * data.SGST) / 100,
-        });
     };
 
     //to handle greyitem add handler
@@ -483,31 +350,17 @@ function Greypurchase({ userDetails }) {
         const res = await usrinstance.post("addbilldetails", datasend); // adds data about the bill
         console.log(res);
         if (res.data.status === "1") {
-            toast.success("Bill added successfully!", {
-                style: {
-                    borderRadius: "15px",
-                    background: "#333",
-                    color: "#fff",
-                },
-            });
+            toastSuccess("Bill added successfully!")
             setState({
                 ...state,
                 BillNo: "",
                 accntnames: "",
                 ChallanNo: "",
-                Agent: "",
-                EntryNo: "",
             });
             setpurchaseditems([]);
             settotalamount(0);
         } else {
-            toast.error(`Error ${res.data.sqlMessage}`, {
-                style: {
-                    borderRadius: "15px",
-                    background: "#333",
-                    color: "#fff",
-                },
-            });
+            toastError(`Error ${res.data.sqlMessage}`)
         }
     };
 
@@ -516,21 +369,9 @@ function Greypurchase({ userDetails }) {
         e.preventDefault();
         const res = await usrinstance.post("additems", itemdetails);
         if (res.data.status === "1") {
-            toast.success("Item added successfully!", {
-                style: {
-                    borderRadius: "15px",
-                    background: "#333",
-                    color: "#fff",
-                },
-            });
+            toastSuccess("Item added successfully!") ;
         } else {
-            toast.error(`Error ${res.data.sqlMessage}`, {
-                style: {
-                    borderRadius: "15px",
-                    background: "#333",
-                    color: "#fff",
-                },
-            });
+            toastError(`Error ${res.data.sqlMessage}`)
         }
         greyitemcloseHandler();
         const items = await usrinstance.get("fetchitems");
@@ -541,6 +382,13 @@ function Greypurchase({ userDetails }) {
     const onViewBillhandler = async () => {
         setmodalstate(true);
         const res = await usrinstance.get("fetchall");
+        console.log(res);
+        res.data.forEach((item, index) => {
+            const date = new Date(item.BillDate);
+            const date2 = new Date(item.ChallanDate);
+            item.BillDate = date.toLocaleDateString();
+            item.ChallanDate = date2.toLocaleDateString();
+        });
         settabledata(res.data);
     };
 
@@ -625,31 +473,10 @@ function Greypurchase({ userDetails }) {
                                 type="text"
                                 value={state.ChallanNo}
                                 name="ChallanNo"
+                                required
                                 onChange={onchangeHandler}
                             />
                         </label>
-                    </div>
-                    <div className="thirdline--greypurchase">
-                        <label>
-                            Agent:
-                            <input
-                                type="text"
-                                name="Agent"
-                                value={state.Agent}
-                                onChange={onchangeHandler}
-                            />
-                        </label>
-                        <label>
-                            Entery No.:
-                            <input
-                                type="text"
-                                name="EntryNo"
-                                value={state.EntryNo}
-                                onChange={onchangeHandler}
-                            />
-                        </label>
-                    </div>
-                    <div className="fourthline--greypurchase">
                         <label>
                             Item Name
                             <select
@@ -681,53 +508,17 @@ function Greypurchase({ userDetails }) {
                                 Add Item
                             </button>
                         </label>
-                        <label>
-                            Marka
-                            <input
-                                type="number"
-                                name="Marka"
-                                value={state.Marka}
-                                onChange={onchangeHandler}
-                            />
-                        </label>
-                        <label>
-                            Taka
-                            <input
-                                type="number"
-                                name="Taka"
-                                value={state.Taka}
-                                onChange={onchangeHandler}
-                            />
-                            <button type="button">Add peices</button>
-                        </label>
                     </div>
                     <div className="fifthline--greypurchase">
                         <label>
-                            Mts.
+                            Mts
                             <input
                                 type="number"
                                 name="Mts"
-                                value={state.Mts}
-                                onChange={onchangeHandler}
-                            />
-                        </label>
-                        <label>
-                            Fold
-                            <input
-                                type="number"
-                                name="Fold"
-                                value={state.Fold}
-                                onChange={onchangeHandler}
-                            />
-                        </label>
-                        <label>
-                            Act. Mts
-                            <input
-                                type="number"
-                                name="ActMts"
-                                value={parseInt(state.ActMts)}
+                                value={parseInt(state.Mts)}
                                 id="mts"
                                 required
+                                min="0"
                                 onChange={onchangeHandler}
                             />
                         </label>
@@ -737,6 +528,7 @@ function Greypurchase({ userDetails }) {
                                 type="number"
                                 id="rate"
                                 name="Rate"
+                                min="0"
                                 value={parseInt(state.Rate)}
                                 onChange={onchangeHandler}
                             />
@@ -746,11 +538,12 @@ function Greypurchase({ userDetails }) {
                             <input
                                 type="number"
                                 name="Amount"
-                                value={state.ActMts * state.Rate}
+                                value={state.Amount}
                                 readOnly
-                                onSelect={onchangeHandler}
+                                
                                 id="Amount"
                                 required
+                                disabled
                             />
                         </label>
                     </div>
@@ -758,10 +551,12 @@ function Greypurchase({ userDetails }) {
                         <label>
                             Discount (%)
                             <input
-                                type="text"
+                                type="number"
                                 name="Discount"
                                 value={state.Discount}
                                 onChange={onchangeHandler}
+                                min="0"
+                                max="100"
                             />
                             <input
                                 type="text"
@@ -769,82 +564,13 @@ function Greypurchase({ userDetails }) {
                                 id="DiscountAmt"
                                 readOnly
                                 value={
-                                    Math.round(
-                                        ((state.Discount / 100) * state.Amount +
-                                            Number.EPSILON) *
-                                            100
-                                    ) / 100
+                                    state.DiscountAmt
                                 }
-                                onSelect={onchangeHandler}
+                           
+                                disabled
                             />
                         </label>
-                        <label>
-                            IGST(%)
-                            <input
-                                type="text"
-                                name="IGST"
-                                value={state.IGST}
-                                onChange={onchangeHandler}
-                            />
-                            <input
-                                type="text"
-                                name="IGSTamt"
-                                id="IGSTamt"
-                                readOnly
-                                value={Math.round(
-                                    ((state.Amount - state.DiscountAmt) *
-                                        state.IGST) /
-                                        100
-                                )}
-                                onSelect={onchangeHandler}
-                            />
-                        </label>
-                        <label>
-                            CGST(%)
-                            <input
-                                type="text"
-                                name="CGST"
-                                value={state.CGST}
-                                onChange={onchangeHandler}
-                            />
-                            <input
-                                type="text"
-                                name="CGSTamt"
-                                id="CGSTamt"
-                                readOnly
-                                value={
-                                    Math.round(
-                                        (((state.Amount - state.DiscountAmt) *
-                                            state.CGST) /
-                                            100 +
-                                            Number.EPSILON) *
-                                            100
-                                    ) / 100
-                                }
-                                onSelect={onchangeHandler}
-                            />
-                        </label>
-                        <label>
-                            SGST(%)
-                            <input
-                                type="text"
-                                name="SGST"
-                                value={state.SGST}
-                                onChange={onchangeHandler}
-                            />
-                            <input
-                                type="text"
-                                name="SGSTamt"
-                                readOnly
-                                id="SGSTamt"
-                                value={Math.round(
-                                    ((state.Amount - state.DiscountAmt) *
-                                        state.SGST) /
-                                        100
-                                )}
-                                onSelect={onchangeHandler}
-                            />
-                        </label>
+                        
                     </div>
                     <div className="seventline--greypurchase">
                         <label>
@@ -854,14 +580,8 @@ function Greypurchase({ userDetails }) {
                                 name="NetAmount"
                                 readOnly
                                 id="NetAmount"
-                                value={Math.round(
-                                    parseInt(state.Amount) -
-                                        state.DiscountAmt +
-                                        state.CGSTamt +
-                                        state.IGSTamt +
-                                        state.SGSTamt
-                                )}
-                                onSelect={onchangeHandler}
+                                value={state.Amount-state.DiscountAmt}
+                                disabled
                                 required
                             />
                         </label>
@@ -874,13 +594,15 @@ function Greypurchase({ userDetails }) {
                         <StickyTable
                             TableCol={TableColData}
                             TableData={tabledata}
-                            style={{width:"1000px",height:"500px"}}
+                            style={{width:"1000px",maxHeight:"500px",border:"1px Solid black",borderRadius:"10px"}}
+
                         />
                     </Modal>
                     <div className="greypurchase--itemtable">
                         <StickyTable
                             TableCol={purchasedListCol}
                             TableData={purchaseditems}
+                            style={{marginLeft:"70px",width:"602px",border:"1px Solid black",borderRadius:"10px"}}
                         />
                     </div>
                 </div>
