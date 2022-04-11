@@ -255,7 +255,6 @@ function Greypurchase({ userDetails }) {
   const onchangeHandler = (event) => {
     let value = event.target.value;
     if (!Number.isNaN(parseFloat(value))) {
-        console.log("float")
       value = parseFloat(value);
     }
     setState({
@@ -278,7 +277,7 @@ function Greypurchase({ userDetails }) {
       ItemName: state.ItemName,
       Mts: state.Mts,
       Rate: state.Rate,
-      Amount: parseFloat(document.getElementById("NetAmount").value),
+      Amount: Math.round(parseFloat(document.getElementById("NetAmount").value)*100)/100,
       BillNo: state.BillNo,
       Discount: state.Discount,
     };
@@ -289,7 +288,7 @@ function Greypurchase({ userDetails }) {
     if (1) {
       toastSuccess("Item Added to the list!");
       settotalamount((presamount) => {
-        return parseInt(presamount + newItem.Amount);
+        return parseFloat(presamount + newItem.Amount);
       });
       setState({
         ...state,
