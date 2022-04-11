@@ -100,6 +100,6 @@ const DesignMasterTable = ({showclick}) => {
             console.log(e);
         }
     }, []);
-    return <StickyTable TableCol={TableColData} TableData={tabledata} />;
+    return <StickyTable TableCol={TableColData} TableData={tabledata}  style={{width:"1000px",height:"500px"}} />;
 };
 export default DesignMasterTable;

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Axios from "axios";
-import StickyTable from "../../components/Reuse_components/Table/StickyTable";
 import "../../styles/Accesslogs.css";
 import styles from "../../styles/Mill.module.css";
 import TableComponent from "./../../components/Reuse_components/Table/TableComponent";

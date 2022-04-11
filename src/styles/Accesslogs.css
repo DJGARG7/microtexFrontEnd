@@ -12,6 +12,7 @@
     max-height: 400px;
     overflow: auto;
     overflow-block: auto;
+    /* width: 515.5px; */
     align-self: center;
     margin-top: 25px;
 }
