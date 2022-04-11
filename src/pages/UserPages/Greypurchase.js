@@ -45,7 +45,7 @@ function Greypurchase({ userDetails }) {
       ),
       sticky: "left",
       Filter: "",
-      width: "80px",
+      width: "90px",
     },
     {
       Header: "Unique Id",
@@ -255,6 +255,7 @@ function Greypurchase({ userDetails }) {
   const onchangeHandler = (event) => {
     let value = event.target.value;
     if (!Number.isNaN(parseFloat(value))) {
+        console.log("float")
       value = parseFloat(value);
     }
     setState({
@@ -277,7 +278,7 @@ function Greypurchase({ userDetails }) {
       ItemName: state.ItemName,
       Mts: state.Mts,
       Rate: state.Rate,
-      Amount: document.getElementById("NetAmount").value,
+      Amount: parseFloat(document.getElementById("NetAmount").value),
       BillNo: state.BillNo,
       Discount: state.Discount,
     };
