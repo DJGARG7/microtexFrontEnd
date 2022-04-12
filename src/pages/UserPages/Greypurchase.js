@@ -253,6 +253,17 @@ function Greypurchase({ userDetails }) {
   const [modalstate, setmodalstate] = useState(false); // use state to handle modal toggle
   // function to handle any changes
   const onchangeHandler = (event) => {
+
+    // selected item uuid is shown here
+    if(event.target.name==="ItemName")
+    {
+        const index = event.target.selectedIndex;
+        const el = event.target.childNodes[index]
+        const option =  el.getAttribute('id'); 
+        console.log("UUID of item selected ",option);
+    }
+
+    // to check if the given input is convertable to Float? convert it,dont convert it
     let value = event.target.value;
     if (!Number.isNaN(parseFloat(value))) {
       value = parseFloat(value);
@@ -500,6 +511,7 @@ function Greypurchase({ userDetails }) {
                 }}
               >
                 Add Item
+
               </button>
             </label>
           </div>
@@ -574,9 +586,9 @@ function Greypurchase({ userDetails }) {
                 required
               />
             </label>
-            <input type="submit" value="Add Purchase" />
+            <input type="submit" value="Add item to the list" />
             <button onClick={onViewBillhandler} type="button">
-              View all purchase
+              View all purchases
             </button>
           </div>
           <Modal open={modalstate} onClose={closeHandler}>
@@ -606,18 +618,15 @@ function Greypurchase({ userDetails }) {
           </div>
         </div>
         <div className="form--button">
-          <label>
-            Final Amount:
             <input
               type="text"
               disabled
               placeholder="Total Amount"
-              value={totalamount}
+              value={totalamount>0?totalamount:"Final Amount"}
             />
-          </label>
-          <button type="button" onClick={onMainSubmit}>
-            Save Purchases
-          </button>
+          {<button disabled={purchaseditems.length>0?false:true}type="button" onClick={onMainSubmit}>
+            Save Bill
+          </button>}
         </div>
       </form>
       <Modal open={greyitemadd} onClose={greyitemcloseHandler}>
