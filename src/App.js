@@ -7,10 +7,12 @@ import UserDashboard from "./components/User_components/UserDashboard";
 import axiosAuth from "./components/Login/api/axios";
 import "./style.css";
 import Axios from "axios";
+
 Axios.defaults.withCredentials = true;
 const usrinstance = Axios.create({
     baseURL: "http://localhost:3005/accesslogs",
 });
+
 function App() {
     // Storing user details in localStorage and as state.
     localStorage.getItem("userDetails") === null &&
@@ -79,6 +81,7 @@ function App() {
                 date: convertDate(new Date()),
                 time: current.toLocaleTimeString(),
             };
+
             if (isAdmin !== 1) {
                 (async () => {
                     const res = await usrinstance.post(" ", usrdata);

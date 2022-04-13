@@ -19,9 +19,15 @@ const toastStyle = {
 };
 
 export default function ReceiveFromMill({ userDetails }) {
+    // Authorization state.
     const [isAllowed, setIsAllowed] = useState(false);
+
+    // Loading states.
+    const [isAllowedLoading, setIsAllowedLoading] = useState(true);
     const [isMillLoading, setIsMillLoading] = useState(true);
     const [isAccountsLoading, setIsAccountsLoading] = useState(true);
+
+    // Form data.
     const [accounts, setAccounts] = useState();
 
     // Form binding.
@@ -35,6 +41,7 @@ export default function ReceiveFromMill({ userDetails }) {
             );
 
             setIsAllowed(res.data);
+            setIsAllowedLoading(false);
         } catch (error) {
             console.log(error);
         }
@@ -72,19 +79,19 @@ export default function ReceiveFromMill({ userDetails }) {
         console.log("Hello");
     };
 
-    if (isAllowed) {
-        if (isMillLoading || isAccountsLoading) {
-            return (
-                <div
-                    style={{
-                        marginTop: "10vh",
-                    }}
-                >
-                    <ReactLoading type="bubbles" color="#212121" />
-                </div>
-            );
-        }
-    } else {
+    if (isAllowedLoading || isMillLoading || isAccountsLoading) {
+        return (
+            <div
+                style={{
+                    marginTop: "10vh",
+                }}
+            >
+                <ReactLoading type="bubbles" color="#212121" />
+            </div>
+        );
+    }
+
+    if (!isAllowed) {
         return (
             <div
                 style={{
