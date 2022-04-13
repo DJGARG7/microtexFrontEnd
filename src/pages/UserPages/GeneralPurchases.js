@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import styles from "../../styles/AccountMaster.module.css";
 import "../../styles/CityMaster.css";
 import Modal from "../../components/Reuse_components/Modal";
@@ -160,7 +159,7 @@ function GeneralPurchases({ userDetails }) {
   // handling of userpermission
   const checkPermission = async () => {
     try {
-      const res = await axios.get(
+      const res = await Axios.get(
         `http://localhost:3002/permissions/${userDetails.uuid}/2`
       );
 

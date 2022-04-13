@@ -8,6 +8,7 @@ import {
   toastSuccess,
 } from "../../components/Reuse_components/toast";
 import StickyTable from "../../components/Reuse_components/Table/StickyTable";
+import TakaDetails from "../../components/Reuse_components/TakaDetails";
 
 if (localStorage.getItem("userDetails") != null)
   Axios.defaults.headers.common["userID"] = JSON.parse(
@@ -74,7 +75,11 @@ function Greypurchase({ userDetails }) {
       accessor: "ItemName",
       Filter: "",
     },
-
+    {
+      Header: "Taka",
+      accessor: "Taka",
+      Filter: "",
+    },
     {
       Header: "Mts",
       accessor: "Mts",
@@ -163,33 +168,41 @@ function Greypurchase({ userDetails }) {
       Header: "Item",
       accessor: "ItemName",
       Filter: "",
-      maxWidth: 250,
-      minWidth: 200,
+      maxWidth: 200,
+      minWidth: 170,
       width: 100,
+    },
+    {
+      Header: "Taka",
+      accessor: "Taka",
+      Filter: "",
+      maxWidth: 70,
+      minWidth: 100,
+      width: 70,
     },
     {
       Header: "Mts",
       accessor: "Mts",
       Filter: "",
-      maxWidth: 150,
-      minWidth: 100,
-      width: 100,
+      maxWidth: 70,
+      minWidth: 70,
+      width: 70,
     },
     {
       Header: "Rate",
       Filter: "",
       accessor: "Rate",
-      maxWidth: 150,
-      minWidth: 100,
+      maxWidth: 70,
+      minWidth: 70,
       width: 40,
     },
     {
       Header: "Amount",
       accessor: "Amount",
       Filter: "",
-      maxWidth: 150,
-      minWidth: 100,
-      width: 100,
+      maxWidth: 90,
+      minWidth: 90,
+      width: 90,
     },
   ];
 
@@ -204,11 +217,11 @@ function Greypurchase({ userDetails }) {
 
   const date = convertDate(new Date());
 
-  const [totalamount, settotalamount] = useState(0); // THIS IS THE FINAL AMOUNT OF THE BILL
+  const [totalamount, settotalamount] = useState(""); // THIS IS THE FINAL AMOUNT OF THE BILL
 
   const [tabledata, settabledata] = useState([]); // for modal table
   const [purchaseditems, setpurchaseditems] = useState([]); // list of purchased items
-
+  const [takaModal, setTakaModal] = useState(false);
 
   const [accntdata, setacctdata] = useState([]); // for setting the account name returend in useEffect
   const [state, setState] = useState({
@@ -225,6 +238,11 @@ function Greypurchase({ userDetails }) {
     DiscountAmt: "",
     NetAmount: "",
   });
+
+  const [takaList,setTakaList] = useState([]); // used to hold info about taka details
+  
+  
+
 
   // useeffect to upadte the data
   useEffect(() => {
@@ -253,14 +271,12 @@ function Greypurchase({ userDetails }) {
   const [modalstate, setmodalstate] = useState(false); // use state to handle modal toggle
   // function to handle any changes
   const onchangeHandler = (event) => {
-
     // selected item uuid is shown here
-    if(event.target.name==="ItemName")
-    {
-        const index = event.target.selectedIndex;
-        const el = event.target.childNodes[index]
-        const option =  el.getAttribute('id'); 
-        console.log("UUID of item selected ",option);
+    if (event.target.name === "ItemName") {
+      const index = event.target.selectedIndex;
+      const el = event.target.childNodes[index];
+      const option = el.getAttribute("id");
+      console.log("UUID of item selected ", option);
     }
 
     // to check if the given input is convertable to Float? convert it,dont convert it
@@ -288,19 +304,25 @@ function Greypurchase({ userDetails }) {
       ItemName: state.ItemName,
       Mts: state.Mts,
       Rate: state.Rate,
-      Amount: Math.round(parseFloat(document.getElementById("NetAmount").value)*100)/100,
+      Amount:
+        Math.round(
+          parseFloat(document.getElementById("NetAmount").value) * 100
+        ) / 100,
       BillNo: state.BillNo,
       Discount: state.Discount,
+      Taka:state.Taka,
+      takaList,
     };
     setpurchaseditems((preitems) => {
       return [...preitems, newItem];
     });
-
     if (1) {
       toastSuccess("Item Added to the list!");
       settotalamount((presamount) => {
         return parseFloat(presamount + newItem.Amount);
       });
+      setTakaList([]);
+      settotalmts(0);
       setState({
         ...state,
         ItemName: "",
@@ -310,6 +332,7 @@ function Greypurchase({ userDetails }) {
         Discount: "",
         NetAmount: "",
         DiscountAmt: "",
+        Taka:"",
       });
     }
   };
@@ -344,14 +367,14 @@ function Greypurchase({ userDetails }) {
       totalamount,
     };
     const res = await usrinstance.post("addbilldetails", datasend); // adds data about the bill
-    
+
     if (res.data.status === "1") {
       toastSuccess("Bill added successfully!");
       setState({
         ...state,
         BillNo: "",
         accntnames: "",
-        ChallanNo:state.ChallanNo+1
+        ChallanNo: state.ChallanNo + 1,
       });
       setpurchaseditems([]);
       settotalamount(0);
@@ -359,6 +382,8 @@ function Greypurchase({ userDetails }) {
       toastError(`Error ${res.data.sqlMessage}`);
     }
   };
+
+  const [totalmts,settotalmts] = useState(0);
 
   // useeffct to set challan No
   useEffect(() => {
@@ -392,6 +417,7 @@ function Greypurchase({ userDetails }) {
   const onViewBillhandler = async () => {
     setmodalstate(true);
     const res = await usrinstance.get("fetchGreyBills");
+    
     console.log(res);
     res.data.forEach((item, index) => {
       const date = new Date(item.BillDate);
@@ -414,6 +440,31 @@ function Greypurchase({ userDetails }) {
     );
   }
 
+
+  // function that handles data recived from child taka component
+  const onTakaHandler = (takaData)=>{
+    setTakaList(takaData.tabledata);
+    setTakaModal(false);
+    setState({
+      ...state,
+      Taka: takaData.tabledata.length,
+      Mts:takaData.totalmts
+    })
+    settotalmts(takaData.totalmts)
+    toastSuccess("Taka Details Saved");
+  }
+
+
+
+  // function to add taka details
+  const addTakaDetails = () => {
+    setTakaModal(true);
+  };
+
+
+  const onCloseTakaModal = ()=>{
+    setTakaModal(false);
+  }
   return (
     <div>
       <form onSubmit={onSubmithandler} className="form--greypurchase">
@@ -493,12 +544,18 @@ function Greypurchase({ userDetails }) {
                 onChange={onchangeHandler}
                 required
               >
-                <option value="" id="">Item Names</option>
+                <option value="" id="">
+                  Item Names
+                </option>
                 {listofitems &&
                   !!listofitems.length &&
                   listofitems.map((item) => {
                     return (
-                      <option value={item.itemname} key={item.uuid} id={item.uuid}>
+                      <option
+                        value={item.itemname}
+                        key={item.uuid}
+                        id={item.uuid}
+                      >
                         {item.itemname}
                       </option>
                     );
@@ -511,11 +568,22 @@ function Greypurchase({ userDetails }) {
                 }}
               >
                 Add Item
-
               </button>
             </label>
           </div>
           <div className="fifthline--greypurchase">
+          <div>
+              <input
+                name="Taka"
+                type="number"
+                placeholder="Taka"
+                value={state.Taka}
+                onChange={onchangeHandler}
+              />
+              <button type="button" onClick={addTakaDetails}>
+                Add taka details
+              </button>
+            </div>
             <label>
               Mts
               <input
@@ -539,7 +607,9 @@ function Greypurchase({ userDetails }) {
                 onChange={onchangeHandler}
               />
             </label>
-            <label>
+          </div>
+          <div className="sixthline--greypurchase">
+          <label>
               Amount
               <input
                 type="number"
@@ -551,13 +621,11 @@ function Greypurchase({ userDetails }) {
                 disabled
               />
             </label>
-          </div>
-          <div className="sixthline--greypurchase">
             <label>
-              Discount (%)
               <input
                 type="number"
                 name="Discount"
+                placeholder="Discount (%)"
                 value={state.Discount}
                 onChange={onchangeHandler}
                 min="0"
@@ -618,15 +686,21 @@ function Greypurchase({ userDetails }) {
           </div>
         </div>
         <div className="form--button">
-            <input
-              type="text"
-              disabled
-              placeholder="Total Amount"
-              value={totalamount>0?totalamount:"Final Amount"}
-            />
-          {<button disabled={purchaseditems.length>0?false:true}type="button" onClick={onMainSubmit}>
-            Save Bill
-          </button>}
+          <input
+            type="text"
+            disabled
+            placeholder="Total Amount"
+            value={totalamount > 0 ? totalamount : "Final Amount"}
+          />
+          {
+            <button
+              disabled={purchaseditems.length > 0 ? false : true}
+              type="button"
+              onClick={onMainSubmit}
+            >
+              Save Bill
+            </button>
+          }
         </div>
       </form>
       <Modal open={greyitemadd} onClose={greyitemcloseHandler}>
@@ -671,10 +745,11 @@ function Greypurchase({ userDetails }) {
               }
             />
           </label>
-          
-          
           <button>Add item</button>
         </form>
+      </Modal>
+      <Modal open={takaModal} onClose={onCloseTakaModal}>
+        <TakaDetails takaList={takaList} totalMts={totalmts} onTakaHandler={onTakaHandler}/>
       </Modal>
     </div>
   );
