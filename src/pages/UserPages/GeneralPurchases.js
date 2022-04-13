@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import styles from "../../styles/AccountMaster.module.css";
 import "../../styles/CityMaster.css";
 import Modal from "../../components/Reuse_components/Modal";
@@ -18,6 +17,9 @@ Axios.defaults.withCredentials = true;
 const usrinstance = Axios.create({
   baseURL: "http://localhost:3005/userservice/",
 });
+const accinstance = Axios.create({
+  baseURL: "http://localhost:3003/accountMaster",
+});
 function GeneralPurchases({ userDetails }) {
   //table data
   const tablecoldata = [
@@ -25,6 +27,10 @@ function GeneralPurchases({ userDetails }) {
       Header: "Unique Id",
       accessor: "uid",
       show: false,
+    },
+    {
+      Header: "Account name",
+      accessor: "accntname",
     },
     {
       Header: "Item Name",
@@ -85,24 +91,26 @@ function GeneralPurchases({ userDetails }) {
   const [modal, setModal] = useState(false);
   const [tabledata, settabledata] = useState([]);
   const [state, setState] = useState({
-    uuid:"",
+    uuid: "",
+    accntname:"",
     itemname: "",
     quantity: "",
     priceperqty: "",
   });
   const [editmode, setEditmode] = useState(false);
   const [totalamount, setTotalamount] = useState(0);
-
+  const [accntlist, setaccntlist] = useState([]);
   // clearing all fields
-  const clearall = ()=>{
-      setState({
-          uuid:"",
-          itemname:"",
-          priceperqty:"",
-          quantity:""
-      })
-      setTotalamount(0)
-  }
+  const clearall = () => {
+    setState({
+      uuid: "",
+      accntname:"",
+      itemname: "",
+      priceperqty: "",
+      quantity: "",
+    });
+    setTotalamount(0);
+  };
   // On input change
   const onChangeHandler = (e) => {
     let val = e.target.value;
@@ -112,7 +120,8 @@ function GeneralPurchases({ userDetails }) {
         document.getElementById("priceperqty").value;
       setTotalamount(value);
     }
-    console.log(val);
+    
+
     setState({
       ...state,
       [e.target.id]: val,
@@ -123,7 +132,7 @@ function GeneralPurchases({ userDetails }) {
     const res = await usrinstance.delete(
       `/deletegeneralpurchase/${tableProps.row.original.uuid}`
     );
-    console.log(res.data);
+
     if (res.data == "1") {
       toastSuccess("Item Deleted");
       const datacopy = [...tabledata];
@@ -137,21 +146,20 @@ function GeneralPurchases({ userDetails }) {
   const onEditrow = async (tableProps) => {
     setModal(false);
     setState({
-        uuid:tableProps.row.original.uuid,
-        itemname:tableProps.row.original.itemname,
-        quantity :tableProps.row.original.quantity,
-        priceperqty :tableProps.row.original.priceperqty,
+      uuid: tableProps.row.original.uuid,
+      accntname: tableProps.row.original.accntname,
+      itemname: tableProps.row.original.itemname,
+      quantity: tableProps.row.original.quantity,
+      priceperqty: tableProps.row.original.priceperqty,
     });
     setTotalamount(tableProps.row.original.totalamount);
     setEditmode(true);
-  
-
   };
 
   // handling of userpermission
   const checkPermission = async () => {
     try {
-      const res = await axios.get(
+      const res = await Axios.get(
         `http://localhost:3002/permissions/${userDetails.uuid}/2`
       );
 
@@ -163,6 +171,11 @@ function GeneralPurchases({ userDetails }) {
   };
   useEffect(() => {
     checkPermission();
+    (async () => {
+      const res = await accinstance.get(" "); 
+   
+      setaccntlist(res.data);
+    })();
   }, []);
   if (!isAllowed) {
     return (
@@ -194,33 +207,42 @@ function GeneralPurchases({ userDetails }) {
   };
 
   // cancels the edit mode
-  const onEditCancel = ()=>{
+  const onEditCancel = () => {
     setEditmode(false);
     clearall();
-  }
+  };
 
   // submits the data form given by the user
-  const onEditData = async () =>{
-      const data = {
-          ...state,
-          totalamount
-      }
-    const res = await usrinstance.put(`updategeneralpurchase/${state.uuid}`,data)
-    console.log(res);
-    if(res.data=="1"){
-        toastSuccess("Edited Successfully")
-        clearall();
-    }else{
-        toastError(`Error ${res.data.sqlMessage}`)
+  const onEditData = async () => {
+    const data = {
+      ...state,
+      totalamount,
+    };
+    const res = await usrinstance.put(
+      `updategeneralpurchase/${state.uuid}`,
+      data
+    );
+ 
+    if (res.data == "1") {
+      toastSuccess("Edited Successfully");
+      clearall();
+    } else {
+      toastError(`Error ${res.data.sqlMessage}`);
     }
     setEditmode(false);
-  }
+  };
   return (
     <div className={styles["main"]}>
       <h1>General Purchase</h1>
       <form onSubmit={onFormSubmit} className={styles["form"]}>
         <div className={styles["input-grid"]}>
           <div className={styles["input-group"]}>
+            <select className={styles["input-select"]} id="accntname" required onChange={onChangeHandler} value={state.accntname}>
+              <option value="">Account Names</option>
+              {accntlist.map((obj,index)=>{
+                return <option value={obj.AccName} key={index}>{obj.AccName}</option>
+              })}
+            </select>
             <input
               placeholder="Item Name"
               type="text"
@@ -265,10 +287,18 @@ function GeneralPurchases({ userDetails }) {
         )}
         {editmode && (
           <div>
-            <button className={`${styles["edit-btn"]} ${styles["btn"]}`} type="button" onClick={onEditData}>
+            <button
+              className={`${styles["edit-btn"]} ${styles["btn"]}`}
+              type="button"
+              onClick={onEditData}
+            >
               Edit
             </button>
-            <button className={`${styles["edit-btn"]} ${styles["btn"]}`} type="button" onClick={onEditCancel}>
+            <button
+              className={`${styles["edit-btn"]} ${styles["btn"]}`}
+              type="button"
+              onClick={onEditCancel}
+            >
               Cancel
             </button>
           </div>
@@ -288,7 +318,13 @@ function GeneralPurchases({ userDetails }) {
         </button>
       </form>
       <Modal open={modal} onClose={() => setModal(false)}>
-        <StickyTable TableCol={tablecoldata} TableData={tabledata} />
+        <StickyTable TableCol={tablecoldata} TableData={tabledata} style={{
+                maxWidth: "1000px",
+            
+                maxHeight: "500px",
+                border: "1px Solid black",
+                borderRadius: "10px",
+              }}/>
       </Modal>
     </div>
   );

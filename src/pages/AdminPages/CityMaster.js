@@ -5,6 +5,7 @@ import "../../styles/CityMaster.css";
 import Axios from "axios";
 import toast from "react-hot-toast";
 
+
 // Include header and cookie with every request.
 if (localStorage.getItem("userDetails") != null)
     Axios.defaults.headers.common["userID"] = JSON.parse(
@@ -88,7 +89,6 @@ function CityMaster({ userDetails }) {
                         className="btn edit-btn"
                         onClick={() => {
                             const dataCopy = [...tabledata];
-
                             setEditMode(true);
                             setCitychange(
                                 dataCopy[tableProps.row.index].CityName
