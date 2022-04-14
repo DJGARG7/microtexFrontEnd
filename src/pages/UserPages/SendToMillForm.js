@@ -3,6 +3,18 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import styles from "../../components/UserManagement/styles/common.module.css";
 import millstyles from "../../styles/Mill.module.css";
+import StickyTable from "../../components/Reuse_components/Table/StickyTable";
+
+const tableColumns = [
+    {
+        Header: "Taka Number",
+        accessor: "col1", // accessor is the "key" in the data
+    },
+    {
+        Header: "Taka Details",
+        accessor: "col2", // accessor is the "key" in the data
+    },
+];
 
 const toastStyle = {
     style: {
@@ -21,33 +33,51 @@ function convertDate(inputFormat) {
     return [d.getFullYear(), pad(d.getMonth() + 1), pad(d.getDate())].join("-");
 }
 
-export default function SendToMillForm({ accountsData }) {
-    // Form binding.
-    const [date, setDate] = useState(convertDate(new Date()));
-    const [selectedGrey, setSelectedGrey] = useState("DEFAULT");
-    const [selectedAccount, setSelectedAccount] = useState("DEFAULT");
-
+export default function SendToMillForm({ supplierData, millsData }) {
     // Form data.
-    const [greyItems, setGreyItems] = useState();
+    const [greyCloth, setGreyCloth] = useState([]);
+    const [taka, setTaka] = useState([]);
 
-    const fetchGreyItems = async () => {
+    // Form binding.
+    const [billDate, setBillDate] = useState();
+    const [challanDate, setChallanDate] = useState();
+    const [selectedGrey, setSelectedGrey] = useState("DEFAULT");
+    const [selectedSupplier, setSelectedSupplier] = useState("DEFAULT");
+    const [selectedMill, setSelectedMill] = useState("DEFAULT");
+
+    const fetchGreyCloth = async () => {
         try {
             const res = await axios.get(
-                `http://localhost:3005/userService/fetchGreyBills/${selectedAccount}`
+                `http://localhost:3005/userservice/fetchGreyBills/${selectedSupplier}`
             );
 
-            console.log(res.data);
-            setGreyItems(res.data);
+            setGreyCloth(res.data);
         } catch (error) {
             console.log(error);
-            toast.error("Failed to fetch grey item data", toastStyle);
+            toast.error("Failed to fetch mill data", toastStyle);
+        }
+    };
+
+    const fetchTaka = async () => {
+        try {
+            const res = await axios.get(
+                `http://localhost:3005/userservice/taka/${selectedGrey}`
+            );
+
+            setTaka(res.data);
+        } catch (error) {
+            console.log(error);
+            toast.error("Failed to fetch taka details", toastStyle);
         }
     };
 
     useEffect(() => {
-        console.log(selectedAccount);
-        fetchGreyItems();
-    }, [selectedAccount]);
+        fetchGreyCloth();
+    }, [selectedSupplier]);
+
+    useEffect(() => {
+        fetchTaka();
+    }, [selectedGrey]);
 
     const submitHandler = () => {
         console.log("Hello");
@@ -58,16 +88,25 @@ export default function SendToMillForm({ accountsData }) {
             <div className={millstyles["form--group"]}>
                 <input
                     type="text"
-                    onChange={(e) => console.log(e.target.value)}
+                    onChange={(e) => setBillDate(e.target.value)}
                     onFocus={(e) => (e.target.type = "date")}
                     onBlur={(e) => (e.target.type = "text")}
-                    value={date}
-                    placeholder="Date"
+                    value={billDate}
+                    placeholder="Bill Date"
                     className={millstyles["form--input"]}
                 />
                 <input
                     type="text"
                     placeholder="Bill Number"
+                    className={millstyles["form--input"]}
+                />
+                <input
+                    type="text"
+                    onChange={(e) => setChallanDate(e.target.value)}
+                    onFocus={(e) => (e.target.type = "date")}
+                    onBlur={(e) => (e.target.type = "text")}
+                    value={challanDate}
+                    placeholder="Challan Date"
                     className={millstyles["form--input"]}
                 />
                 <input
@@ -79,29 +118,46 @@ export default function SendToMillForm({ accountsData }) {
 
             <div className={millstyles["form--group"]}>
                 <select
-                    placeholder="Account"
+                    placeholder="Mill"
                     className={`${millstyles["form--input"]} ${millstyles["form--input-select"]}`}
-                    value={selectedAccount}
+                    value={selectedSupplier}
                     onChange={(e) => {
-                        setSelectedAccount(e.target.value);
+                        setSelectedSupplier(e.target.value);
                     }}
                 >
                     <option disabled hidden value="DEFAULT">
-                        Select account...
+                        Select supplier...
                     </option>
-                    <option value="hello">Hello</option>
-                    {accountsData.map((account) => {
+                    {supplierData.map((supplier) => {
                         return (
                             <option
-                                value={account.AccName}
-                                key={account.AccName}
+                                value={supplier.AccName}
+                                key={supplier.AccName}
                             >
-                                {account.AccName}
+                                {supplier.AccName}
                             </option>
                         );
                     })}
                 </select>
-
+                <select
+                    placeholder="Mill"
+                    className={`${millstyles["form--input"]} ${millstyles["form--input-select"]}`}
+                    value={selectedMill}
+                    onChange={(e) => {
+                        setSelectedMill(e.target.value);
+                    }}
+                >
+                    <option disabled hidden value="DEFAULT">
+                        Select mill...
+                    </option>
+                    {millsData.map((mill) => {
+                        return (
+                            <option value={mill.uid} key={mill.AccName}>
+                                {mill.AccName}
+                            </option>
+                        );
+                    })}
+                </select>
                 <select
                     placeholder="Grey cloth"
                     className={`${millstyles["form--input"]} ${millstyles["form--input-select"]}`}
@@ -111,22 +167,30 @@ export default function SendToMillForm({ accountsData }) {
                     }}
                 >
                     <option disabled hidden value="DEFAULT">
-                        Select cloth...
+                        Select item...
                     </option>
-                    {
-                        // Get Grey cloth.
-                        /* {users.map((user) => {
-                return (
-                    <option
-                        value={Object.keys(user)[0]}
-                        key={Object.keys(user)[0]}
-                    >
-                        {Object.values(user)[0]}
-                    </option>
-                );
-            })} */
-                    }
+                    {greyCloth.map((cloth) => {
+                        return (
+                            <option value={cloth.itemID} key={cloth.itemID}>
+                                {cloth.ItemName}
+                            </option>
+                        );
+                    })}
                 </select>
+            </div>
+
+            <div className={millstyles["form--group"]}>
+                <StickyTable
+                    TableCol={tableColumns}
+                    TableData={taka}
+                    // style={{
+                    //     marginLeft: "70px",
+                    //     width: "602px",
+                    //     border: "1px Solid black",
+                    //     borderRadius: "10px",
+                    // }}
+                />
+                {/* Render table for taka */}
             </div>
 
             <button

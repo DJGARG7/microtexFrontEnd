@@ -25,10 +25,12 @@ export default function SendToMill({ userDetails }) {
 
     // Loading states.
     const [isAllowedLoading, setIsAllowedLoading] = useState(true);
-    const [isAccountsLoading, setIsAccountsLoading] = useState(true);
+    const [isSuppliersLoading, setIsSuppliersLoading] = useState(true);
+    const [isMillsLoading, setIsMillsLoading] = useState(true);
 
     // Form data.
-    const [accounts, setAccounts] = useState();
+    const [suppliers, setSuppliers] = useState([]);
+    const [mills, setMills] = useState([]);
 
     const checkPermission = async () => {
         try {
@@ -43,26 +45,45 @@ export default function SendToMill({ userDetails }) {
         }
     };
 
-    const fetchAccounts = async (accountType) => {
+    const fetchSuppliers = async () => {
+        let accountType = "Sundry Creditors";
+
         try {
             const res = await axios.get(
                 `http://localhost:3003/accountMaster/${accountType}`
             );
 
-            setAccounts(res.data);
-            setIsAccountsLoading(false);
+            setSuppliers(res.data);
+            setIsSuppliersLoading(false);
         } catch (error) {
             console.log(error);
             toast.error("Failed to fetch account data", toastStyle);
         }
     };
 
+    const fetchMills = async () => {
+        let accountType = "Creditors for process";
+
+        try {
+            const res = await axios.get(
+                `http://localhost:3003/accountMaster/${accountType}`
+            );
+
+            setMills(res.data);
+            setIsMillsLoading(false);
+        } catch (error) {
+            console.log(error);
+            toast.error("Failed to fetch mill data", toastStyle);
+        }
+    };
+
     useEffect(() => {
         checkPermission();
-        fetchAccounts("Sundry Creditors");
+        fetchSuppliers();
+        fetchMills();
     }, []);
 
-    if (isAllowedLoading || isAccountsLoading) {
+    if (isAllowedLoading || isSuppliersLoading || isMillsLoading) {
         return (
             <div
                 style={{
@@ -89,7 +110,7 @@ export default function SendToMill({ userDetails }) {
     return (
         <div className={styles["main"]}>
             <h2>Send to Mill</h2>
-            <SendToMillForm accountsData={accounts} />
+            <SendToMillForm supplierData={suppliers} millsData={mills} />
         </div>
     );
 }
