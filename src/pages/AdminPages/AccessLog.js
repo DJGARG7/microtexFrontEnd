@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import "../../styles/Accesslogs.css";
-import styles from "../../styles/Mill.module.css";
+import styles from "../../pages/UserPages/Mill/styles/Mill.module.css";
 import TableComponent from "./../../components/Reuse_components/Table/TableComponent";
 Axios.defaults.withCredentials = true;
 const usrinstance = Axios.create({

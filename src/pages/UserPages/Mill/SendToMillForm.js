@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import styles from "../../components/UserManagement/styles/common.module.css";
-import millstyles from "../../styles/Mill.module.css";
-import StickyTable from "../../components/Reuse_components/Table/StickyTable";
+import styles from "../../../components/UserManagement/styles/common.module.css";
+import millstyles from "./styles/Mill.module.css";
 
 const tableColumns = [
     {
@@ -33,14 +32,14 @@ function convertDate(inputFormat) {
     return [d.getFullYear(), pad(d.getMonth() + 1), pad(d.getDate())].join("-");
 }
 
-export default function SendToMillForm({ supplierData, millsData }) {
+export default function SendToMillForm({ weaverData, millsData }) {
     // Form data.
     const [greyCloth, setGreyCloth] = useState([]);
     const [taka, setTaka] = useState([]);
 
     // Form binding.
-    const [billDate, setBillDate] = useState();
     const [challanDate, setChallanDate] = useState();
+    const [challanNumber, setChallanNumber] = useState();
     const [selectedGrey, setSelectedGrey] = useState("DEFAULT");
     const [selectedSupplier, setSelectedSupplier] = useState("DEFAULT");
     const [selectedMill, setSelectedMill] = useState("DEFAULT");
@@ -88,20 +87,6 @@ export default function SendToMillForm({ supplierData, millsData }) {
             <div className={millstyles["form--group"]}>
                 <input
                     type="text"
-                    onChange={(e) => setBillDate(e.target.value)}
-                    onFocus={(e) => (e.target.type = "date")}
-                    onBlur={(e) => (e.target.type = "text")}
-                    value={billDate}
-                    placeholder="Bill Date"
-                    className={millstyles["form--input"]}
-                />
-                <input
-                    type="text"
-                    placeholder="Bill Number"
-                    className={millstyles["form--input"]}
-                />
-                <input
-                    type="text"
                     onChange={(e) => setChallanDate(e.target.value)}
                     onFocus={(e) => (e.target.type = "date")}
                     onBlur={(e) => (e.target.type = "text")}
@@ -110,35 +95,13 @@ export default function SendToMillForm({ supplierData, millsData }) {
                     className={millstyles["form--input"]}
                 />
                 <input
-                    type="text"
+                    type="number"
+                    onChange={(e) => setChallanNumber(e.target.value)}
+                    value={challanNumber}
+                    min="1"
                     placeholder="Challan Number"
                     className={millstyles["form--input"]}
                 />
-            </div>
-
-            <div className={millstyles["form--group"]}>
-                <select
-                    placeholder="Mill"
-                    className={`${millstyles["form--input"]} ${millstyles["form--input-select"]}`}
-                    value={selectedSupplier}
-                    onChange={(e) => {
-                        setSelectedSupplier(e.target.value);
-                    }}
-                >
-                    <option disabled hidden value="DEFAULT">
-                        Select supplier...
-                    </option>
-                    {supplierData.map((supplier) => {
-                        return (
-                            <option
-                                value={supplier.AccName}
-                                key={supplier.AccName}
-                            >
-                                {supplier.AccName}
-                            </option>
-                        );
-                    })}
-                </select>
                 <select
                     placeholder="Mill"
                     className={`${millstyles["form--input"]} ${millstyles["form--input-select"]}`}
@@ -158,6 +121,9 @@ export default function SendToMillForm({ supplierData, millsData }) {
                         );
                     })}
                 </select>
+            </div>
+
+            <div className={millstyles["form--group"]}>
                 <select
                     placeholder="Grey cloth"
                     className={`${millstyles["form--input"]} ${millstyles["form--input-select"]}`}
@@ -177,19 +143,29 @@ export default function SendToMillForm({ supplierData, millsData }) {
                         );
                     })}
                 </select>
+
+                <select
+                    placeholder="Weaver"
+                    className={`${millstyles["form--input"]} ${millstyles["form--input-select"]}`}
+                    value={selectedSupplier}
+                    onChange={(e) => {
+                        setSelectedSupplier(e.target.value);
+                    }}
+                >
+                    <option disabled hidden value="DEFAULT">
+                        Select weaver...
+                    </option>
+                    {weaverData.map((weaver) => {
+                        return (
+                            <option value={weaver.AccName} key={weaver.AccName}>
+                                {weaver.AccName}
+                            </option>
+                        );
+                    })}
+                </select>
             </div>
 
             <div className={millstyles["form--group"]}>
-                <StickyTable
-                    TableCol={tableColumns}
-                    TableData={taka}
-                    // style={{
-                    //     marginLeft: "70px",
-                    //     width: "602px",
-                    //     border: "1px Solid black",
-                    //     borderRadius: "10px",
-                    // }}
-                />
                 {/* Render table for taka */}
             </div>
 

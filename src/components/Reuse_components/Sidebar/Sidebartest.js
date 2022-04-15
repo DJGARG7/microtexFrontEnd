@@ -9,7 +9,7 @@ const SidebarNav = styled.nav`
     justify-content: space-between;
 
     min-width: 250px;
-    width: 15vw;
+    width: 16vw;
     height: 100%;
     overflow: auto;
     background-color: #480ca8;

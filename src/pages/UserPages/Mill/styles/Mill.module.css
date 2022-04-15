@@ -24,6 +24,7 @@
     margin-top: 4vh;
 
     overflow: auto;
+    padding: 0 5vw 0 5vw;
 }
 
 .form--group {
@@ -34,11 +35,11 @@
     width: 100%;
 
     margin: 1vh 0 20px 0;
-    padding: 0 5px 0 5px;
 }
 
 .form--input {
     width: 20%;
+    min-width: 150px;
     height: 40px;
 
     color: #212121;
@@ -67,4 +68,11 @@
     width: 30%;
     padding: 0;
     padding-left: 10px;
+}
+
+/* To remove input spinners. */
+.form--input[type="number"]::-webkit-inner-spin-button,
+.form--input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }

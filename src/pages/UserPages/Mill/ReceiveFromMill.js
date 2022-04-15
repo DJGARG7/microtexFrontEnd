@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import ReactLoading from "react-loading";
 import axios from "axios";
-import styles from "../../components/UserManagement/styles/common.module.css";
+import styles from "../../../components/UserManagement/styles/common.module.css";
 
 // Axios default configuration to include cookie and user ID with every request.
 axios.defaults.withCredentials = true;

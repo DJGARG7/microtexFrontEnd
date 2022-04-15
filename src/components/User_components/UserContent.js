@@ -1,7 +1,7 @@
 import { Route } from "react-router-dom";
 import Greypurchase from "../../pages/UserPages/Greypurchase";
-import ReceiveFromMill from "../../pages/UserPages/ReceiveFromMill";
-import SendToMill from "../../pages/UserPages/SendToMill";
+import ReceiveFromMill from "../../pages/UserPages/Mill/ReceiveFromMill";
+import SendToMill from "../../pages/UserPages/Mill/SendToMill";
 import SendJobForWork from "../../pages/UserPages/SendJobForWork";
 import Revenue from "../../pages/UserPages/Revenue";
 import SaleChallan from "../../pages/UserPages/SaleChallan";

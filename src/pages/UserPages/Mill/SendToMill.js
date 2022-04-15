@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import ReactLoading from "react-loading";
 import axios from "axios";
-import styles from "../../components/UserManagement/styles/common.module.css";
+import styles from "../../../components/UserManagement/styles/common.module.css";
 import SendToMillForm from "./SendToMillForm";
 
 // Axios default configuration to include cookie and user ID with every request.
@@ -25,11 +25,11 @@ export default function SendToMill({ userDetails }) {
 
     // Loading states.
     const [isAllowedLoading, setIsAllowedLoading] = useState(true);
-    const [isSuppliersLoading, setIsSuppliersLoading] = useState(true);
+    const [isWeaversLoading, setIsWeaversLoading] = useState(true);
     const [isMillsLoading, setIsMillsLoading] = useState(true);
 
     // Form data.
-    const [suppliers, setSuppliers] = useState([]);
+    const [weavers, setWeavers] = useState([]);
     const [mills, setMills] = useState([]);
 
     const checkPermission = async () => {
@@ -45,7 +45,7 @@ export default function SendToMill({ userDetails }) {
         }
     };
 
-    const fetchSuppliers = async () => {
+    const fetchWeavers = async () => {
         let accountType = "Sundry Creditors";
 
         try {
@@ -53,8 +53,8 @@ export default function SendToMill({ userDetails }) {
                 `http://localhost:3003/accountMaster/${accountType}`
             );
 
-            setSuppliers(res.data);
-            setIsSuppliersLoading(false);
+            setWeavers(res.data);
+            setIsWeaversLoading(false);
         } catch (error) {
             console.log(error);
             toast.error("Failed to fetch account data", toastStyle);
@@ -79,11 +79,11 @@ export default function SendToMill({ userDetails }) {
 
     useEffect(() => {
         checkPermission();
-        fetchSuppliers();
+        fetchWeavers();
         fetchMills();
     }, []);
 
-    if (isAllowedLoading || isSuppliersLoading || isMillsLoading) {
+    if (isAllowedLoading || isWeaversLoading || isMillsLoading) {
         return (
             <div
                 style={{
@@ -110,7 +110,7 @@ export default function SendToMill({ userDetails }) {
     return (
         <div className={styles["main"]}>
             <h2>Send to Mill</h2>
-            <SendToMillForm supplierData={suppliers} millsData={mills} />
+            <SendToMillForm weaverData={weavers} millsData={mills} />
         </div>
     );
 }

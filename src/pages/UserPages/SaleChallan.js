@@ -50,7 +50,7 @@ const SaleChallan = ({ userDetails }) => {
     const [sdlist, setSdlist] = useState([]);
     const [DNamelist, setDNamelist] = useState([]);
     const [clothlist, setClothlist] = useState([]);
-    const type = "Creditors For Job";
+    const type = "Sundry Debtors";
 
     const [isAllowed, setIsAllowed] = useState(false);
 
@@ -68,6 +68,7 @@ const SaleChallan = ({ userDetails }) => {
     };
 
     useEffect(async () => {
+        checkPermission();
         try {
             const res = await Axios.get(
                 `http://localhost:3003/accountMaster/${type}`
