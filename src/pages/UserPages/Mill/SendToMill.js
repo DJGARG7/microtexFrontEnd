@@ -28,7 +28,7 @@ export default function SendToMill({ userDetails }) {
     const [isWeaversLoading, setIsWeaversLoading] = useState(true);
     const [isMillsLoading, setIsMillsLoading] = useState(true);
 
-    // Form data.
+    // Form-related data.
     const [weavers, setWeavers] = useState([]);
     const [mills, setMills] = useState([]);
 

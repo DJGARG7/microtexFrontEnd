@@ -27,7 +27,7 @@ export default function ReceiveFromMill({ userDetails }) {
     const [isMillLoading, setIsMillLoading] = useState(true);
     const [isAccountsLoading, setIsAccountsLoading] = useState(true);
 
-    // Form data.
+    // Form-related data.
     const [accounts, setAccounts] = useState();
 
     // Form binding.

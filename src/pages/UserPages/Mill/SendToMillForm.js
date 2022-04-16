@@ -33,7 +33,7 @@ function convertDate(inputFormat) {
 }
 
 export default function SendToMillForm({ weaverData, millsData }) {
-    // Form data.
+    // Form-related data.
     const [greyCloth, setGreyCloth] = useState([]);
     const [taka, setTaka] = useState([]);
 
@@ -86,20 +86,20 @@ export default function SendToMillForm({ weaverData, millsData }) {
         <form onSubmit={submitHandler} className={millstyles["form"]}>
             <div className={millstyles["form--group"]}>
                 <input
+                    type="number"
+                    onChange={(e) => setChallanNumber(e.target.value)}
+                    value={challanNumber}
+                    min="1"
+                    placeholder="Challan Number"
+                    className={millstyles["form--input"]}
+                />
+                <input
                     type="text"
                     onChange={(e) => setChallanDate(e.target.value)}
                     onFocus={(e) => (e.target.type = "date")}
                     onBlur={(e) => (e.target.type = "text")}
                     value={challanDate}
                     placeholder="Challan Date"
-                    className={millstyles["form--input"]}
-                />
-                <input
-                    type="number"
-                    onChange={(e) => setChallanNumber(e.target.value)}
-                    value={challanNumber}
-                    min="1"
-                    placeholder="Challan Number"
                     className={millstyles["form--input"]}
                 />
                 <select

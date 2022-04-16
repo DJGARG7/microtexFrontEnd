@@ -1,5 +1,5 @@
 import { Route } from "react-router-dom";
-import Greypurchase from "../../pages/UserPages/Greypurchase";
+import Greypurchase from "../../pages/UserPages/GreyPurchase";
 import ReceiveFromMill from "../../pages/UserPages/Mill/ReceiveFromMill";
 import SendToMill from "../../pages/UserPages/Mill/SendToMill";
 import SendJobForWork from "../../pages/UserPages/SendJobForWork";
