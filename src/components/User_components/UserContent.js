@@ -12,7 +12,6 @@ const UserContent = ({ userDetails }) => {
     return (
         <>
             <Route path="/dashboard/transaction/purchase/grey" exact>
-                <h1>Grey Purchase</h1>
                 <Greypurchase userDetails={userDetails} />
             </Route>
             <Route path="/dashboard/transaction/purchase/general" exact>

@@ -5,7 +5,6 @@ import Modal from "../../components/Reuse_components/Modal";
 import StickyTable from "../../components/Reuse_components/Table/StickyTable";
 import TakaDetails from "../../components/Reuse_components/TakaDetails";
 
-/* ----------------------------------------Rebuilt---------------------------------------- */
 import { useState, useEffect } from "react";
 import axios from "axios";
 import ReactLoading from "react-loading";
@@ -13,6 +12,8 @@ import {
     toastError,
     toastSuccess,
 } from "../../components/Reuse_components/toast";
+
+import styles2 from "./Mill/styles/Mill.module.css";
 
 // Axios default configuration to include cookie and user ID with every request.
 axios.defaults.withCredentials = true;
@@ -108,7 +109,6 @@ export default function GreyPurchase({ userDetails }) {
         setIsTakaModalOpen(false);
     };
 
-    // funtion to close modal
     const closePurchaseHandler = () => {
         setIsPurchaseModalOpen(false);
     };
@@ -128,9 +128,7 @@ export default function GreyPurchase({ userDetails }) {
         closeItemModal();
     };
 
-    /* ----------------------------------------Rebuilt---------------------------------------- */
-
-    /* Table data. */
+    /* View all purchases table data. */
     const TableColData = [
         {
             Header: "Action",
@@ -138,6 +136,7 @@ export default function GreyPurchase({ userDetails }) {
             Cell: (tableProps) => (
                 <div>
                     <button
+                        className={`${styles2["form--btn"]} ${styles2["form--add-btn"]}`}
                         style={{
                             cursor: "pointer",
                         }}
@@ -211,12 +210,17 @@ export default function GreyPurchase({ userDetails }) {
                     style={{
                         display: "flex",
                         flexDirection: "row",
-                        "justify-content": "center",
+                        justifyContent: "center",
                     }}
                 >
                     <button
+                        className={`${styles2["form--btn"]} ${styles2["form--del-btn"]}`}
                         style={{
                             cursor: "pointer",
+                            width: "auto",
+                            height: "auto",
+                            padding: "5px",
+                            margin: "0",
                         }}
                         type="submit"
                         onClick={() => {
@@ -268,29 +272,34 @@ export default function GreyPurchase({ userDetails }) {
             width: 70,
         },
         {
-            Header: "meters",
-            accessor: "meters",
+            Header: "Meters",
+            accessor: "Mts",
             Filter: "",
             maxWidth: 70,
             minWidth: 70,
             width: 70,
         },
         {
-            Header: "rate",
+            Header: "Rate",
             Filter: "",
-            accessor: "rate",
+            accessor: "Rate",
             maxWidth: 70,
             minWidth: 70,
             width: 40,
         },
         {
-            Header: "amount",
-            accessor: "amount",
+            Header: "Amount",
+            accessor: "Amount",
             Filter: "",
             maxWidth: 90,
             minWidth: 90,
             width: 90,
         },
+        // {
+        //     Header: "Discount",
+        //     accessor: "Discount",
+        //     Filter: "",
+        // },
     ];
     /* Purchase table data. */
 
@@ -364,11 +373,6 @@ export default function GreyPurchase({ userDetails }) {
             [event.target.name]: value,
         });
     };
-
-    // console.log(items);
-    // const result = items.filter((item) => item.itemID == formData.itemID)[0]
-    //     .itemName;
-    // console.log(result);
 
     // function to handle onsubmit form request
     const onSubmitHandler = async (event) => {
@@ -494,7 +498,7 @@ export default function GreyPurchase({ userDetails }) {
         toastSuccess("Taka Details Saved");
     };
 
-    /* ----------------------------------------Rebuilt---------------------------------------- */
+    /* ----------------------------------------Loading---------------------------------------- */
 
     if (isAllowedLoading || isSuppliersLoading || isItemsLoading) {
         return (
@@ -519,19 +523,29 @@ export default function GreyPurchase({ userDetails }) {
             </div>
         );
     }
-    /* ----------------------------------------Rebuilt---------------------------------------- */
+    /* ----------------------------------------Loading---------------------------------------- */
 
     return (
-        <div>
-            <form onSubmit={onSubmitHandler} className="form--greypurchase">
-                <div className="main">
-                    <div className="firstline--greypurchase">
+        <div className={styles2["main"]}>
+            <h2>Grey Purchase</h2>
+            <form onSubmit={onSubmitHandler} className={styles2["form"]}>
+                <div className={styles2["form--group"]}>
+                    <div
+                        className={styles2["form--group"]}
+                        style={{ width: "auto", margin: "0" }}
+                    >
                         <input
                             type="number"
                             name="billNumber"
                             value={formData.billNumber}
                             onChange={onChangeHandler}
                             placeholder="Bill Number"
+                            className={styles2["form--input"]}
+                            style={{
+                                width: "10vw",
+                                minWidth: "150px",
+                                marginRight: "15px",
+                            }}
                             required
                         />
                         <input
@@ -542,43 +556,86 @@ export default function GreyPurchase({ userDetails }) {
                             onFocus={(e) => (e.target.type = "date")}
                             onBlur={(e) => (e.target.type = "text")}
                             placeholder="Bill Date"
-                            style={{ width: "140px" }}
+                            className={styles2["form--input"]}
+                            style={{ width: "150px", minWidth: "150px" }}
                             required
                         />
-                        {/* <label>Challan date</label>
+                    </div>
+                    <select
+                        name="accountID"
+                        onChange={onChangeHandler}
+                        required
+                        value={formData.accountID}
+                        className={`${styles2["form--input"]} ${styles2["form--input-select"]}`}
+                        style={{
+                            width: "20vw",
+                            minWidth: "250px",
+                            margin: "10px 15px 10px 15px",
+                        }}
+                    >
+                        <option value="DEFAULT" disabled hidden>
+                            Select supplier...
+                        </option>
+                        {suppliers.map((supplier) => {
+                            return (
+                                <option value={supplier.uid} key={supplier.uid}>
+                                    {supplier.AccName}
+                                </option>
+                            );
+                        })}
+                    </select>
+                    <div
+                        className={styles2["form--group"]}
+                        style={{ width: "auto", margin: "0" }}
+                    >
+                        <select
+                            name="itemID"
+                            value={formData.itemID}
+                            onChange={onChangeHandler}
+                            className={`${styles2["form--input"]} ${styles2["form--input-select"]}`}
+                            style={{
+                                width: "15vw",
+                                minWidth: "197.5px",
+                                marginRight: "15px",
+                            }}
+                            required
+                        >
+                            <option value="0" disabled hidden>
+                                Select item...
+                            </option>
+                            {items.map((item) => {
+                                return (
+                                    <option
+                                        value={item.itemID}
+                                        key={item.itemID}
+                                    >
+                                        {item.itemName}
+                                    </option>
+                                );
+                            })}
+                        </select>
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setIsItemModalOpen(true);
+                            }}
+                            className={`${styles2["form--btn"]} ${styles2["form--add-btn"]}`}
+                            style={{ width: "87.5px", minWidth: "87.5px" }}
+                        >
+                            Add Item
+                        </button>
+                    </div>
+                </div>
+                {/* <div className="secondline--greypurchase">
+                    <label>Challan date</label>
                         <input
                             style={{ width: "140px" }}
                             type="date"
                             value={formData.ChallanDate}
                             name="challanDate"
                             onChange={onChangeHandler}
-                        /> */}
-                    </div>
-                    <div className="secondline--greypurchase">
-                        <label>
-                            Supplier
-                            <select
-                                name="accountID"
-                                onChange={onChangeHandler}
-                                required
-                                value={formData.accountID}
-                            >
-                                <option value="DEFAULT" disabled hidden>
-                                    Select supplier...
-                                </option>
-                                {suppliers.map((supplier) => {
-                                    return (
-                                        <option
-                                            value={supplier.uid}
-                                            key={supplier.uid}
-                                        >
-                                            {supplier.AccName}
-                                        </option>
-                                    );
-                                })}
-                            </select>
-                        </label>
-                        {/* <label>
+                        />
+                    <label>
                             Challan No.
                             <input
                                 type="text"
@@ -588,173 +645,219 @@ export default function GreyPurchase({ userDetails }) {
                                 required
                                 onChange={onChangeHandler}
                             />
-                        </label> */}
+                        </label>
 
-                        {/* ----------------------------------------Rebuilt---------------------------------------- */}
-                        <label>
-                            Item Name
-                            <select
-                                name="itemID"
-                                value={formData.itemID}
-                                onChange={onChangeHandler}
-                                required
-                            >
-                                <option value="0" disabled hidden>
-                                    Select item...
-                                </option>
-                                {items.map((item) => {
-                                    return (
-                                        <option
-                                            value={item.itemID}
-                                            key={item.itemID}
-                                        >
-                                            {item.itemName}
-                                        </option>
-                                    );
-                                })}
-                            </select>
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    setIsItemModalOpen(true);
-                                }}
-                            >
-                                Add Item?
-                            </button>
-                        </label>
-                        {/* ----------------------------------------Rebuilt---------------------------------------- */}
-                    </div>
-                    <div className="fifthline--greypurchase">
-                        <div>
-                            <input
-                                name="Taka"
-                                type="number"
-                                placeholder="Taka"
-                                value={formData.Taka}
-                                onChange={onChangeHandler}
-                            />
-                            <button type="button" onClick={openTakaModal}>
-                                Add taka details
-                            </button>
-                        </div>
-                        <label>
-                            Mts
-                            <input
-                                type="number"
-                                name="Mts"
-                                value={formData.Mts}
-                                id="mts"
-                                required
-                                min="0"
-                                onChange={onChangeHandler}
-                                readOnly
-                            />
-                        </label>
-                        <label>
-                            Rate
-                            <input
-                                type="number"
-                                id="rate"
-                                name="Rate"
-                                min="0"
-                                value={formData.Rate}
-                                onChange={onChangeHandler}
-                            />
-                        </label>
-                    </div>
-                    <div className="sixthline--greypurchase">
-                        <label>
-                            Amount
-                            <input
-                                type="number"
-                                name="Amount"
-                                value={formData.Amount}
-                                id="Amount"
-                                required
-                                readOnly
-                            />
-                        </label>
-                        <label>
-                            <input
-                                type="number"
-                                name="Discount"
-                                placeholder="Discount (%)"
-                                value={formData.Discount}
-                                onChange={onChangeHandler}
-                                min="0"
-                                max="100"
-                            />
-                            <input
-                                type="text"
-                                name="DiscountAmt"
-                                id="DiscountAmt"
-                                value={formData.DiscountAmt}
-                                readOnly
-                            />
-                        </label>
-                    </div>
-                    <div className="seventline--greypurchase">
-                        <label>
-                            Net Amount
-                            <input
-                                type="number"
-                                name="NetAmount"
-                                id="NetAmount"
-                                value={formData.Amount - formData.DiscountAmt}
-                                readOnly
-                                required
-                            />
-                        </label>
-                        <input type="submit" value="Add to List" />
-                        <button onClick={onViewBillHandler} type="button">
-                            View all purchases
-                        </button>
-                    </div>
-                    <Modal
-                        open={isPurchaseModalOpen}
-                        onClose={closePurchaseHandler}
+                    </div> */}
+                <div className={styles2["form--group"]}>
+                    <div
+                        className={styles2["form--group"]}
+                        style={{ width: "auto", margin: "0" }}
                     >
-                        <StickyTable
-                            TableCol={TableColData}
-                            TableData={tabledata}
+                        <input
+                            name="Taka"
+                            type="number"
+                            placeholder="Taka"
+                            value={formData.Taka}
+                            onChange={onChangeHandler}
+                            className={styles2["form--input"]}
                             style={{
-                                maxWidth: "1000px",
-                                width: "900px",
-                                maxHeight: "500px",
-                                border: "1px Solid black",
-                                borderRadius: "10px",
+                                width: "10vw",
+                                minWidth: "87.5px",
+                                marginRight: "15px",
                             }}
                         />
-                    </Modal>
-                    <div className="greypurchase--itemtable">
-                        <StickyTable
-                            TableCol={purchasedListCol}
-                            TableData={purchaseditems}
-                            style={{
-                                marginLeft: "70px",
-                                width: "602px",
-                                border: "1px Solid black",
-                                borderRadius: "10px",
-                            }}
+                        <button
+                            type="button"
+                            onClick={openTakaModal}
+                            className={`${styles2["form--btn"]} ${styles2["form--add-btn"]}`}
+                            style={{ width: "87.5px", minWidth: "87.5px" }}
+                        >
+                            Add Taka
+                        </button>
+                    </div>
+                    <input
+                        type="number"
+                        name="Mts"
+                        value={formData.Mts}
+                        id="mts"
+                        required
+                        min="0"
+                        onChange={onChangeHandler}
+                        placeholder="Meters"
+                        readOnly
+                        className={styles2["form--input"]}
+                        style={{ width: "10vw", minWidth: "150px" }}
+                    />
+                    <input
+                        type="number"
+                        id="rate"
+                        name="Rate"
+                        min="0"
+                        value={formData.Rate}
+                        onChange={onChangeHandler}
+                        placeholder="Rate"
+                        className={styles2["form--input"]}
+                        style={{ width: "10vw", minWidth: "150px" }}
+                    />
+                    <input
+                        type="number"
+                        name="Discount"
+                        placeholder="Discount %"
+                        value={formData.Discount}
+                        onChange={onChangeHandler}
+                        min="0"
+                        max="100"
+                        className={styles2["form--input"]}
+                        style={{ width: "10vw", minWidth: "150px" }}
+                    />
+                </div>
+                <div className={styles2["form--group"]}>
+                    <div
+                        className={styles2["form--group"]}
+                        style={{
+                            width: "auto",
+                            margin: "0",
+                            alignItems: "center",
+                        }}
+                    >
+                        <label htmlFor="Amount" style={{ marginRight: "10px" }}>
+                            Amount w/o Discount
+                        </label>
+                        <input
+                            type="number"
+                            name="Amount"
+                            value={formData.Amount}
+                            id="Amount"
+                            required
+                            readOnly
+                            className={styles2["form--input"]}
+                            style={{ width: "7.5vw", minWidth: "100px" }}
+                        />
+                    </div>
+                    <div
+                        className={styles2["form--group"]}
+                        style={{
+                            width: "auto",
+                            margin: "0",
+                            alignItems: "center",
+                        }}
+                    >
+                        <label htmlFor="Amount" style={{ marginRight: "10px" }}>
+                            Discount Amount
+                        </label>
+                        <input
+                            type="text"
+                            name="DiscountAmt"
+                            id="DiscountAmt"
+                            value={formData.DiscountAmt}
+                            readOnly
+                            className={styles2["form--input"]}
+                            style={{ width: "7.5vw", minWidth: "100px" }}
+                        />
+                    </div>
+                    <div
+                        className={styles2["form--group"]}
+                        style={{
+                            width: "auto",
+                            margin: "0",
+                            alignItems: "center",
+                        }}
+                    >
+                        <label htmlFor="Amount" style={{ marginRight: "10px" }}>
+                            Net Amount
+                        </label>
+                        <input
+                            type="number"
+                            name="NetAmount"
+                            id="NetAmount"
+                            value={formData.Amount - formData.DiscountAmt}
+                            readOnly
+                            required
+                            className={styles2["form--input"]}
+                            style={{ width: "7.5vw", minWidth: "100px" }}
+                        />
+                    </div>
+
+                    <div
+                        className={styles2["form--group"]}
+                        style={{ width: "auto", margin: "0" }}
+                    >
+                        <input
+                            type="submit"
+                            value="Add to List"
+                            className={`${styles2["form--btn"]} ${styles2["form--add-btn"]}`}
+                            style={{ width: "100px", minWidth: "100px" }}
                         />
                     </div>
                 </div>
-                <div className="form--button">
+                <Modal
+                    open={isPurchaseModalOpen}
+                    onClose={closePurchaseHandler}
+                >
+                    <StickyTable
+                        TableCol={TableColData}
+                        TableData={tabledata}
+                        style={{
+                            maxWidth: "1000px",
+                            width: "900px",
+                            maxHeight: "500px",
+                            border: "1px Solid black",
+                            borderRadius: "10px",
+                        }}
+                    />
+                </Modal>
+                <div className={styles2["form--table"]}>
+                    <StickyTable
+                        TableCol={purchasedListCol}
+                        TableData={purchaseditems}
+                        style={{
+                            width: "604.5px",
+                            border: "2.5px solid black",
+                            borderRadius: "5px",
+                        }}
+                    />
+                </div>
+                <div
+                    className={styles2["form--group"]}
+                    style={{ marginTop: "50px", justifyContent: "center" }}
+                >
+                    <button
+                        onClick={onViewBillHandler}
+                        type="button"
+                        className={`${styles2["form--btn"]} ${styles2["form--add-btn"]}`}
+                        style={{
+                            backgroundColor: "#2297be",
+                            width: "150px",
+                            minWidth: "150px",
+                        }}
+                    >
+                        View Purchases
+                    </button>
                     <input
                         type="text"
                         disabled
                         placeholder="Total Amount"
                         value={totalamount > 0 ? totalamount : "Final Amount"}
+                        className={styles2["form--input"]}
+                        style={{
+                            width: "150px",
+                            minWidth: "150px",
+                            margin: "10px 15px 10px 15px",
+                        }}
                     />
-                    {
-                        <button
-                            disabled={purchaseditems.length > 0 ? false : true}
-                            type="button"
-                            onClick={onMainSubmit}
-                        >
-                            Save Bill
-                        </button>
-                    }
+
+                    <button
+                        disabled={purchaseditems.length > 0 ? false : true}
+                        type="button"
+                        onClick={onMainSubmit}
+                        className={`${styles2["form--btn"]} ${styles2["form--add-btn"]}`}
+                        style={{
+                            width: "150px",
+                            minWidth: "150px",
+                        }}
+                    >
+                        Save Bill
+                    </button>
                 </div>
             </form>
             <Modal open={isItemModalOpen} onClose={closeItemModal}>

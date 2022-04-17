@@ -10,13 +10,11 @@ function UserDashboard({ userDetails, logoutHandler }) {
         <Fragment>
             <Toaster />
             <div className="body">
-                <div className="MainMenu">
-                    <Sidebartest
-                        SidebarDataUserTest={UserSideBarDataTest}
-                        userDetails={userDetails}
-                        logoutHandler={logoutHandler}
-                    />
-                </div>
+                <Sidebartest
+                    SidebarDataUserTest={UserSideBarDataTest}
+                    userDetails={userDetails}
+                    logoutHandler={logoutHandler}
+                />
                 <div className="content">
                     <UserContent userDetails={userDetails} />
                 </div>
