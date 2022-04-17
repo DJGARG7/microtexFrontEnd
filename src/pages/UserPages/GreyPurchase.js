@@ -95,6 +95,39 @@ export default function GreyPurchase({ userDetails }) {
         getSuppliers();
         getItems();
     }, []);
+
+    const closeItemModal = () => {
+        setIsItemModalOpen(false);
+    };
+
+    const openTakaModal = () => {
+        setIsTakaModalOpen(true);
+    };
+
+    const closeTakaModal = () => {
+        setIsTakaModalOpen(false);
+    };
+
+    // funtion to close modal
+    const closePurchaseHandler = () => {
+        setIsPurchaseModalOpen(false);
+    };
+
+    const onItemAdd = async (event) => {
+        event.preventDefault();
+
+        // Post the item to backend.
+        try {
+            const res = await purchases.post("items", itemdetails);
+            toastSuccess(res.data);
+        } catch (error) {
+            toastError(error.response.data);
+        }
+
+        // Close the modal.
+        closeItemModal();
+    };
+
     /* ----------------------------------------Rebuilt---------------------------------------- */
 
     /* Table data. */
@@ -132,7 +165,7 @@ export default function GreyPurchase({ userDetails }) {
         },
         {
             Header: "Account Name",
-            accessor: "accntnames",
+            accessor: "accountID",
         },
         {
             Header: "Challan No",
@@ -270,20 +303,22 @@ export default function GreyPurchase({ userDetails }) {
     ];
     /* Purchase table data. */
 
-    const date = convertDate(new Date());
-
     const [totalamount, settotalamount] = useState(""); // THIS IS THE FINAL AMOUNT OF THE BILL
 
     const [tabledata, settabledata] = useState([]); // for modal table
     const [purchaseditems, setpurchaseditems] = useState([]); // list of purchased items
 
-    const [state, setState] = useState({
-        BillNo: "",
-        BillDate: date,
-        accntnames: "DEFAULT",
-        ChallanNo: "",
-        ChallanDate: date,
-        itemName: 0,
+    const [formData, setFormData] = useState({
+        // BillNo: "",
+        billNumber: "",
+        // BillDate: date,
+        billDate: convertDate(new Date()),
+        // accntnames: "DEFAULT",
+        accountID: "DEFAULT",
+        // ChallanNo: "",
+        // ChallanDate: date,
+        // itemName: 0,
+        itemID: 0,
         Mts: "",
         Rate: "",
         Amount: "",
@@ -298,14 +333,15 @@ export default function GreyPurchase({ userDetails }) {
     useEffect(() => {
         const dis =
             Math.round(
-                ((state.Discount / 100) * state.Amount + Number.EPSILON) * 100
+                ((formData.Discount / 100) * formData.Amount + Number.EPSILON) *
+                    100
             ) / 100;
-        setState({
-            ...state,
-            Amount: state.Rate * state.Mts,
+        setFormData({
+            ...formData,
+            Amount: formData.Rate * formData.Mts,
             DiscountAmt: dis,
         });
-    }, [state.Rate, state.Mts, state.Discount]);
+    }, [formData.Rate, formData.Mts, formData.Discount]);
 
     // for adding a new item
     const [itemdetails, setItemdetails] = useState({
@@ -316,7 +352,7 @@ export default function GreyPurchase({ userDetails }) {
 
     // function to handle any changes
     const onChangeHandler = (event) => {
-        console.log(state);
+        console.log(formData);
         // selected item uuid is shown here
         // if (event.target.name === "itemName") {
         //     const index = event.target.selectedIndex;
@@ -332,33 +368,37 @@ export default function GreyPurchase({ userDetails }) {
         //     value = parseFloat(value);
         // }
 
-        setState({
-            ...state,
+        setFormData({
+            ...formData,
             [event.target.name]: value,
         });
     };
 
-    // funtion to close modal
-    const closeHandler = () => {
-        setIsPurchaseModalOpen(false);
-    };
+    // console.log(items);
+    // const result = items.filter((item) => item.itemID == formData.itemID)[0]
+    //     .itemName;
+    // console.log(result);
 
     // function to handle onsubmit form request
-    const onSubmithandler = async (event) => {
+    const onSubmitHandler = async (event) => {
         event.preventDefault();
-        // const res = await purchases.post("addgreypurchase", state);
+        // const res = await purchases.post("addgreypurchase", formData);
+
+        // Adding item to the table.
 
         const newItem = {
-            itemName: state.itemName,
-            Mts: state.Mts,
-            Rate: state.Rate,
+            itemID: formData.itemID,
+            itemName: items.filter((item) => item.itemID == formData.itemID)[0]
+                .itemName,
+            Mts: formData.Mts,
+            Rate: formData.Rate,
             Amount:
                 Math.round(
                     parseFloat(document.getElementById("NetAmount").value) * 100
                 ) / 100,
-            BillNo: state.BillNo,
-            Discount: state.Discount,
-            Taka: state.Taka,
+            billNumber: formData.billNumber,
+            Discount: formData.Discount,
+            Taka: formData.Taka,
             takaList,
         };
 
@@ -373,9 +413,8 @@ export default function GreyPurchase({ userDetails }) {
             });
             setTakaList([]);
             settotalmts(0);
-            setState({
-                ...state,
-                itemName: "",
+            setFormData({
+                ...formData,
                 Mts: "",
                 Rate: "",
                 Amount: "",
@@ -390,16 +429,12 @@ export default function GreyPurchase({ userDetails }) {
     // if edit is selected when the edit button is clicked on the table
     const onEditHandler = (tableprops) => {
         setIsPurchaseModalOpen(false);
-    };
-
-    //to handle greyitem add handler
-    const closeItemModal = () => {
-        setIsItemModalOpen(false);
+        /* Incomplete. */
     };
 
     const onMainSubmit = async () => {
         const datasend = {
-            state,
+            formData,
             purchaseditems,
             totalamount,
         };
@@ -407,11 +442,11 @@ export default function GreyPurchase({ userDetails }) {
 
         if (res.data.status === "1") {
             toastSuccess("Bill added successfully!");
-            setState({
-                ...state,
-                BillNo: "",
-                accntnames: "",
-                ChallanNo: state.ChallanNo + 1,
+            setFormData({
+                ...formData,
+                billNumber: "",
+                accountID: "",
+                ChallanNo: formData.ChallanNo + 1,
             });
             setpurchaseditems([]);
             settotalamount(0);
@@ -423,43 +458,30 @@ export default function GreyPurchase({ userDetails }) {
     const [totalmts, settotalmts] = useState(0);
 
     // useeffct to set challan No
-    useEffect(() => {
-        (async () => {
-            const challanNo = await purchases.get("fetchChallanNo");
-            let varChallan = 0;
-            if (challanNo.data[0].challanNo !== null)
-                varChallan = challanNo.data[0].challanNo;
-            setState({
-                ...state,
-                ChallanNo: varChallan + 1,
-            });
-        })();
-    }, [settotalamount]);
-
-    /* ----------------------------------------Rebuilt---------------------------------------- */
-    // handles when new item is added to the db
-    const onItemAdd = async (event) => {
-        event.preventDefault();
-
-        // Post the item to backend.
-        try {
-            const res = await purchases.post("items", itemdetails);
-            toastSuccess(res.data);
-        } catch (error) {
-            toastError(error.response.data);
-        }
-
-        // Close the modal.
-        closeItemModal();
-    };
-    /* ----------------------------------------Rebuilt---------------------------------------- */
+    // useEffect(() => {
+    //     (async () => {
+    //         const challanNo = await purchases.get("fetchChallanNo");
+    //         let varChallan = 0;
+    //         if (challanNo.data[0].challanNo !== null)
+    //             varChallan = challanNo.data[0].challanNo;
+    //         setFormData({
+    //             ...formData,
+    //             ChallanNo: varChallan + 1,
+    //         });
+    //     })();
+    // }, [settotalamount]);
 
     // when view all pucrchased isclicked
-    const onViewBillhandler = async () => {
+    const onViewBillHandler = async () => {
+        // Open modal.
         setIsPurchaseModalOpen(true);
+
+        // Fetch bills.
         const res = await purchases.get("fetchGreyBills");
 
-        console.log(res);
+        // console.log(res);
+
+        // Calculations for rendering.
         res.data.forEach((item, index) => {
             const date = new Date(item.BillDate);
             const date2 = new Date(item.ChallanDate);
@@ -469,24 +491,12 @@ export default function GreyPurchase({ userDetails }) {
         settabledata(res.data);
     };
 
-    if (!isAllowed) {
-        return (
-            <div
-                style={{
-                    marginTop: "10vh",
-                }}
-            >
-                <strong>You are not allowed access to this area.</strong>
-            </div>
-        );
-    }
-
     // function that handles data recived from child taka component
     const onTakaHandler = (takaData) => {
         setTakaList(takaData.tabledata);
         setIsTakaModalOpen(false);
-        setState({
-            ...state,
+        setFormData({
+            ...formData,
             Taka: takaData.tabledata.length,
             Mts: takaData.totalmts,
         });
@@ -494,16 +504,8 @@ export default function GreyPurchase({ userDetails }) {
         toastSuccess("Taka Details Saved");
     };
 
-    // function to add taka details
-    const addTakaDetails = () => {
-        setIsTakaModalOpen(true);
-    };
-
-    const onCloseTakaModal = () => {
-        setIsTakaModalOpen(false);
-    };
-
     /* ----------------------------------------Rebuilt---------------------------------------- */
+
     if (isAllowedLoading || isSuppliersLoading || isItemsLoading) {
         return (
             <div
@@ -531,33 +533,33 @@ export default function GreyPurchase({ userDetails }) {
 
     return (
         <div>
-            <form onSubmit={onSubmithandler} className="form--greypurchase">
+            <form onSubmit={onSubmitHandler} className="form--greypurchase">
                 <div className="main">
                     <div className="firstline--greypurchase">
                         <input
                             type="number"
-                            value={state.BillNo}
-                            name="BillNo"
+                            name="billNumber"
+                            value={formData.billNumber}
                             onChange={onChangeHandler}
                             placeholder="Bill Number"
                             required
                         />
                         <input
                             type="text"
-                            style={{ width: "140px" }}
-                            required
-                            value={state.BillDate}
-                            name="BillDate"
+                            name="billDate"
+                            value={formData.billDate}
                             onChange={onChangeHandler}
                             onFocus={(e) => (e.target.type = "date")}
                             onBlur={(e) => (e.target.type = "text")}
                             placeholder="Bill Date"
+                            style={{ width: "140px" }}
+                            required
                         />
                         {/* <label>Challan date</label>
                         <input
                             style={{ width: "140px" }}
                             type="date"
-                            value={state.ChallanDate}
+                            value={formData.ChallanDate}
                             name="challanDate"
                             onChange={onChangeHandler}
                         /> */}
@@ -566,21 +568,21 @@ export default function GreyPurchase({ userDetails }) {
                         <label>
                             Supplier
                             <select
-                                name="accntnames"
+                                name="accountID"
                                 onChange={onChangeHandler}
                                 required
-                                value={state.accntnames}
+                                value={formData.accountID}
                             >
                                 <option value="DEFAULT" disabled hidden>
                                     Select supplier...
                                 </option>
-                                {suppliers.map((acct, index) => {
+                                {suppliers.map((supplier) => {
                                     return (
                                         <option
-                                            value={acct.AccName}
-                                            key={index}
+                                            value={supplier.uid}
+                                            key={supplier.uid}
                                         >
-                                            {acct.AccName}
+                                            {supplier.AccName}
                                         </option>
                                     );
                                 })}
@@ -590,7 +592,7 @@ export default function GreyPurchase({ userDetails }) {
                             Challan No.
                             <input
                                 type="text"
-                                value={state.ChallanNo}
+                                value={formData.ChallanNo}
                                 name="ChallanNo"
                                 disabled
                                 required
@@ -602,8 +604,8 @@ export default function GreyPurchase({ userDetails }) {
                         <label>
                             Item Name
                             <select
-                                name="itemName"
-                                value={state.itemName}
+                                name="itemID"
+                                value={formData.itemID}
                                 onChange={onChangeHandler}
                                 required
                             >
@@ -638,10 +640,10 @@ export default function GreyPurchase({ userDetails }) {
                                 name="Taka"
                                 type="number"
                                 placeholder="Taka"
-                                value={state.Taka}
+                                value={formData.Taka}
                                 onChange={onChangeHandler}
                             />
-                            <button type="button" onClick={addTakaDetails}>
+                            <button type="button" onClick={openTakaModal}>
                                 Add taka details
                             </button>
                         </div>
@@ -650,11 +652,12 @@ export default function GreyPurchase({ userDetails }) {
                             <input
                                 type="number"
                                 name="Mts"
-                                value={state.Mts}
+                                value={formData.Mts}
                                 id="mts"
                                 required
                                 min="0"
                                 onChange={onChangeHandler}
+                                readOnly
                             />
                         </label>
                         <label>
@@ -664,7 +667,7 @@ export default function GreyPurchase({ userDetails }) {
                                 id="rate"
                                 name="Rate"
                                 min="0"
-                                value={state.Rate}
+                                value={formData.Rate}
                                 onChange={onChangeHandler}
                             />
                         </label>
@@ -675,11 +678,10 @@ export default function GreyPurchase({ userDetails }) {
                             <input
                                 type="number"
                                 name="Amount"
-                                value={state.Amount}
-                                readOnly
+                                value={formData.Amount}
                                 id="Amount"
                                 required
-                                disabled
+                                readOnly
                             />
                         </label>
                         <label>
@@ -687,7 +689,7 @@ export default function GreyPurchase({ userDetails }) {
                                 type="number"
                                 name="Discount"
                                 placeholder="Discount (%)"
-                                value={state.Discount}
+                                value={formData.Discount}
                                 onChange={onChangeHandler}
                                 min="0"
                                 max="100"
@@ -696,9 +698,8 @@ export default function GreyPurchase({ userDetails }) {
                                 type="text"
                                 name="DiscountAmt"
                                 id="DiscountAmt"
+                                value={formData.DiscountAmt}
                                 readOnly
-                                value={state.DiscountAmt}
-                                disabled
                             />
                         </label>
                     </div>
@@ -708,19 +709,21 @@ export default function GreyPurchase({ userDetails }) {
                             <input
                                 type="number"
                                 name="NetAmount"
-                                readOnly
                                 id="NetAmount"
-                                value={state.Amount - state.DiscountAmt}
-                                disabled
+                                value={formData.Amount - formData.DiscountAmt}
+                                readOnly
                                 required
                             />
                         </label>
-                        <input type="submit" value="Add item to the list" />
-                        <button onClick={onViewBillhandler} type="button">
+                        <input type="submit" value="Add to List" />
+                        <button onClick={onViewBillHandler} type="button">
                             View all purchases
                         </button>
                     </div>
-                    <Modal open={isPurchaseModalOpen} onClose={closeHandler}>
+                    <Modal
+                        open={isPurchaseModalOpen}
+                        onClose={closePurchaseHandler}
+                    >
                         <StickyTable
                             TableCol={TableColData}
                             TableData={tabledata}
@@ -809,7 +812,7 @@ export default function GreyPurchase({ userDetails }) {
                     <button>Add item</button>
                 </form>
             </Modal>
-            <Modal open={isTakaModalOpen} onClose={onCloseTakaModal}>
+            <Modal open={isTakaModalOpen} onClose={closeTakaModal}>
                 <TakaDetails
                     takaList={takaList}
                     totalMts={totalmts}
