@@ -445,8 +445,7 @@ export default function GreyPurchase({ userDetails }) {
             setFormData({
                 ...formData,
                 billNumber: "",
-                accountID: "",
-                ChallanNo: formData.ChallanNo + 1,
+                accountID: "DEFAULT",
             });
             setpurchaseditems([]);
             settotalamount(0);
@@ -576,6 +575,7 @@ export default function GreyPurchase({ userDetails }) {
                                 <option value="DEFAULT" disabled hidden>
                                     Select supplier...
                                 </option>
+                                {console.log(suppliers)}
                                 {suppliers.map((supplier) => {
                                     return (
                                         <option
