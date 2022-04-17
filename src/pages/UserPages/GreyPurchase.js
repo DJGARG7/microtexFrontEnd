@@ -160,21 +160,12 @@ export default function GreyPurchase({ userDetails }) {
             show: false,
         },
         {
-            Header: "Bill No",
-            accessor: "BillNo",
+            Header: "Bill Number",
+            accessor: "billNumber",
         },
         {
             Header: "Account Name",
-            accessor: "accountID",
-        },
-        {
-            Header: "Challan No",
-            accessor: "ChallanNo",
-            Filter: "",
-        },
-        {
-            Header: "ChallanDate",
-            accessor: "ChallanDate",
+            accessor: "AccName",
         },
         {
             Header: "itemName",
@@ -183,27 +174,27 @@ export default function GreyPurchase({ userDetails }) {
         },
         {
             Header: "Taka",
-            accessor: "Taka",
+            accessor: "taka",
             Filter: "",
         },
         {
             Header: "Mts",
-            accessor: "Mts",
+            accessor: "meters",
             Filter: "",
         },
         {
             Header: "Rate",
             Filter: "",
-            accessor: "Rate",
+            accessor: "rate",
         },
         {
             Header: "Amount",
-            accessor: "Amount",
+            accessor: "amount",
             Filter: "",
         },
         {
             Header: "Discount",
-            accessor: "Discount",
+            accessor: "discount",
             Filter: "",
         },
     ];
@@ -277,24 +268,24 @@ export default function GreyPurchase({ userDetails }) {
             width: 70,
         },
         {
-            Header: "Mts",
-            accessor: "Mts",
+            Header: "meters",
+            accessor: "meters",
             Filter: "",
             maxWidth: 70,
             minWidth: 70,
             width: 70,
         },
         {
-            Header: "Rate",
+            Header: "rate",
             Filter: "",
-            accessor: "Rate",
+            accessor: "rate",
             maxWidth: 70,
             minWidth: 70,
             width: 40,
         },
         {
-            Header: "Amount",
-            accessor: "Amount",
+            Header: "amount",
+            accessor: "amount",
             Filter: "",
             maxWidth: 90,
             minWidth: 90,
@@ -352,7 +343,7 @@ export default function GreyPurchase({ userDetails }) {
 
     // function to handle any changes
     const onChangeHandler = (event) => {
-        console.log(formData);
+        // console.log(formData);
         // selected item uuid is shown here
         // if (event.target.name === "itemName") {
         //     const index = event.target.selectedIndex;
@@ -478,14 +469,14 @@ export default function GreyPurchase({ userDetails }) {
         // Fetch bills.
         const res = await purchases.get("fetchGreyBills");
 
-        // console.log(res);
+        console.log(res.data);
 
         // Calculations for rendering.
         res.data.forEach((item, index) => {
-            const date = new Date(item.BillDate);
-            const date2 = new Date(item.ChallanDate);
-            item.BillDate = date.toLocaleDateString();
-            item.ChallanDate = date2.toLocaleDateString();
+            const date = new Date(item.billDate);
+            // const date2 = new Date(item.ChallanDate);
+            item.billDate = date.toLocaleDateString();
+            // item.ChallanDate = date2.toLocaleDateString();
         });
         settabledata(res.data);
     };
@@ -575,7 +566,6 @@ export default function GreyPurchase({ userDetails }) {
                                 <option value="DEFAULT" disabled hidden>
                                     Select supplier...
                                 </option>
-                                {console.log(suppliers)}
                                 {suppliers.map((supplier) => {
                                     return (
                                         <option
