@@ -32,35 +32,35 @@ function convertDate(inputFormat) {
     return [d.getFullYear(), pad(d.getMonth() + 1), pad(d.getDate())].join("-");
 }
 
-export default function SendToMillForm({ weaverData, millsData }) {
+export default function SendToMillForm({ itemData, millsData }) {
     // Form-related data.
-    const [greyCloth, setGreyCloth] = useState([]);
+    const [suppliers, setSuppliers] = useState([]);
     const [taka, setTaka] = useState([]);
 
     // Form binding.
-    const [challanDate, setChallanDate] = useState();
+    const [challanDate, setChallanDate] = useState(convertDate(new Date()));
     const [challanNumber, setChallanNumber] = useState();
     const [selectedGrey, setSelectedGrey] = useState("DEFAULT");
     const [selectedSupplier, setSelectedSupplier] = useState("DEFAULT");
     const [selectedMill, setSelectedMill] = useState("DEFAULT");
 
-    const fetchGreyCloth = async () => {
+    const fetchSuppliers = async () => {
         try {
             const res = await axios.get(
-                `http://localhost:3005/userservice/fetchGreyBills/${selectedSupplier}`
+                `http://localhost:3005/purchases/suppliers/${selectedGrey}`
             );
 
-            setGreyCloth(res.data);
+            setSuppliers(res.data);
         } catch (error) {
             console.log(error);
-            toast.error("Failed to fetch mill data", toastStyle);
+            toast.error("Failed to fetch supplier data", toastStyle);
         }
     };
 
     const fetchTaka = async () => {
         try {
             const res = await axios.get(
-                `http://localhost:3005/userservice/taka/${selectedGrey}`
+                `http://localhost:3005/purchases/taka/${selectedGrey}`
             );
 
             setTaka(res.data);
@@ -71,12 +71,12 @@ export default function SendToMillForm({ weaverData, millsData }) {
     };
 
     useEffect(() => {
-        fetchGreyCloth();
-    }, [selectedSupplier]);
+        fetchSuppliers();
+    }, [selectedGrey]);
 
     useEffect(() => {
         fetchTaka();
-    }, [selectedGrey]);
+    }, [selectedSupplier]);
 
     const submitHandler = () => {
         console.log("Hello");
@@ -85,29 +85,48 @@ export default function SendToMillForm({ weaverData, millsData }) {
     return (
         <form onSubmit={submitHandler} className={millstyles["form"]}>
             <div className={millstyles["form--group"]}>
-                <input
-                    type="number"
-                    onChange={(e) => setChallanNumber(e.target.value)}
-                    value={challanNumber}
-                    min="1"
-                    placeholder="Challan Number"
-                    className={millstyles["form--input"]}
-                />
-                <input
-                    type="text"
-                    onChange={(e) => setChallanDate(e.target.value)}
-                    onFocus={(e) => (e.target.type = "date")}
-                    onBlur={(e) => (e.target.type = "text")}
-                    value={challanDate}
-                    placeholder="Challan Date"
-                    className={millstyles["form--input"]}
-                />
+                <div
+                    className={millstyles["form--group"]}
+                    style={{ width: "auto", margin: "0" }}
+                >
+                    <input
+                        type="number"
+                        onChange={(e) => setChallanNumber(e.target.value)}
+                        value={challanNumber}
+                        min="1"
+                        placeholder="Challan Number"
+                        className={millstyles["form--input"]}
+                        style={{
+                            width: "10vw",
+                            minWidth: "150px",
+                            marginRight: "15px",
+                        }}
+                        required
+                    />
+                    <input
+                        type="text"
+                        onChange={(e) => setChallanDate(e.target.value)}
+                        onFocus={(e) => (e.target.type = "date")}
+                        onBlur={(e) => (e.target.type = "text")}
+                        value={challanDate}
+                        placeholder="Challan Date"
+                        className={millstyles["form--input"]}
+                        style={{ width: "150px", minWidth: "150px" }}
+                        required
+                    />
+                </div>
+
                 <select
                     placeholder="Mill"
                     className={`${millstyles["form--input"]} ${millstyles["form--input-select"]}`}
                     value={selectedMill}
                     onChange={(e) => {
                         setSelectedMill(e.target.value);
+                    }}
+                    style={{
+                        width: "20vw",
+                        minWidth: "250px",
+                        margin: "10px 15px 10px 15px",
                     }}
                 >
                     <option disabled hidden value="DEFAULT">
@@ -121,9 +140,7 @@ export default function SendToMillForm({ weaverData, millsData }) {
                         );
                     })}
                 </select>
-            </div>
 
-            <div className={millstyles["form--group"]}>
                 <select
                     placeholder="Grey cloth"
                     className={`${millstyles["form--input"]} ${millstyles["form--input-select"]}`}
@@ -131,34 +148,45 @@ export default function SendToMillForm({ weaverData, millsData }) {
                     onChange={(e) => {
                         setSelectedGrey(e.target.value);
                     }}
+                    style={{
+                        width: "17.5vw",
+                        minWidth: "200px",
+                        margin: "10px 15px 10px 15px",
+                    }}
                 >
                     <option disabled hidden value="DEFAULT">
                         Select item...
                     </option>
-                    {greyCloth.map((cloth) => {
+                    {itemData.map((cloth) => {
                         return (
                             <option value={cloth.itemID} key={cloth.itemID}>
-                                {cloth.ItemName}
+                                {cloth.itemName}
                             </option>
                         );
                     })}
                 </select>
+            </div>
 
+            <div
+                className={millstyles["form--group"]}
+                style={{ justifyContent: "center" }}
+            >
                 <select
-                    placeholder="Weaver"
+                    placeholder="Supplier"
                     className={`${millstyles["form--input"]} ${millstyles["form--input-select"]}`}
                     value={selectedSupplier}
                     onChange={(e) => {
                         setSelectedSupplier(e.target.value);
                     }}
                 >
+                    {console.log(suppliers)}
                     <option disabled hidden value="DEFAULT">
-                        Select weaver...
+                        Select supplier...
                     </option>
-                    {weaverData.map((weaver) => {
+                    {suppliers.map((supplier) => {
                         return (
-                            <option value={weaver.AccName} key={weaver.AccName}>
-                                {weaver.AccName}
+                            <option value={supplier.uid} key={supplier.uid}>
+                                {supplier.AccName}
                             </option>
                         );
                     })}

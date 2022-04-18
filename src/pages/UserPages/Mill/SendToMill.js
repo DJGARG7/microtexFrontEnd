@@ -25,11 +25,11 @@ export default function SendToMill({ userDetails }) {
 
     // Loading states.
     const [isAllowedLoading, setIsAllowedLoading] = useState(true);
-    const [isWeaversLoading, setIsWeaversLoading] = useState(true);
+    const [isItemsLoading, setIsItemsLoading] = useState(true);
     const [isMillsLoading, setIsMillsLoading] = useState(true);
 
     // Form-related data.
-    const [weavers, setWeavers] = useState([]);
+    const [items, setItems] = useState([]);
     const [mills, setMills] = useState([]);
 
     const checkPermission = async () => {
@@ -45,19 +45,16 @@ export default function SendToMill({ userDetails }) {
         }
     };
 
-    const fetchWeavers = async () => {
-        let accountType = "Sundry Creditors";
-
+    const fetchItems = async () => {
         try {
             const res = await axios.get(
-                `http://localhost:3003/accountMaster/${accountType}`
+                `http://localhost:3005/purchases/items`
             );
-
-            setWeavers(res.data);
-            setIsWeaversLoading(false);
+            setItems(res.data);
+            setIsItemsLoading(false);
         } catch (error) {
             console.log(error);
-            toast.error("Failed to fetch account data", toastStyle);
+            toast.error("Failed to fetch item data", toastStyle);
         }
     };
 
@@ -79,11 +76,11 @@ export default function SendToMill({ userDetails }) {
 
     useEffect(() => {
         checkPermission();
-        fetchWeavers();
+        fetchItems();
         fetchMills();
     }, []);
 
-    if (isAllowedLoading || isWeaversLoading || isMillsLoading) {
+    if (isAllowedLoading || isItemsLoading || isMillsLoading) {
         return (
             <div
                 style={{
@@ -110,7 +107,7 @@ export default function SendToMill({ userDetails }) {
     return (
         <div className={styles["main"]}>
             <h2>Send to Mill</h2>
-            <SendToMillForm weaverData={weavers} millsData={mills} />
+            <SendToMillForm itemData={items} millsData={mills} />
         </div>
     );
 }

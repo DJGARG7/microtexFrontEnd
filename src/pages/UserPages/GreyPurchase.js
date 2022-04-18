@@ -126,6 +126,8 @@ export default function GreyPurchase({ userDetails }) {
 
         // Close the modal.
         closeItemModal();
+
+        getItems();
     };
 
     /* View all purchases table data. */
@@ -139,6 +141,10 @@ export default function GreyPurchase({ userDetails }) {
                         className={`${styles2["form--btn"]} ${styles2["form--add-btn"]}`}
                         style={{
                             cursor: "pointer",
+                            width: "auto",
+                            height: "auto",
+                            padding: "5px",
+                            margin: "0",
                         }}
                         type="submit"
                         onClick={() => {
@@ -295,11 +301,6 @@ export default function GreyPurchase({ userDetails }) {
             minWidth: 90,
             width: 90,
         },
-        // {
-        //     Header: "Discount",
-        //     accessor: "Discount",
-        //     Filter: "",
-        // },
     ];
     /* Purchase table data. */
 
@@ -659,6 +660,7 @@ export default function GreyPurchase({ userDetails }) {
                             placeholder="Taka"
                             value={formData.Taka}
                             onChange={onChangeHandler}
+                            readOnly
                             className={styles2["form--input"]}
                             style={{
                                 width: "10vw",
