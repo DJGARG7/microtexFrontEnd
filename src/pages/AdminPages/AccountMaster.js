@@ -4,7 +4,7 @@ import AccountTypeData from "../../jsonData/adminData/AccountTypeData";
 import styles from "../../styles/AccountMaster.module.css";
 import Axios from "axios";
 import toast from "react-hot-toast";
-
+import CurrentDate from "../../components/Reuse_components/CurrentDate";
 import AccountMasterTable from "../../components/Admin_components/AccountMasterTable";
 
 if (localStorage.getItem("userDetails") != null)
@@ -15,7 +15,7 @@ Axios.defaults.withCredentials = true;
 const instance = Axios.create({
     baseURL: "http://localhost:3003/accountMaster/",
 });
-
+const currDate = CurrentDate();
 const AccountMaster = ({ userDetails }) => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -139,6 +139,7 @@ const AccountMaster = ({ userDetails }) => {
             IFSC: ifsc.trim(),
 
             shares: share,
+            currDate: currDate,
         };
         //data insert
         if (disMode === 0) {
@@ -528,12 +529,13 @@ const AccountMaster = ({ userDetails }) => {
                                     onChange={(e) => setCrdr(e.target.value)}
                                     className={styles["input-select"]}
                                     disabled={!isEntering}
+                                    required
                                 >
-                                    <option value="none" disabled hidden>
+                                    <option value="" disabled hidden>
                                         Cr./Dr.
                                     </option>
-                                    <option value="CR">Cr.</option>
-                                    <option value="DR">Dr.</option>
+                                    <option value="Cr">Cr.</option>
+                                    <option value="Dr">Dr.</option>
                                 </select>
                             </div>
                         )}

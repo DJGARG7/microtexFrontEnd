@@ -4,14 +4,10 @@ import {
     toastError,
     toastSuccess,
 } from "../../components/Reuse_components/toast";
+import CurrentDate from "../../components/Reuse_components/CurrentDate";
 import StickyTable from "../../components/Reuse_components/Table/StickyTable";
-const current = new Date();
+const currDate = CurrentDate();
 const SaleChallan = ({ userDetails }) => {
-    const currDate = [
-        current.getFullYear(),
-        ("0" + (current.getMonth() + 1)).slice(-2),
-        ("0" + current.getDate()).slice(-2),
-    ].join("-");
     const TableColData = [
         {
             Header: "Design Name",
