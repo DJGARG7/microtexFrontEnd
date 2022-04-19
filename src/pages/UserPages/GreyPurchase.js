@@ -231,7 +231,7 @@ export default function GreyPurchase({ userDetails }) {
                             textTransform: "uppercase",
                             fontWeight: "600",
                         }}
-                        type="submit"
+                        type="button"
                         onClick={() => {
                             settotalamount((preamount) => {
                                 return parseInt(

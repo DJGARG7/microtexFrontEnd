@@ -17,7 +17,7 @@ if (localStorage.getItem("userDetails") != null)
   ).userID;
 Axios.defaults.withCredentials = true;
 const usrinstance = Axios.create({
-  baseURL: "http://localhost:3005/userservice/",
+  baseURL: "http://localhost:3005/purchases/",
 });
 const accinstance = Axios.create({
   baseURL: "http://localhost:3003/accountMaster",
@@ -53,12 +53,6 @@ function SendJobForWork() {
       Filter: "",
       // width: "150px",
     },
-    // {
-    //   Header: "Cut",
-    //   accessor: "Cut",
-    //   Filter: "",
-    //   width: "90px",
-    // },
     // {
     //   Header: "Pcs",
     //   accessor: "Pcs",
@@ -106,7 +100,7 @@ function SendJobForWork() {
   //useEffect to fetch account names
   useEffect(() => {
     (async () => {
-      const res = await accinstance.get(" ");
+      const res = await accinstance.get("Creditors for job");
 
       setAccntList(res.data);
     })();
@@ -160,6 +154,7 @@ function SendJobForWork() {
   return (
     <div className={styles["main"]}>
       <form onSubmit={onFormSubmit} className={styles["form"]}>
+        <h2>Send For Job</h2>
         <div className={styles["input-section"]}>
           <select
             className={styles["input-select"]}
@@ -323,55 +318,49 @@ function SendJobForWork() {
             className={styles["input-text"]}
           />
         </div>
-        <div className={styles["input-section"]}>
+        <div className={styles["form-table"]}>
           <StickyTable
             TableCol={purchasedCol}
             TableData={tabledata}
             style={{
               maxWidth: "100%",
-
               maxHeight: "300px",
-              border: "1px Solid black",
-              borderRadius: "10px",
+              border: "2.5px solid black",
+              borderRadius: "5px",
             }}
           />
         </div>
-        {!editmode && (
-          <button className={`${styles["add-btn"]} ${styles["btn"]}`}>
-            Submit
+        <div style={{ display:"flex", flexDirection:"column",marginTop: "50px", justifyContent: "center" }}>
+          {!editmode && (
+            <button className={`${styles["add-btn"]} ${styles["btn"]}`}>
+              Submit
+            </button>
+          )}
+          {editmode && (
+            <div>
+              <button
+                className={`${styles["edit-btn"]} ${styles["btn"]}`}
+                type="button"
+                onClick={""}
+              >
+                Edit
+              </button>
+              <button
+                className={`${styles["edit-btn"]} ${styles["btn"]}`}
+                type="button"
+                onClick={""}
+              >
+                Cancel
+              </button>
+            </div>
+          )}
+          <button
+            type="button"
+            className={`${styles["add-btn"]} ${styles["btn"]}`}
+          >
+            View all items
           </button>
-        )}
-        {editmode && (
-          <div>
-            <button
-              className={`${styles["edit-btn"]} ${styles["btn"]}`}
-              type="button"
-              onClick={""}
-            >
-              Edit
-            </button>
-            <button
-              className={`${styles["edit-btn"]} ${styles["btn"]}`}
-              type="button"
-              onClick={""}
-            >
-              Cancel
-            </button>
-          </div>
-        )}
-        <button
-          type="button"
-          className={`${styles["add-btn"]} ${styles["btn"]}`}
-          onClick={() => {
-            (async function fetchdata() {
-              const res = await usrinstance.get("fetchgeneralpurchase");
-              setTableData(res.data);
-            })();
-            setModal(true);
-          }}
-        >
-          View all items
-        </button>
+        </div>
       </form>
     </div>
   );

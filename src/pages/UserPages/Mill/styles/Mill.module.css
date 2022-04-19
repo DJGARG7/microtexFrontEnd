@@ -95,7 +95,7 @@
     padding: 5px;
 
     transition: 200ms;
-
+    cursor: pointer;
     margin: 10px 0 10px 0;
 }
 
@@ -111,6 +111,15 @@
     background-color: #40916c;
     color: white;
 }
+.form--edit-btn {
+    background-color: #3e3eff;
+    color: white;
+}
+.form--edit-btn:active {
+    background-color: #0000b2;
+    color: white;
+}
+
 
 .form--del-btn {
     background-color: #ca2b53;

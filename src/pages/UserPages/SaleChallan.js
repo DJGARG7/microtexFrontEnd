@@ -10,6 +10,17 @@ const currDate = CurrentDate();
 const SaleChallan = ({ userDetails }) => {
     const TableColData = [
         {
+            Header: "Action",
+            Cell: (tableProps) => (
+                <button
+                    type="button"
+                    onClick={() => rowDeleteHandler(tableProps)}
+                >
+                    Delete
+                </button>
+            ),
+        },
+        {
             Header: "Design Name",
             accessor: "DName",
             Filter: "",
@@ -30,6 +41,11 @@ const SaleChallan = ({ userDetails }) => {
             Filter: "",
         },
     ];
+    const rowDeleteHandler = (tableData) => {
+        const copyData = [...tableData.data];
+        copyData.splice(tableData.row.index, 1);
+        setItemList(copyData);
+    };
     //for items in table
     const [itemList, setItemList] = useState([]);
 

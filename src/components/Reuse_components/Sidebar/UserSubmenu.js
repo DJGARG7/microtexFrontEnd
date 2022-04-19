@@ -42,7 +42,6 @@ const UserSubmenu = ({ item }) => {
                     backgroundColor: subnav ? "#5A0FD2" : "#480ca8",
                     borderRadius: subnav ? "15px 15px 0px 0px" : "15px",
                 }}
-                activeStyle={{ backgroundColor: "#5A0FD2" }}
             >
                 <div>
                     {item.icon}
