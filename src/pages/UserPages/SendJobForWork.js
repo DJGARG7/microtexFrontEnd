@@ -17,7 +17,7 @@ if (localStorage.getItem("userDetails") != null)
   ).userID;
 Axios.defaults.withCredentials = true;
 const usrinstance = Axios.create({
-  baseURL: "http://localhost:3005/userservice/",
+  baseURL: "http://localhost:3005/purchases/",
 });
 const accinstance = Axios.create({
   baseURL: "http://localhost:3003/accountMaster",
@@ -53,12 +53,6 @@ function SendJobForWork() {
       Filter: "",
       // width: "150px",
     },
-    // {
-    //   Header: "Cut",
-    //   accessor: "Cut",
-    //   Filter: "",
-    //   width: "90px",
-    // },
     // {
     //   Header: "Pcs",
     //   accessor: "Pcs",

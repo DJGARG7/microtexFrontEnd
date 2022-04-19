@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import styles from "../../styles/AccountMaster.module.css";
-import "../../styles/CityMaster.css";
+import styles from "../../styles/SendJob.module.css";
 import Modal from "../../components/Reuse_components/Modal";
 import StickyTable from "../../components/Reuse_components/Table/StickyTable";
+import styles2 from "./Mill/styles/Mill.module.css";
 import Axios from "axios";
 import {
   toastError,
@@ -15,11 +15,21 @@ if (localStorage.getItem("userDetails") != null)
   ).userID;
 Axios.defaults.withCredentials = true;
 const usrinstance = Axios.create({
-  baseURL: "http://localhost:3005/userservice/",
+  baseURL: "http://localhost:3005/purchases/",
 });
 const accinstance = Axios.create({
   baseURL: "http://localhost:3003/accountMaster",
 });
+
+// helper function to get the current date
+function convertDate(inputFormat) {
+  function pad(s) {
+    return s < 10 ? "0" + s : s;
+  }
+  var d = new Date(inputFormat);
+  return [d.getFullYear(), pad(d.getMonth() + 1), pad(d.getDate())].join("-");
+}
+
 function GeneralPurchases({ userDetails }) {
   //table data
   const tablecoldata = [
@@ -57,11 +67,7 @@ function GeneralPurchases({ userDetails }) {
       Cell: (tableProps) => (
         <div className="btn-grp">
           <button
-            style={{
-              cursor: "pointer",
-            }}
-            className="btn del-btn"
-            type="submit"
+            className={`${styles2["form--btn"]} ${styles2["form--del-btn"]}`}
             onClick={() => {
               onDeleteRow(tableProps);
             }}
@@ -69,11 +75,7 @@ function GeneralPurchases({ userDetails }) {
             Delete
           </button>
           <button
-            className="btn edit-btn"
-            style={{
-              cursor: "pointer",
-            }}
-            type="submit"
+            className={`${styles2["form--btn"]} ${styles2["form--edit-btn"]}`}
             onClick={() => {
               onEditrow(tableProps);
             }}
@@ -90,9 +92,12 @@ function GeneralPurchases({ userDetails }) {
   const [isAllowed, setIsAllowed] = useState(false);
   const [modal, setModal] = useState(false);
   const [tabledata, settabledata] = useState([]);
+  const [accntid, setaccntid] = useState("");
   const [state, setState] = useState({
     uuid: "",
-    accntname:"",
+    billno: "",
+    accntname: "",
+    billdate: convertDate(new Date()),
     itemname: "",
     quantity: "",
     priceperqty: "",
@@ -104,27 +109,41 @@ function GeneralPurchases({ userDetails }) {
   const clearall = () => {
     setState({
       uuid: "",
-      accntname:"",
+      accntname: "",
+      billno: "",
+      billdate: convertDate(new Date()),
       itemname: "",
       priceperqty: "",
       quantity: "",
     });
     setTotalamount(0);
+    setaccntid("");
   };
   // On input change
   const onChangeHandler = (e) => {
     let val = e.target.value;
-    if (e.target.id === "quantity" || e.target.id === "priceperqty") {
+    const name = e.target.id;
+    if (name === "billno") {
+      val = parseInt(val);
+    }
+
+    if (name === "quantity" || name === "priceperqty") {
       const value =
         document.getElementById("quantity").value *
         document.getElementById("priceperqty").value;
       setTotalamount(value);
     }
-    
+    if (name === "accntname") {
+      const index = e.target.selectedIndex;
+      const el = e.target.childNodes[index];
+      const uid = el.getAttribute("id");
+      console.log("UUID of item selected ", uid);
+      setaccntid(uid);
+    }
 
     setState({
       ...state,
-      [e.target.id]: val,
+      [name]: val,
     });
   };
   //on deleting a row from the table
@@ -172,8 +191,9 @@ function GeneralPurchases({ userDetails }) {
   useEffect(() => {
     checkPermission();
     (async () => {
-      const res = await accinstance.get(" "); 
-   
+      const accntType = "Creditors for expenses";
+      const res = await accinstance.get(`${accntType}`);
+
       setaccntlist(res.data);
     })();
   }, []);
@@ -194,7 +214,11 @@ function GeneralPurchases({ userDetails }) {
     const data = {
       state,
       totalamount,
+      CrDr: "Cr",
+      accntType: "Creditors for expenses",
+      accntid: accntid,
     };
+    console.log(data);
     (async () => {
       const res = await usrinstance.post("addgeneralpurchase", data);
       if (res.data.status === "1") {
@@ -222,7 +246,7 @@ function GeneralPurchases({ userDetails }) {
       `updategeneralpurchase/${state.uuid}`,
       data
     );
- 
+
     if (res.data == "1") {
       toastSuccess("Edited Successfully");
       clearall();
@@ -233,53 +257,82 @@ function GeneralPurchases({ userDetails }) {
   };
   return (
     <div className={styles["main"]}>
-      <h1>General Purchase</h1>
       <form onSubmit={onFormSubmit} className={styles["form"]}>
-        <div className={styles["input-grid"]}>
-          <div className={styles["input-group"]}>
-            <select className={styles["input-select"]} id="accntname" required onChange={onChangeHandler} value={state.accntname}>
-              <option value="">Account Names</option>
-              {accntlist.map((obj,index)=>{
-                return <option value={obj.AccName} key={index}>{obj.AccName}</option>
-              })}
-            </select>
-            <input
-              placeholder="Item Name"
-              type="text"
-              className={styles["input-text"]}
-              value={state.itemname}
-              id="itemname"
-              required
-              onChange={onChangeHandler}
-            ></input>
-            <input
-              placeholder="Quantity"
-              type="number"
-              className={styles["input-text"]}
-              value={state.quantity}
-              id="quantity"
-              required
-              onChange={onChangeHandler}
-            ></input>
-            <input
-              placeholder="Price per Quantity"
-              type="number"
-              className={styles["input-text"]}
-              value={state.priceperqty}
-              id="priceperqty"
-              required
-              onChange={onChangeHandler}
-            ></input>
-            <input
-              id="totalamount"
-              type="number "
-              required
-              value={totalamount === 0 ? "Total Amount" : totalamount}
-              className={styles["input-text"]}
-              disabled
-            ></input>
-          </div>
+        <h2>General Purchase</h2>
+        <div className={styles["input-section"]}>
+          <input
+            placeholder="Bill No"
+            type="number"
+            className={styles["input-text"]}
+            value={state.billno}
+            id="billno"
+            required
+            onChange={onChangeHandler}
+          />
+          <input
+            placeholder="Bill Date"
+            type="date"
+            className={styles["input-text"]}
+            value={state.billdate}
+            id="billdate"
+            required
+            onChange={onChangeHandler}
+          />
+          <select
+            className={styles["input-select"]}
+            id="accntname"
+            required
+            onChange={onChangeHandler}
+            value={state.accntname}
+          >
+            <option value="">Account Names</option>
+            {accntlist.map((obj, index) => {
+              return (
+                <option value={obj.AccName} key={index} id={obj.uid}>
+                  {obj.AccName}
+                </option>
+              );
+            })}
+          </select>
         </div>
+        <div className={styles["input-section"]}>
+          <input
+            placeholder="Item Name"
+            type="text"
+            className={styles["input-text"]}
+            value={state.itemname}
+            id="itemname"
+            required
+            onChange={onChangeHandler}
+          />
+          <input
+            placeholder="Quantity"
+            type="number"
+            className={styles["input-text"]}
+            value={state.quantity}
+            id="quantity"
+            required
+            onChange={onChangeHandler}
+          ></input>
+          <input
+            placeholder="Price per Quantity"
+            type="number"
+            className={styles["input-text"]}
+            value={state.priceperqty}
+            id="priceperqty"
+            required
+            onChange={onChangeHandler}
+          ></input>
+          <input
+            id="totalamount"
+            type="number "
+            required
+            value={totalamount === 0 ? "Total Amount" : totalamount}
+            className={styles["input-text"]}
+            disabled
+          />
+        </div>
+
         {!editmode && (
           <button className={`${styles["add-btn"]} ${styles["btn"]}`}>
             Submit
@@ -318,13 +371,17 @@ function GeneralPurchases({ userDetails }) {
         </button>
       </form>
       <Modal open={modal} onClose={() => setModal(false)}>
-        <StickyTable TableCol={tablecoldata} TableData={tabledata} style={{
-                maxWidth: "1000px",
-            
-                maxHeight: "500px",
-                border: "1px Solid black",
-                borderRadius: "10px",
-              }}/>
+        <StickyTable
+          TableCol={tablecoldata}
+          TableData={tabledata}
+          style={{
+            maxWidth: "1000px",
+
+            maxHeight: "500px",
+            border: "1px Solid black",
+            borderRadius: "10px",
+          }}
+        />
       </Modal>
     </div>
   );
