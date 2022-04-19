@@ -228,7 +228,7 @@ export default function GreyPurchase({ userDetails }) {
                             padding: "5px",
                             margin: "0",
                         }}
-                        type="submit"
+                        type="button"
                         onClick={() => {
                             settotalamount((preamount) => {
                                 return parseInt(

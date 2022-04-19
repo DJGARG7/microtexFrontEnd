@@ -26,7 +26,7 @@ function AccessLog() {
         },
         {
             Header: "Date",
-            accessor: "Date",
+            accessor: "user_date",
             Filter: "",
         },
         {
@@ -39,12 +39,10 @@ function AccessLog() {
     useEffect(() => {
         (async () => {
             const res = await usrinstance.get(" ");
-            console.log(res.data);
             res.data.forEach((item, index) => {
-                const date = new Date(item.Date);
-                item.Date = date.toLocaleDateString();
+                const date = new Date(item.user_date);
+                item.user_date = date.toLocaleDateString();
             });
-            console.log(res.data);
             setlogs(res.data);
         })();
     }, []);
