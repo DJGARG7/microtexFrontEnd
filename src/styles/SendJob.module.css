@@ -217,3 +217,12 @@
 .form-group:first-of-type {
     margin-top: 3vh;
 }
+
+.form--table {
+    display: flex;
+    justify-content: center;
+
+    width: 100%;
+
+    margin: 25px 0 10px 0;
+}

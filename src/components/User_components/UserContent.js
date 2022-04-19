@@ -8,6 +8,7 @@ import SaleChallan from "../../pages/UserPages/SaleChallan";
 import SaleBilling from "../../pages/UserPages/SaleBilling";
 import SaleDisplay from "../../pages/UserPages/SaleDisplay";
 import GeneralPurchases from "../../pages/UserPages/GeneralPurchases";
+import ReceiveFromJob from "../../pages/UserPages/ReceiveFromJob";
 const UserContent = ({ userDetails }) => {
     return (
         <>
@@ -29,6 +30,9 @@ const UserContent = ({ userDetails }) => {
             </Route>
             <Route path="/dashboard/transaction/job/send" exact>
                 <SendJobForWork userDetails={userDetails} />
+            </Route>
+            <Route path="/dashboard/transaction/job/receive" exact>
+                <ReceiveFromJob userDetails={userDetails} />
             </Route>
             <Route path="/dashboard/transaction/revenue" exact>
                 <Revenue userDetails={userDetails} />
