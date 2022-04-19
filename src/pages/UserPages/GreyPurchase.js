@@ -134,46 +134,47 @@ export default function GreyPurchase({ userDetails }) {
     const TableColData = [
         {
             Header: "Action",
-            accessor: (str) => "edit",
+            accessor: (str) => "Edit",
             Cell: (tableProps) => (
                 <div>
                     <button
                         className={`${styles2["form--btn"]} ${styles2["form--add-btn"]}`}
                         style={{
                             cursor: "pointer",
-                            width: "auto",
                             height: "auto",
-                            padding: "5px",
+                            padding: "2.5px",
                             margin: "0",
+                            fontSize: "0.9rem",
+                            textTransform: "uppercase",
+                            fontWeight: "600",
                         }}
                         type="submit"
                         onClick={() => {
                             onEditHandler(tableProps);
                         }}
                     >
-                        edit
+                        Edit
                     </button>
                 </div>
             ),
             sticky: "left",
             Filter: "",
-            width: "90px",
+            width: 100,
         },
         {
-            Header: "Unique Id",
-            accessor: "uid",
-            show: false,
-        },
-        {
-            Header: "Bill Number",
+            Header: "Bill No.",
             accessor: "billNumber",
         },
         {
-            Header: "Account Name",
+            Header: "Bill Date",
+            accessor: "billDate",
+        },
+        {
+            Header: "Supplier",
             accessor: "AccName",
         },
         {
-            Header: "itemName",
+            Header: "item",
             accessor: "itemName",
             Filter: "",
         },
@@ -223,10 +224,12 @@ export default function GreyPurchase({ userDetails }) {
                         className={`${styles2["form--btn"]} ${styles2["form--del-btn"]}`}
                         style={{
                             cursor: "pointer",
-                            width: "auto",
                             height: "auto",
-                            padding: "5px",
+                            padding: "2.5 0",
                             margin: "0",
+                            fontSize: "0.9rem",
+                            textTransform: "uppercase",
+                            fontWeight: "600",
                         }}
                         type="submit"
                         onClick={() => {
@@ -249,57 +252,49 @@ export default function GreyPurchase({ userDetails }) {
             ),
             sticky: "left",
             Filter: "",
-            maxWidth: 100,
-            minWidth: 100,
+            // maxWidth: 100,
+            // minWidth: 100,
             width: 100,
-        },
-        {
-            Header: "Unique Id",
-            accessor: "uid",
-            show: false,
-            maxWidth: 10,
-            minWidth: 60,
-            width: 40,
         },
         {
             Header: "Item",
             accessor: "itemName",
             Filter: "",
-            maxWidth: 200,
-            minWidth: 170,
-            width: 100,
+            // maxWidth: 200,
+            // minWidth: 170,
+            // width: 100,
         },
         {
             Header: "Taka",
             accessor: "Taka",
             Filter: "",
-            maxWidth: 70,
-            minWidth: 100,
-            width: 70,
+            // maxWidth: 70,
+            // minWidth: 100,
+            // width: 70,
         },
         {
             Header: "Meters",
             accessor: "Mts",
             Filter: "",
-            maxWidth: 70,
-            minWidth: 70,
-            width: 70,
+            // maxWidth: 70,
+            // minWidth: 70,
+            // width: 70,
         },
         {
             Header: "Rate",
             Filter: "",
             accessor: "Rate",
-            maxWidth: 70,
-            minWidth: 70,
-            width: 40,
+            // maxWidth: 70,
+            // minWidth: 70,
+            // width: 40,
         },
         {
             Header: "Amount",
             accessor: "Amount",
             Filter: "",
-            maxWidth: 90,
-            minWidth: 90,
-            width: 90,
+            // maxWidth: 90,
+            // minWidth: 90,
+            // width: 90,
         },
     ];
     /* Purchase table data. */
@@ -468,21 +463,17 @@ export default function GreyPurchase({ userDetails }) {
 
     // when view all pucrchased isclicked
     const onViewBillHandler = async () => {
-        // Open modal.
         setIsPurchaseModalOpen(true);
 
         // Fetch bills.
         const res = await purchases.get("fetchGreyBills");
 
-        console.log(res.data);
-
         // Calculations for rendering.
-        res.data.forEach((item, index) => {
+        res.data.forEach((item) => {
             const date = new Date(item.billDate);
-            // const date2 = new Date(item.ChallanDate);
-            item.billDate = date.toLocaleDateString();
-            // item.ChallanDate = date2.toLocaleDateString();
+            item.billDate = date.toLocaleDateString("en-GB");
         });
+
         settabledata(res.data);
     };
 
@@ -627,28 +618,6 @@ export default function GreyPurchase({ userDetails }) {
                         </button>
                     </div>
                 </div>
-                {/* <div className="secondline--greypurchase">
-                    <label>Challan date</label>
-                        <input
-                            style={{ width: "140px" }}
-                            type="date"
-                            value={formData.ChallanDate}
-                            name="challanDate"
-                            onChange={onChangeHandler}
-                        />
-                    <label>
-                            Challan No.
-                            <input
-                                type="text"
-                                value={formData.ChallanNo}
-                                name="ChallanNo"
-                                disabled
-                                required
-                                onChange={onChangeHandler}
-                            />
-                        </label>
-
-                    </div> */}
                 <div className={styles2["form--group"]}>
                     <div
                         className={styles2["form--group"]}
@@ -796,15 +765,14 @@ export default function GreyPurchase({ userDetails }) {
                     open={isPurchaseModalOpen}
                     onClose={closePurchaseHandler}
                 >
+                    <h2 style={{ marginBottom: "25px" }}>Purchases</h2>
                     <StickyTable
                         TableCol={TableColData}
                         TableData={tabledata}
                         style={{
-                            maxWidth: "1000px",
-                            width: "900px",
-                            maxHeight: "500px",
-                            border: "1px Solid black",
-                            borderRadius: "10px",
+                            maxWidth: "90vw",
+                            width: "100%",
+                            maxHeight: "90vh",
                         }}
                     />
                 </Modal>
@@ -812,11 +780,6 @@ export default function GreyPurchase({ userDetails }) {
                     <StickyTable
                         TableCol={purchasedListCol}
                         TableData={purchaseditems}
-                        style={{
-                            width: "604.5px",
-                            border: "2.5px solid black",
-                            borderRadius: "5px",
-                        }}
                     />
                 </div>
                 <div
@@ -863,23 +826,27 @@ export default function GreyPurchase({ userDetails }) {
                 </div>
             </form>
             <Modal open={isItemModalOpen} onClose={closeItemModal}>
-                <form className="greypurchase--itemadd" onSubmit={onItemAdd}>
-                    <label>
-                        Item Name:
-                        <input
-                            type="text"
-                            required
-                            value={itemdetails.itemname}
-                            onChange={(e) =>
-                                setItemdetails({
-                                    ...itemdetails,
-                                    itemname: e.target.value,
-                                })
-                            }
-                        />
-                    </label>
-                    <label>
-                        Opening Mts:
+                <h2 style={{ marginBottom: "25px" }}>Add Item</h2>
+                <form
+                    className={styles2["form"]}
+                    style={{ padding: "0" }}
+                    onSubmit={onItemAdd}
+                >
+                    <input
+                        type="text"
+                        required
+                        value={itemdetails.itemname}
+                        onChange={(e) =>
+                            setItemdetails({
+                                ...itemdetails,
+                                itemname: e.target.value,
+                            })
+                        }
+                        className={styles2["form--input"]}
+                        style={{ width: "17.5vw", minWidth: "250px" }}
+                        placeholder="Item Name"
+                    />
+                    <div className={styles2["form-group"]}>
                         <input
                             type="number"
                             value={itemdetails.openingmts}
@@ -889,10 +856,14 @@ export default function GreyPurchase({ userDetails }) {
                                     openingmts: e.target.value,
                                 })
                             }
+                            className={styles2["form--input"]}
+                            style={{
+                                width: "7.5vw",
+                                minWidth: "110px",
+                                marginRight: "15px",
+                            }}
+                            placeholder="Opening Meters"
                         />
-                    </label>
-                    <label>
-                        Rate per Mts:
                         <input
                             type="number"
                             value={itemdetails.ratepermts}
@@ -902,12 +873,24 @@ export default function GreyPurchase({ userDetails }) {
                                     ratepermts: e.target.value,
                                 })
                             }
+                            className={styles2["form--input"]}
+                            style={{ width: "7.5vw", minWidth: "110px" }}
+                            placeholder="Rate/Meter"
                         />
-                    </label>
-                    <button>Add item</button>
+                    </div>
+                    <button
+                        className={`${styles2["form--btn"]} ${styles2["form--add-btn"]}`}
+                        style={{
+                            width: "100px",
+                            minWidth: "100px",
+                        }}
+                    >
+                        Add Item
+                    </button>
                 </form>
             </Modal>
             <Modal open={isTakaModalOpen} onClose={closeTakaModal}>
+                <h2>Add Taka</h2>
                 <TakaDetails
                     takaList={takaList}
                     totalMts={totalmts}

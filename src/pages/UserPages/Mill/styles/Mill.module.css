@@ -24,7 +24,7 @@
     margin-top: 3vh;
 
     overflow: auto;
-    padding: 0 1.5vw 0 1.5vw;
+    padding: 0 1vw 0 1vw;
 }
 
 .form--group {
@@ -119,7 +119,8 @@
 
 .form--table {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
 
     width: 100%;
 

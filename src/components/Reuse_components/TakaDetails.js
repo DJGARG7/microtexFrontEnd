@@ -2,6 +2,7 @@ import React from "react";
 import StickyTable from "../../components/Reuse_components/Table/StickyTable";
 import { useState, useEffect } from "react";
 import "../../styles/CityMaster.css";
+import styles from "../../pages/UserPages/Mill/styles/Mill.module.css";
 
 function TakaDetails({ takaList, onTakaHandler, totalMts }) {
     const [tabledata, setTableData] = useState(takaList);
@@ -11,13 +12,13 @@ function TakaDetails({ takaList, onTakaHandler, totalMts }) {
 
     const TableColData = [
         {
-            Header: "Sr No",
+            Header: "SR NO.",
             accessor: "srno",
             Cell: (tableProps) => <div>{tableProps.row.index + 1}</div>,
             Filter: "",
         },
         {
-            Header: "Mts",
+            Header: "Meters",
             accessor: "Mts",
             Filter: "",
         },
@@ -25,8 +26,39 @@ function TakaDetails({ takaList, onTakaHandler, totalMts }) {
             Header: "Action",
             accessor: (str) => "delete",
             Cell: (tableProps) => (
-                <div className="btn-grp">
+                <div
+                    className={styles["form--group"]}
+                    style={{
+                        width: "auto",
+                        margin: "0",
+                    }}
+                >
                     <button
+                        className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
+                        style={{
+                            cursor: "pointer",
+                            width: "50px",
+                            height: "auto",
+                            margin: "0 5px",
+                            fontSize: "0.9rem",
+                            textTransform: "uppercase",
+                            fontWeight: "600",
+                        }}
+                        onClick={onEditHandler}
+                    >
+                        Edit
+                    </button>
+                    <button
+                        className={`${styles["form--btn"]} ${styles["form--del-btn"]}`}
+                        style={{
+                            cursor: "pointer",
+                            width: "70px",
+                            height: "auto",
+                            margin: "0 5px",
+                            fontSize: "0.9rem",
+                            textTransform: "uppercase",
+                            fontWeight: "600",
+                        }}
                         onClick={() => {
                             const dataCopy = [...tabledata];
                             settotalmts(
@@ -38,10 +70,10 @@ function TakaDetails({ takaList, onTakaHandler, totalMts }) {
                     >
                         Delete
                     </button>
-                    <button onClick={onEditHandler}>Edit</button>
                 </div>
             ),
             Filter: "",
+            width: "140px",
         },
     ];
 
@@ -71,64 +103,108 @@ function TakaDetails({ takaList, onTakaHandler, totalMts }) {
     };
 
     return (
-        <div className="citymaster">
-            <h2>Taka details</h2>
-            <div className="Inputs">
-                <form onSubmit={onClickHandler}>
+        <>
+            <form
+                onSubmit={onClickHandler}
+                className={styles["form"]}
+                style={{ padding: "0", marginTop: "15px" }}
+            >
+                <div className={styles["form--group"]}>
                     <input
                         type="number"
                         onChange={(e) => setMts(parseInt(e.target.value))}
                         value={mts}
-                        placeholder="Mts"
-                        className="input-city"
+                        placeholder="Meters"
+                        className={`${styles["form--input"]}`}
+                        style={{
+                            width: "125px",
+                            minWidth: "125px",
+                        }}
                         required
-                    ></input>
+                    />
                     <input
                         value={totalmts}
-                        className="input-city"
                         placeholder="TotalMts"
+                        className={`${styles["form--input"]}`}
+                        style={{
+                            width: "100px",
+                            minWidth: "100px",
+                        }}
                         disabled
                     />
-                    {!editMode && (
-                        <button className="btn add-btn"> Add </button>
-                    )}
-                    {editMode && (
-                        <button className="btn update-btn"> Update </button>
-                    )}
-                    {editMode && (
-                        <button
-                            type="Button"
-                            className="btn update-btn"
-                            onClick={() => setEditMode(false)}
-                        >
-                            {" "}
-                            Cancel{" "}
-                        </button>
-                    )}
-                    {!editMode && tabledata.length > 0 && (
-                        <button
-                            type="Button"
-                            className="btn add-btn"
-                            onClick={onSendDataToParent}
-                        >
-                            Save
-                        </button>
-                    )}
-                </form>
-            </div>
+                    <div
+                        className={styles["form--group"]}
+                        style={{
+                            width: "auto",
+                            margin: "0",
+                        }}
+                    >
+                        {!editMode && (
+                            <button
+                                className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
+                                style={{
+                                    width: "75px",
+                                    minWidth: "75px",
+                                    marginRight: "10px",
+                                }}
+                            >
+                                Add
+                            </button>
+                        )}
+                        {editMode && (
+                            <button
+                                className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
+                                style={{
+                                    width: "75px",
+                                    minWidth: "75px",
+                                    marginRight: "10px",
+                                }}
+                            >
+                                Update
+                            </button>
+                        )}
+                        {editMode && (
+                            <button
+                                type="Button"
+                                onClick={() => setEditMode(false)}
+                                className={`${styles["form--btn"]} ${styles["form--del-btn"]}`}
+                                style={{
+                                    width: "75px",
+                                    minWidth: "75px",
+                                }}
+                            >
+                                Cancel
+                            </button>
+                        )}
+                        {!editMode && tabledata.length > 0 && (
+                            <button
+                                type="Button"
+                                className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
+                                style={{
+                                    width: "75px",
+                                    minWidth: "75px",
+                                }}
+                                onClick={onSendDataToParent}
+                            >
+                                Save
+                            </button>
+                        )}
+                    </div>
+                </div>
+            </form>
             <div className="table">
                 <StickyTable
                     TableCol={TableColData}
                     TableData={tabledata}
-                    style={{
-                        maxWidth: "452px",
-                        maxHeight: "500px",
-                        border: "1px Solid black",
-                        borderRadius: "10px",
-                    }}
+                    style={
+                        {
+                            // maxWidth: "452px",
+                            // maxHeight: "500px",
+                        }
+                    }
                 />
             </div>
-        </div>
+        </>
     );
 }
 

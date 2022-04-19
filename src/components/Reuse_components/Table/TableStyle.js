@@ -2,7 +2,8 @@ import styled from "styled-components";
 
 export const Styles = styled.div`
     .table--sticky {
-        // border: 1px solid #ddd;
+        border: thin solid #031927;
+        border-radius: 5px;
 
         .tr--sticky {
             :last-child {
@@ -14,9 +15,13 @@ export const Styles = styled.div`
         .th--sticky,
         .td--sticky {
             padding: 5px;
-            border-bottom: 1px solid #ddd;
-            border-right: 1px solid #ddd;
-            background-color: #fff;
+            display: flex !important;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-bottom: thin solid #031927;
+            border-right: thin solid #031927;
+            background-color: #edf2f4;
             overflow: hidden;
 
             :last-child {
@@ -25,11 +30,16 @@ export const Styles = styled.div`
         }
 
         .th--sticky {
-            // padding-top: 12px;
-            // padding-bottom: 12px;
-            text-align: center;
-            background-color: #04aa6d;
+            // padding: 10px;
+            // background-color: #04aa6d;
+            background-color: #031927;
+            border-right: 2px solid white;
 
+            margin: 0;
+
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             color: white;
         }
 

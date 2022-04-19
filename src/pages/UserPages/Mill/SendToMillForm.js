@@ -3,17 +3,8 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import styles from "../../../components/UserManagement/styles/common.module.css";
 import millstyles from "./styles/Mill.module.css";
-
-const tableColumns = [
-    {
-        Header: "Taka Number",
-        accessor: "col1", // accessor is the "key" in the data
-    },
-    {
-        Header: "Taka Details",
-        accessor: "col2", // accessor is the "key" in the data
-    },
-];
+import BillsTable from "./BillsTable";
+import { Modal } from "react-native-web";
 
 const toastStyle = {
     style: {
@@ -35,6 +26,7 @@ function convertDate(inputFormat) {
 export default function SendToMillForm({ itemData, millsData }) {
     // Form-related data.
     const [suppliers, setSuppliers] = useState([]);
+    const [bills, setBills] = useState([]);
     const [taka, setTaka] = useState([]);
 
     // Form binding.
@@ -44,16 +36,53 @@ export default function SendToMillForm({ itemData, millsData }) {
     const [selectedSupplier, setSelectedSupplier] = useState("DEFAULT");
     const [selectedMill, setSelectedMill] = useState("DEFAULT");
 
+    // Modal state.
+    const [isTakaModalOpen, setIsTakaModalOpen] = useState(false);
+
     const fetchSuppliers = async () => {
+        const suppliersToast = toast.loading(
+            "Getting suppliers...",
+            toastStyle
+        );
+
         try {
             const res = await axios.get(
                 `http://localhost:3005/purchases/suppliers/${selectedGrey}`
             );
 
             setSuppliers(res.data);
+            setSelectedSupplier("DEFAULT");
+
+            toast.success("Suppliers fetched.", { id: suppliersToast });
         } catch (error) {
             console.log(error);
-            toast.error("Failed to fetch supplier data", toastStyle);
+            toast.error("Failed to fetch supplier data.", suppliersToast, {
+                id: suppliersToast,
+            });
+        }
+    };
+
+    const fetchBills = async () => {
+        const billsToast = toast.loading("Getting suppliers...", toastStyle);
+
+        try {
+            const res = await axios.get(
+                `http://localhost:3005/purchases/fetchGreyBills/${selectedSupplier}/${selectedGrey}`
+            );
+
+            res.data.forEach((bill) => {
+                const date = new Date(bill.billDate);
+                bill.billDate = date.toLocaleDateString("en-GB");
+            });
+
+            setBills(res.data);
+
+            toast.success("Bills fetched.", { id: billsToast });
+        } catch (error) {
+            console.log(error);
+            toast.error("Failed to fetch bills", toastStyle, {
+                id: billsToast,
+            });
         }
     };
 
@@ -75,8 +104,16 @@ export default function SendToMillForm({ itemData, millsData }) {
     }, [selectedGrey]);
 
     useEffect(() => {
-        fetchTaka();
+        fetchBills();
     }, [selectedSupplier]);
+
+    // useEffect(() => {
+    //     fetchTaka();
+    // }, [selectedSupplier]);
+
+    const closeTakaModal = () => {
+        setIsTakaModalOpen(false);
+    };
 
     const submitHandler = () => {
         console.log("Hello");
@@ -124,8 +161,8 @@ export default function SendToMillForm({ itemData, millsData }) {
                         setSelectedMill(e.target.value);
                     }}
                     style={{
-                        width: "20vw",
-                        minWidth: "250px",
+                        width: "20%",
+                        minWidth: "200px",
                         margin: "10px 15px 10px 15px",
                     }}
                 >
@@ -149,8 +186,8 @@ export default function SendToMillForm({ itemData, millsData }) {
                         setSelectedGrey(e.target.value);
                     }}
                     style={{
-                        width: "17.5vw",
-                        minWidth: "200px",
+                        width: "15%",
+                        minWidth: "150px",
                         margin: "10px 15px 10px 15px",
                     }}
                 >
@@ -165,12 +202,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                         );
                     })}
                 </select>
-            </div>
 
-            <div
-                className={millstyles["form--group"]}
-                style={{ justifyContent: "center" }}
-            >
                 <select
                     placeholder="Supplier"
                     className={`${millstyles["form--input"]} ${millstyles["form--input-select"]}`}
@@ -178,14 +210,22 @@ export default function SendToMillForm({ itemData, millsData }) {
                     onChange={(e) => {
                         setSelectedSupplier(e.target.value);
                     }}
+                    style={{
+                        width: "20%",
+                        minWidth: "200px",
+                        margin: "10px 15px 10px 15px",
+                    }}
                 >
-                    {console.log(suppliers)}
                     <option disabled hidden value="DEFAULT">
                         Select supplier...
                     </option>
                     {suppliers.map((supplier) => {
                         return (
-                            <option value={supplier.uid} key={supplier.uid}>
+                            <option
+                                value={supplier.uid}
+                                key={supplier.uid}
+                                disabled={supplier.uid === -1 ? true : false}
+                            >
                                 {supplier.AccName}
                             </option>
                         );
@@ -193,8 +233,19 @@ export default function SendToMillForm({ itemData, millsData }) {
                 </select>
             </div>
 
-            <div className={millstyles["form--group"]}>
-                {/* Render table for taka */}
+            <div
+                className={millstyles["form--group"]}
+                style={{ justifyContent: "center" }}
+            ></div>
+
+            <div className={millstyles["form--table"]}>
+                <BillsTable
+                    data={bills}
+                    setIsTakaModalOpen={setIsTakaModalOpen}
+                />
+                {/* <Modal open={isTakaModalOpen} onClose={closeTakaModal}>
+                    <h2>Hello</h2>
+                </Modal> */}
             </div>
 
             <button
