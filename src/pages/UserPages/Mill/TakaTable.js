@@ -1,17 +1,9 @@
 import { useState } from "react";
+import { toastSuccess } from "../../../components/Reuse_components/toast";
 import styles from "../../../components/UserManagement/styles/common.module.css";
-import toast from "react-hot-toast";
 import "./styles/Table.css";
 
-const toastStyle = {
-    style: {
-        borderRadius: "15px",
-        background: "#333",
-        color: "#fff",
-    },
-};
-
-export default function TakaTable({ data, setTaka, closeTakaModal }) {
+export default function TakaTable({ data, setTaka, setTotal, closeTakaModal }) {
     const [selectedTaka, setSelectedTaka] = useState(new Set());
 
     const selectTakaHandler = (event) => {
@@ -27,6 +19,25 @@ export default function TakaTable({ data, setTaka, closeTakaModal }) {
         }
 
         console.log(selectedTaka);
+    };
+
+    const calculateTotalMeters = () => {
+        let sum = 0;
+
+        data.forEach((taka) => {
+            if (Array.from(selectedTaka).includes(taka.takaID))
+                sum += taka.meters;
+        });
+
+        return sum;
+    };
+
+    const submitHandler = (e) => {
+        e.preventDefault();
+        toastSuccess("Taka selected!");
+        setTotal(calculateTotalMeters());
+        setTaka(Array.from(selectedTaka));
+        closeTakaModal();
     };
 
     return (
@@ -67,11 +78,7 @@ export default function TakaTable({ data, setTaka, closeTakaModal }) {
             <button
                 className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
                 style={{ width: "100px", marginTop: "25px" }}
-                onClick={(e) => {
-                    e.preventDefault();
-                    setTaka(Array.from(selectedTaka));
-                    closeTakaModal();
-                }}
+                onClick={submitHandler}
             >
                 Select Taka
             </button>

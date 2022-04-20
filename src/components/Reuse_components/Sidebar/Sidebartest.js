@@ -8,8 +8,8 @@ const SidebarNav = styled.nav`
     flex-direction: column;
     justify-content: space-between;
 
-    min-width: 250px;
-    width: 16.5vw;
+    min-width: 275px;
+    width: 17.5vw;
     height: 100%;
     overflow: auto;
     background-color: #480ca8;

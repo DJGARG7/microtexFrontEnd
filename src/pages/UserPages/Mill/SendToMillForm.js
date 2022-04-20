@@ -26,7 +26,6 @@ export default function SendToMillForm({ itemData, millsData }) {
     // Form-related data.
     const [suppliers, setSuppliers] = useState([]);
     const [bills, setBills] = useState([]);
-    const [taka, setTaka] = useState([]);
 
     // Form binding.
     const [challanDate, setChallanDate] = useState(convertDate(new Date()));
@@ -34,6 +33,9 @@ export default function SendToMillForm({ itemData, millsData }) {
     const [selectedGrey, setSelectedGrey] = useState("DEFAULT");
     const [selectedSupplier, setSelectedSupplier] = useState("DEFAULT");
     const [selectedMill, setSelectedMill] = useState("DEFAULT");
+    const [selectedBill, setSelectedBill] = useState({});
+    const [selectedTaka, setSelectedTaka] = useState([]);
+    const [totalMeters, setTotalMeters] = useState(0);
 
     const fetchSuppliers = async () => {
         const suppliersToast = toast.loading(
@@ -90,15 +92,23 @@ export default function SendToMillForm({ itemData, millsData }) {
         fetchBills();
     }, [selectedSupplier]);
 
+    const setBillFromTable = (data) => {
+        setSelectedBill(data);
+    };
+
     const setTakaFromTable = (data) => {
-        setTaka(data);
+        setSelectedTaka(data);
+    };
+
+    const setTotalMetersFromTable = (data) => {
+        setTotalMeters(data);
     };
 
     const submitHandler = () => {
         console.log("Hello");
     };
 
-    console.log(taka);
+    console.log(selectedTaka, selectedBill, totalMeters);
 
     return (
         <form onSubmit={submitHandler} className={millstyles["form"]}>
@@ -220,7 +230,81 @@ export default function SendToMillForm({ itemData, millsData }) {
             ></div>
 
             <div className={millstyles["form--table"]}>
-                <BillsTable data={bills} setTaka={setTakaFromTable} />
+                <BillsTable
+                    data={bills}
+                    setTaka={setTakaFromTable}
+                    setBill={setBillFromTable}
+                    setTotal={setTotalMetersFromTable}
+                />
+            </div>
+
+            <div
+                className={millstyles["form--group"]}
+                style={{ justifyContent: "space-around" }}
+            >
+                <div
+                    className={millstyles["form--group"]}
+                    style={{
+                        width: "auto",
+                        margin: "0",
+                        alignItems: "center",
+                    }}
+                >
+                    <label
+                        htmlFor="selectedTaka"
+                        style={{ marginRight: "10px" }}
+                    >
+                        Selected Taka
+                    </label>
+                    <input
+                        type="number"
+                        value={selectedTaka.length}
+                        id="selectedTaka"
+                        readOnly
+                        className={millstyles["form--input"]}
+                        style={{ width: "2vw", minWidth: "50px" }}
+                    />
+
+                    <label
+                        htmlFor="selectedTaka"
+                        style={{ marginLeft: "10px", marginRight: "10px" }}
+                    >
+                        out of
+                    </label>
+                    <input
+                        type="number"
+                        value={
+                            typeof selectedBill.taka === "undefined"
+                                ? 0
+                                : selectedBill.taka
+                        }
+                        id="selectedTaka"
+                        readOnly
+                        className={millstyles["form--input"]}
+                        style={{ width: "2vw", minWidth: "50px" }}
+                    />
+                </div>
+
+                <div
+                    className={millstyles["form--group"]}
+                    style={{
+                        width: "auto",
+                        margin: "0",
+                        alignItems: "center",
+                    }}
+                >
+                    <label htmlFor="Amount" style={{ marginRight: "10px" }}>
+                        Total Meters
+                    </label>
+                    <input
+                        type="number"
+                        value={totalMeters}
+                        id="totalMeters"
+                        readOnly
+                        className={millstyles["form--input"]}
+                        style={{ width: "5vw", minWidth: "100px" }}
+                    />
+                </div>
             </div>
 
             <button

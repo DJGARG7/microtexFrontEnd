@@ -14,7 +14,7 @@ const toastStyle = {
     },
 };
 
-export default function BillsTable({ data, setTaka }) {
+export default function BillsTable({ data, setBill, setTaka, setTotal }) {
     const columns = useMemo(() => [
         {
             Header: "Bill No.",
@@ -68,6 +68,7 @@ export default function BillsTable({ data, setTaka }) {
                         onClick={(e) => {
                             e.preventDefault();
                             fetchTakaDetails(tableProps.row.original);
+                            setBill(tableProps.row.original);
                         }}
                     >
                         Choose Taka
@@ -112,12 +113,17 @@ export default function BillsTable({ data, setTaka }) {
 
     return (
         <>
-            <StickyTable TableCol={columns} TableData={data} />
+            <StickyTable
+                TableCol={columns}
+                TableData={data}
+                style={{ maxHeight: "40vh" }}
+            />
             <Modal open={isTakaModalOpen} onClose={closeTakaModal}>
                 <h2 style={{ marginBottom: "25px" }}>Choose Taka</h2>
                 <TakaTable
                     data={takaDetails}
                     setTaka={setTaka}
+                    setTotal={setTotal}
                     closeTakaModal={closeTakaModal}
                 />
             </Modal>
