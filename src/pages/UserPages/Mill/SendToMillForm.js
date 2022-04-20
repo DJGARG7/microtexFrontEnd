@@ -4,7 +4,6 @@ import toast from "react-hot-toast";
 import styles from "../../../components/UserManagement/styles/common.module.css";
 import millstyles from "./styles/Mill.module.css";
 import BillsTable from "./BillsTable";
-import { Modal } from "react-native-web";
 
 const toastStyle = {
     style: {
@@ -35,9 +34,6 @@ export default function SendToMillForm({ itemData, millsData }) {
     const [selectedGrey, setSelectedGrey] = useState("DEFAULT");
     const [selectedSupplier, setSelectedSupplier] = useState("DEFAULT");
     const [selectedMill, setSelectedMill] = useState("DEFAULT");
-
-    // Modal state.
-    const [isTakaModalOpen, setIsTakaModalOpen] = useState(false);
 
     const fetchSuppliers = async () => {
         const suppliersToast = toast.loading(
@@ -86,19 +82,6 @@ export default function SendToMillForm({ itemData, millsData }) {
         }
     };
 
-    const fetchTaka = async () => {
-        try {
-            const res = await axios.get(
-                `http://localhost:3005/purchases/taka/${selectedGrey}`
-            );
-
-            setTaka(res.data);
-        } catch (error) {
-            console.log(error);
-            toast.error("Failed to fetch taka details", toastStyle);
-        }
-    };
-
     useEffect(() => {
         fetchSuppliers();
     }, [selectedGrey]);
@@ -107,17 +90,15 @@ export default function SendToMillForm({ itemData, millsData }) {
         fetchBills();
     }, [selectedSupplier]);
 
-    // useEffect(() => {
-    //     fetchTaka();
-    // }, [selectedSupplier]);
-
-    const closeTakaModal = () => {
-        setIsTakaModalOpen(false);
+    const setTakaFromTable = (data) => {
+        setTaka(data);
     };
 
     const submitHandler = () => {
         console.log("Hello");
     };
+
+    console.log(taka);
 
     return (
         <form onSubmit={submitHandler} className={millstyles["form"]}>
@@ -239,13 +220,7 @@ export default function SendToMillForm({ itemData, millsData }) {
             ></div>
 
             <div className={millstyles["form--table"]}>
-                <BillsTable
-                    data={bills}
-                    setIsTakaModalOpen={setIsTakaModalOpen}
-                />
-                {/* <Modal open={isTakaModalOpen} onClose={closeTakaModal}>
-                    <h2>Hello</h2>
-                </Modal> */}
+                <BillsTable data={bills} setTaka={setTakaFromTable} />
             </div>
 
             <button

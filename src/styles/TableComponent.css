@@ -1,5 +1,5 @@
 table {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Karla", sans-serif;
     border-collapse: collapse;
 }
 table td,
@@ -17,6 +17,20 @@ table th {
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: center;
-    background-color: #04aa6d;
+    /* background-color: #04aa6d; */
+    background-color: #031927;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     color: white;
+}
+
+table th:first-of-type {
+    border: 0;
+    border-radius: 5px 0 0 0;
+}
+
+table th:last-of-type {
+    border: 0;
+    border-radius: 0 5px 0 0;
 }

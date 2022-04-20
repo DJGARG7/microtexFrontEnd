@@ -39,7 +39,7 @@ function TakaDetails({ takaList, onTakaHandler, totalMts }) {
                             cursor: "pointer",
                             width: "50px",
                             height: "auto",
-                            margin: "0 5px",
+                            margin: "0 2.5px",
                             fontSize: "0.9rem",
                             textTransform: "uppercase",
                             fontWeight: "600",
@@ -54,7 +54,7 @@ function TakaDetails({ takaList, onTakaHandler, totalMts }) {
                             cursor: "pointer",
                             width: "70px",
                             height: "auto",
-                            margin: "0 5px",
+                            margin: "0 2.5px",
                             fontSize: "0.9rem",
                             textTransform: "uppercase",
                             fontWeight: "600",
@@ -193,16 +193,7 @@ function TakaDetails({ takaList, onTakaHandler, totalMts }) {
                 </div>
             </form>
             <div className="table">
-                <StickyTable
-                    TableCol={TableColData}
-                    TableData={tabledata}
-                    style={
-                        {
-                            // maxWidth: "452px",
-                            // maxHeight: "500px",
-                        }
-                    }
-                />
+                <StickyTable TableCol={TableColData} TableData={tabledata} />
             </div>
         </>
     );

@@ -1,0 +1,30 @@
+table {
+    font-family: "Karla", sans-serif;
+    border-collapse: collapse;
+    border-radius: 5px;
+}
+
+table thead {
+    background-color: #031927;
+    color: white;
+    letter-spacing: 1px;
+    font-weight: 700;
+    text-transform: uppercase;
+    pointer-events: none;
+}
+
+table thead th {
+    border: 0;
+    border-right: 2px solid white;
+    border-left: 2px solid white;
+}
+
+table thead tr th:first-of-type {
+    border: 0;
+    border-radius: 5px 0 0 0 !important;
+}
+
+table thead tr th:last-of-type {
+    border: 0;
+    border-radius: 0 5px 0 0 !important;
+}

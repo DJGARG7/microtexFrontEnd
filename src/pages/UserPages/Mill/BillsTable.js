@@ -1,11 +1,23 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import StickyTable from "../../../components/Reuse_components/Table/StickyTable";
+import Modal from "../../../components/Reuse_components/Modal";
 import styles from "../../../components/UserManagement/styles/common.module.css";
+import axios from "axios";
+import toast from "react-hot-toast";
+import TakaTable from "./TakaTable";
 
-export default function BillsTable({ data, setIsTakaModalOpen }) {
-    const TableColData = [
+const toastStyle = {
+    style: {
+        borderRadius: "15px",
+        background: "#333",
+        color: "#fff",
+    },
+};
+
+export default function BillsTable({ data, setTaka }) {
+    const columns = useMemo(() => [
         {
-            Header: "Bill Number",
+            Header: "Bill No.",
             accessor: "billNumber",
         },
         {
@@ -13,11 +25,17 @@ export default function BillsTable({ data, setIsTakaModalOpen }) {
             accessor: "billDate",
         },
         {
-            Header: "Account Name",
+            Header: "Supplier",
             accessor: "AccName",
         },
         {
-            Header: "Item Name",
+            Header: "Item ID",
+            accessor: "itemID",
+            Filter: "",
+            show: false,
+        },
+        {
+            Header: "Item",
             accessor: "itemName",
             Filter: "",
         },
@@ -33,7 +51,7 @@ export default function BillsTable({ data, setIsTakaModalOpen }) {
         },
         {
             Header: "Action",
-            accessor: (str) => "edit",
+            accessor: (str) => "ShowTaka",
             Cell: (tableProps) => (
                 <div>
                     <button
@@ -49,18 +67,60 @@ export default function BillsTable({ data, setIsTakaModalOpen }) {
                         }}
                         onClick={(e) => {
                             e.preventDefault();
-                            setIsTakaModalOpen(true);
+                            fetchTakaDetails(tableProps.row.original);
                         }}
                     >
                         Choose Taka
                     </button>
                 </div>
             ),
-            sticky: "left",
+            sticky: "right",
             Filter: "",
             width: 100,
         },
-    ];
+    ]);
 
-    return <StickyTable TableCol={TableColData} TableData={data} />;
+    const [takaDetails, setTakaDetails] = useState([]);
+
+    // Modal state.
+    const [isTakaModalOpen, setIsTakaModalOpen] = useState(false);
+
+    const fetchTakaDetails = async (bill) => {
+        // Open modal.
+        setIsTakaModalOpen(true);
+
+        try {
+            const res = await axios.get(
+                `http://localhost:3005/purchases/taka/${bill.billNumber}/${bill.itemID}`
+            );
+
+            // Adding serial number.
+            res.data.forEach((taka, index) => {
+                taka.serialNumber = index + 1;
+            });
+
+            setTakaDetails(res.data);
+        } catch (error) {
+            console.log(error);
+            toast.error("Failed to fetch taka details", toastStyle);
+        }
+    };
+
+    const closeTakaModal = () => {
+        setIsTakaModalOpen(false);
+    };
+
+    return (
+        <>
+            <StickyTable TableCol={columns} TableData={data} />
+            <Modal open={isTakaModalOpen} onClose={closeTakaModal}>
+                <h2 style={{ marginBottom: "25px" }}>Choose Taka</h2>
+                <TakaTable
+                    data={takaDetails}
+                    setTaka={setTaka}
+                    closeTakaModal={closeTakaModal}
+                />
+            </Modal>
+        </>
+    );
 }
