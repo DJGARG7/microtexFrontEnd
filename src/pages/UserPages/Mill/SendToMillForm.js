@@ -224,11 +224,6 @@ export default function SendToMillForm({ itemData, millsData }) {
                 </select>
             </div>
 
-            <div
-                className={millstyles["form--group"]}
-                style={{ justifyContent: "center" }}
-            ></div>
-
             <div className={millstyles["form--table"]}>
                 <BillsTable
                     data={bills}
@@ -240,7 +235,15 @@ export default function SendToMillForm({ itemData, millsData }) {
 
             <div
                 className={millstyles["form--group"]}
-                style={{ justifyContent: "space-around" }}
+                style={{
+                    width: "auto",
+                    padding: "0 10px",
+                    alignSelf: "center",
+                    justifyContent: "space-around",
+                    backgroundColor: "#dddddd",
+                    borderRadius: "5px",
+                    marginTop: "45px",
+                }}
             >
                 <div
                     className={millstyles["form--group"]}
@@ -251,8 +254,36 @@ export default function SendToMillForm({ itemData, millsData }) {
                     }}
                 >
                     <label
+                        htmlFor="billNumber"
+                        style={{ margin: "0 10px 0 0" }}
+                    >
+                        Bill Number
+                    </label>
+                    <input
+                        type="number"
+                        value={
+                            typeof selectedBill.billNumber === "undefined"
+                                ? 0
+                                : selectedBill.billNumber
+                        }
+                        id="billNumber"
+                        readOnly
+                        className={millstyles["form--input"]}
+                        style={{ width: "7.5vw", minWidth: "150px" }}
+                    />
+                </div>
+
+                <div
+                    className={millstyles["form--group"]}
+                    style={{
+                        width: "auto",
+                        margin: "0",
+                        alignItems: "center",
+                    }}
+                >
+                    <label
                         htmlFor="selectedTaka"
-                        style={{ marginRight: "10px" }}
+                        style={{ margin: "0 10px 0 50px" }}
                     >
                         Selected Taka
                     </label>
@@ -266,8 +297,8 @@ export default function SendToMillForm({ itemData, millsData }) {
                     />
 
                     <label
-                        htmlFor="selectedTaka"
-                        style={{ marginLeft: "10px", marginRight: "10px" }}
+                        htmlFor="totalTaka"
+                        style={{ margin: "0 10px 0 10px" }}
                     >
                         out of
                     </label>
@@ -278,7 +309,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                                 ? 0
                                 : selectedBill.taka
                         }
-                        id="selectedTaka"
+                        id="totalTaka"
                         readOnly
                         className={millstyles["form--input"]}
                         style={{ width: "2vw", minWidth: "50px" }}
@@ -293,7 +324,35 @@ export default function SendToMillForm({ itemData, millsData }) {
                         alignItems: "center",
                     }}
                 >
-                    <label htmlFor="Amount" style={{ marginRight: "10px" }}>
+                    <label
+                        htmlFor="itemName"
+                        style={{ margin: "0 10px 0 50px" }}
+                    >
+                        Item
+                    </label>
+                    <input
+                        type="text"
+                        value={
+                            typeof selectedBill.itemName === "undefined"
+                                ? "?"
+                                : selectedBill.itemName
+                        }
+                        id="itemName"
+                        readOnly
+                        className={millstyles["form--input"]}
+                        style={{ width: "10vw", minWidth: "200px" }}
+                    />
+                </div>
+
+                <div
+                    className={millstyles["form--group"]}
+                    style={{
+                        width: "auto",
+                        margin: "0",
+                        alignItems: "center",
+                    }}
+                >
+                    <label htmlFor="Amount" style={{ margin: "0 10px 0 50px" }}>
                         Total Meters
                     </label>
                     <input
@@ -309,6 +368,7 @@ export default function SendToMillForm({ itemData, millsData }) {
 
             <button
                 className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
+                style={{ alignSelf: "center" }}
             >
                 Send
             </button>
