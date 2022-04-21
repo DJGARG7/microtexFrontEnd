@@ -17,10 +17,9 @@ export default function TakaTable({ data, setTaka, setTotal, closeTakaModal }) {
                 ? setSelectedTaka(new Set())
                 : setSelectedTaka(temp);
         }
-
-        console.log(selectedTaka);
     };
 
+    // Calculate total length of selected taka.
     const calculateTotalMeters = () => {
         let sum = 0;
 
@@ -32,11 +31,23 @@ export default function TakaTable({ data, setTaka, setTotal, closeTakaModal }) {
         return sum;
     };
 
+    // Add taka length to selectedTaka.
+    const addMetersToTaka = () => {
+        let temp = [];
+
+        data.forEach((taka) => {
+            if (Array.from(selectedTaka).includes(taka.takaID))
+                temp.push({ takaID: taka.takaID, meters: taka.meters });
+        });
+
+        return temp;
+    };
+
     const submitHandler = (e) => {
         e.preventDefault();
         toastSuccess("Taka selected!");
         setTotal(calculateTotalMeters());
-        setTaka(Array.from(selectedTaka));
+        setTaka(addMetersToTaka());
         closeTakaModal();
     };
 

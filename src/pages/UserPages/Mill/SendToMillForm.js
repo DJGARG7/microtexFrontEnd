@@ -29,7 +29,7 @@ export default function SendToMillForm({ itemData, millsData }) {
 
     // Form binding.
     const [challanDate, setChallanDate] = useState(convertDate(new Date()));
-    const [challanNumber, setChallanNumber] = useState();
+    const [challanNumber, setChallanNumber] = useState("");
     const [selectedGrey, setSelectedGrey] = useState("DEFAULT");
     const [selectedSupplier, setSelectedSupplier] = useState("DEFAULT");
     const [selectedMill, setSelectedMill] = useState("DEFAULT");
@@ -118,11 +118,11 @@ export default function SendToMillForm({ itemData, millsData }) {
         try {
             const res = await axios.post(`http://localhost:3005/mill/challan`, {
                 // For MILL_CHALLAN.
-                challanNumber,
+                challanNumber: parseInt(challanNumber),
                 challanDate,
-                selectedSupplier,
-                selectedGrey,
-                selectedMill,
+                supplierID: selectedSupplier,
+                itemID: parseInt(selectedGrey),
+                millID: selectedMill,
                 totalMeters,
 
                 // For MILL_TAKA_DETAILS.
