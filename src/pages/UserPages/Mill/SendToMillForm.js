@@ -37,6 +37,7 @@ export default function SendToMillForm({ itemData, millsData }) {
     const [selectedTaka, setSelectedTaka] = useState([]);
     const [totalMeters, setTotalMeters] = useState(0);
 
+    // Fetch supppliers for an item from backend.
     const fetchSuppliers = async () => {
         const suppliersToast = toast.loading(
             "Getting suppliers...",
@@ -60,6 +61,7 @@ export default function SendToMillForm({ itemData, millsData }) {
         }
     };
 
+    // Fetch selected bill of a supplier from backend.
     const fetchBills = async () => {
         const billsToast = toast.loading("Getting suppliers...", toastStyle);
 
@@ -68,6 +70,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                 `http://localhost:3005/purchases/fetchGreyBills/${selectedSupplier}/${selectedGrey}`
             );
 
+            // Converting date to DD/MM/YYYY format.
             res.data.forEach((bill) => {
                 const date = new Date(bill.billDate);
                 bill.billDate = date.toLocaleDateString("en-GB");
@@ -92,27 +95,67 @@ export default function SendToMillForm({ itemData, millsData }) {
         fetchBills();
     }, [selectedSupplier]);
 
+    // Retrieve selected bill details from BillTable.
     const setBillFromTable = (data) => {
         setSelectedBill(data);
     };
 
+    // Retrive selected taka from TakaTable.
     const setTakaFromTable = (data) => {
         setSelectedTaka(data);
     };
 
+    // Retrieve sum of selected taka (in meters) from TakaTable.
     const setTotalMetersFromTable = (data) => {
         setTotalMeters(data);
     };
 
-    const submitHandler = () => {
-        console.log("Hello");
+    const submitHandler = async (e) => {
+        e.preventDefault();
+
+        const submitToast = toast.loading("Sending to mill...", toastStyle);
+
+        try {
+            const res = await axios.post(`http://localhost:3005/mill/challan`, {
+                // For MILL_CHALLAN.
+                challanNumber,
+                challanDate,
+                selectedSupplier,
+                selectedGrey,
+                selectedMill,
+                totalMeters,
+
+                // For MILL_TAKA_DETAILS.
+                billNumber: selectedBill.billNumber,
+                selectedTaka,
+            });
+
+            toast.success(res.data, { id: submitToast });
+
+            // Refresh form.
+            setChallanDate(convertDate(new Date()));
+            setChallanNumber("");
+            setSelectedGrey("DEFAULT");
+            setSelectedSupplier("DEFAULT");
+            setSelectedMill("DEFAULT");
+            setSelectedBill({});
+            setSelectedTaka([]);
+            setTotalMeters(0);
+        } catch (error) {
+            console.log(error);
+            toast.error(`Failed to send: ${error.response.data}.`, {
+                id: submitToast,
+            });
+        }
     };
 
     console.log(selectedTaka, selectedBill, totalMeters);
 
     return (
         <form onSubmit={submitHandler} className={millstyles["form"]}>
+            {/* Row 1: Inputs. */}
             <div className={millstyles["form--group"]}>
+                {/* Column 1: Challan information. */}
                 <div
                     className={millstyles["form--group"]}
                     style={{ width: "auto", margin: "0" }}
@@ -144,6 +187,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                     />
                 </div>
 
+                {/* Column 2: selectedMill. */}
                 <select
                     placeholder="Mill"
                     className={`${millstyles["form--input"]} ${millstyles["form--input-select"]}`}
@@ -169,6 +213,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                     })}
                 </select>
 
+                {/* Column 3: selectedGrey. */}
                 <select
                     placeholder="Grey cloth"
                     className={`${millstyles["form--input"]} ${millstyles["form--input-select"]}`}
@@ -194,6 +239,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                     })}
                 </select>
 
+                {/* Column 4: selectedSupplier */}
                 <select
                     placeholder="Supplier"
                     className={`${millstyles["form--input"]} ${millstyles["form--input-select"]}`}
@@ -224,6 +270,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                 </select>
             </div>
 
+            {/* Row 2: Table. */}
             <div className={millstyles["form--table"]}>
                 <BillsTable
                     data={bills}
@@ -233,6 +280,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                 />
             </div>
 
+            {/* Row 3: Selected options. */}
             <div
                 className={millstyles["form--group"]}
                 style={{
@@ -245,6 +293,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                     marginTop: "45px",
                 }}
             >
+                {/* Column 1: billNumber. */}
                 <div
                     className={millstyles["form--group"]}
                     style={{
@@ -273,6 +322,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                     />
                 </div>
 
+                {/* Column 2: Taka information.  */}
                 <div
                     className={millstyles["form--group"]}
                     style={{
@@ -283,7 +333,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                 >
                     <label
                         htmlFor="selectedTaka"
-                        style={{ margin: "0 10px 0 50px" }}
+                        style={{ margin: "0 10px 0 40px" }}
                     >
                         Selected Taka
                     </label>
@@ -316,6 +366,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                     />
                 </div>
 
+                {/* Column 3: itemName. */}
                 <div
                     className={millstyles["form--group"]}
                     style={{
@@ -326,7 +377,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                 >
                     <label
                         htmlFor="itemName"
-                        style={{ margin: "0 10px 0 50px" }}
+                        style={{ margin: "0 10px 0 40px" }}
                     >
                         Item
                     </label>
@@ -344,6 +395,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                     />
                 </div>
 
+                {/* Column 4: Total meters. */}
                 <div
                     className={millstyles["form--group"]}
                     style={{
@@ -352,7 +404,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                         alignItems: "center",
                     }}
                 >
-                    <label htmlFor="Amount" style={{ margin: "0 10px 0 50px" }}>
+                    <label htmlFor="Amount" style={{ margin: "0 10px 0 40px" }}>
                         Total Meters
                     </label>
                     <input
@@ -364,14 +416,15 @@ export default function SendToMillForm({ itemData, millsData }) {
                         style={{ width: "5vw", minWidth: "100px" }}
                     />
                 </div>
-            </div>
 
-            <button
-                className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
-                style={{ alignSelf: "center" }}
-            >
-                Send
-            </button>
+                {/* Column 5: Submit button. */}
+                <button
+                    className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
+                    style={{ marginLeft: "40px", alignSelf: "center" }}
+                >
+                    Send
+                </button>
+            </div>
         </form>
     );
 }

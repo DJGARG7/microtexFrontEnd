@@ -15,6 +15,7 @@ const toastStyle = {
 };
 
 export default function BillsTable({ data, setBill, setTaka, setTotal }) {
+    // Columns for Bill Table.
     const columns = useMemo(() => [
         {
             Header: "Bill No.",
@@ -81,11 +82,11 @@ export default function BillsTable({ data, setBill, setTaka, setTotal }) {
         },
     ]);
 
+    // Component states.
     const [takaDetails, setTakaDetails] = useState([]);
-
-    // Modal state.
     const [isTakaModalOpen, setIsTakaModalOpen] = useState(false);
 
+    // Fetch taka details for selected item & bill.
     const fetchTakaDetails = async (bill) => {
         // Open modal.
         setIsTakaModalOpen(true);
