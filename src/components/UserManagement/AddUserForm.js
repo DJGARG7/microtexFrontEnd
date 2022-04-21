@@ -142,6 +142,7 @@ export default function AddUserForm({ corporateID, permissionsData }) {
                                 id={permission.p_id}
                                 value={permission.p_id}
                                 onChange={selectPermissionHandler}
+                                style={{ marginRight: "10px" }}
                             />
                         </div>
                     );

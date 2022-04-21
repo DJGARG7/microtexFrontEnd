@@ -49,7 +49,6 @@ export default function ReceiveFromMill({ userDetails }) {
 
     const fetchMillCloth = async () => {
         // Get grey cloth.
-        console.log("hello");
         setIsMillLoading(false);
     };
 

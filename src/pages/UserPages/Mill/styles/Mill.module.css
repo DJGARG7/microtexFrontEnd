@@ -76,6 +76,10 @@
     margin: 0;
 }
 
+.form--input[type="number"] {
+    -moz-appearance: textfield;
+}
+
 /* Remove padding & margin from date picker icon. */
 .form--input[type="date"]::-webkit-calendar-picker-indicator {
     padding: 0;
@@ -119,7 +123,6 @@
     background-color: #0000b2;
     color: white;
 }
-
 
 .form--del-btn {
     background-color: #ca2b53;

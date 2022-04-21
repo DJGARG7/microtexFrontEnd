@@ -252,49 +252,32 @@ export default function GreyPurchase({ userDetails }) {
             ),
             sticky: "left",
             Filter: "",
-            // maxWidth: 100,
-            // minWidth: 100,
             width: 100,
         },
         {
             Header: "Item",
             accessor: "itemName",
             Filter: "",
-            // maxWidth: 200,
-            // minWidth: 170,
-            // width: 100,
         },
         {
             Header: "Taka",
             accessor: "Taka",
             Filter: "",
-            // maxWidth: 70,
-            // minWidth: 100,
-            // width: 70,
         },
         {
             Header: "Meters",
             accessor: "Mts",
             Filter: "",
-            // maxWidth: 70,
-            // minWidth: 70,
-            // width: 70,
         },
         {
             Header: "Rate",
             Filter: "",
             accessor: "Rate",
-            // maxWidth: 70,
-            // minWidth: 70,
-            // width: 40,
         },
         {
             Header: "Amount",
             accessor: "Amount",
             Filter: "",
-            // maxWidth: 90,
-            // minWidth: 90,
-            // width: 90,
         },
     ];
     /* Purchase table data. */
@@ -305,15 +288,9 @@ export default function GreyPurchase({ userDetails }) {
     const [purchaseditems, setpurchaseditems] = useState([]); // list of purchased items
 
     const [formData, setFormData] = useState({
-        // BillNo: "",
         billNumber: "",
-        // BillDate: date,
         billDate: convertDate(new Date()),
-        // accntnames: "DEFAULT",
         accountID: "DEFAULT",
-        // ChallanNo: "",
-        // ChallanDate: date,
-        // itemName: 0,
         itemID: 0,
         Mts: "",
         Rate: "",
@@ -348,15 +325,6 @@ export default function GreyPurchase({ userDetails }) {
 
     // function to handle any changes
     const onChangeHandler = (event) => {
-        // console.log(formData);
-        // selected item uuid is shown here
-        // if (event.target.name === "itemName") {
-        //     const index = event.target.selectedIndex;
-        //     const el = event.target.childNodes[index];
-        //     const option = el.getAttribute("id");
-        //     console.log("UUID of item selected ", option);
-        // }
-
         // to check if the given input is convertable to Float? convert it, dont convert it
         let value = event.target.value;
 

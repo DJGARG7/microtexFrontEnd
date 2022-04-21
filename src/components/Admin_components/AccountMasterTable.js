@@ -151,7 +151,13 @@ function AccountMasterTable({ showclick }) {
         })();
     }, []);
 
-    return <StickyTable TableCol={TableColData} TableData={tabledata}  style={{width:"1000px",height:"500px"}} />;
+    return (
+        <StickyTable
+            TableCol={TableColData}
+            TableData={tabledata}
+            style={{ width: "80vw", maxHeight: "75vh" }}
+        />
+    );
 }
 
 export default AccountMasterTable;

@@ -8,8 +8,8 @@ const SidebarNav = styled.nav`
     flex-direction: column;
     justify-content: space-between;
 
-    min-width: 250px;
-    width: 16vw;
+    min-width: 275px;
+    width: 17.5vw;
     height: 100%;
     overflow: auto;
     background-color: #480ca8;
@@ -17,6 +17,14 @@ const SidebarNav = styled.nav`
 
     transition: 350ms;
     z-index: 10;
+
+    -ms-overflow-style: none; /* for Internet Explorer, Edge */
+    scrollbar-width: none; /* for Firefox */
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+        display: none; /* for Chrome, Safari, and Opera */
+    }
 `;
 
 const SidebarWrap = styled.div`
@@ -49,6 +57,7 @@ const Sidebartest = ({ SidebarDataUserTest, userDetails, logoutHandler }) => {
 
                         <button
                             className={styles["sidebar--logout-btn"]}
+                            style={{ position: "sticky", bottom: "0" }}
                             onClick={logoutHandler}
                         >
                             Logout
