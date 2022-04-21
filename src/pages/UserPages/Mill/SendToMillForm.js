@@ -243,10 +243,10 @@ export default function SendToMillForm({ itemData, millsData }) {
                     data={bills}
                     setIsTakaModalOpen={setIsTakaModalOpen}
                 />
+            </div>
                 {/* <Modal open={isTakaModalOpen} onClose={closeTakaModal}>
                     <h2>Hello</h2>
                 </Modal> */}
-            </div>
 
             <button
                 className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import styles from "../../styles/SendJob.module.css";
 import Modal from "../../components/Reuse_components/Modal";
 import StickyTable from "../../components/Reuse_components/Table/StickyTable";
-import { JobTypes } from "../../jsonData/userData/JobToWork/JobTypes";
 import { ItemFrom } from "../../jsonData/userData/JobToWork/ItemFrom";
+import { JobQuality } from "../../jsonData/userData/JobToWork/JobQuality";
 
 import Axios from "axios";
 import {
@@ -22,6 +22,9 @@ const usrinstance = Axios.create({
 const accinstance = Axios.create({
   baseURL: "http://localhost:3003/accountMaster",
 });
+const jobinstance = Axios.create({
+  baseURL: "http://localhost:3005/job/",
+});
 
 function convertDate(inputFormat) {
   function pad(s) {
@@ -30,16 +33,54 @@ function convertDate(inputFormat) {
   var d = new Date(inputFormat);
   return [d.getFullYear(), pad(d.getMonth() + 1), pad(d.getDate())].join("-");
 }
-
 const date = convertDate(new Date());
 
 function SendJobForWork() {
   const purchasedCol = [
     {
-      Header: "Item From",
-      accessor: "ItemFame",
+      Header: "Action",
+      accessor: (str) => "delete",
+      Cell: (tableProps) => (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+          }}
+        >
+          <button
+            className={`${styles["form--btn"]} ${styles["form--del-btn"]}`}
+            style={{
+              cursor: "pointer",
+              height: "auto",
+              padding: "2.5 0",
+              margin: "0",
+              fontSize: "0.9rem",
+              textTransform: "uppercase",
+              fontWeight: "600",
+            }}
+            type="button"
+            onClick={() => {
+              settotalpcspresent((preamount) => {
+                return parseInt(
+                  preamount + tabledata[tableProps.row.index].Pcs
+                );
+              });
+              setTableData((prestate) => {
+                prestate.splice(tableProps.row.index, 1);
+                return [...prestate];
+              });
+            }}
+          >
+            Delete
+          </button>
+        </div>
+      ),
+      sticky: "left",
       Filter: "",
-      // width: "150px",
+      // maxWidth: 100,
+      // minWidth: 100,
+      width: 100,
     },
     {
       Header: "Item Name",
@@ -53,12 +94,12 @@ function SendJobForWork() {
       Filter: "",
       // width: "150px",
     },
-    // {
-    //   Header: "Pcs",
-    //   accessor: "Pcs",
-    //   Filter: "",
-    //   width: "90px",
-    // },
+    {
+      Header: "Pcs",
+      accessor: "Pcs",
+      Filter: "",
+      // width: "90px",
+    },
     {
       Header: "Mts",
       accessor: "Mts",
@@ -73,7 +114,8 @@ function SendJobForWork() {
     },
   ];
 
-  // statevariables
+  /*- - - - - - - - - - - - - - - - - - - - - - Use states - - - - - - - - - - - - - - - - - - - - */
+
   const [state, setState] = useState({
     ChallanNo: "",
     JobType: "",
@@ -82,35 +124,44 @@ function SendJobForWork() {
     ItemName: "",
     ItemFrom: "",
     JobQuality: "",
-    Cut: "",
     Pcs: "",
     Mts: "",
     JobRate: "",
   });
-
   const [editmode, setEditmode] = useState(false);
   const [totalamount, setTotalAmount] = useState(0);
   const [accntlist, setAccntList] = useState([]);
   const [tabledata, setTableData] = useState([]);
   const [modal, setModal] = useState(false);
-  const [totalmtspresent, settotalmtspresent] = useState([]);
-  const [distinctitemlist, setdistinctitemlist] = useState([]);
-  const [totalpcspresent, settotalpcspresent] = useState([]);
+  const [totalmtspresent, settotalmtspresent] = useState([]); // total mts in inventory
+  const [distinctitemlist, setdistinctitemlist] = useState([]); // distinct list of items in inventory
+  const [totalpcspresent, settotalpcspresent] = useState([]); // total pcs in inventory
+  const [jobTypeModal, setJobTypeModal] = useState(false); // used to open and close job type modal
+  const [jobtypelist, setjobtypelist] = useState([]); // used to render job types in select
+  const [jobtype, setjobtype] = useState(""); // used in adding job type in modal
+  const [itemID, setItemID] = useState("");
+  /*- - - - - - - - - - - - - - - - - - - - - - Use states - - - - - - - - - - - - - - - - - - - - */
 
   //useEffect to fetch account names
   useEffect(() => {
     (async () => {
-      const res = await accinstance.get("Creditors for job");
-
-      setAccntList(res.data);
+      try {
+        const res = await accinstance.get("Creditors for job");
+        setAccntList(res.data);
+        getjobtypes();
+      } catch (e) {
+        console.log(e.response.data);
+      }
     })();
   }, []);
 
-  // On input change
+  /*- - - - - - - - - - - - - - - - - - - - - - Input change function  - - - - - - - - - - - - - - - - - - - - */
+
   const onChangeHandler = async (e) => {
     let res;
     let value = e.target.value;
     const name = e.target.name;
+
     if (name === "ItemFrom") {
       if (value === "Grey Godown Stock") {
         res = await usrinstance("fetchDistinctItems");
@@ -119,23 +170,20 @@ function SendJobForWork() {
         setdistinctitemlist([]);
       }
     }
+
     // if an item is selected this loads all the mts in the inventory
     if (name === "ItemName" && value !== "") {
+      const index = e.target.selectedIndex;
+      const el = e.target.childNodes[index];
+      const id = el.getAttribute("id");
+      console.log(index);
+      console.log(id);
+      setItemID(id);
       if (state.ItemFrom === "Grey Godown Stock") {
         res = await usrinstance.get(`/stockDetails/${value}`);
-        console.log(res.data[0].totaltaka);
         settotalmtspresent(res.data[0].totalmts);
         settotalpcspresent(res.data[0].totaltaka);
       }
-    }
-
-    let mts;
-    //if item selected is cut or pcs
-    if (name === "Cut" || name === "Pcs") {
-      const cut = parseFloat(document.getElementById("Cut").value);
-      const pcs = parseFloat(document.getElementById("Pcs").value);
-      mts = cut * pcs;
-      console.log(cut);
     }
 
     // sanity check to convert integer entered to integer
@@ -144,13 +192,65 @@ function SendJobForWork() {
     }
     setState({
       ...state,
-      [e.target.name]: value,
-      Mts: mts,
+      [name]: value,
     });
   };
 
+  /*- - - - - - - - - - - - - - - - - - - - - - Input change function  - - - - - - - - - - - - - - - - - - - - */
+
   // when the form is submitted
-  const onFormSubmit = () => {};
+  const onFormSubmit = (e) => {
+    e.preventDefault();
+    console.log(state);
+    console.log(itemID);
+    const newjoblist = { ...state, itemID };
+    console.log(newjoblist);
+    setTableData((prevdata) => {
+      let flag = 0;
+      prevdata.forEach((item) => {
+        if (
+          item.itemID === newjoblist.itemID &&
+          item.JobQuality === newjoblist.JobQuality
+        ) {
+          toastError("Job already exist please delete it");
+          flag = 1;
+          
+          return [...prevdata];
+        }
+      });
+      if (flag === 0){
+        // settotalpcspresent((prestate)=>{
+        //   return []
+        // })
+        return [...prevdata, newjoblist];
+      } 
+      else return [...prevdata];
+    });
+  };
+
+  const getjobtypes = async () => {
+    const jobtypes = await jobinstance.get("getjobtype");
+    setjobtypelist(jobtypes.data);
+  };
+
+  // when jobtype modal form is submitted
+  const onJobTypeSubmit = async (e) => {
+    e.preventDefault();
+    const data = {
+      jobtype: jobtype,
+    };
+
+    try {
+      const res = await jobinstance.post("/addjobtype", data);
+      toastSuccess(res.data);
+      setJobTypeModal(false);
+      setjobtype("");
+      getjobtypes();
+    } catch (error) {
+      toastError(error.response.data);
+    }
+  };
+
   return (
     <div className={styles["main"]}>
       <form onSubmit={onFormSubmit} className={styles["form"]}>
@@ -160,6 +260,7 @@ function SendJobForWork() {
             className={styles["input-select"]}
             id="accntname"
             required
+            name="accntname"
             onChange={onChangeHandler}
             value={state.accntname}
           >
@@ -174,29 +275,38 @@ function SendJobForWork() {
           </select>
           <select
             className={styles["input-select"]}
-            id="jobType"
+            id="JobType"
+            name="JobType"
             required
             onChange={onChangeHandler}
-            value={state.jobType}
+            value={state.JobType}
           >
             <option value="">Job Types</option>
-            {JobTypes.map((obj, index) => {
+            {jobtypelist.map((obj, index) => {
               return (
-                <option value={obj} key={index}>
-                  {obj}
+                <option value={obj.jobType} key={index}>
+                  {obj.jobType}
                 </option>
               );
             })}
           </select>
+          <button
+            type="button"
+            onClick={() => setJobTypeModal(true)}
+            className={`${styles["add-btn"]} ${styles["btn"]}`}
+          >
+            Add Job Type
+          </button>
           <input
             placeholder="Challan No"
             type="number"
+            name="ChallanNo"
             className={styles["input-text"]}
-            value={state.itemname}
-            id="itemname"
+            value={state.ChallanNo}
+            id="ChallanNo"
             required
             onChange={onChangeHandler}
-          ></input>
+          />
           <input
             placeholder="ChallanDate"
             type="Date"
@@ -210,7 +320,7 @@ function SendJobForWork() {
         </div>
         <div className={styles["input-section"]}>
           <input
-            id=""
+            id="qty"
             type="number"
             name="QtyPresent"
             value={totalpcspresent}
@@ -219,7 +329,7 @@ function SendJobForWork() {
             className={styles["input-text"]}
           />
           <input
-            id=""
+            id="MtsPresent"
             type="number"
             name="MtsPresent"
             placeholder="Mts Present"
@@ -255,8 +365,8 @@ function SendJobForWork() {
             <option value="">Item Name</option>
             {distinctitemlist.map((obj, index) => {
               return (
-                <option value={obj.ItemName} key={index}>
-                  {obj.ItemName}
+                <option value={obj.itemName} key={index} id={obj.itemID}>
+                  {obj.itemName}
                 </option>
               );
             })}
@@ -269,40 +379,32 @@ function SendJobForWork() {
             value={state.JobQuality}
           >
             <option value="">Job Quality</option>
-            {/* {accntlist.map((obj, index) => {
-                return (
-                  <option value={obj.AccName} key={index}>
-                    {obj.AccName}
-                  </option>
-                );
-              })} */}
+            {JobQuality.map((obj, index) => {
+              return (
+                <option value={obj} key={index}>
+                  {obj}
+                </option>
+              );
+            })}
           </select>
-          {/* <input
-            id="Cut"
-            type="number"
-            name="Cut"
-            placeholder="Cut"
-            required
-            onChange={onChangeHandler}
-            value={state.Cut}
-            className={styles["input-text"]}
-          />
           <input
             id="Pcs"
             type="number"
             name="Pcs"
             placeholder="Pcs"
             required
+            max={totalpcspresent}
             onChange={onChangeHandler}
             value={state.Pcs}
             className={styles["input-text"]}
-          /> */}
+          />
           <input
             id="Mts"
             type="number"
             name="Mts"
             placeholder="Mts"
             required
+            max={totalmtspresent}
             onChange={onChangeHandler}
             value={state.Mts}
             className={styles["input-text"]}
@@ -330,7 +432,14 @@ function SendJobForWork() {
             }}
           />
         </div>
-        <div style={{ display:"flex", flexDirection:"column",marginTop: "50px", justifyContent: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            marginTop: "50px",
+            justifyContent: "center",
+          }}
+        >
           {!editmode && (
             <button className={`${styles["add-btn"]} ${styles["btn"]}`}>
               Submit
@@ -362,6 +471,38 @@ function SendJobForWork() {
           </button>
         </div>
       </form>
+      <Modal open={jobTypeModal} onClose={() => setJobTypeModal(false)}>
+        <h2>Add Job type</h2>
+        <form className={styles["form-modal"]} onSubmit={onJobTypeSubmit}>
+          <input
+            type="text"
+            placeholder="Job Type"
+            className={styles["input-text"]}
+            required
+            style={{ width: "200px" }}
+            value={jobtype}
+            onChange={(e) => setjobtype(e.target.value)}
+          />
+          <button
+            style={{ width: "150px" }}
+            className={`${styles["add-btn"]} ${styles["btn"]}`}
+          >
+            {" "}
+            Add Job
+          </button>
+        </form>
+        <select className={styles["input-select"]}>
+          <option value="">Job types</option>
+          {jobtypelist.map((obj, index) => {
+            return (
+              <option value={obj.jobType} key={index}>
+                {" "}
+                {obj.jobType}{" "}
+              </option>
+            );
+          })}
+        </select>
+      </Modal>
     </div>
   );
 }
