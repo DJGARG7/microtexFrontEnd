@@ -192,9 +192,13 @@ function GeneralPurchases({ userDetails }) {
     checkPermission();
     (async () => {
       const accntType = "Creditors for expenses";
-      const res = await accinstance.get(`${accntType}`);
+      try{
+        const res = await accinstance.get(`${accntType}`);
+        setaccntlist(res.data);
 
-      setaccntlist(res.data);
+      }catch(e){
+        console.log(e);
+      }
     })();
   }, []);
   if (!isAllowed) {
@@ -361,10 +365,14 @@ function GeneralPurchases({ userDetails }) {
           className={`${styles["add-btn"]} ${styles["btn"]}`}
           onClick={() => {
             (async function fetchdata() {
-              const res = await usrinstance.get("fetchgeneralpurchase");
-              settabledata(res.data);
+              try{
+                const res = await usrinstance.get("fetchgeneralpurchase");
+                settabledata(res.data);
+                setModal(true);
+              }catch(e){
+                console.log(e.response.data)
+              }
             })();
-            setModal(true);
           }}
         >
           View all items

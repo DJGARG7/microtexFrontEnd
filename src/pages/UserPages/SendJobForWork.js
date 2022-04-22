@@ -102,7 +102,7 @@ function SendJobForWork() {
     },
     {
       Header: "Mts",
-      accessor: "Mts",
+      accessor: "meters ",
       Filter: "",
       // width: "90px",
     },
@@ -125,7 +125,6 @@ function SendJobForWork() {
     ItemFrom: "",
     JobQuality: "",
     Pcs: "",
-    Mts: "",
     JobRate: "",
   });
   const [editmode, setEditmode] = useState(false);
@@ -139,7 +138,8 @@ function SendJobForWork() {
   const [jobTypeModal, setJobTypeModal] = useState(false); // used to open and close job type modal
   const [jobtypelist, setjobtypelist] = useState([]); // used to render job types in select
   const [jobtype, setjobtype] = useState(""); // used in adding job type in modal
-  const [itemID, setItemID] = useState("");
+  const [itemID, setItemID] = useState(""); //ID of the item added to the list
+  const [meters,setMeters] = useState("");
   /*- - - - - - - - - - - - - - - - - - - - - - Use states - - - - - - - - - - - - - - - - - - - - */
 
   //useEffect to fetch account names
@@ -162,6 +162,7 @@ function SendJobForWork() {
     let value = e.target.value;
     const name = e.target.name;
 
+
     if (name === "ItemFrom") {
       if (value === "Grey Godown Stock") {
         res = await usrinstance("fetchDistinctItems");
@@ -170,6 +171,7 @@ function SendJobForWork() {
         setdistinctitemlist([]);
       }
     }
+
 
     // if an item is selected this loads all the mts in the inventory
     if (name === "ItemName" && value !== "") {
@@ -181,10 +183,17 @@ function SendJobForWork() {
       setItemID(id);
       if (state.ItemFrom === "Grey Godown Stock") {
         res = await usrinstance.get(`/stockDetails/${value}`);
-        settotalmtspresent(res.data[0].totalmts);
-        settotalpcspresent(res.data[0].totaltaka);
+        const totalpcs = parseInt(res.data[0].totalmts/10);
+        // settotalmtspresent(res.data[0].totalmts);
+        settotalpcspresent(totalpcs);
       }
     }
+
+    // set meters pcs * 10
+    if(name==="Pcs"){
+      setMeters(value*10);
+    }
+
 
     // sanity check to convert integer entered to integer
     if (!Number.isNaN(parseFloat(value))) {
@@ -201,10 +210,7 @@ function SendJobForWork() {
   // when the form is submitted
   const onFormSubmit = (e) => {
     e.preventDefault();
-    console.log(state);
-    console.log(itemID);
-    const newjoblist = { ...state, itemID };
-    console.log(newjoblist);
+    const newjoblist = { ...state, itemID , meters};
     setTableData((prevdata) => {
       let flag = 0;
       prevdata.forEach((item) => {
@@ -214,23 +220,27 @@ function SendJobForWork() {
         ) {
           toastError("Job already exist please delete it");
           flag = 1;
-          
+
           return [...prevdata];
         }
       });
-      if (flag === 0){
-        // settotalpcspresent((prestate)=>{
-        //   return []
-        // })
+      if (flag === 0) {
+        settotalpcspresent((prestate)=>{
+          return prestate-newjoblist.Pcs
+        })
         return [...prevdata, newjoblist];
-      } 
-      else return [...prevdata];
+      } else return [...prevdata];
     });
   };
 
   const getjobtypes = async () => {
-    const jobtypes = await jobinstance.get("getjobtype");
-    setjobtypelist(jobtypes.data);
+    try{
+      const jobtypes = await jobinstance.get("getjobtype");
+      setjobtypelist(jobtypes.data);
+    }
+    catch(e){
+      console.log(e);
+    }
   };
 
   // when jobtype modal form is submitted
@@ -402,11 +412,10 @@ function SendJobForWork() {
             id="Mts"
             type="number"
             name="Mts"
+            readOnly
             placeholder="Mts"
             required
-            max={totalmtspresent}
-            onChange={onChangeHandler}
-            value={state.Mts}
+            value={meters}
             className={styles["input-text"]}
           />
           <input
@@ -420,29 +429,10 @@ function SendJobForWork() {
             className={styles["input-text"]}
           />
         </div>
-        <div className={styles["form-table"]}>
-          <StickyTable
-            TableCol={purchasedCol}
-            TableData={tabledata}
-            style={{
-              maxWidth: "100%",
-              maxHeight: "300px",
-              border: "2.5px solid black",
-              borderRadius: "5px",
-            }}
-          />
-        </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            marginTop: "50px",
-            justifyContent: "center",
-          }}
-        >
-          {!editmode && (
-            <button className={`${styles["add-btn"]} ${styles["btn"]}`}>
-              Submit
+        <div style={{paddingBottom:"20px"}}>
+          {!editmode && tabledata.length===0  && (
+            <button className={`${styles["add-btn"]} ${styles["btn"]}`} style={{width:"150px"}}>
+              Add to the list
             </button>
           )}
           {editmode && (
@@ -463,9 +453,40 @@ function SendJobForWork() {
               </button>
             </div>
           )}
+        </div>
+        <div className={styles["form-table"]}>
+          <StickyTable
+            TableCol={purchasedCol}
+            TableData={tabledata}
+            style={{
+              maxWidth: "100%",
+              maxHeight: "300px",
+              border: "2.5px solid black",
+              borderRadius: "5px",
+            }}
+          />
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            padding:"20px",
+            marginTop:"50px",
+            width:"100%",
+            justifyContent: "space-evenly",
+          }}
+        >
           <button
             type="button"
             className={`${styles["add-btn"]} ${styles["btn"]}`}
+            style={{width:"150px"}}
+          >
+            Submit
+          </button>
+          <button
+            type="button"
+            className={`${styles["add-btn"]} ${styles["btn"]}`}
+            style={{width:"150px"}}
           >
             View all items
           </button>
