@@ -105,8 +105,6 @@ function ReceiveFromJob() {
       }catch(e){
         console.log(e.response.data);
       }
-
-      
     })();
   }, []);
 

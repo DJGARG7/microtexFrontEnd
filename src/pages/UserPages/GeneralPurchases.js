@@ -195,9 +195,8 @@ function GeneralPurchases({ userDetails }) {
       try{
         const res = await accinstance.get(`${accntType}`);
         setaccntlist(res.data);
-
       }catch(e){
-        console.log(e);
+        console.log(e.response.data);
       }
     })();
   }, []);
@@ -224,12 +223,12 @@ function GeneralPurchases({ userDetails }) {
     };
     console.log(data);
     (async () => {
-      const res = await usrinstance.post("addgeneralpurchase", data);
-      if (res.data.status === "1") {
+      try{
+        const res = await usrinstance.post("addgeneralpurchase", data);
         toastSuccess("Item added");
         clearall();
-      } else {
-        toastError(`Error ${res.data.sqlMessage}`);
+      }catch(e){
+        toastError(`Error ${e.response.data}`);
       }
     })();
   };
@@ -246,16 +245,15 @@ function GeneralPurchases({ userDetails }) {
       ...state,
       totalamount,
     };
-    const res = await usrinstance.put(
-      `updategeneralpurchase/${state.uuid}`,
-      data
-    );
-
-    if (res.data == "1") {
-      toastSuccess("Edited Successfully");
+    try{
+      const res = await usrinstance.put(
+        `updategeneralpurchase/${state.uuid}`,
+        data
+      );
+      toastSuccess("Updated");
       clearall();
-    } else {
-      toastError(`Error ${res.data.sqlMessage}`);
+    }catch(e){
+      toastError(e.response.data);
     }
     setEditmode(false);
   };

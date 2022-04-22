@@ -10,6 +10,7 @@ import {
   toastError,
   toastSuccess,
 } from "../../components/Reuse_components/toast";
+import toast from "react-hot-toast";
 
 if (localStorage.getItem("userDetails") != null)
   Axios.defaults.headers.common["userID"] = JSON.parse(
@@ -63,7 +64,7 @@ function SendJobForWork() {
             onClick={() => {
               settotalpcspresent((preamount) => {
                 return parseInt(
-                  preamount + tabledata[tableProps.row.index].Pcs
+                  preamount + tabledata[tableProps.row.index].pieces
                 );
               });
               setTableData((prestate) => {
@@ -90,25 +91,25 @@ function SendJobForWork() {
     },
     {
       Header: "Job Quality",
-      accessor: "JobQuality",
+      accessor: "jobQuality",
       Filter: "",
       // width: "150px",
     },
     {
       Header: "Pcs",
-      accessor: "Pcs",
+      accessor: "pieces",
       Filter: "",
       // width: "90px",
     },
     {
       Header: "Mts",
-      accessor: "meters ",
+      accessor: "meters",
       Filter: "",
       // width: "90px",
     },
     {
       Header: "JobRate",
-      accessor: "JobRate",
+      accessor: "jobRate",
       Filter: "",
       // width: "90px",
     },
@@ -117,19 +118,20 @@ function SendJobForWork() {
   /*- - - - - - - - - - - - - - - - - - - - - - Use states - - - - - - - - - - - - - - - - - - - - */
 
   const [state, setState] = useState({
-    ChallanNo: "",
-    JobType: "",
-    ChallanDate: date,
-    inventory: "",
+    challanNo: "",
+    jobType: "",
+    challanDate: date,
     ItemName: "",
     ItemFrom: "",
-    JobQuality: "",
-    Pcs: "",
-    JobRate: "",
+    jobQuality: "",
+    pieces: "",
+    jobRate: "",
+    accntname:"",
   });
   const [editmode, setEditmode] = useState(false);
   const [totalamount, setTotalAmount] = useState(0);
   const [accntlist, setAccntList] = useState([]);
+  const [accountID,setaccountID] = useState([]);
   const [tabledata, setTableData] = useState([]);
   const [modal, setModal] = useState(false);
   const [totalmtspresent, settotalmtspresent] = useState([]); // total mts in inventory
@@ -138,8 +140,9 @@ function SendJobForWork() {
   const [jobTypeModal, setJobTypeModal] = useState(false); // used to open and close job type modal
   const [jobtypelist, setjobtypelist] = useState([]); // used to render job types in select
   const [jobtype, setjobtype] = useState(""); // used in adding job type in modal
+  const [jobtypeID,setjobtypeID] = useState(""); // for getting ID of job type
   const [itemID, setItemID] = useState(""); //ID of the item added to the list
-  const [meters,setMeters] = useState("");
+  const [meters, setMeters] = useState("");
   /*- - - - - - - - - - - - - - - - - - - - - - Use states - - - - - - - - - - - - - - - - - - - - */
 
   //useEffect to fetch account names
@@ -155,13 +158,29 @@ function SendJobForWork() {
     })();
   }, []);
 
+
+  const clearall = ()=>{
+    setState({
+      challanNo:"",
+      jobType:"",
+      ItemName:"",
+      ItemFrom:"",
+      jobQuality:"",
+      pieces:"",
+      jobRate:"",
+      accntname:"",
+    })
+    settotalpcspresent("");
+    setTableData("");
+    setMeters("");
+  }
+
   /*- - - - - - - - - - - - - - - - - - - - - - Input change function  - - - - - - - - - - - - - - - - - - - - */
 
   const onChangeHandler = async (e) => {
     let res;
     let value = e.target.value;
     const name = e.target.name;
-
 
     if (name === "ItemFrom") {
       if (value === "Grey Godown Stock") {
@@ -172,28 +191,47 @@ function SendJobForWork() {
       }
     }
 
+    // for getting the account id
+    if(name==="accntname"){
+      const index = e.target.selectedIndex;
+      const el = e.target.childNodes[index];
+      const id = el.getAttribute("id");
+      console.log(id);
+      setaccountID(id);
+    }
+
+
+
+    if(name==="jobType"){
+      const index = e.target.selectedIndex;
+      const el = e.target.childNodes[index];
+      const id = el.getAttribute("id");
+      console.log(id);
+      setjobtypeID(id);
+    }
 
     // if an item is selected this loads all the mts in the inventory
     if (name === "ItemName" && value !== "") {
       const index = e.target.selectedIndex;
       const el = e.target.childNodes[index];
       const id = el.getAttribute("id");
-      console.log(index);
       console.log(id);
       setItemID(id);
       if (state.ItemFrom === "Grey Godown Stock") {
-        res = await usrinstance.get(`/stockDetails/${value}`);
-        const totalpcs = parseInt(res.data[0].totalmts/10);
-        // settotalmtspresent(res.data[0].totalmts);
-        settotalpcspresent(totalpcs);
+        try {
+          res = await usrinstance.get(`/stockDetails/${id}`);
+          const totalpcs = parseInt(res.data[0].totalmts / 10);
+          settotalpcspresent(totalpcs);
+        } catch (err) {
+          console.log(err.response.data);
+        }
       }
     }
 
     // set meters pcs * 10
-    if(name==="Pcs"){
-      setMeters(value*10);
+    if (name === "pieces") {
+      setMeters(value * 10);
     }
-
 
     // sanity check to convert integer entered to integer
     if (!Number.isNaN(parseFloat(value))) {
@@ -207,39 +245,40 @@ function SendJobForWork() {
 
   /*- - - - - - - - - - - - - - - - - - - - - - Input change function  - - - - - - - - - - - - - - - - - - - - */
 
-  // when the form is submitted
+  /*- - - - - - - - - - - - - - - - - - - - - -       ON FORM SUBMIT    - - - - - - - - - - - - - - - - - - - - */
+
   const onFormSubmit = (e) => {
     e.preventDefault();
-    const newjoblist = { ...state, itemID , meters};
+    const newjoblist = { ...state, itemID, meters};
     setTableData((prevdata) => {
       let flag = 0;
       prevdata.forEach((item) => {
         if (
           item.itemID === newjoblist.itemID &&
-          item.JobQuality === newjoblist.JobQuality
+          item.jobQuality === newjoblist.jobQuality
         ) {
           toastError("Job already exist please delete it");
           flag = 1;
-
           return [...prevdata];
         }
       });
       if (flag === 0) {
-        settotalpcspresent((prestate)=>{
-          return prestate-newjoblist.Pcs
-        })
+        settotalpcspresent((prestate) => {
+          return prestate - newjoblist.pieces;
+        });
         return [...prevdata, newjoblist];
       } else return [...prevdata];
     });
   };
 
+  /*- - - - - - - - - - - - - - - - - - - - - -       ON FORM SUBMIT    - - - - - - - - - - - - - - - - - - - - */
+
   const getjobtypes = async () => {
-    try{
+    try {
       const jobtypes = await jobinstance.get("getjobtype");
       setjobtypelist(jobtypes.data);
-    }
-    catch(e){
-      console.log(e);
+    } catch (e) {
+      console.log(e.response.data);
     }
   };
 
@@ -261,6 +300,28 @@ function SendJobForWork() {
     }
   };
 
+  /*- - - - - - - - - - - - - - - - - - - - - -       ON BILL SUBMIT    - - - - - - - - - - - - - - - - - - - - */
+
+  const onBillSubmit = async () => {
+    const postdata = {
+      state,
+      accountID,
+      jobtypeID,
+      tabledata
+    }
+
+    try{
+      const res = await jobinstance.post("/addjobdetails",postdata);
+      console.log(res);
+      clearall();
+      toastSuccess(res.data);
+    }catch(e){
+      toastError(e.response.data);
+    }
+  };
+
+  /*- - - - - - - - - - - - - - - - - - - - - -       ON BILL SUBMIT    - - - - - - - - - - - - - - - - - - - - */
+
   return (
     <div className={styles["main"]}>
       <form onSubmit={onFormSubmit} className={styles["form"]}>
@@ -277,7 +338,7 @@ function SendJobForWork() {
             <option value="">Account Names</option>
             {accntlist.map((obj, index) => {
               return (
-                <option value={obj.AccName} key={index}>
+                <option value={obj.AccName} key={index} id={obj.uid}>
                   {obj.AccName}
                 </option>
               );
@@ -285,16 +346,16 @@ function SendJobForWork() {
           </select>
           <select
             className={styles["input-select"]}
-            id="JobType"
-            name="JobType"
+            id="jobType"
+            name="jobType"
             required
             onChange={onChangeHandler}
-            value={state.JobType}
+            value={state.jobType}
           >
             <option value="">Job Types</option>
             {jobtypelist.map((obj, index) => {
               return (
-                <option value={obj.jobType} key={index}>
+                <option value={obj.jobType} key={index} id={obj.jobId}>
                   {obj.jobType}
                 </option>
               );
@@ -310,20 +371,20 @@ function SendJobForWork() {
           <input
             placeholder="Challan No"
             type="number"
-            name="ChallanNo"
+            name="challanNo"
             className={styles["input-text"]}
-            value={state.ChallanNo}
-            id="ChallanNo"
+            value={state.challanNo}
+            id="challanNo"
             required
             onChange={onChangeHandler}
           />
           <input
-            placeholder="ChallanDate"
+            placeholder="challanDate"
             type="Date"
             className={styles["input-text"]}
-            value={state.ChallanDate}
-            id="ChallanDate"
-            name="ChallanDate"
+            value={state.challanDate}
+            id="challanDate"
+            name="challanDate"
             required
             onChange={onChangeHandler}
           ></input>
@@ -383,10 +444,10 @@ function SendJobForWork() {
           </select>
           <select
             className={styles["input-select"]}
-            name="JobQuality"
+            name="jobQuality"
             required
             onChange={onChangeHandler}
-            value={state.JobQuality}
+            value={state.jobQuality}
           >
             <option value="">Job Quality</option>
             {JobQuality.map((obj, index) => {
@@ -398,40 +459,43 @@ function SendJobForWork() {
             })}
           </select>
           <input
-            id="Pcs"
+            id="pieces"
             type="number"
-            name="Pcs"
-            placeholder="Pcs"
+            name="pieces"
+            placeholder="Pieces"
             required
             max={totalpcspresent}
             onChange={onChangeHandler}
-            value={state.Pcs}
+            value={state.pieces}
             className={styles["input-text"]}
           />
           <input
             id="Mts"
             type="number"
             name="Mts"
-            readOnly
+            disabled
             placeholder="Mts"
             required
             value={meters}
             className={styles["input-text"]}
           />
           <input
-            id="JobRate"
+            id="jobRate"
             type="number"
-            name="JobRate"
+            name="jobRate"
             placeholder="Job Rate"
             required
             onChange={onChangeHandler}
-            value={state.JobRate}
+            value={state.jobRate}
             className={styles["input-text"]}
           />
         </div>
-        <div style={{paddingBottom:"20px"}}>
-          {!editmode && tabledata.length===0  && (
-            <button className={`${styles["add-btn"]} ${styles["btn"]}`} style={{width:"150px"}}>
+        <div style={{ paddingBottom: "20px" }}>
+          {!editmode && (
+            <button
+              className={`${styles["add-btn"]} ${styles["btn"]}`}
+              style={{ width: "150px" }}
+            >
               Add to the list
             </button>
           )}
@@ -470,23 +534,24 @@ function SendJobForWork() {
           style={{
             display: "flex",
             flexDirection: "row",
-            padding:"20px",
-            marginTop:"50px",
-            width:"100%",
+            padding: "20px",
+            marginTop: "50px",
+            width: "100%",
             justifyContent: "space-evenly",
           }}
         >
           <button
             type="button"
             className={`${styles["add-btn"]} ${styles["btn"]}`}
-            style={{width:"150px"}}
+            style={{ width: "150px" }}
+            onClick={onBillSubmit}
           >
             Submit
           </button>
           <button
             type="button"
             className={`${styles["add-btn"]} ${styles["btn"]}`}
-            style={{width:"150px"}}
+            style={{ width: "150px" }}
           >
             View all items
           </button>
