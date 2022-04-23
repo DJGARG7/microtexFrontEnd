@@ -192,9 +192,12 @@ function GeneralPurchases({ userDetails }) {
     checkPermission();
     (async () => {
       const accntType = "Creditors for expenses";
-      const res = await accinstance.get(`${accntType}`);
-
-      setaccntlist(res.data);
+      try{
+        const res = await accinstance.get(`${accntType}`);
+        setaccntlist(res.data);
+      }catch(e){
+        console.log(e.response.data);
+      }
     })();
   }, []);
   if (!isAllowed) {
@@ -220,12 +223,12 @@ function GeneralPurchases({ userDetails }) {
     };
     console.log(data);
     (async () => {
-      const res = await usrinstance.post("addgeneralpurchase", data);
-      if (res.data.status === "1") {
+      try{
+        const res = await usrinstance.post("addgeneralpurchase", data);
         toastSuccess("Item added");
         clearall();
-      } else {
-        toastError(`Error ${res.data.sqlMessage}`);
+      }catch(e){
+        toastError(`Error ${e.response.data}`);
       }
     })();
   };
@@ -242,16 +245,15 @@ function GeneralPurchases({ userDetails }) {
       ...state,
       totalamount,
     };
-    const res = await usrinstance.put(
-      `updategeneralpurchase/${state.uuid}`,
-      data
-    );
-
-    if (res.data == "1") {
-      toastSuccess("Edited Successfully");
+    try{
+      const res = await usrinstance.put(
+        `updategeneralpurchase/${state.uuid}`,
+        data
+      );
+      toastSuccess("Updated");
       clearall();
-    } else {
-      toastError(`Error ${res.data.sqlMessage}`);
+    }catch(e){
+      toastError(e.response.data);
     }
     setEditmode(false);
   };
@@ -361,10 +363,14 @@ function GeneralPurchases({ userDetails }) {
           className={`${styles["add-btn"]} ${styles["btn"]}`}
           onClick={() => {
             (async function fetchdata() {
-              const res = await usrinstance.get("fetchgeneralpurchase");
-              settabledata(res.data);
+              try{
+                const res = await usrinstance.get("fetchgeneralpurchase");
+                settabledata(res.data);
+                setModal(true);
+              }catch(e){
+                console.log(e.response.data)
+              }
             })();
-            setModal(true);
           }}
         >
           View all items
