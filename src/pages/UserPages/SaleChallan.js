@@ -6,8 +6,13 @@ import {
 } from "../../components/Reuse_components/toast";
 import CurrentDate from "../../components/Reuse_components/CurrentDate";
 import StickyTable from "../../components/Reuse_components/Table/StickyTable";
+import ReactLoading from "react-loading";
+
+import styles from "./Mill/styles/Mill.module.css";
+
 const currDate = CurrentDate();
-const SaleChallan = ({ userDetails }) => {
+
+export default function SaleChallan({ userDetails }) {
     const TableColData = [
         {
             Header: "Action",
@@ -15,13 +20,24 @@ const SaleChallan = ({ userDetails }) => {
                 <button
                     type="button"
                     onClick={() => rowDeleteHandler(tableProps)}
+                    className={`${styles["form--btn"]} ${styles["form--del-btn"]}`}
+                    style={{
+                        cursor: "pointer",
+                        height: "auto",
+                        padding: "2.5 0",
+                        margin: "0",
+                        fontSize: "0.9rem",
+                        textTransform: "uppercase",
+                        fontWeight: "600",
+                    }}
                 >
                     Delete
                 </button>
             ),
+            width: 100,
         },
         {
-            Header: "Design Name",
+            Header: "Design",
             accessor: "DName",
             Filter: "",
         },
@@ -41,11 +57,13 @@ const SaleChallan = ({ userDetails }) => {
             Filter: "",
         },
     ];
+
     const rowDeleteHandler = (tableData) => {
         const copyData = [...tableData.data];
         copyData.splice(tableData.row.index, 1);
         setItemList(copyData);
     };
+
     //for items in table
     const [itemList, setItemList] = useState([]);
 
@@ -65,6 +83,9 @@ const SaleChallan = ({ userDetails }) => {
     const type = "Sundry Debtors";
 
     const [isAllowed, setIsAllowed] = useState(false);
+    const [isAllowedLoading, setIsAllowedLoading] = useState(true);
+    const [isAccountsLoading, setIsAccountsLoading] = useState(true);
+    const [isDesignsLoading, setIsDesignsLoading] = useState(true);
 
     const checkPermission = async () => {
         try {
@@ -73,27 +94,41 @@ const SaleChallan = ({ userDetails }) => {
             );
 
             setIsAllowed(res.data);
-            console.log(res.data);
+            setIsAllowedLoading(false);
         } catch (error) {
             console.log(error);
         }
     };
 
-    useEffect(async () => {
-        checkPermission();
+    const fetchAccounts = async () => {
         try {
             const res = await Axios.get(
                 `http://localhost:3003/accountMaster/${type}`
             );
             setSdlist(res.data);
+            setIsAccountsLoading(false);
+        } catch (e) {
+            toastError("Error fetching SD data");
+        }
+    };
+
+    const fetchDesigns = async () => {
+        try {
             const res1 = await Axios.get(
                 "http://localhost:3004/designMaster/nameAndType"
             );
             setDNamelist(res1.data[0]);
             setClothlist(res1.data[1]);
+            setIsDesignsLoading(false);
         } catch (e) {
-            toastError("Error loading SD data");
+            toastError("Failed to fetch designs");
         }
+    };
+
+    useEffect(async () => {
+        checkPermission();
+        fetchAccounts();
+        fetchDesigns();
     }, []);
 
     const addItemHandler = () => {
@@ -122,7 +157,9 @@ const SaleChallan = ({ userDetails }) => {
             toastError(message);
         }
     };
+
     const deleteItemHandler = () => {};
+
     //insert into db
     const submitHandler = async (e) => {
         e.preventDefault();
@@ -141,6 +178,18 @@ const SaleChallan = ({ userDetails }) => {
         }
     };
 
+    if (isAllowedLoading || isDesignsLoading || isAccountsLoading) {
+        return (
+            <div
+                style={{
+                    marginTop: "10vh",
+                }}
+            >
+                <ReactLoading type="bubbles" color="#212121" />
+            </div>
+        );
+    }
+
     if (!isAllowed) {
         return (
             <div
@@ -154,120 +203,183 @@ const SaleChallan = ({ userDetails }) => {
     }
 
     return (
-        <div>
-            Sale Challan
-            <form onSubmit={submitHandler}>
-                <input
-                    type="number"
-                    name="challan"
-                    value={challan}
-                    placeholder="Challan No."
-                    onChange={(e) => setChallan(e.target.value)}
-                    // disabled={!isEntering}
-                    // className={`${styles["input-text"]}`}
-                    style={{ marginRight: "10%" }}
-                    required
-                />
-                <select
-                    // className={styles["input-select"]}
-                    name="custName"
-                    value={custName}
-                    onChange={(e) => setCustName(e.target.value)}
-                    required
-                    // disabled={!isEntering}
-                    style={{ marginLeft: "10%" }}
+        <div className={styles["main"]}>
+            <h2>Sale Challan</h2>
+            <form onSubmit={submitHandler} className={styles["form"]}>
+                <div className={styles["form--group"]}>
+                    <div
+                        className={styles["form--group"]}
+                        style={{ width: "auto", margin: "0" }}
+                    >
+                        <input
+                            type="number"
+                            name="challan"
+                            value={challan}
+                            placeholder="Challan Number"
+                            onChange={(e) => setChallan(e.target.value)}
+                            // disabled={!isEntering}
+                            className={styles["form--input"]}
+                            style={{
+                                width: "10vw",
+                                minWidth: "150px",
+                                marginRight: "15px",
+                            }}
+                            required
+                        />
+
+                        <input
+                            type="text"
+                            name="SCdate"
+                            value={SCdate}
+                            onChange={(e) => setSCDate(e.target.value)}
+                            onFocus={(e) => (e.target.type = "date")}
+                            onBlur={(e) => (e.target.type = "text")}
+                            placeholder="Challan Date"
+                            // disabled={!isEntering}
+                            className={styles["form--input"]}
+                            style={{ width: "150px", minWidth: "150px" }}
+                            required
+                        />
+                    </div>
+
+                    <select
+                        name="custName"
+                        value={custName}
+                        onChange={(e) => setCustName(e.target.value)}
+                        required
+                        // disabled={!isEntering}
+                        className={`${styles["form--input"]} ${styles["form--input-select"]}`}
+                        style={{
+                            width: "20%",
+                            minWidth: "200px",
+                            margin: "10px 15px 10px 15px",
+                        }}
+                    >
+                        <option value="" disabled hidden>
+                            Select customer...
+                        </option>
+                        {sdlist.map((sd) => {
+                            return (
+                                <option value={sd.uid} key={sd.uid}>
+                                    {sd.AccName}
+                                </option>
+                            );
+                        })}
+                    </select>
+
+                    <select
+                        name="DName"
+                        value={DName}
+                        onChange={(e) => setDName(e.target.value)}
+                        // disabled={!isEntering}
+                        className={`${styles["form--input"]} ${styles["form--input-select"]}`}
+                        style={{
+                            width: "20%",
+                            minWidth: "200px",
+                            margin: "10px 15px 10px 15px",
+                        }}
+                    >
+                        <option value="none" disabled hidden>
+                            Select design...
+                        </option>
+                        {DNamelist.map((DName) => {
+                            return (
+                                <option value={DName.name} key={DName.name}>
+                                    {DName.name}
+                                </option>
+                            );
+                        })}
+                    </select>
+                </div>
+
+                <div
+                    className={styles["form--group"]}
+                    style={{ justifyContent: "space-around" }}
                 >
-                    <option value="">Customer Name</option>
-                    {sdlist.map((sd) => {
-                        return (
-                            <option value={sd.uid} key={sd.uid}>
-                                {sd.AccName}
-                            </option>
-                        );
-                    })}
-                </select>
-                <input
-                    type="date"
-                    name="SCdate"
-                    value={SCdate}
-                    onChange={(e) => setSCDate(e.target.value)}
-                    // disabled={!isEntering}
-                    // className={`${styles["input-text"]}`}
-                    style={{ marginRight: "10%" }}
-                    required
-                />
-                <br></br>
-                <select
-                    // className={styles["input-select"]}
-                    name="DName"
-                    value={DName}
-                    onChange={(e) => setDName(e.target.value)}
-                    // disabled={!isEntering}
-                    style={{ marginLeft: "10%" }}
+                    <select
+                        name="clothType"
+                        value={clothType}
+                        onChange={(e) => setClothType(e.target.value)}
+                        // disabled={!isEntering}
+                        className={`${styles["form--input"]} ${styles["form--input-select"]}`}
+                        style={{
+                            width: "20%",
+                            minWidth: "200px",
+                            margin: "10px 15px 10px 15px",
+                        }}
+                    >
+                        <option value="none" disabled hidden>
+                            Select cloth type...
+                        </option>
+                        {clothlist.map((cloth) => {
+                            return (
+                                <option
+                                    value={cloth.cloth_Type}
+                                    key={cloth.cloth_Type}
+                                >
+                                    {cloth.cloth_Type}
+                                </option>
+                            );
+                        })}
+                    </select>
+
+                    <input
+                        type="number"
+                        name="rate"
+                        value={rate}
+                        placeholder="Rate"
+                        onChange={(e) => setRate(e.target.value)}
+                        // disabled={!isEntering}
+                        className={styles["form--input"]}
+                        style={{
+                            width: "10vw",
+                            minWidth: "150px",
+                            marginRight: "15px",
+                        }}
+                    />
+
+                    <input
+                        type="number"
+                        name="quantity"
+                        value={quantity}
+                        placeholder="Quantity"
+                        onChange={(e) => setQuantity(e.target.value)}
+                        // disabled={!isEntering}
+                        className={styles["form--input"]}
+                        style={{
+                            width: "10vw",
+                            minWidth: "150px",
+                            marginRight: "15px",
+                        }}
+                    />
+
+                    <button
+                        type="button"
+                        onClick={addItemHandler}
+                        className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
+                        style={{ width: "100px" }}
+                    >
+                        Add item
+                    </button>
+                </div>
+
+                <div
+                    className={styles["form--table"]}
+                    style={{ marginBottom: "40px" }}
                 >
-                    <option value="none" disabled hidden>
-                        Design Name
-                    </option>
-                    {DNamelist.map((DName) => {
-                        return (
-                            <option value={DName.name} key={DName.name}>
-                                {DName.name}
-                            </option>
-                        );
-                    })}
-                </select>
-                <select
-                    // className={styles["input-select"]}
-                    name="clothType"
-                    value={clothType}
-                    onChange={(e) => setClothType(e.target.value)}
-                    // disabled={!isEntering}
-                    style={{ marginLeft: "10%" }}
+                    <StickyTable
+                        TableCol={TableColData}
+                        TableData={itemList}
+                    ></StickyTable>
+                </div>
+
+                <button
+                    className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
+                    style={{ width: "125px", alignSelf: "center" }}
                 >
-                    <option value="none" disabled hidden>
-                        Cloth Type
-                    </option>
-                    {clothlist.map((cloth) => {
-                        return (
-                            <option
-                                value={cloth.cloth_Type}
-                                key={cloth.cloth_Type}
-                            >
-                                {cloth.cloth_Type}
-                            </option>
-                        );
-                    })}
-                </select>
-                <input
-                    type="number"
-                    name="rate"
-                    value={rate}
-                    placeholder="Rate"
-                    onChange={(e) => setRate(e.target.value)}
-                    // disabled={!isEntering}
-                    // className={`${styles["input-text"]}`}
-                    style={{ marginRight: "10%" }}
-                />
-                <input
-                    type="number"
-                    name="quantity"
-                    value={quantity}
-                    placeholder="Quantity"
-                    onChange={(e) => setQuantity(e.target.value)}
-                    // disabled={!isEntering}
-                    // className={`${styles["input-text"]}`}
-                    style={{ marginRight: "10%" }}
-                />
-                <button type="button" onClick={addItemHandler}>
-                    Add item
+                    Add Challan
                 </button>
-                <StickyTable
-                    TableCol={TableColData}
-                    TableData={itemList}
-                ></StickyTable>
-                <button>Add Challan</button>
             </form>
         </div>
     );
-};
-export default SaleChallan;
+}
