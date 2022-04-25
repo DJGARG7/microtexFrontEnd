@@ -3,9 +3,9 @@ import Axios from "axios";
 import {
     toastError,
     toastSuccess,
-} from "../../components/Reuse_components/toast";
-import CurrentDate from "../../components/Reuse_components/CurrentDate";
-import StickyTable from "../../components/Reuse_components/Table/StickyTable";
+} from "../../../components/Reuse_components/toast";
+import CurrentDate from "../../../components/Reuse_components/CurrentDate";
+import StickyTable from "../../../components/Reuse_components/Table/StickyTable";
 const currDate = CurrentDate();
 const SaleChallan = ({ userDetails }) => {
     const TableColData = [

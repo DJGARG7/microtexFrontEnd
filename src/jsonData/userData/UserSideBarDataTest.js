@@ -64,6 +64,10 @@ export const UserSideBarDataTest = [
                 iconOpened: <RiIcons.RiArrowUpSFill />,
                 subNav: [
                     {
+                        title: "Add Stock for sale",
+                        path: "/dashboard/saleStock",
+                    },
+                    {
                         title: "Sale Challan",
                         path: "/dashboard/saleChallan",
                     },
@@ -77,6 +81,7 @@ export const UserSideBarDataTest = [
                     },
                 ],
             },
+            { title: "Cash Book", path: "/dashboard/transaction/cashbook" },
         ],
     },
     {

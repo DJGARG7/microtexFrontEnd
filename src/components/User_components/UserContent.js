@@ -3,12 +3,13 @@ import Greypurchase from "../../pages/UserPages/GreyPurchase";
 import ReceiveFromMill from "../../pages/UserPages/Mill/ReceiveFromMill";
 import SendToMill from "../../pages/UserPages/Mill/SendToMill";
 import SendJobForWork from "../../pages/UserPages/SendJobForWork";
-import Revenue from "../../pages/UserPages/Revenue";
-import SaleChallan from "../../pages/UserPages/SaleChallan";
-import SaleBilling from "../../pages/UserPages/SaleBilling";
-import SaleDisplay from "../../pages/UserPages/SaleDisplay";
 import GeneralPurchases from "../../pages/UserPages/GeneralPurchases";
 import ReceiveFromJob from "../../pages/UserPages/ReceiveFromJob";
+import SaleStock from "../../pages/UserPages/sales/SaleStock";
+import SaleChallan from "../../pages/UserPages/sales/SaleChallan";
+import SaleBilling from "../../pages/UserPages/sales/SaleBilling";
+import SaleDisplay from "../../pages/UserPages/sales/SaleDisplay";
+import CashBook from "../../pages/UserPages/CashBook";
 const UserContent = ({ userDetails }) => {
     return (
         <>
@@ -34,8 +35,8 @@ const UserContent = ({ userDetails }) => {
             <Route path="/dashboard/transaction/job/receive" exact>
                 <ReceiveFromJob userDetails={userDetails} />
             </Route>
-            <Route path="/dashboard/transaction/revenue" exact>
-                <Revenue userDetails={userDetails} />
+            <Route path="/dashboard/saleStock" exact>
+                <SaleStock userDetails={userDetails} />
             </Route>
             <Route path="/dashboard/saleChallan" exact>
                 <SaleChallan userDetails={userDetails} />
@@ -45,6 +46,9 @@ const UserContent = ({ userDetails }) => {
             </Route>
             <Route path="/dashboard/displayBills" exact>
                 <SaleDisplay userDetails={userDetails} />
+            </Route>
+            <Route path="/dashboard/transaction/cashbook" exact>
+                <CashBook userDetails={userDetails} />
             </Route>
             <Route path="/dashboard" exact>
                 <h2>Welcome to Microtex</h2>
