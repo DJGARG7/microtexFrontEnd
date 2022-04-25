@@ -8,13 +8,22 @@ import {
 import "./temp.css";
 import Modal from "../../../components/Reuse_components/Modal";
 import SaleBillModal from "../../../components/User_components/sales/SaleBillModal";
-function SaleBilling({ userDetails }) {
+
+import ReactLoading from "react-loading";
+
+import styles from "../Mill/styles/Mill.module.css";
+
+export default function SaleBilling({ userDetails }) {
     const [total, setTotal] = useState(0);
     const [salesList, setSalesList] = useState([]);
     const [salesDetailList, setSalesDetailList] = useState([]);
     const [billInfo, setBillInfo] = useState({});
     const [isOpen, setIsOpen] = useState(false);
+
     const [isAllowed, setIsAllowed] = useState(false);
+    const [isAllowedLoading, setIsAllowedLoading] = useState(true);
+    const [isSalesLoading, setIsSalesLoading] = useState(true);
+
     const checkPermission = async () => {
         try {
             const res = await Axios.get(
@@ -22,13 +31,13 @@ function SaleBilling({ userDetails }) {
             );
 
             setIsAllowed(res.data);
-            console.log(res.data);
+            setIsAllowedLoading(false);
         } catch (error) {
             console.log(error);
         }
     };
-    useEffect(async () => {
-        checkPermission();
+
+    const fetchSalesOrder = async () => {
         try {
             const res = await Axios.get(
                 `http://localhost:3005/sales/sales_order/0`
@@ -37,24 +46,69 @@ function SaleBilling({ userDetails }) {
                 toastSuccess("No pending challans")
             }
             setSalesList(res.data);
+            setIsSalesLoading(false);
         } catch (e) {
-            toastError("Error loading sales data");
+            toastError("Failed to fetch sales data");
         }
+    };
+
+    useEffect(() => {
+        checkPermission();
+        fetchSalesOrder();
     }, [isOpen]);
+
     const TableColData = [
         {
             Header: "Action",
             Cell: (tableProps) => (
-                <div>
-                    <button onClick={() => salesShowHandler(tableProps.row)}>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                    <button
+                        onClick={() => salesShowHandler(tableProps.row)}
+                        className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
+                        style={{
+                            cursor: "pointer",
+                            height: "auto",
+                            padding: "2.5px 0",
+                            margin: "2.5px 0",
+                            fontSize: "0.9rem",
+                            textTransform: "uppercase",
+                            fontWeight: "600",
+                        }}
+                    >
                         Show
                     </button>
-                    <button>Delete</button>
-                    <button onClick={() => salesBillHandler(tableProps.row)}>
+                    <button
+                        className={`${styles["form--btn"]} ${styles["form--del-btn"]}`}
+                        style={{
+                            cursor: "pointer",
+                            height: "auto",
+                            padding: "2.5px 0",
+                            margin: "2.5px 0",
+                            fontSize: "0.9rem",
+                            textTransform: "uppercase",
+                            fontWeight: "600",
+                        }}
+                    >
+                        Delete
+                    </button>
+                    <button
+                        onClick={() => salesBillHandler(tableProps.row)}
+                        className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
+                        style={{
+                            cursor: "pointer",
+                            height: "auto",
+                            padding: "2.5px 0",
+                            margin: "2.5px 0",
+                            fontSize: "0.9rem",
+                            textTransform: "uppercase",
+                            fontWeight: "600",
+                        }}
+                    >
                         Bill
                     </button>
                 </div>
             ),
+            width: 100,
         },
         {
             Header: "Challan No.",
@@ -72,9 +126,10 @@ function SaleBilling({ userDetails }) {
             Filter: "",
         },
     ];
+
     const TableColData1 = [
         {
-            Header: "Design Name",
+            Header: "Design",
             accessor: "NAME",
             Filter: "",
         },
@@ -94,6 +149,7 @@ function SaleBilling({ userDetails }) {
             Filter: "",
         },
     ];
+
     const salesShowHandler = async (currRow) => {
         var tot = 0;
         const res = await Axios.get(
@@ -106,11 +162,13 @@ function SaleBilling({ userDetails }) {
         setTotal(tot);
         setSalesDetailList(res.data);
     };
+
     const salesBillHandler = (currRow) => {
         setBillInfo(currRow.values);
         salesShowHandler(currRow);
         setIsOpen(true);
     };
+
     if (!isAllowed) {
         return (
             <div
@@ -122,6 +180,7 @@ function SaleBilling({ userDetails }) {
             </div>
         );
     }
+
     const makeBill = async () => {
         console.log("make bill runing");
         const transactData = {
@@ -147,22 +206,51 @@ function SaleBilling({ userDetails }) {
             toastError("Transaction Failed");
         }
     };
+
+    if (isAllowedLoading || isSalesLoading) {
+        return (
+            <div
+                style={{
+                    marginTop: "10vh",
+                }}
+            >
+                <ReactLoading type="bubbles" color="#212121" />
+            </div>
+        );
+    }
+
+    if (!isAllowed) {
+        return (
+            <div
+                style={{
+                    marginTop: "10vh",
+                }}
+            >
+                <strong>You are not allowed access to this area.</strong>
+            </div>
+        );
+    }
+
     return (
-        <div className="sales_main">
-            <div className="sales_inside">
-                <StickyTable
-                    TableCol={TableColData}
-                    TableData={salesList}
-                ></StickyTable>
+        <div className={styles["main"]}>
+            <h2>Sale Billing</h2>
+
+            <div style={{ display: "flex", marginTop: "2.5vh" }}>
+                <div className={styles["form--table"]}>
+                    <StickyTable
+                        TableCol={TableColData}
+                        TableData={salesList}
+                    ></StickyTable>
+                </div>
+
+                <div className={styles["form--table"]}>
+                    <StickyTable
+                        TableCol={TableColData1}
+                        TableData={salesDetailList}
+                    ></StickyTable>
+                </div>
             </div>
-            <div className="sales_inside">
-                <h2>Sale Billing</h2>Here pending sale challans will be
-                displayed. Either bill it or delete it.
-                <StickyTable
-                    TableCol={TableColData1}
-                    TableData={salesDetailList}
-                ></StickyTable>
-            </div>
+
             <Modal
                 open={isOpen}
                 onClose={() => {
@@ -183,5 +271,3 @@ function SaleBilling({ userDetails }) {
         </div>
     );
 }
-
-export default SaleBilling;

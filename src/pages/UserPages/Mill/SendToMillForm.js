@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-import styles from "../../../components/UserManagement/styles/common.module.css";
-import millstyles from "./styles/Mill.module.css";
+import styles from "./styles/Mill.module.css";
 import BillsTable from "./BillsTable";
 
 const toastStyle = {
@@ -149,15 +148,13 @@ export default function SendToMillForm({ itemData, millsData }) {
         }
     };
 
-    console.log(selectedTaka, selectedBill, totalMeters);
-
     return (
-        <form onSubmit={submitHandler} className={millstyles["form"]}>
+        <form onSubmit={submitHandler} className={styles["form"]}>
             {/* Row 1: Inputs. */}
-            <div className={millstyles["form--group"]}>
+            <div className={styles["form--group"]}>
                 {/* Column 1: Challan information. */}
                 <div
-                    className={millstyles["form--group"]}
+                    className={styles["form--group"]}
                     style={{ width: "auto", margin: "0" }}
                 >
                     <input
@@ -166,7 +163,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                         value={challanNumber}
                         min="1"
                         placeholder="Challan Number"
-                        className={millstyles["form--input"]}
+                        className={styles["form--input"]}
                         style={{
                             width: "10vw",
                             minWidth: "150px",
@@ -181,7 +178,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                         onBlur={(e) => (e.target.type = "text")}
                         value={challanDate}
                         placeholder="Challan Date"
-                        className={millstyles["form--input"]}
+                        className={styles["form--input"]}
                         style={{ width: "150px", minWidth: "150px" }}
                         required
                     />
@@ -190,7 +187,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                 {/* Column 2: selectedMill. */}
                 <select
                     placeholder="Mill"
-                    className={`${millstyles["form--input"]} ${millstyles["form--input-select"]}`}
+                    className={`${styles["form--input"]} ${styles["form--input-select"]}`}
                     value={selectedMill}
                     onChange={(e) => {
                         setSelectedMill(e.target.value);
@@ -216,7 +213,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                 {/* Column 3: selectedGrey. */}
                 <select
                     placeholder="Grey cloth"
-                    className={`${millstyles["form--input"]} ${millstyles["form--input-select"]}`}
+                    className={`${styles["form--input"]} ${styles["form--input-select"]}`}
                     value={selectedGrey}
                     onChange={(e) => {
                         setSelectedGrey(e.target.value);
@@ -242,7 +239,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                 {/* Column 4: selectedSupplier */}
                 <select
                     placeholder="Supplier"
-                    className={`${millstyles["form--input"]} ${millstyles["form--input-select"]}`}
+                    className={`${styles["form--input"]} ${styles["form--input-select"]}`}
                     value={selectedSupplier}
                     onChange={(e) => {
                         setSelectedSupplier(e.target.value);
@@ -271,7 +268,7 @@ export default function SendToMillForm({ itemData, millsData }) {
             </div>
 
             {/* Row 2: Table. */}
-            <div className={millstyles["form--table"]}>
+            <div className={styles["form--table"]}>
                 <BillsTable
                     data={bills}
                     setTaka={setTakaFromTable}
@@ -282,7 +279,7 @@ export default function SendToMillForm({ itemData, millsData }) {
 
             {/* Row 3: Selected options. */}
             <div
-                className={millstyles["form--group"]}
+                className={styles["form--group"]}
                 style={{
                     width: "auto",
                     padding: "0 10px",
@@ -295,7 +292,7 @@ export default function SendToMillForm({ itemData, millsData }) {
             >
                 {/* Column 1: billNumber. */}
                 <div
-                    className={millstyles["form--group"]}
+                    className={styles["form--group"]}
                     style={{
                         width: "auto",
                         margin: "0",
@@ -317,14 +314,14 @@ export default function SendToMillForm({ itemData, millsData }) {
                         }
                         id="billNumber"
                         readOnly
-                        className={millstyles["form--input"]}
+                        className={styles["form--input"]}
                         style={{ width: "7.5vw", minWidth: "150px" }}
                     />
                 </div>
 
                 {/* Column 2: Taka information.  */}
                 <div
-                    className={millstyles["form--group"]}
+                    className={styles["form--group"]}
                     style={{
                         width: "auto",
                         margin: "0",
@@ -342,7 +339,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                         value={selectedTaka.length}
                         id="selectedTaka"
                         readOnly
-                        className={millstyles["form--input"]}
+                        className={styles["form--input"]}
                         style={{ width: "2vw", minWidth: "50px" }}
                     />
 
@@ -361,14 +358,14 @@ export default function SendToMillForm({ itemData, millsData }) {
                         }
                         id="totalTaka"
                         readOnly
-                        className={millstyles["form--input"]}
+                        className={styles["form--input"]}
                         style={{ width: "2vw", minWidth: "50px" }}
                     />
                 </div>
 
                 {/* Column 3: itemName. */}
                 <div
-                    className={millstyles["form--group"]}
+                    className={styles["form--group"]}
                     style={{
                         width: "auto",
                         margin: "0",
@@ -390,14 +387,14 @@ export default function SendToMillForm({ itemData, millsData }) {
                         }
                         id="itemName"
                         readOnly
-                        className={millstyles["form--input"]}
+                        className={styles["form--input"]}
                         style={{ width: "10vw", minWidth: "200px" }}
                     />
                 </div>
 
                 {/* Column 4: Total meters. */}
                 <div
-                    className={millstyles["form--group"]}
+                    className={styles["form--group"]}
                     style={{
                         width: "auto",
                         margin: "0",
@@ -412,7 +409,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                         value={totalMeters}
                         id="totalMeters"
                         readOnly
-                        className={millstyles["form--input"]}
+                        className={styles["form--input"]}
                         style={{ width: "5vw", minWidth: "100px" }}
                     />
                 </div>
@@ -420,7 +417,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                 {/* Column 5: Submit button. */}
                 <button
                     className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
-                    style={{ marginLeft: "40px", alignSelf: "center" }}
+                    style={{ margin: "0 0 0 40px", alignSelf: "center" }}
                 >
                     Send
                 </button>
