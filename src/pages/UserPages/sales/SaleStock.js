@@ -5,10 +5,14 @@ import {
     toastSuccess,
 } from "../../../components/Reuse_components/toast";
 import StickyTable from "../../../components/Reuse_components/Table/StickyTable";
+import Modal from "../../../components/Reuse_components/Modal";
+import SaleStockModal from "../../../components/User_components/sales/SaleStockModal";
 const SaleStock = () => {
+    const [currMts, setCurrMts] = useState(0);
     const addSaleStockHandler = (rowData) => {
         console.log(rowData.row.values);
-        //open modal select pieces/meters and add it to sale inventory and subtract from job inventory if full not selected else delete row
+        setCurrMts(rowData.row.values.meters);
+        setIsOpen(true);
     };
     const rowDisplayHandler = (cellData) => {
         if (cellData.row.values[cellData.column.id] == 1) {
@@ -82,6 +86,7 @@ const SaleStock = () => {
     const [DNamelist, setDNamelist] = useState([]);
     const [clothlist, setClothlist] = useState([]);
     const [jobStockList, setJobStockList] = useState([]);
+    const [isOpen, setIsOpen] = useState(false);
     const fetchDesigns = async () => {
         try {
             const res1 = await Axios.get(
@@ -94,6 +99,9 @@ const SaleStock = () => {
             toastError("Failed to fetch designs");
         }
     };
+    useEffect(() => {
+        fetchDesigns();
+    }, []);
     const fetchJobStocksHandler = async () => {
         try {
             const res1 = await Axios.get(
@@ -110,15 +118,15 @@ const SaleStock = () => {
             toastError("Failed to fetch designs");
         }
     };
-    useEffect(() => {
-        fetchDesigns();
-    }, []);
-    const submitHandler = (e) => {
-        e.preventDefault();
+    const transferInventoryHandler = (num) => {
+        console.log(num);
+        //axios request to transfer if success ->close modal and show success msg
+        setIsOpen(false);
+        //else show error msg
     };
     return (
         <>
-            <form onSubmit={submitHandler}>
+            <form>
                 <select
                     name="DName"
                     value={DName}
@@ -139,6 +147,7 @@ const SaleStock = () => {
                     name="clothType"
                     value={clothType}
                     onChange={(e) => setClothType(e.target.value)}
+                    disabled={DName == ""}
                 >
                     <option value="" disabled hidden>
                         Select cloth type...
@@ -154,11 +163,26 @@ const SaleStock = () => {
                         );
                     })}
                 </select>
-                <button type="button" onClick={fetchJobStocksHandler}>
+                <button
+                    type="button"
+                    onClick={fetchJobStocksHandler}
+                    disabled={clothType == ""}
+                >
                     Show Available stocks
                 </button>
             </form>
             <StickyTable TableCol={TableColData} TableData={jobStockList} />
+            <Modal
+                open={isOpen}
+                onClose={() => {
+                    setIsOpen(false);
+                }}
+            >
+                <SaleStockModal
+                    stockData={currMts}
+                    transferStock={transferInventoryHandler}
+                />
+            </Modal>
         </>
     );
 };
