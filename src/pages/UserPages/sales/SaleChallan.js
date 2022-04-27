@@ -3,12 +3,13 @@ import Axios from "axios";
 import {
     toastError,
     toastSuccess,
-} from "../../components/Reuse_components/toast";
-import CurrentDate from "../../components/Reuse_components/CurrentDate";
-import StickyTable from "../../components/Reuse_components/Table/StickyTable";
+} from "../../../components/Reuse_components/toast";
+import CurrentDate from "../../../components/Reuse_components/CurrentDate";
+import StickyTable from "../../../components/Reuse_components/Table/StickyTable";
+
 import ReactLoading from "react-loading";
 
-import styles from "./Mill/styles/Mill.module.css";
+import styles from "../Mill/styles/Mill.module.css";
 
 const currDate = CurrentDate();
 
@@ -367,10 +368,7 @@ export default function SaleChallan({ userDetails }) {
                     className={styles["form--table"]}
                     style={{ marginBottom: "40px" }}
                 >
-                    <StickyTable
-                        TableCol={TableColData}
-                        TableData={itemList}
-                    ></StickyTable>
+                    <StickyTable TableCol={TableColData} TableData={itemList} />
                 </div>
 
                 <button

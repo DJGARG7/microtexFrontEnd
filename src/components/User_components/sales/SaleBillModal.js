@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
 import StickyTable from "../../Reuse_components/Table/StickyTable";
-import Axios from "axios";
 const SaleBillModal = ({ billData, makeBill }) => {
     const colHead = billData.colHead;
     return (

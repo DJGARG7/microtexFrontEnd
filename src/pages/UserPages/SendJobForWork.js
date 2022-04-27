@@ -115,6 +115,63 @@ function SendJobForWork() {
     },
   ];
 
+  const viewallitemscoldata = [
+    {
+      Header: "Challan no",
+      accessor: "challanNo",
+      
+      // width: "150px",
+    },
+    {
+      Header: "Challan Date",
+      accessor: "challanDate",
+
+      // width: "150px",
+    },
+    {
+      Header: "Account Name",
+      accessor: "AccName",
+
+      // width: "150px",
+    },
+    {
+      Header: "Job Type",
+      accessor: "jobType",
+      Filter: "",
+      // width: "150px",
+    },
+    {
+      Header: "Item Name",
+      accessor: "itemName",
+      Filter: "",
+      // width: "150px",
+    },
+    {
+      Header: "Job Qulaity",
+      accessor: "jobQuality",
+      Filter: "",
+      // width: "150px",
+    },
+    {
+      Header: "Pcs",
+      accessor: "pieces",
+      Filter: "",
+      // width: "90px",
+    },
+    {
+      Header: "Mts",
+      accessor: "meters",
+      Filter: "",
+      // width: "90px",
+    },
+    {
+      Header: "JobRate",
+      accessor: "jobRate",
+      Filter: "",
+      // width: "90px",
+    },
+  ];
+
   /*- - - - - - - - - - - - - - - - - - - - - - Use states - - - - - - - - - - - - - - - - - - - - */
 
   const [state, setState] = useState({
@@ -126,23 +183,23 @@ function SendJobForWork() {
     jobQuality: "",
     pieces: "",
     jobRate: "",
-    accntname:"",
+    accntname: "",
   });
   const [editmode, setEditmode] = useState(false);
-  const [totalamount, setTotalAmount] = useState(0);
   const [accntlist, setAccntList] = useState([]);
-  const [accountID,setaccountID] = useState([]);
+  const [accountID, setaccountID] = useState([]);
   const [tabledata, setTableData] = useState([]);
-  const [modal, setModal] = useState(false);
   const [totalmtspresent, settotalmtspresent] = useState([]); // total mts in inventory
   const [distinctitemlist, setdistinctitemlist] = useState([]); // distinct list of items in inventory
   const [totalpcspresent, settotalpcspresent] = useState([]); // total pcs in inventory
   const [jobTypeModal, setJobTypeModal] = useState(false); // used to open and close job type modal
   const [jobtypelist, setjobtypelist] = useState([]); // used to render job types in select
   const [jobtype, setjobtype] = useState(""); // used in adding job type in modal
-  const [jobtypeID,setjobtypeID] = useState(""); // for getting ID of job type
+  const [jobtypeID, setjobtypeID] = useState(""); // for getting ID of job type
   const [itemID, setItemID] = useState(""); //ID of the item added to the list
-  const [meters, setMeters] = useState("");
+  const [meters, setMeters] = useState(""); // meters by users = pcs * 10
+  const [viewItemData, setViewItemData] = useState([]); // when view all items is clicked
+  const [onViewJobItemModal, setOnViewJobItemModal] = useState(false); // controls the view all items modal
   /*- - - - - - - - - - - - - - - - - - - - - - Use states - - - - - - - - - - - - - - - - - - - - */
 
   //useEffect to fetch account names
@@ -158,22 +215,21 @@ function SendJobForWork() {
     })();
   }, []);
 
-
-  const clearall = ()=>{
+  const clearall = () => {
     setState({
-      challanNo:"",
-      jobType:"",
-      ItemName:"",
-      ItemFrom:"",
-      jobQuality:"",
-      pieces:"",
-      jobRate:"",
-      accntname:"",
-    })
+      challanNo: "",
+      jobType: "",
+      ItemName: "",
+      ItemFrom: "",
+      jobQuality: "",
+      pieces: "",
+      jobRate: "",
+      accntname: "",
+    });
     settotalpcspresent("");
     setTableData("");
     setMeters("");
-  }
+  };
 
   /*- - - - - - - - - - - - - - - - - - - - - - Input change function  - - - - - - - - - - - - - - - - - - - - */
 
@@ -192,7 +248,7 @@ function SendJobForWork() {
     }
 
     // for getting the account id
-    if(name==="accntname"){
+    if (name === "accntname") {
       const index = e.target.selectedIndex;
       const el = e.target.childNodes[index];
       const id = el.getAttribute("id");
@@ -200,9 +256,7 @@ function SendJobForWork() {
       setaccountID(id);
     }
 
-
-
-    if(name==="jobType"){
+    if (name === "jobType") {
       const index = e.target.selectedIndex;
       const el = e.target.childNodes[index];
       const id = el.getAttribute("id");
@@ -249,7 +303,7 @@ function SendJobForWork() {
 
   const onFormSubmit = (e) => {
     e.preventDefault();
-    const newjoblist = { ...state, itemID, meters};
+    const newjoblist = { ...state, itemID, meters };
     setTableData((prevdata) => {
       let flag = 0;
       prevdata.forEach((item) => {
@@ -307,20 +361,36 @@ function SendJobForWork() {
       state,
       accountID,
       jobtypeID,
-      tabledata
-    }
+      tabledata,
+    };
 
-    try{
-      const res = await jobinstance.post("/addjobdetails",postdata);
+    try {
+      const res = await jobinstance.post("/addjobdetails", postdata);
       console.log(res);
       clearall();
       toastSuccess(res.data);
-    }catch(e){
+    } catch (e) {
       toastError(e.response.data);
     }
   };
 
   /*- - - - - - - - - - - - - - - - - - - - - -       ON BILL SUBMIT    - - - - - - - - - - - - - - - - - - - - */
+
+  const viewjobitems = async () => {
+    try {
+      const res = await jobinstance.get("/viewjobitems");
+      res.data.forEach((data, index) => {
+        const date = new Date(data.challanDate);
+        data.challanDate = date.toLocaleDateString("en-GB");
+      });
+      console.log(res.data);
+
+      setViewItemData(res.data);
+      setOnViewJobItemModal(true);
+    } catch (e) {
+      console.log(e.response.data);
+    }
+  };
 
   return (
     <div className={styles["main"]}>
@@ -552,6 +622,7 @@ function SendJobForWork() {
             type="button"
             className={`${styles["add-btn"]} ${styles["btn"]}`}
             style={{ width: "150px" }}
+            onClick={viewjobitems}
           >
             View all items
           </button>
@@ -588,6 +659,21 @@ function SendJobForWork() {
             );
           })}
         </select>
+      </Modal>
+      <Modal
+        open={onViewJobItemModal}
+        onClose={() => setOnViewJobItemModal(false)}
+      >
+        <h2>Job Items sent</h2>
+        <StickyTable
+          TableData={viewItemData}
+          TableCol={viewallitemscoldata}
+          style={{
+            maxWidth: "90vw",
+            width: "100%",
+            maxHeight: "90vh",
+          }}
+        />
       </Modal>
     </div>
   );

@@ -1,16 +1,17 @@
-import StickyTable from "../../components/Reuse_components/Table/StickyTable";
+import StickyTable from "../../../components/Reuse_components/Table/StickyTable";
 import Axios from "axios";
 import { useState, useEffect } from "react";
 import {
     toastError,
     toastSuccess,
-} from "../../components/Reuse_components/toast";
+} from "../../../components/Reuse_components/toast";
 import "./temp.css";
-import Modal from "../../components/Reuse_components/Modal";
-import SaleBillModal from "../../components/User_components/sales/SaleBillModal";
+import Modal from "../../../components/Reuse_components/Modal";
+import SaleBillModal from "../../../components/User_components/sales/SaleBillModal";
+
 import ReactLoading from "react-loading";
 
-import styles from "./Mill/styles/Mill.module.css";
+import styles from "../Mill/styles/Mill.module.css";
 
 export default function SaleBilling({ userDetails }) {
     const [total, setTotal] = useState(0);
@@ -39,9 +40,11 @@ export default function SaleBilling({ userDetails }) {
     const fetchSalesOrder = async () => {
         try {
             const res = await Axios.get(
-                `http://localhost:3005/sales/sales_order`
+                `http://localhost:3005/sales/sales_order/0`
             );
-
+            if(res.data.length == 0){
+                toastSuccess("No pending challans")
+            }
             setSalesList(res.data);
             setIsSalesLoading(false);
         } catch (e) {
