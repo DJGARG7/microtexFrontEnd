@@ -150,6 +150,8 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                     amount,
 
                     // For MILL_CHALLAN_DETAILS.
+                    receivedTaka: selectedChallan.sentTaka,
+                    receivedMeters,
                     lostMeters,
                     rate,
                 }
@@ -157,15 +159,16 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
 
             toast.success(res.data, { id: submitToast });
 
-            // // Refresh form.
-            // setChallanDate(convertDate(new Date()));
-            // setChallanNumber("");
-            // setSelectedGrey("DEFAULT");
-            // setSelectedSupplier("DEFAULT");
-            // setSelectedMill("DEFAULT");
-            // setSelectedBill({});
-            // setSelectedTaka([]);
-            // setTotalMeters(0);
+            // Refresh form.
+            setReceiveDate(convertDate(new Date()));
+            setSelectedGrey("DEFAULT");
+            setSelectedMill("DEFAULT");
+            setSelectedChallan([]);
+            setReceivedMeters(0);
+            setLostMeters(0);
+            setLossP(0);
+            setRate(0);
+            setAmount(0);
         } catch (error) {
             console.log(error);
             toast.error(`Failed to receive: ${error.response.data}.`, {
