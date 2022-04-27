@@ -3,6 +3,7 @@ import toast from "react-hot-toast";
 import ReactLoading from "react-loading";
 import axios from "axios";
 import styles from "../../../components/UserManagement/styles/common.module.css";
+import ReceiveFromMillForm from "./ReceiveFromMillForm";
 
 // Axios default configuration to include cookie and user ID with every request.
 axios.defaults.withCredentials = true;
@@ -24,15 +25,12 @@ export default function ReceiveFromMill({ userDetails }) {
 
     // Loading states.
     const [isAllowedLoading, setIsAllowedLoading] = useState(true);
-    const [isMillLoading, setIsMillLoading] = useState(true);
-    const [isAccountsLoading, setIsAccountsLoading] = useState(true);
+    const [isItemsLoading, setIsItemsLoading] = useState(true);
+    const [isMillsLoading, setIsMillsLoading] = useState(true);
 
     // Form-related data.
-    const [accounts, setAccounts] = useState();
-
-    // Form binding.
-    const [selectedMill, setSelectedMill] = useState("DEFAULT");
-    const [selectedAccount, setSelectedAccount] = useState("DEFAULT");
+    const [items, setItems] = useState([]);
+    const [mills, setMills] = useState([]);
 
     const checkPermission = async () => {
         try {
@@ -47,12 +45,20 @@ export default function ReceiveFromMill({ userDetails }) {
         }
     };
 
-    const fetchMillCloth = async () => {
-        // Get grey cloth.
-        setIsMillLoading(false);
+    const fetchItems = async () => {
+        try {
+            const res = await axios.get(
+                `http://localhost:3005/purchases/items`
+            );
+            setItems(res.data);
+            setIsItemsLoading(false);
+        } catch (error) {
+            console.log(error);
+            toast.error("Failed to fetch item data", toastStyle);
+        }
     };
 
-    const fetchAccounts = async () => {
+    const fetchMills = async () => {
         let accountType = "Creditors for process";
 
         try {
@@ -60,25 +66,21 @@ export default function ReceiveFromMill({ userDetails }) {
                 `http://localhost:3003/accountMaster/${accountType}`
             );
 
-            setAccounts(res.data);
-            setIsAccountsLoading(false);
+            setMills(res.data);
+            setIsMillsLoading(false);
         } catch (error) {
             console.log(error);
-            toast.error("Failed to fetch account data", toastStyle);
+            toast.error("Failed to fetch mill data", toastStyle);
         }
     };
 
     useEffect(() => {
         checkPermission();
-        fetchMillCloth();
-        fetchAccounts();
+        fetchItems();
+        fetchMills();
     }, []);
 
-    const submitHandler = () => {
-        console.log("Hello");
-    };
-
-    if (isAllowedLoading || isMillLoading || isAccountsLoading) {
+    if (isAllowedLoading || isItemsLoading || isMillsLoading) {
         return (
             <div
                 style={{
@@ -105,60 +107,7 @@ export default function ReceiveFromMill({ userDetails }) {
     return (
         <div className={styles["main"]}>
             <h2>Receive from Mill</h2>
-            <form onSubmit={submitHandler} className={styles["form"]}>
-                <select
-                    placeholder="Mill cloth"
-                    className={styles["form--inp-s"]}
-                    value={selectedMill}
-                    onChange={(e) => {
-                        setSelectedMill(e.target.value);
-                    }}
-                >
-                    <option disabled hidden value="DEFAULT">
-                        Select mill cloth...
-                    </option>
-                    {
-                        // Get Grey cloth.
-                        /* {users.map((user) => {
-                        return (
-                            <option
-                                value={Object.keys(user)[0]}
-                                key={Object.keys(user)[0]}
-                            >
-                                {Object.values(user)[0]}
-                            </option>
-                        );
-                    })} */
-                    }
-                </select>
-
-                <select
-                    placeholder="Account"
-                    className={styles["form--inp-s"]}
-                    value={selectedAccount}
-                    onChange={(e) => {
-                        setSelectedAccount(e.target.value);
-                    }}
-                >
-                    <option disabled hidden value="DEFAULT">
-                        Select account...
-                    </option>
-
-                    {accounts.map((account) => {
-                        return (
-                            <option value={account.uid} key={account.AccName}>
-                                {account.AccName}
-                            </option>
-                        );
-                    })}
-                </select>
-
-                <button
-                    className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
-                >
-                    Receive
-                </button>
-            </form>
+            <ReceiveFromMillForm itemData={items} millsData={mills} />
         </div>
     );
 }

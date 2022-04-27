@@ -31,8 +31,9 @@ export const Styles = styled.div`
 
         .th--sticky {
             // padding: 10px;
-            background-color: #04aa6d;
-  
+            // background-color: #04aa6d;
+            background-color: #031927;
+
             border-right: 2px solid white;
 
             margin: 0;

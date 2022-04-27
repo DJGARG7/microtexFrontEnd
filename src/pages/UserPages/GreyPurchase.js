@@ -57,6 +57,9 @@ export default function GreyPurchase({ userDetails }) {
     const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false); // use state to handle modal toggle
     const [isTakaModalOpen, setIsTakaModalOpen] = useState(false);
 
+    // For adding a new item.
+    const [newItemName, setNewItemName] = useState("");
+
     const checkPermission = async () => {
         try {
             const res = await axios.get(
@@ -118,14 +121,19 @@ export default function GreyPurchase({ userDetails }) {
 
         // Post the item to backend.
         try {
-            const res = await purchases.post("items", itemdetails);
+            const res = await purchases.post("items", {
+                itemName: newItemName,
+            });
             toastSuccess(res.data);
+
+            // Close the modal.
+            closeItemModal();
+
+            // Reset new item name.
+            setNewItemName("");
         } catch (error) {
             toastError(error.response.data);
         }
-
-        // Close the modal.
-        closeItemModal();
 
         getItems();
     };
@@ -280,7 +288,6 @@ export default function GreyPurchase({ userDetails }) {
             Filter: "",
         },
     ];
-    /* Purchase table data. */
 
     const [totalamount, settotalamount] = useState(""); // THIS IS THE FINAL AMOUNT OF THE BILL
 
@@ -315,13 +322,6 @@ export default function GreyPurchase({ userDetails }) {
             DiscountAmt: dis,
         });
     }, [formData.Rate, formData.Mts, formData.Discount]);
-
-    // for adding a new item
-    const [itemdetails, setItemdetails] = useState({
-        itemname: "",
-        openingmts: "",
-        ratepermts: "",
-    });
 
     // function to handle any changes
     const onChangeHandler = (event) => {
@@ -455,7 +455,7 @@ export default function GreyPurchase({ userDetails }) {
             Mts: takaData.totalmts,
         });
         settotalmts(takaData.totalmts);
-        toastSuccess("Taka Details Saved");
+        toastSuccess("Taka details saved!");
     };
 
     /* ----------------------------------------Loading---------------------------------------- */
@@ -586,7 +586,10 @@ export default function GreyPurchase({ userDetails }) {
                         </button>
                     </div>
                 </div>
-                <div className={styles2["form--group"]}>
+                <div
+                    className={styles2["form--group"]}
+                    style={{ justifyContent: "space-around" }}
+                >
                     <div
                         className={styles2["form--group"]}
                         style={{ width: "auto", margin: "0" }}
@@ -650,7 +653,10 @@ export default function GreyPurchase({ userDetails }) {
                         style={{ width: "10vw", minWidth: "150px" }}
                     />
                 </div>
-                <div className={styles2["form--group"]}>
+                <div
+                    className={styles2["form--group"]}
+                    style={{ justifyContent: "space-around" }}
+                >
                     <div
                         className={styles2["form--group"]}
                         style={{
@@ -729,6 +735,7 @@ export default function GreyPurchase({ userDetails }) {
                         />
                     </div>
                 </div>
+
                 <Modal
                     open={isPurchaseModalOpen}
                     onClose={closePurchaseHandler}
@@ -744,6 +751,7 @@ export default function GreyPurchase({ userDetails }) {
                         }}
                     />
                 </Modal>
+
                 <div className={styles2["form--table"]}>
                     <StickyTable
                         TableCol={purchasedListCol}
@@ -766,6 +774,7 @@ export default function GreyPurchase({ userDetails }) {
                     >
                         View Purchases
                     </button>
+
                     <input
                         type="text"
                         disabled
@@ -793,64 +802,29 @@ export default function GreyPurchase({ userDetails }) {
                     </button>
                 </div>
             </form>
+
             <Modal open={isItemModalOpen} onClose={closeItemModal}>
                 <h2 style={{ marginBottom: "25px" }}>Add Item</h2>
                 <form
                     className={styles2["form"]}
-                    style={{ padding: "0" }}
+                    style={{ padding: "0", flexDirection: "row" }}
                     onSubmit={onItemAdd}
                 >
                     <input
                         type="text"
                         required
-                        value={itemdetails.itemname}
-                        onChange={(e) =>
-                            setItemdetails({
-                                ...itemdetails,
-                                itemname: e.target.value,
-                            })
-                        }
+                        value={newItemName}
+                        onChange={(e) => setNewItemName(e.target.value)}
                         className={styles2["form--input"]}
-                        style={{ width: "17.5vw", minWidth: "250px" }}
+                        style={{ width: "15vw", minWidth: "200px" }}
                         placeholder="Item Name"
                     />
-                    <div className={styles2["form-group"]}>
-                        <input
-                            type="number"
-                            value={itemdetails.openingmts}
-                            onChange={(e) =>
-                                setItemdetails({
-                                    ...itemdetails,
-                                    openingmts: e.target.value,
-                                })
-                            }
-                            className={styles2["form--input"]}
-                            style={{
-                                width: "7.5vw",
-                                minWidth: "110px",
-                                marginRight: "15px",
-                            }}
-                            placeholder="Opening Meters"
-                        />
-                        <input
-                            type="number"
-                            value={itemdetails.ratepermts}
-                            onChange={(e) =>
-                                setItemdetails({
-                                    ...itemdetails,
-                                    ratepermts: e.target.value,
-                                })
-                            }
-                            className={styles2["form--input"]}
-                            style={{ width: "7.5vw", minWidth: "110px" }}
-                            placeholder="Rate/Meter"
-                        />
-                    </div>
                     <button
                         className={`${styles2["form--btn"]} ${styles2["form--add-btn"]}`}
                         style={{
                             width: "100px",
                             minWidth: "100px",
+                            margin: "10px 0 10px 10px",
                         }}
                     >
                         Add Item

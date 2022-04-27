@@ -193,7 +193,11 @@ function TakaDetails({ takaList, onTakaHandler, totalMts }) {
                 </div>
             </form>
             <div className="table">
-                <StickyTable TableCol={TableColData} TableData={tabledata} />
+                <StickyTable
+                    TableCol={TableColData}
+                    TableData={tabledata}
+                    style={{ maxHeight: "50vh" }}
+                />
             </div>
         </>
     );
