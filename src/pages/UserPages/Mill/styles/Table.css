@@ -4,7 +4,7 @@ table {
     border-radius: 5px;
 }
 
-table thead {
+table thead:not():last-child {
     background-color: #031927;
     color: white;
     letter-spacing: 1px;

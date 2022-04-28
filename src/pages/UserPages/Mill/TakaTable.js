@@ -6,16 +6,36 @@ import "./styles/Table.css";
 export default function TakaTable({ data, setTaka, setTotal, closeTakaModal }) {
     const [selectedTaka, setSelectedTaka] = useState(new Set());
 
-    const selectTakaHandler = (event) => {
+    const selectTakaHandler = (e) => {
+        console.log(e);
+
         let temp = selectedTaka;
 
-        if (event.target.checked) {
-            setSelectedTaka(temp.add(parseInt(event.target.value)));
+        if (e.target.checked) {
+            setSelectedTaka(temp.add(parseInt(e.target.value)));
         } else {
-            temp.delete(parseInt(event.target.value));
+            temp.delete(parseInt(e.target.value));
             temp.size === 0
                 ? setSelectedTaka(new Set())
                 : setSelectedTaka(temp);
+        }
+    };
+
+    const selectAllCheckboxHandler = (e) => {
+        let checkboxes = document.getElementsByName("taka");
+        let temp = selectedTaka;
+
+        for (var i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = e.target.checked;
+
+            if (e.target.checked) {
+                setSelectedTaka(temp.add(parseInt(checkboxes[i].value)));
+            } else {
+                temp.delete(parseInt(checkboxes[i].value));
+                temp.size === 0
+                    ? setSelectedTaka(new Set())
+                    : setSelectedTaka(temp);
+            }
         }
     };
 
@@ -52,15 +72,21 @@ export default function TakaTable({ data, setTaka, setTotal, closeTakaModal }) {
     };
 
     return (
-        <>
-            <table>
+        <div style={{ maxHeight: "60vh", overflow: "auto" }}>
+            <table style={{ margin: "0 10px 0 0" }}>
                 <thead>
                     <tr>
                         <th>SR No.</th>
-                        <th>Taka ID</th>
+                        {/* <th>Taka ID</th> */}
                         <th>Bill No</th>
-                        <th>Item ID</th>
+                        {/* <th>Item ID</th> */}
                         <th>Meters</th>
+                        <th>
+                            <input
+                                type="checkbox"
+                                onChange={selectAllCheckboxHandler}
+                            />
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -68,9 +94,9 @@ export default function TakaTable({ data, setTaka, setTotal, closeTakaModal }) {
                         return (
                             <tr key={index}>
                                 <td>{index + 1}</td>
-                                <td>{bill.takaID}</td>
+                                {/* <td>{bill.takaID}</td> */}
                                 <td>{bill.billNumber}</td>
-                                <td>{bill.itemID}</td>
+                                {/* <td>{bill.itemID}</td> */}
                                 <td>{bill.meters}</td>
                                 <td>
                                     <input
@@ -88,11 +114,11 @@ export default function TakaTable({ data, setTaka, setTotal, closeTakaModal }) {
 
             <button
                 className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
-                style={{ width: "100px", marginTop: "25px" }}
+                style={{ width: "100px", margin: "25px 0 2.5px 0" }}
                 onClick={submitHandler}
             >
                 Select Taka
             </button>
-        </>
+        </div>
     );
 }

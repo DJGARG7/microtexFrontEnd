@@ -32,11 +32,11 @@ export const UserSideBarDataTest = [
                 iconOpened: <RiIcons.RiArrowUpSFill />,
                 subNav: [
                     {
-                        title: "Send to Mill",
+                        title: "Send",
                         path: "/dashboard/transaction/mill/send",
                     },
                     {
-                        title: "Receive from Mill",
+                        title: "Receive",
                         path: "/dashboard/transaction/mill/receive",
                     },
                 ],
@@ -68,15 +68,15 @@ export const UserSideBarDataTest = [
                         path: "/dashboard/saleStock",
                     },
                     {
-                        title: "Sale Challan",
+                        title: "Challan",
                         path: "/dashboard/saleChallan",
                     },
                     {
-                        title: "Sale Billing",
+                        title: "Billing",
                         path: "/dashboard/saleBilling",
                     },
                     {
-                        title: "Display Bills",
+                        title: "Bills",
                         path: "/dashboard/displayBills",
                     },
                 ],

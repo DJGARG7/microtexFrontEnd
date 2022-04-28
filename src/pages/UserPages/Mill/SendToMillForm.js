@@ -38,12 +38,13 @@ export default function SendToMillForm({ itemData, millsData }) {
 
     // Fetch supppliers for an item from backend.
     const fetchSuppliers = async () => {
-        const suppliersToast = toast.loading(
-            "Getting suppliers...",
-            toastStyle
-        );
+        if (selectedGrey === "DEFAULT") return;
+
+        let suppliersToast;
 
         try {
+            suppliersToast = toast.loading("Fetching suppliers...", toastStyle);
+
             const res = await axios.get(
                 `http://localhost:3005/purchases/suppliers/${selectedGrey}`
             );
@@ -62,9 +63,14 @@ export default function SendToMillForm({ itemData, millsData }) {
 
     // Fetch selected bill of a supplier from backend.
     const fetchBills = async () => {
-        const billsToast = toast.loading("Getting suppliers...", toastStyle);
+        if (selectedSupplier === "DEFAULT" || selectedGrey === "DEFAULT")
+            return;
+
+        let billsToast;
 
         try {
+            billsToast = toast.loading("Fetching bills...", toastStyle);
+
             const res = await axios.get(
                 `http://localhost:3005/purchases/fetchGreyBills/${selectedSupplier}/${selectedGrey}`
             );
@@ -80,7 +86,7 @@ export default function SendToMillForm({ itemData, millsData }) {
             toast.success("Bills fetched.", { id: billsToast });
         } catch (error) {
             console.log(error);
-            toast.error("Failed to fetch bills", toastStyle, {
+            toast.error("Failed to fetch bills.", toastStyle, {
                 id: billsToast,
             });
         }
@@ -92,7 +98,7 @@ export default function SendToMillForm({ itemData, millsData }) {
 
     useEffect(() => {
         fetchBills();
-    }, [selectedSupplier]);
+    }, [selectedSupplier, selectedGrey]);
 
     // Retrieve selected bill details from BillTable.
     const setBillFromTable = (data) => {
@@ -115,7 +121,7 @@ export default function SendToMillForm({ itemData, millsData }) {
         const submitToast = toast.loading("Sending to mill...", toastStyle);
 
         try {
-            const res = await axios.post(`http://localhost:3005/mill/challan`, {
+            const res = await axios.post(`http://localhost:3005/mill/send/`, {
                 // For MILL_CHALLAN.
                 challanNumber: parseInt(challanNumber),
                 challanDate,
@@ -287,7 +293,9 @@ export default function SendToMillForm({ itemData, millsData }) {
                     justifyContent: "space-around",
                     backgroundColor: "#dddddd",
                     borderRadius: "5px",
-                    marginTop: "45px",
+                    marginTop: "auto",
+                    position: "sticky",
+                    bottom: "0",
                 }}
             >
                 {/* Column 1: billNumber. */}
@@ -315,7 +323,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                         id="billNumber"
                         readOnly
                         className={styles["form--input"]}
-                        style={{ width: "7.5vw", minWidth: "150px" }}
+                        style={{ width: "7.5vw", minWidth: "125px" }}
                     />
                 </div>
 
