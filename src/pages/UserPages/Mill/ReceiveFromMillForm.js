@@ -101,8 +101,8 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
     const [selectedMill, setSelectedMill] = useState("DEFAULT");
     const [selectedChallan, setSelectedChallan] = useState([]);
     const [receivedMeters, setReceivedMeters] = useState(0);
-    const [lostMeters, setLostMeters] = useState(0);
-    const [lossP, setLossP] = useState(0);
+    const [millLoss, setMillLoss] = useState(0);
+    const [pieceLoss, setPieceLoss] = useState(0);
     const [rate, setRate] = useState(0);
     const [amount, setAmount] = useState(0);
 
@@ -154,9 +154,10 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
 
                     // For MILL_CHALLAN_DETAILS.
                     receivedTaka: selectedChallan.sentTaka,
-                    receivedMeters,
-                    lostMeters,
-                    rate,
+                    receivedMeters: parseInt(receivedMeters),
+                    millLoss,
+                    pieceLoss,
+                    rate: parseInt(rate),
                 }
             );
 
@@ -168,8 +169,8 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
             setSelectedMill("DEFAULT");
             setSelectedChallan([]);
             setReceivedMeters(0);
-            setLostMeters(0);
-            setLossP(0);
+            setMillLoss(0);
+            setPieceLoss(0);
             setRate(0);
             setAmount(0);
         } catch (error) {
@@ -185,28 +186,26 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
     }, [selectedGrey, selectedMill]);
 
     useEffect(() => {
+        // Mill loss.
         let tempLM =
             Math.round(
                 (selectedChallan.sentMeters - receivedMeters + Number.EPSILON) *
                     100
             ) / 100;
 
+        // Piece loss.
         let tempLP =
-            Math.round(
-                ((parseFloat(tempLM) / selectedChallan.sentMeters) * 100 +
-                    Number.EPSILON) *
-                    100
-            ) / 100;
+            Math.round(((receivedMeters % 10) + Number.EPSILON) * 100) / 100;
 
         if (tempLM < 0) {
             toast.error(
-                `Please enter a value greater than ${selectedChallan.sentMeters}.`,
+                `Please enter a value <= ${selectedChallan.sentMeters}.`,
                 toastStyle
             );
             setReceivedMeters(0);
         } else {
-            setLostMeters(tempLM);
-            setLossP(tempLP);
+            setMillLoss(tempLM);
+            setPieceLoss(tempLP);
         }
     }, [receivedMeters]);
 
@@ -385,16 +384,16 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                     />
 
                     <label
-                        htmlFor="lostMeters"
+                        htmlFor="millLoss"
                         style={{ margin: "0 10px 0 1vw" }}
                     >
-                        Lost Meters
+                        Mill Loss
                     </label>
                     <input
                         type="number"
-                        value={lostMeters}
-                        id="lostMeters"
-                        onChange={(e) => setLostMeters(e.target.value)}
+                        value={millLoss}
+                        id="millLoss"
+                        onChange={(e) => setMillLoss(e.target.value)}
                         className={styles["form--input"]}
                         style={{ width: "5vw", minWidth: "70px" }}
                         disabled={
@@ -407,18 +406,21 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                         required
                     />
 
-                    <label htmlFor="lossP" style={{ margin: "0 10px 0 1vw" }}>
-                        Loss %
+                    <label
+                        htmlFor="pieceLoss"
+                        style={{ margin: "0 10px 0 1vw" }}
+                    >
+                        Piece Loss
                     </label>
                     <input
                         type="number"
-                        value={lossP}
+                        value={pieceLoss}
                         disabled={
                             typeof selectedChallan.sentTaka === "undefined"
                                 ? true
                                 : false
                         }
-                        id="lossP"
+                        id="pieceLoss"
                         step=".01"
                         readOnly
                         className={styles["form--input"]}
@@ -476,7 +478,7 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                         required
                     />
                 </div>
-                {/* Row 4: Submit button. */}
+                {/* Column: Submit button. */}
                 <button
                     className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
                     style={{ margin: "0 10px 0 1vw", alignSelf: "center" }}
