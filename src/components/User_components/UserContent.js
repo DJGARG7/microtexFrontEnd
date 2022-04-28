@@ -1,15 +1,16 @@
 import { Route } from "react-router-dom";
 import Greypurchase from "../../pages/UserPages/GreyPurchase";
-import ReceiveFromMill from "../../pages/UserPages/Mill/ReceiveFromMill";
-import SendToMill from "../../pages/UserPages/Mill/SendToMill";
-import SendJobForWork from "../../pages/UserPages/SendJobForWork";
 import GeneralPurchases from "../../pages/UserPages/GeneralPurchases";
+import SendToMill from "../../pages/UserPages/Mill/SendToMill";
+import ReceiveFromMill from "../../pages/UserPages/Mill/ReceiveFromMill";
+import SendJobForWork from "../../pages/UserPages/SendJobForWork";
 import ReceiveFromJob from "../../pages/UserPages/ReceiveFromJob";
 import SaleStock from "../../pages/UserPages/sales/SaleStock";
 import SaleChallan from "../../pages/UserPages/sales/SaleChallan";
 import SaleBilling from "../../pages/UserPages/sales/SaleBilling";
 import SaleDisplay from "../../pages/UserPages/sales/SaleDisplay";
-import CashBook from "../../pages/UserPages/CashBook";
+import CashPay from "../../pages/UserPages/cashbooks/CashPay";
+import CashRecieve from "../../pages/UserPages/cashbooks/CashRecieve";
 const UserContent = ({ userDetails }) => {
     return (
         <>
@@ -47,8 +48,11 @@ const UserContent = ({ userDetails }) => {
             <Route path="/dashboard/displayBills" exact>
                 <SaleDisplay userDetails={userDetails} />
             </Route>
-            <Route path="/dashboard/transaction/cashbook" exact>
-                <CashBook userDetails={userDetails} />
+            <Route path="/dashboard/transaction/cashbook/pay" exact>
+                <CashPay userDetails={userDetails} />
+            </Route>
+            <Route path="/dashboard/transaction/cashbook/recieve" exact>
+                <CashRecieve userDetails={userDetails} />
             </Route>
             <Route path="/dashboard" exact>
                 <h2>Welcome to Microtex</h2>

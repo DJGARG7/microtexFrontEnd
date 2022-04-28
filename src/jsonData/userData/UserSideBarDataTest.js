@@ -81,7 +81,22 @@ export const UserSideBarDataTest = [
                     },
                 ],
             },
-            { title: "Cash Book", path: "/dashboard/transaction/cashbook" },
+            {
+                title: "Cash Book",
+                path: "/dashboard/transaction/cashbook",
+                iconClosed: <RiIcons.RiArrowDownSFill />,
+                iconOpened: <RiIcons.RiArrowUpSFill />,
+                subNav: [
+                    {
+                        title: "Payment",
+                        path: "/dashboard/transaction/cashbook/pay",
+                    },
+                    {
+                        title: "Recieve",
+                        path: "/dashboard/transaction/cashbook/recieve",
+                    },
+                ],
+            },
         ],
     },
     {

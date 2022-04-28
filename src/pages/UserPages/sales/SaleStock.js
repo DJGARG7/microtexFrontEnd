@@ -121,6 +121,7 @@ const SaleStock = () => {
     const transferInventoryHandler = (num) => {
         console.log(num);
         //axios request to transfer if success ->close modal and show success msg
+        //reset cloth type and job list
         setIsOpen(false);
         //else show error msg
     };
@@ -187,4 +188,3 @@ const SaleStock = () => {
     );
 };
 export default SaleStock;
-//select design name , design cloth type then fetch from inventory where = godown , =clothtype
