@@ -72,7 +72,7 @@ export default function SendToMillForm({ itemData, millsData }) {
             billsToast = toast.loading("Fetching bills...", toastStyle);
 
             const res = await axios.get(
-                `http://localhost:3005/purchases/fetchGreyBills/${selectedSupplier}/${selectedGrey}`
+                `http://localhost:3005/purchases/bills/${selectedSupplier}/${selectedGrey}`
             );
 
             // Converting date to DD/MM/YYYY format.
@@ -201,7 +201,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                     style={{
                         width: "20%",
                         minWidth: "200px",
-                        margin: "10px 15px 10px 15px",
+                        margin: "10px 0",
                     }}
                 >
                     <option disabled hidden value="DEFAULT">
@@ -227,7 +227,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                     style={{
                         width: "15%",
                         minWidth: "150px",
-                        margin: "10px 15px 10px 15px",
+                        margin: "10px 0",
                     }}
                 >
                     <option disabled hidden value="DEFAULT">
@@ -253,7 +253,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                     style={{
                         width: "20%",
                         minWidth: "200px",
-                        margin: "10px 15px 10px 15px",
+                        margin: "10px 0",
                     }}
                 >
                     <option disabled hidden value="DEFAULT">
@@ -287,13 +287,11 @@ export default function SendToMillForm({ itemData, millsData }) {
             <div
                 className={styles["form--group"]}
                 style={{
-                    width: "auto",
-                    padding: "0 10px",
                     alignSelf: "center",
-                    justifyContent: "space-around",
                     backgroundColor: "#dddddd",
-                    borderRadius: "5px",
+                    borderRadius: "7.5px",
                     marginTop: "auto",
+                    marginBottom: "0",
                     position: "sticky",
                     bottom: "0",
                 }}
@@ -309,7 +307,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                 >
                     <label
                         htmlFor="billNumber"
-                        style={{ margin: "0 10px 0 0" }}
+                        style={{ margin: "0 10px 0 10px" }}
                     >
                         Bill Number
                     </label>
@@ -338,7 +336,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                 >
                     <label
                         htmlFor="selectedTaka"
-                        style={{ margin: "0 10px 0 40px" }}
+                        style={{ margin: "0 10px 0 10px" }}
                     >
                         Selected Taka
                     </label>
@@ -355,7 +353,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                         htmlFor="totalTaka"
                         style={{ margin: "0 10px 0 10px" }}
                     >
-                        out of
+                        of
                     </label>
                     <input
                         type="number"
@@ -382,7 +380,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                 >
                     <label
                         htmlFor="itemName"
-                        style={{ margin: "0 10px 0 40px" }}
+                        style={{ margin: "0 10px 0 10px" }}
                     >
                         Item
                     </label>
@@ -396,7 +394,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                         id="itemName"
                         readOnly
                         className={styles["form--input"]}
-                        style={{ width: "10vw", minWidth: "200px" }}
+                        style={{ width: "10vw", minWidth: "150px" }}
                     />
                 </div>
 
@@ -409,7 +407,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                         alignItems: "center",
                     }}
                 >
-                    <label htmlFor="Amount" style={{ margin: "0 10px 0 40px" }}>
+                    <label htmlFor="Amount" style={{ margin: "0 10px 0 10px" }}>
                         Total Meters
                     </label>
                     <input
@@ -418,14 +416,19 @@ export default function SendToMillForm({ itemData, millsData }) {
                         id="totalMeters"
                         readOnly
                         className={styles["form--input"]}
-                        style={{ width: "5vw", minWidth: "100px" }}
+                        style={{ width: "3vw", minWidth: "90px" }}
                     />
                 </div>
 
                 {/* Column 5: Submit button. */}
                 <button
                     className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
-                    style={{ margin: "0 0 0 40px", alignSelf: "center" }}
+                    style={{
+                        width: "75px",
+                        minWidth: "50px",
+                        margin: "0 10px 0 10px",
+                        alignSelf: "center",
+                    }}
                 >
                     Send
                 </button>
