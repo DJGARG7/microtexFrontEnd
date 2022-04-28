@@ -28,6 +28,7 @@ export default function BillsTable({ data, setBill, setTaka, setTotal }) {
         {
             Header: "Supplier",
             accessor: "AccName",
+            Filter: "",
         },
         {
             Header: "Item ID",
@@ -44,11 +45,13 @@ export default function BillsTable({ data, setBill, setTaka, setTotal }) {
             Header: "Taka",
             accessor: "taka",
             Filter: "",
+            width: 100,
         },
         {
             Header: "Meters",
             accessor: "meters",
             Filter: "",
+            width: 100,
         },
         {
             Header: "Action",
@@ -60,7 +63,7 @@ export default function BillsTable({ data, setBill, setTaka, setTotal }) {
                         style={{
                             cursor: "pointer",
                             height: "auto",
-                            padding: "2.5px 7.5px",
+                            padding: "2.5px 5px",
                             margin: "0",
                             fontSize: "0.9rem",
                             textTransform: "uppercase",
@@ -72,7 +75,7 @@ export default function BillsTable({ data, setBill, setTaka, setTotal }) {
                             setBill(tableProps.row.original);
                         }}
                     >
-                        Choose Taka
+                        Select Taka
                     </button>
                 </div>
             ),
@@ -117,7 +120,7 @@ export default function BillsTable({ data, setBill, setTaka, setTotal }) {
             <StickyTable
                 TableCol={columns}
                 TableData={data}
-                style={{ maxHeight: "40vh" }}
+                style={{ maxHeight: "50vh", maxWidth: "70vw" }}
             />
             <Modal open={isTakaModalOpen} onClose={closeTakaModal}>
                 <h2 style={{ marginBottom: "25px" }}>Choose Taka</h2>

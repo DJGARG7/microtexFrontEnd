@@ -368,10 +368,7 @@ export default function SaleChallan({ userDetails }) {
                     className={styles["form--table"]}
                     style={{ marginBottom: "40px" }}
                 >
-                    <StickyTable
-                        TableCol={TableColData}
-                        TableData={itemList}
-                    ></StickyTable>
+                    <StickyTable TableCol={TableColData} TableData={itemList} />
                 </div>
 
                 <button
