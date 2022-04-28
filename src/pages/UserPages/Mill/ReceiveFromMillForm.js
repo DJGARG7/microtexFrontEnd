@@ -79,7 +79,6 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                         onClick={(e) => {
                             e.preventDefault();
                             setSelectedChallan(tableProps.row.original);
-                            console.log(selectedChallan);
                         }}
                     >
                         Select
@@ -126,7 +125,6 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
             });
 
             setChallans(res.data);
-            console.log(challans);
 
             toast.success("Challan fetched.", { id: billsToast });
         } catch (error) {
@@ -158,6 +156,11 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                     millLoss,
                     pieceLoss,
                     rate: parseInt(rate),
+
+                    // For INVENTORY.
+                    itemName: itemData.filter(
+                        (item) => item.itemID == selectedGrey
+                    )[0].itemName,
                 }
             );
 
@@ -202,7 +205,7 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                 `Please enter a value <= ${selectedChallan.sentMeters}.`,
                 toastStyle
             );
-            setReceivedMeters(0);
+            setReceivedMeters("");
         } else {
             setMillLoss(tempLM);
             setPieceLoss(tempLP);
