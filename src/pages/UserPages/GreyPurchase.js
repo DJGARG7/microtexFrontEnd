@@ -598,6 +598,7 @@ export default function GreyPurchase({ userDetails }) {
                             value={formData.Taka}
                             onChange={onChangeHandler}
                             readOnly
+                            disabled
                             className={styles2["form--input"]}
                             style={{
                                 width: "10vw",
