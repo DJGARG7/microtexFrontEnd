@@ -11,6 +11,8 @@ import SaleBilling from "../../pages/UserPages/sales/SaleBilling";
 import SaleDisplay from "../../pages/UserPages/sales/SaleDisplay";
 import CashPay from "../../pages/UserPages/cashbooks/CashPay";
 import CashRecieve from "../../pages/UserPages/cashbooks/CashRecieve";
+import BalanceSheet from "../../pages/UserPages/Reports/BalanceSheet/BalanceSheet";
+
 const UserContent = ({ userDetails }) => {
     return (
         <>
@@ -54,6 +56,9 @@ const UserContent = ({ userDetails }) => {
             </Route>
             <Route path="/dashboard/transaction/cashbook/recieve" exact>
                 <CashRecieve userDetails={userDetails} />
+            </Route>
+            <Route path="/dashboard/reports/balance-sheet" exact>
+                <BalanceSheet userDetails={userDetails} />
             </Route>
             <Route path="/dashboard" exact />
         </>
