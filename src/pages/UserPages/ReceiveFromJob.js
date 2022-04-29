@@ -14,9 +14,6 @@ if (localStorage.getItem("userDetails") != null)
     localStorage.getItem("userDetails")
   ).userID;
 Axios.defaults.withCredentials = true;
-const usrinstance = Axios.create({
-  baseURL: "http://localhost:3005/purchases/",
-});
 const accinstance = Axios.create({
   baseURL: "http://localhost:3003/accountMaster",
 });
@@ -59,9 +56,9 @@ function ReceiveFromJob() {
               fontWeight: "600",
             }}
             type="button"
-            onClick={() => onReceiveClick(tableProps)}
+            onClick={() => onSelectClick(tableProps)}
           >
-            Receive
+            Select
           </button>
         </div>
       ),
@@ -72,92 +69,23 @@ function ReceiveFromJob() {
       width: 100,
     },
     {
-      Header: "Item Name",
-      accessor: "itemname",
+      Header: "Challan No",
+      accessor: "challanNo",
       Filter: "",
       // width: "150px",
     },
     {
-      Header: "Meters",
-      accessor: "meters",
+      Header: "Challan Date",
+      accessor: "challanDate",
       Filter: "",
-      // width: "90px",
+      // width: "150px",
     },
-    {
-      Header: "Pieces",
-      accessor: "pieces",
-      Filter: "",
-      // width: "90px",
-      Cell : (tableprops) => (
-       <div>
-         {tableprops.row.original.meters/10}
-       </div>
-      )
-    },
-    {
-      Header: "Embroidery Done",
-      accessor: "Embroidery",
-      Filter: "",
-      // width: "90px",
-    },
-    {
-      Header: "Stone Done",
-      accessor: "Stone",
-      Filter: "",
-      // width: "90px",
-    },
-    {
-      Header: "Lace Done",
-      accessor: "Lace",
-      Filter: "",
-      // width: "90px",
-    },
-  ];
-
-  const receivedCol = [
-    {
-      Header: "Action",
-      accessor: (str) => "delete",
-      Cell: (tableProps) => (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-          }}
-        >
-          <button
-            className={`${styles["form--btn"]} ${styles["form--del-btn"]}`}
-            style={{
-              cursor: "pointer",
-              height: "auto",
-              padding: "2.5 0",
-              margin: "0",
-              fontSize: "0.9rem",
-              textTransform: "uppercase",
-              fontWeight: "600",
-            }}
-            type="button"
-            // onClick={() => onReceiveClick(tableProps)}
-          >
-            Delete
-          </button>
-        </div>
-      ),
-      sticky: "left",
-      Filter: "",
-      // maxWidth: 100,
-      // minWidth: 100,
-      width: 100,
-    },
-    
     {
       Header: "Item Name",
       accessor: "itemName",
       Filter: "",
       // width: "150px",
     },
-    
     {
       Header: "Pieces",
       accessor: "pieces",
@@ -165,8 +93,24 @@ function ReceiveFromJob() {
       // width: "90px",
     },
     {
-      Header: "Meters",
-      accessor: "meters",
+      Header: "Job Rate",
+      accessor: "jobRate",
+      Filter: "",
+      // width: "150px",
+    },
+  ];
+
+  const receivedCol = [
+    {
+      Header: "Item Name",
+      accessor: "itemName",
+      Filter: "",
+      // width: "150px",
+    },
+
+    {
+      Header: "Pieces",
+      accessor: "pieces",
       Filter: "",
       // width: "90px",
     },
@@ -180,34 +124,26 @@ function ReceiveFromJob() {
       Header: "Total Price",
       accessor: "amount",
       Filter: "",
+      Cell: (tableProps) => (
+        <div>
+          {tableProps.row.original.pieces * tableProps.row.original.jobRate}
+        </div>
+      ),
     },
   ];
 
   /*- - - - - - - - - - - - - - - - - - - - - - Use states - - - - - - - - - - - - - - - - - - - - */
 
   const [state, setState] = useState({
-    billno: "",
     accntname: "",
     billdate: date,
-  });
-  const [itemfrom,setitemfrom] = useState("");
-  const [editmode, setEditmode] = useState(false);
-  const [totalamount, setTotalAmount] = useState(0);
+  })
+  const [totalamount,settotalamount] = useState("");
+  const [challannumber,setchallannumber] = useState("");
   const [accntlist, setAccntList] = useState([]);
-  const [sent, setsendjobitemslist] = useState([]);
-  const [jobsentlist, setjobsentlist] = useState([]); // populates the sent job item table
   const [accountID, setaccountID] = useState([]); // account id
-  const [jobtypelist, setjobtypelist] = useState([]); // used to render job types in select
-  const [jobtypeID, setjobtypeID] = useState(""); // for getting ID of job type
-  const [receiveditemlist, setreceiveditemlist] = useState([]); // list of items fetched from inventory
-  const [received, setreceived] = useState({
-    itemID:"",
-    itemName: "",
-    rowindex:"",
-  });
-  const [receivedpcs, setreceivedpcs] = useState("");
-  const [receivedjobrate, setreceivedjobrate] = useState("");
-  const [amount, setamount] = useState("");
+  const [sentItems, setsentItems] = useState([]); // list of items fetched from inventory
+  const [receivedItems, setreceivedItems] = useState([]); // used to populate the final table in the page
 
   /*- - - - - - - - - - - - - - - - - - - - - - Use states - - - - - - - - - - - - - - - - - - - - */
 
@@ -223,23 +159,19 @@ function ReceiveFromJob() {
     })();
   }, []);
 
-
   /*- - - - - - - - - - - - - - - - - - - - - - Input change function  - - - - - - - - - - - - - - - - - - - - */
 
   const onChangeHandler = async (e) => {
     let value = e.target.value;
     const name = e.target.name;
 
-    if (name === "accntname" || name === "jobType") {
+    if (name === "accntname") {
       const index = e.target.selectedIndex;
       const el = e.target.childNodes[index];
       const id = el.getAttribute("id");
-
-      if (name === "accntname") setaccountID(id);
-      else setjobtypeID(id);
+      console.log(id);
+      setaccountID(id);
     }
-
-
 
     setState({
       ...state,
@@ -247,44 +179,84 @@ function ReceiveFromJob() {
     });
   };
 
-
   const onitemfromChangeHandler = async (e) => {
     const value = e.target.value;
-    if(value!=="")
-    {
-      try{
-        const res = await jobinstance.get(`/getitemsforjobreceive/${value}`)
-        console.log(res.data);
-        setreceiveditemlist(res.data);
-      }catch(e){
+    if (value !== "") {
+      try {
+        const res = await jobinstance.get(
+          `/getitemsforjobreceive/${value}/${accountID}`
+        );
+        res.data.forEach((data, index) => {
+          const date = new Date(data.challanDate);
+          data.challanDate = date.toLocaleDateString("en-GB");
+        });
+        setsentItems(res.data);
+      } catch (e) {
         console.log(e);
       }
-    }else{
-      setreceiveditemlist("");
+    } else {
+      setsentItems("");
     }
-  }
+  };
   /*- - - - - - - - - - - - - - - - - - - - - - Input change function  - - - - - - - - - - - - - - - - - - - - */
 
-
+  const clearall = ()=>{
+    settotalamount("");
+    setchallannumber("");
+    setreceivedItems("");
+    setsentItems("");
+    setState({
+      accntname:"",
+      billdate:date
+    })
+  }
 
   /*- - - - - - - - - - - - - - - - - - - - - - Receive button clicked on table function  - - - - - - - - - - - - - - - - - - - - */
 
-  const onReceiveClick = (tableprops) => {
+  const onSelectClick = async (tableprops) => {
     const data = tableprops.row.original;
+    console.log(data);
+    setchallannumber(data.challanNo);
+    let amt=0;
+    let temp = []
+    sentItems.forEach((item,index)=>{
+      if(item.challanNo === data.challanNo){
+        amt += data.jobRate * data.pieces
+        temp = [...temp,item ]
+      }
+    })
+    console.log(temp);
+    settotalamount(amt);
+    setreceivedItems(temp);
   };
 
   /*- - - - - - - - - - - - - - - - - - - - - - Receive button clicked on table function  - - - - - - - - - - - - - - - - - - - - */
 
-
-  const onFormSubmit = (e) => {
+  const onFormSubmit = async (e) => {
     e.preventDefault();
+    const data = {
+      ...state,
+      challannumber,
+      totalamount,
+      receivedItems
+    }
+    try{
+      const res = await jobinstance.post("/jobreceiveitems",data);
+      console.log(res.data);
+      clearall();
+      toastSuccess(res.data);
+    }catch(e){
+      console.log(e.response);
+      // toastError(e);
+    }
+
   };
   return (
     <div className={styles["main"]}>
       <form onSubmit={onFormSubmit} className={styles["form"]}>
         <h2>Receiv from Job</h2>
         <div className={styles["input-section"]}>
-          <input
+          {/* <input
             placeholder="Bill No"
             type="number"
             className={styles["input-text"]}
@@ -293,7 +265,7 @@ function ReceiveFromJob() {
             name="billno"
             required
             onChange={onChangeHandler}
-          />
+          /> */}
           <select
             className={styles["input-select"]}
             id="accntname"
@@ -334,71 +306,12 @@ function ReceiveFromJob() {
             onChange={onChangeHandler}
           ></input>
         </div>
-        <div className={styles["input-section"]}>
-          <input
-            placeholder="Item Name"
-            type="text"
-            className={styles["input-text"]}
-            value={received.itemname}
-            id="itemname"
-            name="itemname"
-            required
-            disabled
-          />
-          <input
-            placeholder="Pieces"
-            type="number"
-            className={styles["input-text"]}
-            value={receivedpcs}
-            id="pcs"
-            name="pcs"
-            required
-            onChange={(e) => {
-              setreceivedpcs(e.target.value);
-            }}
-          />
-          <input
-            placeholder="Meters"
-            type="number"
-            className={styles["input-text"]}
-            value={receivedpcs * 10}
-            id="meters"
-            name="meters"
-            required
-            disabled
-          />
-          <input
-            placeholder="Job Rate"
-            type="number"
-            className={styles["input-text"]}
-            value={receivedjobrate}
-            id="jobrate"
-            name="jobrate"
-            required
-            onChange={(e) => {
-              setreceivedjobrate(e.target.value);
-            }}
-          />
-          <input
-            placeholder="Amount"
-            type="number"
-            className={styles["input-text"]}
-            value={receivedpcs * receivedjobrate}
-            id="amount"
-            name="amount"
-            disabled
-            required
-          />
-        <button type = "submit" className={`${styles["add-btn"]} ${styles["btn"]}`}>
-          Add
-        </button>
-        </div>
         <div
           className={styles["form-table"]}
           style={{ padding: "20px", overflow: "auto" }}
         >
           <StickyTable
-            TableData={receiveditemlist}
+            TableData={sentItems}
             TableCol={inventoryCol}
             style={{
               maxWidth: "1023px",
@@ -409,13 +322,29 @@ function ReceiveFromJob() {
             }}
           />
         </div>
+        <div className={styles["input-section"]}>
+          <input
+            placeholder="Challan Number"
+            type="number"
+            className={styles["input-text"]}
+            value={challannumber}
+            disabled
+          />
+          <input
+            placeholder="Total Amount"
+            type="number"
+            className={styles["input-text"]}
+            value={totalamount}
+            disabled
+          />
+        </div>
         <div
           className={styles["form-table"]}
           style={{ padding: "20px", overflow: "auto" }}
         >
           <StickyTable
             TableCol={receivedCol}
-            TableData={receiveditemlist}
+            TableData={receivedItems}
             style={{
               maxWidth: "1023px",
               maxHeight: "300px",
@@ -428,39 +357,28 @@ function ReceiveFromJob() {
         <div
           style={{
             display: "flex",
-            flexDirection: "column",
+            flexDirection: "row",
             marginTop: "50px",
-            justifyContent: "center",
+            width: "100%",
+            justifyContent: "space-between",
           }}
         >
-          {!editmode && (
-            <button className={`${styles["add-btn"]} ${styles["btn"]}`}>
-              Submit
-            </button>
-          )}
-          {editmode && (
-            <div>
-              <button
-                className={`${styles["edit-btn"]} ${styles["btn"]}`}
-                type="button"
-                // onClick={""}
-              >
-                Edit
-              </button>
-              <button
-                className={`${styles["edit-btn"]} ${styles["btn"]}`}
-                type="button"
-                // onClick={""}
-              >
-                Cancel
-              </button>
-            </div>
-          )}
+          {<button disabled = {!receivedItems.length} className={`${styles["add-btn"]} ${styles["btn"]}`} style={{width:"20%"}}>
+            Receive
+          </button>}
+          {<button disabled = {!receivedItems.length} className={`${styles["add-btn"]} ${styles["btn"]}`} style={{width:"20%"}} onClick={()=>{
+            setchallannumber("");
+            settotalamount("");
+            setreceivedItems([])}}
+            type="button">
+            Cancel
+          </button>}
           <button
             type="button"
             className={`${styles["add-btn"]} ${styles["btn"]}`}
+            style={{width:"20%"}}
           >
-            View all items
+            View all received items
           </button>
         </div>
       </form>
