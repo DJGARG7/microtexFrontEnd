@@ -1,6 +1,5 @@
 import EntityBlock from "./EntityBlock";
 import styles from "../../Mill/styles/Mill.module.css";
-import { flexRender } from "react-table/dist/react-table.development";
 
 const dummyData = {
     liabilites: [

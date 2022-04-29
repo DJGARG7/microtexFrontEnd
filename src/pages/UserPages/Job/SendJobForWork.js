@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import styles from "../../../styles/SendJob.module.css";
 import Modal from "../../../components/Reuse_components/Modal";
 import StickyTable from "../../../components/Reuse_components/Table/StickyTable";
+import styles2 from "../Mill/styles/Mill.module.css";
 
 import Axios from "axios";
 import {
@@ -350,20 +351,61 @@ function SendJobForWork() {
     };
 
     return (
-        <div className={styles["main"]}>
-            <form onSubmit={onFormSubmit} className={styles["form"]}>
-                <h2>Send For Job</h2>
-                <div className={styles["input-section"]}>
+        <div className={styles2["main"]}>
+            <h2>Send For Job</h2>
+            <form onSubmit={onFormSubmit} className={styles2["form"]}>
+                <div className={styles2["form--group"]}>
+                    <div
+                        className={styles2["form--group"]}
+                        style={{ width: "auto", margin: "0" }}
+                    >
+                        <input
+                            type="number"
+                            name="challanNo"
+                            value={challandetails.challanNo}
+                            id="challanNo"
+                            disabled={sendjobitemslist.length}
+                            onChange={onChallanChnageHandler}
+                            placeholder="Bill Number"
+                            className={styles2["form--input"]}
+                            style={{
+                                width: "10vw",
+                                minWidth: "150px",
+                                marginRight: "15px",
+                            }}
+                            required
+                        />
+                        <input
+                            type="text"
+                            value={challandetails.challanDate}
+                            id="challanDate"
+                            name="challanDate"
+                            onChange={onChallanChnageHandler}
+                            onFocus={(e) => (e.target.type = "date")}
+                            onBlur={(e) => (e.target.type = "text")}
+                            placeholder="Bill Date"
+                            className={styles2["form--input"]}
+                            style={{ width: "150px", minWidth: "150px" }}
+                            required
+                        />
+                    </div>
                     <select
-                        className={styles["input-select"]}
                         id="accntname"
                         required
                         disabled={sendjobitemslist.length}
                         name="accntname"
                         onChange={onChallanChnageHandler}
                         value={challandetails.accntname}
+                        className={`${styles2["form--input"]} ${styles2["form--input-select"]}`}
+                        style={{
+                            width: "20vw",
+                            minWidth: "250px",
+                            margin: "10px 0",
+                        }}
                     >
-                        <option value="">Account Names</option>
+                        <option value="" disabled>
+                            Select account...
+                        </option>
                         {accntlist.map((obj, index) => {
                             return (
                                 <option
@@ -377,60 +419,42 @@ function SendJobForWork() {
                         })}
                     </select>
                     <select
-                        className={styles["input-select"]}
                         id="jobType"
                         name="jobType"
                         required
                         disabled={sendjobitemslist.length}
                         onChange={onChallanChnageHandler}
                         value={challandetails.jobType}
+                        className={`${styles2["form--input"]} ${styles2["form--input-select"]}`}
+                        style={{
+                            width: "20vw",
+                            minWidth: "250px",
+                            margin: "10px 0",
+                        }}
                     >
-                        <option value="">Job Types</option>
+                        <option value="">Select job type...</option>
                         <option value="Embroidery">Embroidery Work</option>
                         <option value="Lace">Lace Work</option>
                         <option value="Stone">Stone Work</option>
                     </select>
-                    <input
-                        placeholder="Challan No"
-                        type="number"
-                        name="challanNo"
-                        className={styles["input-text"]}
-                        value={challandetails.challanNo}
-                        id="challanNo"
-                        disabled={sendjobitemslist.length}
-                        required
-                        onChange={onChallanChnageHandler}
-                    />
-                    <input
-                        type="Date"
-                        className={styles["input-text"]}
-                        value={challandetails.challanDate}
-                        id="challanDate"
-                        name="challanDate"
-                        required
-                        onChange={onChallanChnageHandler}
-                    ></input>
                 </div>
-                <div className={styles["input-section"]}>
-                    <input
-                        id="qty"
-                        type="number"
-                        name="QtyPresent"
-                        value={totalpcspresent}
-                        placeholder="Qty Present"
-                        disabled
-                        className={styles["input-text"]}
-                    />
-                </div>
-                <div className={styles["input-section"]}>
+
+                <div className={styles2["form--group"]}>
                     <select
-                        className={styles["input-select"]}
                         name="ItemFrom"
                         required
                         onChange={onitemChangeHandler}
                         value={itemdetials.ItemFrom}
+                        className={`${styles2["form--input"]} ${styles2["form--input-select"]}`}
+                        style={{
+                            width: "17.5vw",
+                            minWidth: "275px",
+                            margin: "10px 0",
+                        }}
                     >
-                        <option value="">Item From</option>
+                        <option value="" disabled>
+                            Select item from...
+                        </option>
                         <option value="000">Mill Finished Stock</option>
                         <option value="100">Embroidery Finished Stock</option>
                         <option value="010">Lace Finished Stock</option>
@@ -445,12 +469,18 @@ function SendJobForWork() {
                             Lace and Stone Finished Stock
                         </option>
                     </select>
+
                     <select
-                        className={styles["input-select"]}
                         name="ItemName"
                         required
                         onChange={onitemChangeHandler}
                         value={itemdetials.ItemName}
+                        className={`${styles2["form--input"]} ${styles2["form--input-select"]}`}
+                        style={{
+                            width: "15vw",
+                            minWidth: "200px",
+                            margin: "10px 0",
+                        }}
                     >
                         <option value="">Item Name</option>
                         {distinctitemlist.map((obj, index) => {
@@ -465,18 +495,55 @@ function SendJobForWork() {
                             );
                         })}
                     </select>
-
-                    <input
-                        id="pieces"
-                        type="number"
-                        name="pieces"
-                        placeholder="Pieces"
-                        required
-                        max={totalpcspresent}
-                        onChange={onitemChangeHandler}
-                        value={itemdetials.pieces}
-                        className={styles["input-text"]}
-                    />
+                    <div
+                        className={styles["form--group"]}
+                        style={{
+                            width: "auto",
+                            margin: "0",
+                            alignItems: "center",
+                        }}
+                    >
+                        <label
+                            htmlFor="selectedTaka"
+                            style={{ margin: "0 10px 0 10px" }}
+                        >
+                            Send
+                        </label>
+                        <input
+                            id="pieces"
+                            type="number"
+                            name="pieces"
+                            placeholder="Pieces"
+                            required
+                            max={totalpcspresent}
+                            onChange={onitemChangeHandler}
+                            value={itemdetials.pieces}
+                            className={styles2["form--input"]}
+                            style={{
+                                width: "5vw",
+                                minWidth: "75px",
+                            }}
+                        />
+                        <label
+                            htmlFor="selectedTaka"
+                            style={{ margin: "0 10px 0 10px" }}
+                        >
+                            of
+                        </label>
+                        <input
+                            id="qty"
+                            type="number"
+                            name="QtyPresent"
+                            value={totalpcspresent}
+                            placeholder="?"
+                            readOnly
+                            className={styles2["form--input"]}
+                            style={{
+                                width: "5vw",
+                                minWidth: "75px",
+                            }}
+                        />
+                    </div>
                     <input
                         id="jobRate"
                         type="number"
@@ -485,17 +552,26 @@ function SendJobForWork() {
                         required
                         onChange={onitemChangeHandler}
                         value={itemdetials.jobRate}
-                        className={styles["input-text"]}
+                        className={styles2["form--input"]}
+                        style={{
+                            width: "5vw",
+                            minWidth: "75px",
+                        }}
                     />
-                </div>
-                <div style={{ paddingBottom: "20px" }}>
                     <button
-                        className={`${styles["add-btn"]} ${styles["btn"]}`}
-                        style={{ width: "150px" }}
+                        className={`${styles2["form--btn"]} ${styles2["form--add-btn"]}`}
+                        style={{
+                            width: "100px",
+                            minWidth: "100px",
+                            margin: "0 10px 0 10px",
+                            alignSelf: "center",
+                        }}
                     >
-                        Add to the list
+                        Add to list
                     </button>
+                </div>
 
+                <div style={{ paddingBottom: "20px" }}>
                     {/*         
             <div>
               <button
@@ -514,44 +590,54 @@ function SendJobForWork() {
               </button>
             </div> */}
                 </div>
-                <div className={styles["form-table"]}>
+
+                <div className={styles2["form--table"]}>
                     <StickyTable
                         TableCol={purchasedCol}
                         TableData={sendjobitemslist}
                         style={{
                             maxWidth: "100%",
-                            maxHeight: "300px",
-                            border: "2.5px solid black",
-                            borderRadius: "5px",
+                            maxHeight: "32.5vh",
                         }}
                     />
                 </div>
+
                 <div
+                    className={styles2["form--group"]}
                     style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        padding: "20px",
-                        marginTop: "50px",
-                        width: "100%",
-                        justifyContent: "space-evenly",
+                        justifyContent: "center",
+                        marginTop: "auto",
+                        marginBottom: "0",
+                        position: "sticky",
+                        bottom: "0",
                     }}
                 >
                     <button
                         type="button"
-                        className={`${styles["add-btn"]} ${styles["btn"]}`}
-                        style={{ width: "150px" }}
-                        onClick={onBillSubmit}
-                        disabled={!sendjobitemslist.length}
-                    >
-                        Submit
-                    </button>
-                    <button
-                        type="button"
-                        className={`${styles["add-btn"]} ${styles["btn"]}`}
-                        style={{ width: "150px" }}
+                        className={`${styles2["form--btn"]} ${styles2["form--add-btn"]}`}
+                        style={{
+                            width: "125px",
+                            minWidth: "125px",
+                            margin: "0 10px 0 10px",
+                            alignSelf: "center",
+                        }}
                         onClick={viewjobitems}
                     >
                         View all items
+                    </button>
+                    <button
+                        type="button"
+                        className={`${styles2["form--btn"]} ${styles2["form--add-btn"]}`}
+                        style={{
+                            width: "100px",
+                            minWidth: "100px",
+                            margin: "0 10px 0 10px",
+                            alignSelf: "center",
+                        }}
+                        onClick={onBillSubmit}
+                        disabled={!sendjobitemslist.length}
+                    >
+                        Send
                     </button>
                 </div>
             </form>

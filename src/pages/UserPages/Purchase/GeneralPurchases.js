@@ -339,7 +339,7 @@ function GeneralPurchases({ userDetails }) {
                             margin: "10px 0",
                         }}
                     >
-                        <option value="">Account Names</option>
+                        <option value="">Select account...</option>
                         {accntlist.map((obj, index) => {
                             return (
                                 <option

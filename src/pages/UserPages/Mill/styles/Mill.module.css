@@ -116,6 +116,14 @@
     transform: scale(0.95, 0.95);
 }
 
+.form--btn:disabled {
+    background-color: grey;
+}
+
+.form--btn:disabled:hover {
+    background-color: grey;
+}
+
 .form--add-btn {
     background-color: #40916c;
     color: white;
