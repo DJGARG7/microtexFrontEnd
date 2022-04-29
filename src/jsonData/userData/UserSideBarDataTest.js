@@ -3,15 +3,15 @@ import * as RiIcons from "react-icons/ri";
 
 export const UserSideBarDataTest = [
     {
-        title: "Transaction",
-        path: "/dashboard/transaction",
+        title: "Transactions",
+        path: "#",
         iconClosed: <RiIcons.RiArrowDownSFill />,
         iconOpened: <RiIcons.RiArrowUpSFill />,
 
         subNav: [
             {
                 title: "Purchase",
-                path: "/dashboard/transaction/purchase",
+                path: "#",
                 iconClosed: <RiIcons.RiArrowDownSFill />,
                 iconOpened: <RiIcons.RiArrowUpSFill />,
                 subNav: [
@@ -27,7 +27,7 @@ export const UserSideBarDataTest = [
             },
             {
                 title: "MILL",
-                path: "/dashboard/transaction/mill",
+                path: "#",
                 iconClosed: <RiIcons.RiArrowDownSFill />,
                 iconOpened: <RiIcons.RiArrowUpSFill />,
                 subNav: [
@@ -43,7 +43,7 @@ export const UserSideBarDataTest = [
             },
             {
                 title: "JOB",
-                path: "/dashboard/transaction/job",
+                path: "#",
                 iconClosed: <RiIcons.RiArrowDownSFill />,
                 iconOpened: <RiIcons.RiArrowUpSFill />,
                 subNav: [
@@ -59,7 +59,7 @@ export const UserSideBarDataTest = [
             },
             {
                 title: "Sale",
-                path: "/dashboard/transaction/sale",
+                path: "#",
                 iconClosed: <RiIcons.RiArrowDownSFill />,
                 iconOpened: <RiIcons.RiArrowUpSFill />,
                 subNav: [
@@ -83,7 +83,7 @@ export const UserSideBarDataTest = [
             },
             {
                 title: "Cash Book",
-                path: "/dashboard/transaction/cashbook",
+                path: "#",
                 iconClosed: <RiIcons.RiArrowDownSFill />,
                 iconOpened: <RiIcons.RiArrowUpSFill />,
                 subNav: [
@@ -92,8 +92,8 @@ export const UserSideBarDataTest = [
                         path: "/dashboard/transaction/cashbook/pay",
                     },
                     {
-                        title: "Recieve",
-                        path: "/dashboard/transaction/cashbook/recieve",
+                        title: "Receive",
+                        path: "/dashboard/transaction/cashbook/receive",
                     },
                 ],
             },
@@ -101,14 +101,14 @@ export const UserSideBarDataTest = [
     },
     {
         title: "Reports",
-        path: "/dashboard",
+        path: "#",
         iconClosed: <RiIcons.RiArrowDownSFill />,
         iconOpened: <RiIcons.RiArrowUpSFill />,
 
         subNav: [
             {
-                title: "Reports 1",
-                path: "/dashboard/reports1",
+                title: "Balance Sheet",
+                path: "/dashboard/reports/balance-sheet",
 
                 cName: "sub-nav",
             },
