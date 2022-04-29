@@ -1,10 +1,10 @@
 import { Route } from "react-router-dom";
-import GreyPurchase from "../../pages/UserPages/GreyPurchase";
-import GeneralPurchases from "../../pages/UserPages/GeneralPurchases";
+import GreyPurchase from "../../pages/UserPages/Purchase/GreyPurchase";
+import GeneralPurchases from "../../pages/UserPages/Purchase/GeneralPurchases";
 import SendToMill from "../../pages/UserPages/Mill/SendToMill";
 import ReceiveFromMill from "../../pages/UserPages/Mill/ReceiveFromMill";
-import SendJobForWork from "../../pages/UserPages/SendJobForWork";
-import ReceiveFromJob from "../../pages/UserPages/ReceiveFromJob";
+import SendJobForWork from "../../pages/UserPages/Job/SendJobForWork";
+import ReceiveFromJob from "../../pages/UserPages/Job/ReceiveFromJob";
 import SaleStock from "../../pages/UserPages/sales/SaleStock";
 import SaleChallan from "../../pages/UserPages/sales/SaleChallan";
 import SaleBilling from "../../pages/UserPages/sales/SaleBilling";
@@ -57,6 +57,7 @@ const UserContent = ({ userDetails }) => {
             <Route path="/dashboard/transaction/cashbook/receive" exact>
                 <CashReceive userDetails={userDetails} />
             </Route>
+            {/* --------------------   Report   -------------------- */}
             <Route path="/dashboard/reports/balance-sheet" exact>
                 <BalanceSheet userDetails={userDetails} />
             </Route>

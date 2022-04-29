@@ -46,7 +46,7 @@ export default function BalanceSheet({ userDetails }) {
             <h2>Balance Sheet</h2>
             <div
                 className={styles["grid--container"]}
-                style={{ backgroundColor: "red", padding: "15px" }}
+                // style={{ backgroundColor: "red", padding: "15px" }}
             >
                 <div className={styles["grid--column"]}>
                     {dummyData.liabilites.map((liability) => {
