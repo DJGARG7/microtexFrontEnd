@@ -1,10 +1,7 @@
-/* eslint-disable eqeqeq */
-import "react-widgets/styles.css";
-import "../../styles/Greypurchase.css";
-import Modal from "../../components/Reuse_components/Modal";
+import Modal from "../../../components/Reuse_components/Modal";
 
-import StickyTable from "../../components/Reuse_components/Table/StickyTable";
-import TakaDetails from "../../components/Reuse_components/TakaDetails";
+import StickyTable from "../../../components/Reuse_components/Table/StickyTable";
+import TakaDetails from "../../../components/Reuse_components/TakaDetails";
 
 import { useState, useEffect, useMemo } from "react";
 import axios from "axios";
@@ -12,10 +9,10 @@ import ReactLoading from "react-loading";
 import {
     toastError,
     toastSuccess,
-} from "../../components/Reuse_components/toast";
+} from "../../../components/Reuse_components/toast";
 import toast from "react-hot-toast";
 
-import styles2 from "./Mill/styles/Mill.module.css";
+import styles from "../Mill/styles/Mill.module.css";
 
 // Axios default configuration to include cookie and user ID with every request.
 axios.defaults.withCredentials = true;
@@ -57,7 +54,7 @@ export default function GreyPurchase({ userDetails }) {
             Cell: (tableProps) => (
                 <div>
                     <button
-                        className={`${styles2["form--btn"]} ${styles2["form--add-btn"]}`}
+                        className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
                         style={{
                             cursor: "pointer",
                             height: "auto",
@@ -137,7 +134,7 @@ export default function GreyPurchase({ userDetails }) {
                     }}
                 >
                     <button
-                        className={`${styles2["form--btn"]} ${styles2["form--del-btn"]}`}
+                        className={`${styles["form--btn"]} ${styles["form--del-btn"]}`}
                         style={{
                             cursor: "pointer",
                             height: "auto",
@@ -474,13 +471,13 @@ export default function GreyPurchase({ userDetails }) {
     }
 
     return (
-        <div className={styles2["main"]}>
+        <div className={styles["main"]}>
             <h2>Grey Purchase</h2>
-            <form onSubmit={onSubmitHandler} className={styles2["form"]}>
+            <form onSubmit={onSubmitHandler} className={styles["form"]}>
                 {/* Row 1: Bill information, supplier & item */}
-                <div className={styles2["form--group"]}>
+                <div className={styles["form--group"]}>
                     <div
-                        className={styles2["form--group"]}
+                        className={styles["form--group"]}
                         style={{ width: "auto", margin: "0" }}
                     >
                         <input
@@ -489,7 +486,7 @@ export default function GreyPurchase({ userDetails }) {
                             value={formData.billNumber}
                             onChange={onChangeHandler}
                             placeholder="Bill Number"
-                            className={styles2["form--input"]}
+                            className={styles["form--input"]}
                             style={{
                                 width: "10vw",
                                 minWidth: "150px",
@@ -505,7 +502,7 @@ export default function GreyPurchase({ userDetails }) {
                             onFocus={(e) => (e.target.type = "date")}
                             onBlur={(e) => (e.target.type = "text")}
                             placeholder="Bill Date"
-                            className={styles2["form--input"]}
+                            className={styles["form--input"]}
                             style={{ width: "150px", minWidth: "150px" }}
                             required
                         />
@@ -515,7 +512,7 @@ export default function GreyPurchase({ userDetails }) {
                         onChange={onChangeHandler}
                         required
                         value={formData.accountID}
-                        className={`${styles2["form--input"]} ${styles2["form--input-select"]}`}
+                        className={`${styles["form--input"]} ${styles["form--input-select"]}`}
                         style={{
                             width: "20vw",
                             minWidth: "250px",
@@ -534,14 +531,14 @@ export default function GreyPurchase({ userDetails }) {
                         })}
                     </select>
                     <div
-                        className={styles2["form--group"]}
+                        className={styles["form--group"]}
                         style={{ width: "auto", margin: "0" }}
                     >
                         <select
                             name="itemID"
                             value={formData.itemID}
                             onChange={onChangeHandler}
-                            className={`${styles2["form--input"]} ${styles2["form--input-select"]}`}
+                            className={`${styles["form--input"]} ${styles["form--input-select"]}`}
                             style={{
                                 width: "15vw",
                                 minWidth: "197.5px",
@@ -568,7 +565,7 @@ export default function GreyPurchase({ userDetails }) {
                             onClick={() => {
                                 setIsItemModalOpen(true);
                             }}
-                            className={`${styles2["form--btn"]} ${styles2["form--add-btn"]}`}
+                            className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
                             style={{ width: "87.5px", minWidth: "87.5px" }}
                         >
                             Add Item
@@ -577,9 +574,9 @@ export default function GreyPurchase({ userDetails }) {
                 </div>
 
                 {/* Row 2: Cloth & rate information. */}
-                <div className={styles2["form--group"]}>
+                <div className={styles["form--group"]}>
                     <div
-                        className={styles2["form--group"]}
+                        className={styles["form--group"]}
                         style={{ width: "auto", margin: "0" }}
                     >
                         <input
@@ -589,7 +586,7 @@ export default function GreyPurchase({ userDetails }) {
                             value={formData.Taka}
                             onChange={onChangeHandler}
                             readOnly
-                            className={styles2["form--input"]}
+                            className={styles["form--input"]}
                             style={{
                                 width: "10vw",
                                 minWidth: "87.5px",
@@ -599,7 +596,7 @@ export default function GreyPurchase({ userDetails }) {
                         <button
                             type="button"
                             onClick={openTakaModal}
-                            className={`${styles2["form--btn"]} ${styles2["form--add-btn"]}`}
+                            className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
                             style={{ width: "87.5px", minWidth: "87.5px" }}
                         >
                             Add Taka
@@ -615,7 +612,7 @@ export default function GreyPurchase({ userDetails }) {
                         onChange={onChangeHandler}
                         placeholder="Meters"
                         readOnly
-                        className={styles2["form--input"]}
+                        className={styles["form--input"]}
                         style={{ width: "10vw", minWidth: "150px" }}
                     />
                     <input
@@ -626,7 +623,7 @@ export default function GreyPurchase({ userDetails }) {
                         value={formData.Rate}
                         onChange={onChangeHandler}
                         placeholder="Rate"
-                        className={styles2["form--input"]}
+                        className={styles["form--input"]}
                         style={{ width: "10vw", minWidth: "150px" }}
                     />
                     <input
@@ -637,21 +634,21 @@ export default function GreyPurchase({ userDetails }) {
                         onChange={onChangeHandler}
                         min="0"
                         max="100"
-                        className={styles2["form--input"]}
+                        className={styles["form--input"]}
                         style={{ width: "10vw", minWidth: "150px" }}
                     />
                 </div>
 
                 {/* Row 3: Amount calculations */}
                 <div
-                    className={styles2["form--group"]}
+                    className={styles["form--group"]}
                     style={{
                         backgroundColor: "#dddddd",
                         borderRadius: "5px",
                     }}
                 >
                     <div
-                        className={styles2["form--group"]}
+                        className={styles["form--group"]}
                         style={{
                             width: "auto",
                             margin: "0",
@@ -671,12 +668,12 @@ export default function GreyPurchase({ userDetails }) {
                             id="Amount"
                             required
                             readOnly
-                            className={styles2["form--input"]}
+                            className={styles["form--input"]}
                             style={{ width: "7.5vw", minWidth: "100px" }}
                         />
                     </div>
                     <div
-                        className={styles2["form--group"]}
+                        className={styles["form--group"]}
                         style={{
                             width: "auto",
                             margin: "0",
@@ -692,12 +689,12 @@ export default function GreyPurchase({ userDetails }) {
                             id="DiscountAmt"
                             value={formData.DiscountAmt}
                             readOnly
-                            className={styles2["form--input"]}
+                            className={styles["form--input"]}
                             style={{ width: "7.5vw", minWidth: "100px" }}
                         />
                     </div>
                     <div
-                        className={styles2["form--group"]}
+                        className={styles["form--group"]}
                         style={{
                             width: "auto",
                             margin: "0",
@@ -714,35 +711,36 @@ export default function GreyPurchase({ userDetails }) {
                             value={formData.Amount - formData.DiscountAmt}
                             readOnly
                             required
-                            className={styles2["form--input"]}
+                            className={styles["form--input"]}
                             style={{ width: "7.5vw", minWidth: "100px" }}
                         />
                     </div>
 
                     <div
-                        className={styles2["form--group"]}
+                        className={styles["form--group"]}
                         style={{ width: "auto", margin: "0 10px 0 0" }}
                     >
                         <input
                             type="submit"
                             value="Add to List"
-                            className={`${styles2["form--btn"]} ${styles2["form--add-btn"]}`}
+                            className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
                             style={{ width: "100px", minWidth: "100px" }}
                         />
                     </div>
                 </div>
 
                 {/* Row 4: Purchase list. */}
-                <div className={styles2["form--table"]}>
+                <div className={styles["form--table"]}>
                     <StickyTable
                         TableCol={purchasedListCol}
                         TableData={purchaseditems}
+                        style={{ maxHeight: "32.5vh" }}
                     />
                 </div>
 
                 {/* Row 5: Button group. */}
                 <div
-                    className={styles2["form--group"]}
+                    className={styles["form--group"]}
                     style={{
                         backgroundColor: "#edf2f4",
                         justifyContent: "center",
@@ -755,11 +753,12 @@ export default function GreyPurchase({ userDetails }) {
                     <button
                         onClick={onViewBillHandler}
                         type="button"
-                        className={`${styles2["form--btn"]} ${styles2["form--add-btn"]}`}
+                        className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
                         style={{
                             backgroundColor: "#2297be",
                             width: "150px",
                             minWidth: "150px",
+                            marginBottom: "0",
                         }}
                     >
                         View Purchases
@@ -770,11 +769,11 @@ export default function GreyPurchase({ userDetails }) {
                         disabled
                         placeholder="Total Amount"
                         value={totalamount > 0 ? totalamount : "Final Amount"}
-                        className={styles2["form--input"]}
+                        className={styles["form--input"]}
                         style={{
                             width: "150px",
                             minWidth: "150px",
-                            margin: "10px 15px 10px 15px",
+                            margin: "10px 15px 0 15px",
                         }}
                     />
 
@@ -782,10 +781,11 @@ export default function GreyPurchase({ userDetails }) {
                         disabled={purchaseditems.length > 0 ? false : true}
                         type="button"
                         onClick={onMainSubmit}
-                        className={`${styles2["form--btn"]} ${styles2["form--add-btn"]}`}
+                        className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
                         style={{
                             width: "150px",
                             minWidth: "150px",
+                            marginBottom: "0",
                         }}
                     >
                         Save Bill
@@ -811,7 +811,7 @@ export default function GreyPurchase({ userDetails }) {
             <Modal open={isItemModalOpen} onClose={closeItemModal}>
                 <h2 style={{ marginBottom: "25px" }}>Add Item</h2>
                 <form
-                    className={styles2["form"]}
+                    className={styles["form"]}
                     style={{ padding: "0", flexDirection: "row" }}
                     onSubmit={onItemAdd}
                 >
@@ -820,12 +820,12 @@ export default function GreyPurchase({ userDetails }) {
                         required
                         value={newItemName}
                         onChange={(e) => setNewItemName(e.target.value)}
-                        className={styles2["form--input"]}
+                        className={styles["form--input"]}
                         style={{ width: "15vw", minWidth: "200px" }}
                         placeholder="Item Name"
                     />
                     <button
-                        className={`${styles2["form--btn"]} ${styles2["form--add-btn"]}`}
+                        className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
                         style={{
                             width: "100px",
                             minWidth: "100px",
