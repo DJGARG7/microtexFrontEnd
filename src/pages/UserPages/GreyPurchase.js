@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import "react-widgets/styles.css";
 import "../../styles/Greypurchase.css";
 import Modal from "../../components/Reuse_components/Modal";

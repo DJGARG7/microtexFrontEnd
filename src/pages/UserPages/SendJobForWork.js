@@ -15,9 +15,6 @@ if (localStorage.getItem("userDetails") != null)
     localStorage.getItem("userDetails")
   ).userID;
 Axios.defaults.withCredentials = true;
-const usrinstance = Axios.create({
-  baseURL: "http://localhost:3005/purchases/",
-});
 const accinstance = Axios.create({
   baseURL: "http://localhost:3003/accountMaster",
 });
@@ -202,7 +199,6 @@ function SendJobForWork() {
   /*- - - - - - - - - - - - - - - - - - - - - - Input change function  - - - - - - - - - - - - - - - - - - - - */
 
   const onChallanChnageHandler = async (e) => {
-    let res;
     let value = e.target.value;
     const name = e.target.name;
 
@@ -216,10 +212,7 @@ function SendJobForWork() {
     }
 
     // sanity check to convert integer entered to integer
-    if (
-      !Number.isNaN(parseFloat(value)) &&
-      name !== "challanDate"
-    ) {
+    if (!Number.isNaN(parseFloat(value)) && name !== "challanDate") {
       value = parseFloat(value);
     }
     setchallandetails({
@@ -227,8 +220,6 @@ function SendJobForWork() {
       [name]: value,
     });
   };
-
-
 
   const onitemChangeHandler = async (e) => {
     let res;
@@ -242,7 +233,7 @@ function SendJobForWork() {
           res = await jobinstance.get(
             `/getdistinctitems/${value[0]}/${value[1]}/${value[2]}`
           );
-          console.log("rgrgrg")
+          console.log("rgrgrg");
           setdistinctitemlist(res.data);
         } else {
           setdistinctitemlist([]);
@@ -268,15 +259,9 @@ function SendJobForWork() {
       });
     }
 
-
-    if (
-      !Number.isNaN(parseFloat(value)) &&
-      name !== "ItemFrom"
-    ) {
+    if (!Number.isNaN(parseFloat(value)) && name !== "ItemFrom") {
       value = parseFloat(value);
     }
-
-
 
     setitemdetails({
       ...itemdetials,

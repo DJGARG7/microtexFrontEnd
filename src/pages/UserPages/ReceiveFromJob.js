@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styles from "../../styles/SendJob.module.css";
-import Modal from "../../components/Reuse_components/Modal";
 import StickyTable from "../../components/Reuse_components/Table/StickyTable";
 
 import Axios from "axios";
@@ -152,7 +151,9 @@ function ReceiveFromJob() {
     (async () => {
       try {
         const res = await accinstance.get("Creditors for job");
+
         setAccntList(res.data);
+
       } catch (e) {
         console.log(e.response.data);
       }
@@ -238,7 +239,8 @@ function ReceiveFromJob() {
       ...state,
       challannumber,
       totalamount,
-      receivedItems
+      receivedItems,
+      accountID
     }
     try{
       const res = await jobinstance.post("/jobreceiveitems",data);
@@ -360,7 +362,7 @@ function ReceiveFromJob() {
             flexDirection: "row",
             marginTop: "50px",
             width: "100%",
-            justifyContent: "space-between",
+            justifyContent: "space-evenly",
           }}
         >
           {<button disabled = {!receivedItems.length} className={`${styles["add-btn"]} ${styles["btn"]}`} style={{width:"20%"}}>
@@ -373,13 +375,6 @@ function ReceiveFromJob() {
             type="button">
             Cancel
           </button>}
-          <button
-            type="button"
-            className={`${styles["add-btn"]} ${styles["btn"]}`}
-            style={{width:"20%"}}
-          >
-            View all received items
-          </button>
         </div>
       </form>
     </div>
