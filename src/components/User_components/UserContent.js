@@ -1,5 +1,5 @@
 import { Route } from "react-router-dom";
-import Greypurchase from "../../pages/UserPages/GreyPurchase";
+import GreyPurchase from "../../pages/UserPages/GreyPurchase";
 import GeneralPurchases from "../../pages/UserPages/GeneralPurchases";
 import SendToMill from "../../pages/UserPages/Mill/SendToMill";
 import ReceiveFromMill from "../../pages/UserPages/Mill/ReceiveFromMill";
@@ -14,28 +14,28 @@ import CashRecieve from "../../pages/UserPages/cashbooks/CashRecieve";
 const UserContent = ({ userDetails }) => {
     return (
         <>
+            {/* -------------------- Purchase -------------------- */}
             <Route path="/dashboard/transaction/purchase/grey" exact>
-                <Greypurchase userDetails={userDetails} />
+                <GreyPurchase userDetails={userDetails} />
             </Route>
             <Route path="/dashboard/transaction/purchase/general" exact>
                 <GeneralPurchases userDetails={userDetails} />
             </Route>
-            <Route path="/dashboard/transaction/" exact>
-                <h1>Transaction</h1>
-            </Route>
-            <Route path="/dashboard/transaction/mill" exact />
+            {/* --------------------   Mill   -------------------- */}
             <Route path="/dashboard/transaction/mill/send" exact>
                 <SendToMill userDetails={userDetails} />
             </Route>
             <Route path="/dashboard/transaction/mill/receive" exact>
                 <ReceiveFromMill userDetails={userDetails} />
             </Route>
+            {/* --------------------- Job -------------------- */}
             <Route path="/dashboard/transaction/job/send" exact>
                 <SendJobForWork userDetails={userDetails} />
             </Route>
             <Route path="/dashboard/transaction/job/receive" exact>
                 <ReceiveFromJob userDetails={userDetails} />
             </Route>
+            {/* --------------------   Sale   -------------------- */}
             <Route path="/dashboard/saleStock" exact>
                 <SaleStock userDetails={userDetails} />
             </Route>
@@ -48,16 +48,16 @@ const UserContent = ({ userDetails }) => {
             <Route path="/dashboard/displayBills" exact>
                 <SaleDisplay userDetails={userDetails} />
             </Route>
+            {/* -------------------- Cash Book -------------------- */}
             <Route path="/dashboard/transaction/cashbook/pay" exact>
                 <CashPay userDetails={userDetails} />
             </Route>
             <Route path="/dashboard/transaction/cashbook/recieve" exact>
                 <CashRecieve userDetails={userDetails} />
             </Route>
-            <Route path="/dashboard" exact>
-                <h2>Welcome to Microtex</h2>
-            </Route>
+            <Route path="/dashboard" exact />
         </>
     );
 };
+
 export default UserContent;

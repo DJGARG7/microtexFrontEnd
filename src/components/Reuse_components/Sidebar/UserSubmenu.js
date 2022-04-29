@@ -25,7 +25,7 @@ const SidebarLink = styled(NavLink)`
 `;
 
 const SidebarLabel = styled.span`
-    margin-left: 16px;
+    margin-left: 15px;
 `;
 
 const UserSubmenu = ({ item }) => {
@@ -44,7 +44,6 @@ const UserSubmenu = ({ item }) => {
                 }}
             >
                 <div>
-                    {item.icon}
                     <SidebarLabel>{item.title}</SidebarLabel>
                 </div>
                 <div style={{ marginRight: "10px" }}>
