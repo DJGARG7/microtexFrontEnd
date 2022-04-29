@@ -92,8 +92,8 @@ export const UserSideBarDataTest = [
                         path: "/dashboard/transaction/cashbook/pay",
                     },
                     {
-                        title: "Recieve",
-                        path: "/dashboard/transaction/cashbook/recieve",
+                        title: "Receive",
+                        path: "/dashboard/transaction/cashbook/receive",
                     },
                 ],
             },

@@ -10,7 +10,7 @@ import SaleChallan from "../../pages/UserPages/sales/SaleChallan";
 import SaleBilling from "../../pages/UserPages/sales/SaleBilling";
 import SaleDisplay from "../../pages/UserPages/sales/SaleDisplay";
 import CashPay from "../../pages/UserPages/cashbooks/CashPay";
-import CashRecieve from "../../pages/UserPages/cashbooks/CashRecieve";
+import CashReceive from "../../pages/UserPages/cashbooks/CashReceive";
 import BalanceSheet from "../../pages/UserPages/Reports/BalanceSheet/BalanceSheet";
 
 const UserContent = ({ userDetails }) => {
@@ -54,8 +54,8 @@ const UserContent = ({ userDetails }) => {
             <Route path="/dashboard/transaction/cashbook/pay" exact>
                 <CashPay userDetails={userDetails} />
             </Route>
-            <Route path="/dashboard/transaction/cashbook/recieve" exact>
-                <CashRecieve userDetails={userDetails} />
+            <Route path="/dashboard/transaction/cashbook/receive" exact>
+                <CashReceive userDetails={userDetails} />
             </Route>
             <Route path="/dashboard/reports/balance-sheet" exact>
                 <BalanceSheet userDetails={userDetails} />
