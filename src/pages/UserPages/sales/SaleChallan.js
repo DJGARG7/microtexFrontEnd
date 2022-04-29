@@ -253,7 +253,7 @@ export default function SaleChallan({ userDetails }) {
                         style={{
                             width: "20%",
                             minWidth: "200px",
-                            margin: "10px 15px 10px 15px",
+                            margin: "10px 0",
                         }}
                     >
                         <option value="" disabled hidden>
@@ -277,7 +277,7 @@ export default function SaleChallan({ userDetails }) {
                         style={{
                             width: "20%",
                             minWidth: "200px",
-                            margin: "10px 15px 10px 15px",
+                            margin: "10px 0",
                         }}
                     >
                         <option value="none" disabled hidden>
@@ -293,10 +293,7 @@ export default function SaleChallan({ userDetails }) {
                     </select>
                 </div>
 
-                <div
-                    className={styles["form--group"]}
-                    style={{ justifyContent: "space-around" }}
-                >
+                <div className={styles["form--group"]}>
                     <select
                         name="clothType"
                         value={clothType}
@@ -306,7 +303,7 @@ export default function SaleChallan({ userDetails }) {
                         style={{
                             width: "20%",
                             minWidth: "200px",
-                            margin: "10px 15px 10px 15px",
+                            margin: "10px 0",
                         }}
                     >
                         <option value="none" disabled hidden>
@@ -335,7 +332,6 @@ export default function SaleChallan({ userDetails }) {
                         style={{
                             width: "10vw",
                             minWidth: "150px",
-                            marginRight: "15px",
                         }}
                     />
 
@@ -350,7 +346,6 @@ export default function SaleChallan({ userDetails }) {
                         style={{
                             width: "10vw",
                             minWidth: "150px",
-                            marginRight: "15px",
                         }}
                     />
 

@@ -46,7 +46,7 @@ export default function SendToMillForm({ itemData, millsData }) {
             suppliersToast = toast.loading("Fetching suppliers...", toastStyle);
 
             const res = await axios.get(
-                `http://localhost:3005/purchases/suppliers/${selectedGrey}`
+                `http://localhost:3005/mill/suppliers/${selectedGrey}`
             );
 
             setSuppliers(res.data);

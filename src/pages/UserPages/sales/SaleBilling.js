@@ -42,8 +42,8 @@ export default function SaleBilling({ userDetails }) {
             const res = await Axios.get(
                 `http://localhost:3005/sales/sales_order/0`
             );
-            if(res.data.length == 0){
-                toastSuccess("No pending challans")
+            if (res.data.length == 0) {
+                toastSuccess("No pending challans");
             }
             setSalesList(res.data);
             setIsSalesLoading(false);
@@ -240,6 +240,7 @@ export default function SaleBilling({ userDetails }) {
                     <StickyTable
                         TableCol={TableColData}
                         TableData={salesList}
+                        style={{ maxWidth: "35vw", maxHeight: "50vh" }}
                     ></StickyTable>
                 </div>
 
@@ -247,6 +248,7 @@ export default function SaleBilling({ userDetails }) {
                     <StickyTable
                         TableCol={TableColData1}
                         TableData={salesDetailList}
+                        style={{ maxWidth: "35vw", maxHeight: "70vh" }}
                     ></StickyTable>
                 </div>
             </div>
