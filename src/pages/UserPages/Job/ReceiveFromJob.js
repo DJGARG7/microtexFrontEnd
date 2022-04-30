@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "../../../styles/SendJob.module.css";
 import Modal from "../../../components/Reuse_components/Modal";
 import StickyTable from "../../../components/Reuse_components/Table/StickyTable";
-
+import ReactLoading from "react-loading";
 import Axios from "axios";
 import {
     toastError,
@@ -31,7 +31,7 @@ function convertDate(inputFormat) {
 
 const date = convertDate(new Date());
 
-function ReceiveFromJob() {
+function ReceiveFromJob({ userDetails }) {
     const inventoryCol = [
         {
             Header: "Action",
@@ -146,18 +146,42 @@ function ReceiveFromJob() {
     const [sentItems, setsentItems] = useState([]); // list of items fetched from inventory
     const [receivedItems, setreceivedItems] = useState([]); // used to populate the final table in the page
 
+    // Authorization state.
+    const [isAllowed, setIsAllowed] = useState(false);
+
+    // Loading states.
+    const [isAllowedLoading, setIsAllowedLoading] = useState(true);
+    const [isAccountsLoading, setIsAccountsLoading] = useState(true);
+
     /*- - - - - - - - - - - - - - - - - - - - - - Use states - - - - - - - - - - - - - - - - - - - - */
+
+    const checkPermission = async () => {
+        try {
+            const res = await Axios.get(
+                `http://localhost:3002/permissions/${userDetails.uuid}/9`
+            );
+
+            setIsAllowed(res.data);
+            setIsAllowedLoading(false);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const fetchAccounts = async () => {
+        try {
+            const res = await accinstance.get("Creditors for job");
+            setAccntList(res.data);
+            setIsAccountsLoading(false);
+        } catch (e) {
+            console.log(e.response.data);
+        }
+    };
 
     //useEffect to fetch account names
     useEffect(() => {
-        (async () => {
-            try {
-                const res = await accinstance.get("Creditors for job");
-                setAccntList(res.data);
-            } catch (e) {
-                console.log(e.response.data);
-            }
-        })();
+        checkPermission();
+        fetchAccounts();
     }, []);
 
     /*- - - - - - - - - - - - - - - - - - - - - - Input change function  - - - - - - - - - - - - - - - - - - - - */
@@ -251,6 +275,31 @@ function ReceiveFromJob() {
             // toastError(e);
         }
     };
+
+    if (isAllowedLoading || isAccountsLoading) {
+        return (
+            <div
+                style={{
+                    marginTop: "10vh",
+                }}
+            >
+                <ReactLoading type="bubbles" color="#212121" />
+            </div>
+        );
+    }
+
+    if (!isAllowed) {
+        return (
+            <div
+                style={{
+                    marginTop: "10vh",
+                }}
+            >
+                <strong>You are not allowed access to this area.</strong>
+            </div>
+        );
+    }
+
     return (
         <div className={styles["main"]}>
             <form onSubmit={onFormSubmit} className={styles["form"]}>

@@ -216,30 +216,6 @@ function GeneralPurchases({ userDetails }) {
         fetchAccounts();
     }, []);
 
-    if (isAllowedLoading || isAccountsLoading) {
-        return (
-            <div
-                style={{
-                    marginTop: "10vh",
-                }}
-            >
-                <ReactLoading type="bubbles" color="#212121" />
-            </div>
-        );
-    }
-
-    if (!isAllowed) {
-        return (
-            <div
-                style={{
-                    marginTop: "10vh",
-                }}
-            >
-                <strong>You are not allowed access to this area.</strong>
-            </div>
-        );
-    }
-
     const onFormSubmit = async (e) => {
         e.preventDefault();
         const data = {
@@ -285,6 +261,31 @@ function GeneralPurchases({ userDetails }) {
         }
         setEditmode(false);
     };
+
+    if (isAllowedLoading || isAccountsLoading) {
+        return (
+            <div
+                style={{
+                    marginTop: "10vh",
+                }}
+            >
+                <ReactLoading type="bubbles" color="#212121" />
+            </div>
+        );
+    }
+
+    if (!isAllowed) {
+        return (
+            <div
+                style={{
+                    marginTop: "10vh",
+                }}
+            >
+                <strong>You are not allowed access to this area.</strong>
+            </div>
+        );
+    }
+
     return (
         <div className={styles2["main"]}>
             <h2>General Purchase</h2>
@@ -339,7 +340,9 @@ function GeneralPurchases({ userDetails }) {
                             margin: "10px 0",
                         }}
                     >
-                        <option value="">Select account...</option>
+                        <option value="" disabled hidden>
+                            Select account...
+                        </option>
                         {accntlist.map((obj, index) => {
                             return (
                                 <option
