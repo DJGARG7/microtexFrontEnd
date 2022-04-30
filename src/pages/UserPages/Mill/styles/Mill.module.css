@@ -162,6 +162,7 @@
 
     width: 100%;
     overflow: auto;
+    transition: 350ms;
 }
 
 .grid--column {

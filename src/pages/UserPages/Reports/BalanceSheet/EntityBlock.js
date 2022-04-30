@@ -31,10 +31,13 @@ export default function EntityBlock({ data }) {
         alignSelf: "flex-end",
     };
 
+    let sum = 0.0;
+
     return (
         <div style={style_main}>
             <div style={style_heading}>{data.heading}</div>
             {data.subdata.map((row) => {
+                sum += row.value;
                 return (
                     <div style={style_row}>
                         <div>{row.name}</div>
@@ -43,7 +46,7 @@ export default function EntityBlock({ data }) {
                 );
             })}
             <hr style={style_hr} />
-            <div style={style_total}>{data.total}</div>
+            <div style={style_total}>{sum}</div>
         </div>
     );
 }
