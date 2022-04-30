@@ -4,29 +4,27 @@ import styles from "../../../styles/SendJob.module.css";
 import Modal from "../../../components/Reuse_components/Modal";
 import StickyTable from "../../../components/Reuse_components/Table/StickyTable";
 import styles2 from "../Mill/styles/Mill.module.css";
-
-import Axios from "axios";
+import ReactLoading from "react-loading";
+import axios from "axios";
 import {
     toastError,
     toastSuccess,
 } from "../../../components/Reuse_components/toast";
 
-if (localStorage.getItem("userDetails") != null)
-    Axios.defaults.headers.common["userID"] = JSON.parse(
-        localStorage.getItem("userDetails")
-    ).userID;
-Axios.defaults.withCredentials = true;
-const usrinstance = Axios.create({
-    baseURL: "http://localhost:3005/purchases/",
-});
-const accinstance = Axios.create({
+// axios default configuration to include cookie and user ID with every request.
+axios.defaults.withCredentials = true;
+axios.defaults.headers.common["userID"] = localStorage.getItem("userDetails")
+    ? JSON.parse(localStorage.getItem("userDetails")).userID
+    : "";
+
+const accounts = axios.create({
     baseURL: "http://localhost:3003/accountMaster",
 });
-const jobinstance = Axios.create({
+const jobinstance = axios.create({
     baseURL: "http://localhost:3005/job/",
 });
 
-function SendJobForWork() {
+function SendJobForWork({ userDetails }) {
     function convertDate(inputFormat) {
         function pad(s) {
             return s < 10 ? "0" + s : s;
@@ -174,17 +172,40 @@ function SendJobForWork() {
     const [onViewJobItemModal, setOnViewJobItemModal] = useState(false); // controls the view all items modal
     const [inventoryID, setinventoryID] = useState();
     /*- - - - - - - - - - - - - - - - - - - - - - Use states - - - - - - - - - - - - - - - - - - - - */
+    // Authorization state.
+    const [isAllowed, setIsAllowed] = useState(false);
+
+    // Loading states.
+    const [isAllowedLoading, setIsAllowedLoading] = useState(true);
+    const [isAccountsLoading, setIsAccountsLoading] = useState(true);
+
+    const checkPermission = async () => {
+        try {
+            const res = await axios.get(
+                `http://localhost:3002/permissions/${userDetails.uuid}/8`
+            );
+
+            setIsAllowed(res.data);
+            setIsAllowedLoading(false);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const fetchAccounts = async () => {
+        try {
+            const res = await accounts.get("Creditors for job");
+            setAccntList(res.data);
+            setIsAccountsLoading(false);
+        } catch (e) {
+            console.log(e.response.data);
+        }
+    };
 
     //useEffect to fetch account names
     useEffect(() => {
-        (async () => {
-            try {
-                const res = await accinstance.get("Creditors for job");
-                setAccntList(res.data);
-            } catch (e) {
-                console.log(e.response.data);
-            }
-        })();
+        checkPermission();
+        fetchAccounts();
     }, []);
 
     const clearall = () => {
@@ -350,6 +371,30 @@ function SendJobForWork() {
         }
     };
 
+    if (isAllowedLoading || isAccountsLoading) {
+        return (
+            <div
+                style={{
+                    marginTop: "10vh",
+                }}
+            >
+                <ReactLoading type="bubbles" color="#212121" />
+            </div>
+        );
+    }
+
+    if (!isAllowed) {
+        return (
+            <div
+                style={{
+                    marginTop: "10vh",
+                }}
+            >
+                <strong>You are not allowed access to this area.</strong>
+            </div>
+        );
+    }
+
     return (
         <div className={styles2["main"]}>
             <h2>Send For Job</h2>
@@ -403,7 +448,7 @@ function SendJobForWork() {
                             margin: "10px 0",
                         }}
                     >
-                        <option value="" disabled>
+                        <option value="" disabled hidden>
                             Select account...
                         </option>
                         {accntlist.map((obj, index) => {
@@ -432,7 +477,9 @@ function SendJobForWork() {
                             margin: "10px 0",
                         }}
                     >
-                        <option value="">Select job type...</option>
+                        <option value="" disabled hidden>
+                            Select job type...
+                        </option>
                         <option value="Embroidery">Embroidery Work</option>
                         <option value="Lace">Lace Work</option>
                         <option value="Stone">Stone Work</option>
@@ -452,7 +499,7 @@ function SendJobForWork() {
                             margin: "10px 0",
                         }}
                     >
-                        <option value="" disabled>
+                        <option value="" disabled hidden>
                             Select item from...
                         </option>
                         <option value="000">Mill Finished Stock</option>
@@ -482,7 +529,9 @@ function SendJobForWork() {
                             margin: "10px 0",
                         }}
                     >
-                        <option value="">Item Name</option>
+                        <option value="" hidden>
+                            Item Name
+                        </option>
                         {distinctitemlist.map((obj, index) => {
                             return (
                                 <option
