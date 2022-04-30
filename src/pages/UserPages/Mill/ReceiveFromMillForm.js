@@ -341,13 +341,18 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                         type="number"
                         value={
                             typeof selectedChallan.sentMeters === "undefined"
-                                ? 0
+                                ? ""
                                 : selectedChallan.sentMeters
                         }
                         id="sentMeters"
                         readOnly
                         className={styles["form--input"]}
                         style={{ width: "5vw", minWidth: "70px" }}
+                        disabled={
+                            typeof selectedChallan.sentTaka === "undefined"
+                                ? true
+                                : false
+                        }
                     />
                 </div>
 
@@ -486,6 +491,11 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                 <button
                     className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
                     style={{ margin: "0 10px 0 1vw", alignSelf: "center" }}
+                    disabled={
+                        typeof selectedChallan.sentTaka === "undefined"
+                            ? true
+                            : false
+                    }
                 >
                     Receive
                 </button>

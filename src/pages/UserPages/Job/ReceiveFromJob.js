@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import styles from "../../../styles/SendJob.module.css";
-import Modal from "../../../components/Reuse_components/Modal";
 import StickyTable from "../../../components/Reuse_components/Table/StickyTable";
-import styles2 from "../Mill/styles/Mill.module.css";
+import styles from "../Mill/styles/Mill.module.css";
 import ReactLoading from "react-loading";
 import axios from "axios";
 import {
@@ -40,7 +38,7 @@ function ReceiveFromJob({ userDetails }) {
             accessor: (str) => "delete",
             Cell: (tableProps) => (
                 <button
-                    className={`${styles2["form--btn"]} ${styles2["form--add-btn"]}`}
+                    className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
                     style={{
                         cursor: "pointer",
                         height: "auto",
@@ -125,6 +123,7 @@ function ReceiveFromJob({ userDetails }) {
     const [state, setState] = useState({
         accntname: "",
         billdate: date,
+        ItemFrom: "",
     });
 
     const [totalamount, settotalamount] = useState("");
@@ -289,11 +288,11 @@ function ReceiveFromJob({ userDetails }) {
     }
 
     return (
-        <div className={styles2["main"]}>
+        <div className={styles["main"]}>
             <h2>Receive from Job</h2>
-            <form onSubmit={onFormSubmit} className={styles2["form"]}>
+            <form onSubmit={onFormSubmit} className={styles["form"]}>
                 <div
-                    className={styles2["form--group"]}
+                    className={styles["form--group"]}
                     style={{ justifyContent: "space-around" }}
                 >
                     <select
@@ -302,7 +301,7 @@ function ReceiveFromJob({ userDetails }) {
                         required
                         onChange={onChangeHandler}
                         value={state.accntname}
-                        className={`${styles2["form--input"]} ${styles2["form--input-select"]}`}
+                        className={`${styles["form--input"]} ${styles["form--input-select"]}`}
                         style={{
                             width: "25%",
                             minWidth: "200px",
@@ -329,7 +328,7 @@ function ReceiveFromJob({ userDetails }) {
                         required
                         onChange={onitemfromChangeHandler}
                         value={state.ItemFrom}
-                        className={`${styles2["form--input"]} ${styles2["form--input-select"]}`}
+                        className={`${styles["form--input"]} ${styles["form--input-select"]}`}
                         style={{
                             width: "25%",
                             minWidth: "200px",
@@ -354,14 +353,14 @@ function ReceiveFromJob({ userDetails }) {
                         value={state.billdate}
                         id="billdate"
                         name="billdate"
-                        className={styles2["form--input"]}
+                        className={styles["form--input"]}
                         style={{ width: "150px", minWidth: "150px" }}
                         required
                     />
                 </div>
 
                 <div
-                    className={styles2["form--table"]}
+                    className={styles["form--table"]}
                     style={{ padding: "20px", overflow: "auto" }}
                 >
                     <StickyTable
@@ -375,7 +374,7 @@ function ReceiveFromJob({ userDetails }) {
                 </div>
 
                 <div
-                    className={styles2["form--group"]}
+                    className={styles["form--group"]}
                     style={{ justifyContent: "center" }}
                 >
                     <div
@@ -393,7 +392,7 @@ function ReceiveFromJob({ userDetails }) {
                             placeholder="?"
                             type="number"
                             value={challannumber}
-                            className={styles2["form--input"]}
+                            className={styles["form--input"]}
                             style={{
                                 width: "250px",
                                 minWidth: "250px",
@@ -405,7 +404,7 @@ function ReceiveFromJob({ userDetails }) {
                             placeholder="?"
                             type="number"
                             value={totalamount}
-                            className={styles2["form--input"]}
+                            className={styles["form--input"]}
                             style={{
                                 width: "250px",
                                 minWidth: "250px",
@@ -432,7 +431,7 @@ function ReceiveFromJob({ userDetails }) {
                 </div>
 
                 <div
-                    className={styles2["form--group"]}
+                    className={styles["form--group"]}
                     style={{
                         justifyContent: "center",
                         marginTop: "auto",
@@ -444,7 +443,7 @@ function ReceiveFromJob({ userDetails }) {
                     {
                         <button
                             disabled={!receivedItems.length}
-                            className={`${styles2["form--add-btn"]} ${styles2["form--btn"]}`}
+                            className={`${styles["form--add-btn"]} ${styles["form--btn"]}`}
                             style={{ width: "150px", margin: "10px 0.5vw" }}
                         >
                             Receive
@@ -453,7 +452,7 @@ function ReceiveFromJob({ userDetails }) {
                     {
                         <button
                             disabled={!receivedItems.length}
-                            className={`${styles2["form--del-btn"]} ${styles2["form--btn"]}`}
+                            className={`${styles["form--del-btn"]} ${styles["form--btn"]}`}
                             style={{ width: "150px", margin: "10px 0.5vw" }}
                             onClick={() => {
                                 setchallannumber("");
@@ -467,7 +466,7 @@ function ReceiveFromJob({ userDetails }) {
                     }
                     <button
                         type="button"
-                        className={`${styles2["form--edit-btn"]} ${styles2["form--btn"]}`}
+                        className={`${styles["form--edit-btn"]} ${styles["form--btn"]}`}
                         style={{
                             backgroundColor: "#2297be",
                             width: "150px",

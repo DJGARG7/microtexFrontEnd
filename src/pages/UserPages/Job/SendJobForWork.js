@@ -1,9 +1,8 @@
 /* eslint-disable eqeqeq */
 import React, { useEffect, useState } from "react";
-import styles from "../../../styles/SendJob.module.css";
 import Modal from "../../../components/Reuse_components/Modal";
 import StickyTable from "../../../components/Reuse_components/Table/StickyTable";
-import styles2 from "../Mill/styles/Mill.module.css";
+import styles from "../Mill/styles/Mill.module.css";
 import ReactLoading from "react-loading";
 import axios from "axios";
 import {
@@ -40,42 +39,34 @@ function SendJobForWork({ userDetails }) {
             Header: "Action",
             accessor: (str) => "delete",
             Cell: (tableProps) => (
-                <div
+                <button
+                    className={`${styles["form--btn"]} ${styles["form--del-btn"]}`}
                     style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "center",
+                        cursor: "pointer",
+                        height: "auto",
+                        padding: "2.5 0",
+                        margin: "0",
+                        fontSize: "0.9rem",
+                        textTransform: "uppercase",
+                        fontWeight: "600",
+                    }}
+                    type="button"
+                    onClick={() => {
+                        settotalpcspresent((preamount) => {
+                            return parseInt(
+                                preamount +
+                                    sendjobitemslist[tableProps.row.index]
+                                        .pieces
+                            );
+                        });
+                        setsendjobitemlist((prestate) => {
+                            prestate.splice(tableProps.row.index, 1);
+                            return [...prestate];
+                        });
                     }}
                 >
-                    <button
-                        className={`${styles["form--btn"]} ${styles["form--del-btn"]}`}
-                        style={{
-                            cursor: "pointer",
-                            height: "auto",
-                            padding: "2.5 0",
-                            margin: "0",
-                            fontSize: "0.9rem",
-                            textTransform: "uppercase",
-                            fontWeight: "600",
-                        }}
-                        type="button"
-                        onClick={() => {
-                            settotalpcspresent((preamount) => {
-                                return parseInt(
-                                    preamount +
-                                        sendjobitemslist[tableProps.row.index]
-                                            .pieces
-                                );
-                            });
-                            setsendjobitemlist((prestate) => {
-                                prestate.splice(tableProps.row.index, 1);
-                                return [...prestate];
-                            });
-                        }}
-                    >
-                        Delete
-                    </button>
-                </div>
+                    Delete
+                </button>
             ),
             sticky: "left",
             Filter: "",
@@ -396,12 +387,12 @@ function SendJobForWork({ userDetails }) {
     }
 
     return (
-        <div className={styles2["main"]}>
+        <div className={styles["main"]}>
             <h2>Send For Job</h2>
-            <form onSubmit={onFormSubmit} className={styles2["form"]}>
-                <div className={styles2["form--group"]}>
+            <form onSubmit={onFormSubmit} className={styles["form"]}>
+                <div className={styles["form--group"]}>
                     <div
-                        className={styles2["form--group"]}
+                        className={styles["form--group"]}
                         style={{ width: "auto", margin: "0" }}
                     >
                         <input
@@ -412,7 +403,7 @@ function SendJobForWork({ userDetails }) {
                             disabled={sendjobitemslist.length}
                             onChange={onChallanChnageHandler}
                             placeholder="Bill Number"
-                            className={styles2["form--input"]}
+                            className={styles["form--input"]}
                             style={{
                                 width: "10vw",
                                 minWidth: "150px",
@@ -429,7 +420,7 @@ function SendJobForWork({ userDetails }) {
                             onFocus={(e) => (e.target.type = "date")}
                             onBlur={(e) => (e.target.type = "text")}
                             placeholder="Bill Date"
-                            className={styles2["form--input"]}
+                            className={styles["form--input"]}
                             style={{ width: "150px", minWidth: "150px" }}
                             required
                         />
@@ -441,7 +432,7 @@ function SendJobForWork({ userDetails }) {
                         name="accntname"
                         onChange={onChallanChnageHandler}
                         value={challandetails.accntname}
-                        className={`${styles2["form--input"]} ${styles2["form--input-select"]}`}
+                        className={`${styles["form--input"]} ${styles["form--input-select"]}`}
                         style={{
                             width: "20vw",
                             minWidth: "250px",
@@ -470,7 +461,7 @@ function SendJobForWork({ userDetails }) {
                         disabled={sendjobitemslist.length}
                         onChange={onChallanChnageHandler}
                         value={challandetails.jobType}
-                        className={`${styles2["form--input"]} ${styles2["form--input-select"]}`}
+                        className={`${styles["form--input"]} ${styles["form--input-select"]}`}
                         style={{
                             width: "20vw",
                             minWidth: "250px",
@@ -486,13 +477,13 @@ function SendJobForWork({ userDetails }) {
                     </select>
                 </div>
 
-                <div className={styles2["form--group"]}>
+                <div className={styles["form--group"]}>
                     <select
                         name="ItemFrom"
                         required
                         onChange={onitemChangeHandler}
                         value={itemdetials.ItemFrom}
-                        className={`${styles2["form--input"]} ${styles2["form--input-select"]}`}
+                        className={`${styles["form--input"]} ${styles["form--input-select"]}`}
                         style={{
                             width: "17.5vw",
                             minWidth: "275px",
@@ -522,15 +513,15 @@ function SendJobForWork({ userDetails }) {
                         required
                         onChange={onitemChangeHandler}
                         value={itemdetials.ItemName}
-                        className={`${styles2["form--input"]} ${styles2["form--input-select"]}`}
+                        className={`${styles["form--input"]} ${styles["form--input-select"]}`}
                         style={{
                             width: "15vw",
                             minWidth: "200px",
                             margin: "10px 0",
                         }}
                     >
-                        <option value="" hidden>
-                            Item Name
+                        <option value="" disabled hidden>
+                            Seelct item...
                         </option>
                         {distinctitemlist.map((obj, index) => {
                             return (
@@ -553,7 +544,7 @@ function SendJobForWork({ userDetails }) {
                         }}
                     >
                         <label
-                            htmlFor="selectedTaka"
+                            htmlFor="pieces"
                             style={{ margin: "0 10px 0 10px" }}
                         >
                             Send
@@ -567,7 +558,7 @@ function SendJobForWork({ userDetails }) {
                             max={totalpcspresent}
                             onChange={onitemChangeHandler}
                             value={itemdetials.pieces}
-                            className={styles2["form--input"]}
+                            className={styles["form--input"]}
                             style={{
                                 width: "5vw",
                                 minWidth: "75px",
@@ -586,7 +577,7 @@ function SendJobForWork({ userDetails }) {
                             value={totalpcspresent}
                             placeholder="?"
                             readOnly
-                            className={styles2["form--input"]}
+                            className={styles["form--input"]}
                             style={{
                                 width: "5vw",
                                 minWidth: "75px",
@@ -601,14 +592,14 @@ function SendJobForWork({ userDetails }) {
                         required
                         onChange={onitemChangeHandler}
                         value={itemdetials.jobRate}
-                        className={styles2["form--input"]}
+                        className={styles["form--input"]}
                         style={{
                             width: "5vw",
                             minWidth: "75px",
                         }}
                     />
                     <button
-                        className={`${styles2["form--btn"]} ${styles2["form--add-btn"]}`}
+                        className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
                         style={{
                             width: "100px",
                             minWidth: "100px",
@@ -624,14 +615,14 @@ function SendJobForWork({ userDetails }) {
                     {/*         
             <div>
               <button
-                className={`${styles["edit-btn"]} ${styles["btn"]}`}
+                className={`${styles["form--edit-btn"]} ${styles["form--btn"]}`}
                 type="button"
                 onClick={""}
               >
                 Edit
               </button>
               <button
-                className={`${styles["edit-btn"]} ${styles["btn"]}`}
+                className={`${styles["form--edit-btn"]} ${styles["form--btn"]}`}
                 type="button"
                 onClick={""}
               >
@@ -640,7 +631,7 @@ function SendJobForWork({ userDetails }) {
             </div> */}
                 </div>
 
-                <div className={styles2["form--table"]}>
+                <div className={styles["form--table"]}>
                     <StickyTable
                         TableCol={purchasedCol}
                         TableData={sendjobitemslist}
@@ -652,7 +643,7 @@ function SendJobForWork({ userDetails }) {
                 </div>
 
                 <div
-                    className={styles2["form--group"]}
+                    className={styles["form--group"]}
                     style={{
                         justifyContent: "center",
                         marginTop: "auto",
@@ -663,7 +654,7 @@ function SendJobForWork({ userDetails }) {
                 >
                     <button
                         type="button"
-                        className={`${styles2["form--btn"]} ${styles2["form--add-btn"]}`}
+                        className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
                         style={{
                             width: "125px",
                             minWidth: "125px",
@@ -677,7 +668,7 @@ function SendJobForWork({ userDetails }) {
                     </button>
                     <button
                         type="button"
-                        className={`${styles2["form--btn"]} ${styles2["form--add-btn"]}`}
+                        className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
                         style={{
                             width: "125px",
                             minWidth: "125px",
@@ -697,7 +688,7 @@ function SendJobForWork({ userDetails }) {
                 onClose={() => setOnViewJobItemModal(false)}
             >
                 <h2>Sent Items</h2>
-                <div className={styles2["form--table"]}>
+                <div className={styles["form--table"]}>
                     <StickyTable
                         TableData={viewItemData}
                         TableCol={viewallitemscoldata}
