@@ -139,6 +139,7 @@ function ReceiveFromJob({ userDetails }) {
         accntname: "",
         billdate: date,
     });
+
     const [totalamount, settotalamount] = useState("");
     const [challannumber, setchallannumber] = useState("");
     const [accntlist, setAccntList] = useState([]);

@@ -12,12 +12,44 @@ const dummyData = {
             ],
         },
         {
+            heading: "Capital Account",
+            total: 1000,
+            subdata: [
+                { name: "prop1", value: 500 },
+                { name: "prop2", value: 500 },
+            ],
+        },
+        {
+            heading: "Capital Account",
+            total: 1000,
+            subdata: [
+                { name: "prop1", value: 500 },
+                { name: "prop2", value: 500 },
+            ],
+        },
+        {
+            heading: "Capital Account",
+            total: 1000,
+            subdata: [
+                { name: "prop1", value: 500 },
+                { name: "prop2", value: 500 },
+            ],
+        },
+        {
             heading: "Sundry Creditors",
             total: 300,
             subdata: [
                 { name: "buyer1", value: 100 },
                 { name: "buyer2", value: 100 },
                 { name: "buyer2", value: 100 },
+            ],
+        },
+        {
+            heading: "Capital Account",
+            total: 1000,
+            subdata: [
+                { name: "prop1", value: 500 },
+                { name: "prop2", value: 500 },
             ],
         },
     ],
@@ -34,6 +66,38 @@ const dummyData = {
                 { name: "seller1", value: 400 },
                 { name: "seller2", value: 200 },
                 { name: "seller2", value: 200 },
+            ],
+        },
+        {
+            heading: "Capital Account",
+            total: 1000,
+            subdata: [
+                { name: "prop1", value: 500 },
+                { name: "prop2", value: 500 },
+            ],
+        },
+        {
+            heading: "Capital Account",
+            total: 1000,
+            subdata: [
+                { name: "prop1", value: 500 },
+                { name: "prop2", value: 500 },
+            ],
+        },
+        {
+            heading: "Capital Account",
+            total: 1000,
+            subdata: [
+                { name: "prop1", value: 500 },
+                { name: "prop2", value: 500 },
+            ],
+        },
+        {
+            heading: "Capital Account",
+            total: 1000,
+            subdata: [
+                { name: "prop1", value: 500 },
+                { name: "prop2", value: 500 },
             ],
         },
     ],

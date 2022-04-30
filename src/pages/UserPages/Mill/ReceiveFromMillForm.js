@@ -99,11 +99,11 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
     const [selectedGrey, setSelectedGrey] = useState("DEFAULT");
     const [selectedMill, setSelectedMill] = useState("DEFAULT");
     const [selectedChallan, setSelectedChallan] = useState([]);
-    const [receivedMeters, setReceivedMeters] = useState(0);
-    const [millLoss, setMillLoss] = useState(0);
-    const [pieceLoss, setPieceLoss] = useState(0);
-    const [rate, setRate] = useState(0);
-    const [amount, setAmount] = useState(0);
+    const [receivedMeters, setReceivedMeters] = useState();
+    const [millLoss, setMillLoss] = useState();
+    const [pieceLoss, setPieceLoss] = useState();
+    const [rate, setRate] = useState();
+    const [amount, setAmount] = useState();
 
     // Fetch challan for mill & item from backend.
     const fetchChallan = async () => {
@@ -155,7 +155,7 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                     receivedMeters: parseInt(receivedMeters),
                     millLoss,
                     pieceLoss,
-                    rate: parseInt(rate),
+                    rate: parseFloat(rate),
 
                     // For INVENTORY.
                     itemName: itemData.filter(
@@ -171,11 +171,11 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
             setSelectedGrey("DEFAULT");
             setSelectedMill("DEFAULT");
             setSelectedChallan([]);
-            setReceivedMeters(0);
-            setMillLoss(0);
-            setPieceLoss(0);
-            setRate(0);
-            setAmount(0);
+            setReceivedMeters("");
+            setMillLoss("");
+            setPieceLoss("");
+            setRate("");
+            setAmount("");
         } catch (error) {
             console.log(error);
             toast.error(`Failed to receive: ${error.response.data}.`, {
@@ -445,6 +445,7 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                     </label>
                     <input
                         type="number"
+                        step=".01"
                         value={rate}
                         id="rate"
                         onChange={(e) => setRate(e.target.value)}

@@ -669,17 +669,18 @@ function SendJobForWork({ userDetails }) {
                             minWidth: "125px",
                             margin: "0 10px 0 10px",
                             alignSelf: "center",
+                            fontSize: "0.9rem",
                         }}
                         onClick={viewjobitems}
                     >
-                        View all items
+                        View sent items
                     </button>
                     <button
                         type="button"
                         className={`${styles2["form--btn"]} ${styles2["form--add-btn"]}`}
                         style={{
-                            width: "100px",
-                            minWidth: "100px",
+                            width: "125px",
+                            minWidth: "125px",
                             margin: "0 10px 0 10px",
                             alignSelf: "center",
                         }}
@@ -695,16 +696,18 @@ function SendJobForWork({ userDetails }) {
                 open={onViewJobItemModal}
                 onClose={() => setOnViewJobItemModal(false)}
             >
-                <h2>Job Items sent</h2>
-                <StickyTable
-                    TableData={viewItemData}
-                    TableCol={viewallitemscoldata}
-                    style={{
-                        maxWidth: "90vw",
-                        width: "100%",
-                        maxHeight: "90vh",
-                    }}
-                />
+                <h2>Sent Items</h2>
+                <div className={styles2["form--table"]}>
+                    <StickyTable
+                        TableData={viewItemData}
+                        TableCol={viewallitemscoldata}
+                        style={{
+                            maxWidth: "90vw",
+                            width: "100%",
+                            maxHeight: "90vh",
+                        }}
+                    />
+                </div>
             </Modal>
         </div>
     );
