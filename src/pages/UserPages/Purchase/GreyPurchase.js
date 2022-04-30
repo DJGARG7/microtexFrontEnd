@@ -753,7 +753,7 @@ export default function GreyPurchase({ userDetails }) {
                     <button
                         onClick={onViewBillHandler}
                         type="button"
-                        className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
+                        className={`${styles["form--btn"]} ${styles["form--edit-btn"]}`}
                         style={{
                             backgroundColor: "#2297be",
                             width: "150px",

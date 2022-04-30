@@ -146,6 +146,7 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                 {
                     // For MILL_CHALLAN.
                     challanNumber: selectedChallan.challanNumber,
+                    millID: selectedMill,
                     itemID: selectedChallan.itemID,
                     receiveDate,
                     amount,
@@ -178,7 +179,7 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
             setAmount("");
         } catch (error) {
             console.log(error);
-            toast.error(`Failed to receive: ${error.response.data}.`, {
+            toast.error(`${error.response.data}`, {
                 id: submitToast,
             });
         }
@@ -313,7 +314,6 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
             <div
                 className={styles["form--group"]}
                 style={{
-                    // display: "none",
                     backgroundColor: "#dddddd",
                     borderRadius: "7.5px",
                     marginTop: "auto",

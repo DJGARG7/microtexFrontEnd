@@ -2,22 +2,24 @@ import React, { useEffect, useState } from "react";
 import styles from "../../../styles/SendJob.module.css";
 import Modal from "../../../components/Reuse_components/Modal";
 import StickyTable from "../../../components/Reuse_components/Table/StickyTable";
+import styles2 from "../Mill/styles/Mill.module.css";
 import ReactLoading from "react-loading";
-import Axios from "axios";
+import axios from "axios";
 import {
     toastError,
     toastSuccess,
 } from "../../../components/Reuse_components/toast";
 
-if (localStorage.getItem("userDetails") != null)
-    Axios.defaults.headers.common["userID"] = JSON.parse(
-        localStorage.getItem("userDetails")
-    ).userID;
-Axios.defaults.withCredentials = true;
-const accinstance = Axios.create({
+// axios default configuration to include cookie and user ID with every request.
+axios.defaults.withCredentials = true;
+axios.defaults.headers.common["userID"] = localStorage.getItem("userDetails")
+    ? JSON.parse(localStorage.getItem("userDetails")).userID
+    : "";
+
+const accounts = axios.create({
     baseURL: "http://localhost:3003/accountMaster",
 });
-const jobinstance = Axios.create({
+const jobinstance = axios.create({
     baseURL: "http://localhost:3005/job/",
 });
 
@@ -37,66 +39,51 @@ function ReceiveFromJob({ userDetails }) {
             Header: "Action",
             accessor: (str) => "delete",
             Cell: (tableProps) => (
-                <div
+                <button
+                    className={`${styles2["form--btn"]} ${styles2["form--add-btn"]}`}
                     style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "center",
+                        cursor: "pointer",
+                        height: "auto",
+                        padding: "2.5 0",
+                        margin: "0",
+                        fontSize: "0.9rem",
+                        textTransform: "uppercase",
+                        fontWeight: "600",
                     }}
+                    type="button"
+                    onClick={() => onSelectClick(tableProps)}
                 >
-                    <button
-                        className={`${styles["form--btn"]} ${styles["form--del-btn"]}`}
-                        style={{
-                            cursor: "pointer",
-                            height: "auto",
-                            padding: "2.5 0",
-                            margin: "0",
-                            fontSize: "0.9rem",
-                            textTransform: "uppercase",
-                            fontWeight: "600",
-                        }}
-                        type="button"
-                        onClick={() => onSelectClick(tableProps)}
-                    >
-                        Select
-                    </button>
-                </div>
+                    Select
+                </button>
             ),
             sticky: "left",
             Filter: "",
-            // maxWidth: 100,
-            // minWidth: 100,
             width: 100,
         },
         {
-            Header: "Challan No",
+            Header: "Challan No.",
             accessor: "challanNo",
             Filter: "",
-            // width: "150px",
         },
         {
             Header: "Challan Date",
             accessor: "challanDate",
             Filter: "",
-            // width: "150px",
         },
         {
             Header: "Item Name",
             accessor: "itemName",
             Filter: "",
-            // width: "150px",
         },
         {
             Header: "Pieces",
             accessor: "pieces",
             Filter: "",
-            // width: "90px",
         },
         {
             Header: "Job Rate",
             accessor: "jobRate",
             Filter: "",
-            // width: "150px",
         },
     ];
 
@@ -158,7 +145,7 @@ function ReceiveFromJob({ userDetails }) {
 
     const checkPermission = async () => {
         try {
-            const res = await Axios.get(
+            const res = await axios.get(
                 `http://localhost:3002/permissions/${userDetails.uuid}/9`
             );
 
@@ -171,7 +158,7 @@ function ReceiveFromJob({ userDetails }) {
 
     const fetchAccounts = async () => {
         try {
-            const res = await accinstance.get("Creditors for job");
+            const res = await accounts.get("Creditors for job");
             setAccntList(res.data);
             setIsAccountsLoading(false);
         } catch (e) {
@@ -302,29 +289,29 @@ function ReceiveFromJob({ userDetails }) {
     }
 
     return (
-        <div className={styles["main"]}>
-            <form onSubmit={onFormSubmit} className={styles["form"]}>
-                <h2>Receive from Job</h2>
-                <div className={styles["input-section"]}>
-                    {/* <input
-            placeholder="Bill No"
-            type="number"
-            className={styles["input-text"]}
-            value={state.billno}
-            id="billno"
-            name="billno"
-            required
-            onChange={onChangeHandler}
-          /> */}
+        <div className={styles2["main"]}>
+            <h2>Receive from Job</h2>
+            <form onSubmit={onFormSubmit} className={styles2["form"]}>
+                <div
+                    className={styles2["form--group"]}
+                    style={{ justifyContent: "space-around" }}
+                >
                     <select
-                        className={styles["input-select"]}
                         id="accntname"
                         name="accntname"
                         required
                         onChange={onChangeHandler}
                         value={state.accntname}
+                        className={`${styles2["form--input"]} ${styles2["form--input-select"]}`}
+                        style={{
+                            width: "25%",
+                            minWidth: "200px",
+                            margin: "10px 0",
+                        }}
                     >
-                        <option value="">Account Names</option>
+                        <option value="" disabled hidden>
+                            Select account...
+                        </option>
                         {accntlist.map((obj, index) => {
                             return (
                                 <option
@@ -338,13 +325,20 @@ function ReceiveFromJob({ userDetails }) {
                         })}
                     </select>
                     <select
-                        className={styles["input-select"]}
                         name="ItemFrom"
                         required
                         onChange={onitemfromChangeHandler}
                         value={state.ItemFrom}
+                        className={`${styles2["form--input"]} ${styles2["form--input-select"]}`}
+                        style={{
+                            width: "25%",
+                            minWidth: "200px",
+                            margin: "10px 0",
+                        }}
                     >
-                        <option value="">Item From</option>
+                        <option value="" disabled hidden>
+                            Select item from...
+                        </option>
                         <option value="Embroidery">
                             Receive from Embroidery Work
                         </option>
@@ -352,18 +346,22 @@ function ReceiveFromJob({ userDetails }) {
                         <option value="Stone">Receive from Stone Work</option>
                     </select>
                     <input
-                        placeholder="Bill Date"
-                        type="Date"
-                        className={styles["input-text"]}
+                        type="text"
+                        onChange={onChangeHandler}
+                        onFocus={(e) => (e.target.type = "date")}
+                        onBlur={(e) => (e.target.type = "text")}
+                        placeholder="Receive Date"
                         value={state.billdate}
                         id="billdate"
                         name="billdate"
+                        className={styles2["form--input"]}
+                        style={{ width: "150px", minWidth: "150px" }}
                         required
-                        onChange={onChangeHandler}
-                    ></input>
+                    />
                 </div>
+
                 <div
-                    className={styles["form-table"]}
+                    className={styles2["form--table"]}
                     style={{ padding: "20px", overflow: "auto" }}
                 >
                     <StickyTable
@@ -372,58 +370,82 @@ function ReceiveFromJob({ userDetails }) {
                         style={{
                             maxWidth: "1023px",
                             maxHeight: "300px",
-                            border: "2.5px solid black",
-                            borderRadius: "5px",
-                            overflow: "auto",
                         }}
                     />
                 </div>
-                <div className={styles["input-section"]}>
-                    <input
-                        placeholder="Challan Number"
-                        type="number"
-                        className={styles["input-text"]}
-                        value={challannumber}
-                        disabled
-                    />
-                    <input
-                        placeholder="Total Amount"
-                        type="number"
-                        className={styles["input-text"]}
-                        value={totalamount}
-                        disabled
-                    />
-                </div>
+
                 <div
-                    className={styles["form-table"]}
-                    style={{ padding: "20px", overflow: "auto" }}
+                    className={styles2["form--group"]}
+                    style={{ justifyContent: "center" }}
                 >
+                    <div
+                        className={styles["form--group"]}
+                        style={{
+                            width: "auto",
+                            margin: "0",
+                            alignItems: "center",
+                        }}
+                    >
+                        <label htmlFor="Amount" style={{ margin: "0 1vw" }}>
+                            Selected Challan
+                        </label>
+                        <input
+                            placeholder="?"
+                            type="number"
+                            value={challannumber}
+                            className={styles2["form--input"]}
+                            style={{
+                                width: "250px",
+                                minWidth: "250px",
+                                marginRight: "1vw",
+                            }}
+                            readOnly
+                        />
+                        <input
+                            placeholder="?"
+                            type="number"
+                            value={totalamount}
+                            className={styles2["form--input"]}
+                            style={{
+                                width: "250px",
+                                minWidth: "250px",
+                                marginLeft: "1vw",
+                                textAlign: "right",
+                            }}
+                            readOnly
+                        />
+                        <label htmlFor="Amount" style={{ margin: "0 1vw" }}>
+                            Job Rate
+                        </label>
+                    </div>
+                </div>
+
+                <div className={styles["form--table"]}>
                     <StickyTable
                         TableCol={receivedCol}
                         TableData={receivedItems}
                         style={{
                             maxWidth: "1023px",
                             maxHeight: "300px",
-                            border: "2.5px solid black",
-                            borderRadius: "5px",
-                            overflow: "auto",
                         }}
                     />
                 </div>
+
                 <div
+                    className={styles2["form--group"]}
                     style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        marginTop: "50px",
-                        width: "100%",
-                        justifyContent: "space-between",
+                        justifyContent: "center",
+                        marginTop: "auto",
+                        marginBottom: "0",
+                        position: "sticky",
+                        bottom: "0",
                     }}
                 >
                     {
                         <button
                             disabled={!receivedItems.length}
-                            className={`${styles["add-btn"]} ${styles["btn"]}`}
-                            style={{ width: "20%" }}
+                            className={`${styles2["form--add-btn"]} ${styles2["form--btn"]}`}
+                            style={{ width: "150px", margin: "10px 0.5vw" }}
                         >
                             Receive
                         </button>
@@ -431,8 +453,8 @@ function ReceiveFromJob({ userDetails }) {
                     {
                         <button
                             disabled={!receivedItems.length}
-                            className={`${styles["add-btn"]} ${styles["btn"]}`}
-                            style={{ width: "20%" }}
+                            className={`${styles2["form--del-btn"]} ${styles2["form--btn"]}`}
+                            style={{ width: "150px", margin: "10px 0.5vw" }}
                             onClick={() => {
                                 setchallannumber("");
                                 settotalamount("");
@@ -445,10 +467,15 @@ function ReceiveFromJob({ userDetails }) {
                     }
                     <button
                         type="button"
-                        className={`${styles["add-btn"]} ${styles["btn"]}`}
-                        style={{ width: "20%" }}
+                        className={`${styles2["form--edit-btn"]} ${styles2["form--btn"]}`}
+                        style={{
+                            backgroundColor: "#2297be",
+                            width: "150px",
+                            fontSize: "0.9rem",
+                            margin: "10px 0.5vw",
+                        }}
                     >
-                        View all received items
+                        View received items
                     </button>
                 </div>
             </form>
