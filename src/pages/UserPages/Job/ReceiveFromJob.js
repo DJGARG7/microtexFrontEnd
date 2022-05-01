@@ -253,6 +253,7 @@ function ReceiveFromJob({ userDetails }) {
             challannumber,
             totalamount,
             receivedItems,
+            accountID
         };
         try {
             const res = await jobinstance.post("/jobreceiveitems", data);
