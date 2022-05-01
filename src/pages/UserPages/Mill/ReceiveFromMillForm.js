@@ -99,11 +99,11 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
     const [selectedGrey, setSelectedGrey] = useState("DEFAULT");
     const [selectedMill, setSelectedMill] = useState("DEFAULT");
     const [selectedChallan, setSelectedChallan] = useState([]);
-    const [receivedMeters, setReceivedMeters] = useState(0);
-    const [millLoss, setMillLoss] = useState(0);
-    const [pieceLoss, setPieceLoss] = useState(0);
-    const [rate, setRate] = useState(0);
-    const [amount, setAmount] = useState(0);
+    const [receivedMeters, setReceivedMeters] = useState();
+    const [millLoss, setMillLoss] = useState();
+    const [pieceLoss, setPieceLoss] = useState();
+    const [rate, setRate] = useState();
+    const [amount, setAmount] = useState();
 
     // Fetch challan for mill & item from backend.
     const fetchChallan = async () => {
@@ -146,6 +146,7 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                 {
                     // For MILL_CHALLAN.
                     challanNumber: selectedChallan.challanNumber,
+                    millID: selectedMill,
                     itemID: selectedChallan.itemID,
                     receiveDate,
                     amount,
@@ -155,7 +156,7 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                     receivedMeters: parseInt(receivedMeters),
                     millLoss,
                     pieceLoss,
-                    rate: parseInt(rate),
+                    rate: parseFloat(rate),
 
                     // For INVENTORY.
                     itemName: itemData.filter(
@@ -171,14 +172,14 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
             setSelectedGrey("DEFAULT");
             setSelectedMill("DEFAULT");
             setSelectedChallan([]);
-            setReceivedMeters(0);
-            setMillLoss(0);
-            setPieceLoss(0);
-            setRate(0);
-            setAmount(0);
+            setReceivedMeters("");
+            setMillLoss("");
+            setPieceLoss("");
+            setRate("");
+            setAmount("");
         } catch (error) {
             console.log(error);
-            toast.error(`Failed to receive: ${error.response.data}.`, {
+            toast.error(`${error.response.data}`, {
                 id: submitToast,
             });
         }
@@ -313,7 +314,6 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
             <div
                 className={styles["form--group"]}
                 style={{
-                    // display: "none",
                     backgroundColor: "#dddddd",
                     borderRadius: "7.5px",
                     marginTop: "auto",
@@ -341,13 +341,18 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                         type="number"
                         value={
                             typeof selectedChallan.sentMeters === "undefined"
-                                ? 0
+                                ? ""
                                 : selectedChallan.sentMeters
                         }
                         id="sentMeters"
                         readOnly
                         className={styles["form--input"]}
                         style={{ width: "5vw", minWidth: "70px" }}
+                        disabled={
+                            typeof selectedChallan.sentTaka === "undefined"
+                                ? true
+                                : false
+                        }
                     />
                 </div>
 
@@ -445,6 +450,7 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                     </label>
                     <input
                         type="number"
+                        step=".01"
                         value={rate}
                         id="rate"
                         onChange={(e) => setRate(e.target.value)}
@@ -485,6 +491,11 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                 <button
                     className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
                     style={{ margin: "0 10px 0 1vw", alignSelf: "center" }}
+                    disabled={
+                        typeof selectedChallan.sentTaka === "undefined"
+                            ? true
+                            : false
+                    }
                 >
                     Receive
                 </button>

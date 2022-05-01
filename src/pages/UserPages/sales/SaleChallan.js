@@ -4,14 +4,19 @@ import {
     toastError,
     toastSuccess,
 } from "../../../components/Reuse_components/toast";
-import CurrentDate from "../../../components/Reuse_components/CurrentDate";
 import StickyTable from "../../../components/Reuse_components/Table/StickyTable";
 
 import ReactLoading from "react-loading";
 
 import styles from "../Mill/styles/Mill.module.css";
 
-const currDate = CurrentDate();
+function convertDate(inputFormat) {
+    function pad(s) {
+        return s < 10 ? "0" + s : s;
+    }
+    var d = new Date(inputFormat);
+    return [d.getFullYear(), pad(d.getMonth() + 1), pad(d.getDate())].join("-");
+}
 
 export default function SaleChallan({ userDetails }) {
     const TableColData = [
@@ -70,7 +75,7 @@ export default function SaleChallan({ userDetails }) {
 
     const [challan, setChallan] = useState("");
     const [custName, setCustName] = useState("");
-    const [SCdate, setSCDate] = useState(currDate);
+    const [SCdate, setSCDate] = useState(convertDate(new Date()));
 
     const [DName, setDName] = useState("none");
     const [clothType, setClothType] = useState("none");

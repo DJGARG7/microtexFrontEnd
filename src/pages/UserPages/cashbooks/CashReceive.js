@@ -6,11 +6,63 @@ import {
 } from "../../../components/Reuse_components/toast";
 import styles from "../Mill/styles/Mill.module.css";
 import StickyTable from "../../../components/Reuse_components/Table/StickyTable";
+import CurrentDate from "../../../components/Reuse_components/CurrentDate";
 const CashReceive = () => {
+    const [sdlist, setSdlist] = useState([]);
+    const [custName, setCustName] = useState("");
+    const [drBillsList, setDrBillsList] = useState([]);
+    const [total, setTotal] = useState(0);
+    const type = "Sundry Debtors";
+    const [checkedList, setCheckedList] = useState({});
+    const [selectedAmt, setSelectedAmt] = useState({});
+    const [billsString, setBillsString] = useState("");
+    useEffect(() => {
+        setTotal(
+            Object.values(selectedAmt).reduce(
+                (sum, value) => sum + (value || 0),
+                0
+            )
+        );
+        setBillsString(
+            Object.keys(checkedList)
+                .filter((key) => {
+                    return checkedList[key];
+                })
+                .toString()
+        );
+    }, [selectedAmt]);
+    const checkboxHandler = (e, tableProps) => {
+        console.log(e.target.checked);
+        if (e.target.checked) {
+            setCheckedList({
+                ...checkedList,
+                [parseInt(tableProps.row.values.billno)]: true,
+            });
+            setSelectedAmt({
+                ...selectedAmt,
+                [tableProps.row.values.billno]: tableProps.row.values.amount,
+            });
+        } else {
+            setCheckedList({
+                ...checkedList,
+                [parseInt(tableProps.row.values.billno)]: false,
+            });
+            setSelectedAmt({
+                ...selectedAmt,
+                [tableProps.row.values.billno]: 0,
+            });
+        }
+    };
     const TableColData = [
         {
             Header: "Action",
-            Cell: (tableProps) => <p>tick</p>,
+            Cell: (tableProps) => (
+                <input
+                    type="checkbox"
+                    onChange={(e) => checkboxHandler(e, tableProps)}
+                    checked={checkedList[tableProps.row.values.billno]}
+                />
+            ),
             width: 100,
         },
         {
@@ -34,10 +86,6 @@ const CashReceive = () => {
             Filter: "",
         },
     ];
-    const [custName, setCustName] = useState("");
-    const [sdlist, setSdlist] = useState([]);
-    const [drBillsList, setDrBillsList] = useState([]);
-    const type = "Sundry Debtors";
     const fetchAccounts = async () => {
         try {
             const res = await Axios.get(
@@ -55,11 +103,17 @@ const CashReceive = () => {
             const res = await Axios.get(
                 `http://localhost:3007/transaction/drBills/${custName}`
             );
-            setDrBillsList(res.data);
+            if (res.data.length == 0) {
+                toastSuccess("No unpaid bills for this account");
+            } else {
+                setDrBillsList(res.data);
+            }
         } catch (e) {
             toastError("Error showing bills");
             setCustName("");
+            setDrBillsList([]);
         }
+        setTotal(0);
     };
     useEffect(() => {
         fetchAccounts();
@@ -69,50 +123,66 @@ const CashReceive = () => {
             showUnpaidBillHandler();
         }
     }, [custName]);
-    const recordCashHandler = () => {
-        //send axios post request to 3005/cashbook/receive with body
+    const recordCashHandler = async () => {
+        const data = {
+            date: CurrentDate(),
+            uid: custName,
+            accType: type,
+            amt: total,
+            CrDr: "Cr",
+            billno: "-1",
+            remark: billsString,
+        };
+        try {
+            const res = await Axios.post(
+                `http://localhost:3005/cashbook/receive`,
+                data
+            );
+            toastSuccess("Successful Transaction");
+        } catch (e) {
+            toastError("Transaction Failed. Try again");
+        }
+        setCustName("");
+        setDrBillsList([]);
+        setTotal(0);
     };
     return (
         <div>
-            <form>
-                <select
-                    name="custName"
-                    value={custName}
-                    onChange={(e) => {
-                        setCustName(e.target.value);
-                    }}
-                    required
-                    // disabled={!isEntering}
-                    className={`${styles["form--input"]} ${styles["form--input-select"]}`}
-                    style={{
-                        width: "20%",
-                        minWidth: "200px",
-                        margin: "10px 0",
-                    }}
-                >
-                    <option value="" disabled hidden>
-                        Select customer...
-                    </option>
-                    {sdlist.map((sd) => {
-                        return (
-                            <option value={sd.uid} key={sd.uid}>
-                                {sd.AccName}
-                            </option>
-                        );
-                    })}
-                </select>
-            </form>
+            <select
+                name="custName"
+                value={custName}
+                onChange={(e) => {
+                    setCustName(e.target.value);
+                }}
+                required
+                className={`${styles["form--input"]} ${styles["form--input-select"]}`}
+                style={{
+                    width: "20%",
+                    minWidth: "200px",
+                    margin: "10px 0",
+                }}
+            >
+                <option value="" disabled hidden>
+                    Select customer...
+                </option>
+                {sdlist.map((sd) => {
+                    return (
+                        <option value={sd.uid} key={sd.uid}>
+                            {sd.AccName}
+                        </option>
+                    );
+                })}
+            </select>
             <StickyTable TableCol={TableColData} TableData={drBillsList} />
-            <p>Total Amount</p>
-            <button type="button" onClick={recordCashHandler}>
+            <p>Total Amount : {total}</p>
+            <button
+                type="button"
+                onClick={recordCashHandler}
+                disabled={total == 0}
+            >
                 Record Cash Receive
             </button>
         </div>
     );
 };
-
 export default CashReceive;
-
-// ask for account name with sundry debtors name ...check for pending bills for that....
-//total the amount and record that cash payment
-// update status =2 for the bills

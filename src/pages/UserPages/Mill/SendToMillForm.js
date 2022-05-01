@@ -322,6 +322,11 @@ export default function SendToMillForm({ itemData, millsData }) {
                         readOnly
                         className={styles["form--input"]}
                         style={{ width: "7.5vw", minWidth: "125px" }}
+                        disabled={
+                            typeof selectedBill.sentTaka === "undefined"
+                                ? true
+                                : false
+                        }
                     />
                 </div>
 
@@ -347,6 +352,11 @@ export default function SendToMillForm({ itemData, millsData }) {
                         readOnly
                         className={styles["form--input"]}
                         style={{ width: "2vw", minWidth: "50px" }}
+                        disabled={
+                            typeof selectedBill.sentTaka === "undefined"
+                                ? true
+                                : false
+                        }
                     />
 
                     <label
@@ -366,6 +376,11 @@ export default function SendToMillForm({ itemData, millsData }) {
                         readOnly
                         className={styles["form--input"]}
                         style={{ width: "2vw", minWidth: "50px" }}
+                        disabled={
+                            typeof selectedBill.sentTaka === "undefined"
+                                ? true
+                                : false
+                        }
                     />
                 </div>
 
@@ -395,6 +410,11 @@ export default function SendToMillForm({ itemData, millsData }) {
                         readOnly
                         className={styles["form--input"]}
                         style={{ width: "10vw", minWidth: "150px" }}
+                        disabled={
+                            typeof selectedBill.sentTaka === "undefined"
+                                ? true
+                                : false
+                        }
                     />
                 </div>
 
@@ -417,6 +437,11 @@ export default function SendToMillForm({ itemData, millsData }) {
                         readOnly
                         className={styles["form--input"]}
                         style={{ width: "3vw", minWidth: "90px" }}
+                        disabled={
+                            typeof selectedBill.sentTaka === "undefined"
+                                ? true
+                                : false
+                        }
                     />
                 </div>
 
@@ -429,6 +454,11 @@ export default function SendToMillForm({ itemData, millsData }) {
                         margin: "0 10px 0 10px",
                         alignSelf: "center",
                     }}
+                    disabled={
+                        typeof selectedBill.sentTaka === "undefined"
+                            ? true
+                            : false
+                    }
                 >
                     Send
                 </button>
