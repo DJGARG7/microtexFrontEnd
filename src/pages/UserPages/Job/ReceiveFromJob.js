@@ -206,6 +206,7 @@ function ReceiveFromJob({ userDetails }) {
                 setitemfrom(value);
             } catch (e) {
                 console.log(e);
+                toastError("Error fetching item data");
             }
         } else {
             setsentItems("");

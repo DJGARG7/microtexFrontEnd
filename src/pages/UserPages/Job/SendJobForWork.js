@@ -219,7 +219,6 @@ function SendJobForWork({ userDetails }) {
     /*- - - - - - - - - - - - - - - - - - - - - - Input change function  - - - - - - - - - - - - - - - - - - - - */
 
     const onChallanChnageHandler = async (e) => {
-        let res;
         let value = e.target.value;
         const name = e.target.name;
 
