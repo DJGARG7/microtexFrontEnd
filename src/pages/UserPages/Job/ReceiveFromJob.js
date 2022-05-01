@@ -123,9 +123,9 @@ function ReceiveFromJob({ userDetails }) {
     const [state, setState] = useState({
         accntname: "",
         billdate: date,
-        ItemFrom: "",
+        
     });
-
+    const [itemfrom,setitemfrom] = useState("");
     const [totalamount, settotalamount] = useState("");
     const [challannumber, setchallannumber] = useState("");
     const [accntlist, setAccntList] = useState([]);
@@ -203,11 +203,13 @@ function ReceiveFromJob({ userDetails }) {
                     data.challanDate = date.toLocaleDateString("en-GB");
                 });
                 setsentItems(res.data);
+                setitemfrom(value);
             } catch (e) {
                 console.log(e);
             }
         } else {
             setsentItems("");
+            setitemfrom(value);
         }
     };
     /*- - - - - - - - - - - - - - - - - - - - - - Input change function  - - - - - - - - - - - - - - - - - - - - */
@@ -275,17 +277,17 @@ function ReceiveFromJob({ userDetails }) {
         );
     }
 
-    if (!isAllowed) {
-        return (
-            <div
-                style={{
-                    marginTop: "10vh",
-                }}
-            >
-                <strong>You are not allowed access to this area.</strong>
-            </div>
-        );
-    }
+    // if (!isAllowed) {
+    //     return (
+    //         <div
+    //             style={{
+    //                 marginTop: "10vh",
+    //             }}
+    //         >
+    //             <strong>You are not allowed access to this area.</strong>
+    //         </div>
+    //     );
+    // }
 
     return (
         <div className={styles["main"]}>
@@ -327,7 +329,7 @@ function ReceiveFromJob({ userDetails }) {
                         name="ItemFrom"
                         required
                         onChange={onitemfromChangeHandler}
-                        value={state.ItemFrom}
+                        value={itemfrom}
                         className={`${styles["form--input"]} ${styles["form--input-select"]}`}
                         style={{
                             width: "25%",
@@ -464,18 +466,6 @@ function ReceiveFromJob({ userDetails }) {
                             Cancel
                         </button>
                     }
-                    <button
-                        type="button"
-                        className={`${styles["form--edit-btn"]} ${styles["form--btn"]}`}
-                        style={{
-                            backgroundColor: "#2297be",
-                            width: "150px",
-                            fontSize: "0.9rem",
-                            margin: "10px 0.5vw",
-                        }}
-                    >
-                        View received items
-                    </button>
                 </div>
             </form>
         </div>

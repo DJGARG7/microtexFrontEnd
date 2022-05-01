@@ -374,17 +374,17 @@ function SendJobForWork({ userDetails }) {
         );
     }
 
-    if (!isAllowed) {
-        return (
-            <div
-                style={{
-                    marginTop: "10vh",
-                }}
-            >
-                <strong>You are not allowed access to this area.</strong>
-            </div>
-        );
-    }
+    // if (!isAllowed) {
+    //     return (
+    //         <div
+    //             style={{
+    //                 marginTop: "10vh",
+    //             }}
+    //         >
+    //             <strong>You are not allowed access to this area.</strong>
+    //         </div>
+    //     );
+    // }
 
     return (
         <div className={styles["main"]}>
