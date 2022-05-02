@@ -1,5 +1,4 @@
-import React, { Children } from 'react';
-import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+import { Page, Document} from '@react-pdf/renderer';
 
 // Create styles
 

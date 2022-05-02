@@ -585,6 +585,7 @@ export default function GreyPurchase({ userDetails }) {
                             placeholder="Taka"
                             value={formData.Taka}
                             onChange={onChangeHandler}
+                            required
                             readOnly
                             className={styles["form--input"]}
                             style={{
@@ -614,6 +615,7 @@ export default function GreyPurchase({ userDetails }) {
                         readOnly
                         className={styles["form--input"]}
                         style={{ width: "10vw", minWidth: "150px" }}
+                        
                     />
                     <input
                         type="number"
@@ -625,6 +627,7 @@ export default function GreyPurchase({ userDetails }) {
                         placeholder="Rate"
                         className={styles["form--input"]}
                         style={{ width: "10vw", minWidth: "150px" }}
+                        required
                     />
                     <input
                         type="number"
@@ -711,6 +714,7 @@ export default function GreyPurchase({ userDetails }) {
                             value={formData.Amount - formData.DiscountAmt}
                             readOnly
                             required
+                            
                             className={styles["form--input"]}
                             style={{ width: "7.5vw", minWidth: "100px" }}
                         />
@@ -724,6 +728,7 @@ export default function GreyPurchase({ userDetails }) {
                             type="submit"
                             value="Add to List"
                             className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
+                            disabled={(formData.Amount - formData.DiscountAmt)<=0}
                             style={{ width: "100px", minWidth: "100px" }}
                         />
                     </div>
