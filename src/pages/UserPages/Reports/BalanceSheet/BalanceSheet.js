@@ -1,6 +1,7 @@
 import EntityBlock from "./EntityBlock";
 import styles from "../../Mill/styles/Mill.module.css";
-
+import axios from "axios";
+import { useEffect, useState } from "react";
 const dummyData = {
     liabilites: [
         {
@@ -36,17 +37,24 @@ const dummyData = {
 };
 
 export default function BalanceSheet({ userDetails }) {
+    const [actData, setActData] = useState({});
+    useEffect(async () => {
+        const result = await axios.get(
+            "http://localhost:3005/reports/balancesheet"
+        );
+        setActData(result.data);
+    }, []);
     return (
         <div className={styles["main"]}>
             <h2>Balance Sheet</h2>
             <div className={styles["grid--container"]}>
                 <div className={styles["grid--column"]}>
-                    {dummyData.liabilites.map((liability) => {
+                    {actData.liabilites?.map((liability) => {
                         return <EntityBlock data={liability} />;
                     })}
                 </div>
                 <div className={styles["grid--column"]}>
-                    {dummyData.assets.map((liability) => {
+                    {actData.assets?.map((liability) => {
                         return <EntityBlock data={liability} />;
                     })}
                 </div>

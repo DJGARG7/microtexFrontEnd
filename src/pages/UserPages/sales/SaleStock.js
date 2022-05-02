@@ -11,7 +11,7 @@ const SaleStock = () => {
     const [currMts, setCurrMts] = useState(0);
     const addSaleStockHandler = (rowData) => {
         console.log(rowData.row.values);
-        setCurrMts(rowData.row.values.meters);
+        setCurrMts(rowData.row.values.pieces);
         setIsOpen(true);
     };
     const rowDisplayHandler = (cellData) => {
@@ -52,8 +52,8 @@ const SaleStock = () => {
             Filter: "",
         },
         {
-            Header: "mtrs available",
-            accessor: "meters",
+            Header: "Pieces",
+            accessor: "pieces",
             Filter: "",
         },
         {
@@ -105,7 +105,7 @@ const SaleStock = () => {
     const fetchJobStocksHandler = async () => {
         try {
             const res1 = await Axios.get(
-                `http://localhost:3005/sales/jobStocks/cloth_type_1`
+                `http://localhost:3005/sales/jobStocks/${clothType}`
             );
             console.log(res1.data);
             if (res1.data.length == 0) {

@@ -455,7 +455,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                         alignSelf: "center",
                     }}
                     disabled={
-                        typeof selectedBill.sentTaka === "undefined"
+                        typeof selectedBill.billNumber === "undefined"
                             ? true
                             : false
                     }
