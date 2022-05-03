@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import StickyTable from "../../../components/Reuse_components/Table/StickyTable";
 import Modal from "../../../components/Reuse_components/Modal";
-import styles from "../../../components/UserManagement/styles/common.module.css";
+import styles from "./styles/Mill.module.css";
 import axios from "axios";
 import toast from "react-hot-toast";
 import TakaTable from "./TakaTable";

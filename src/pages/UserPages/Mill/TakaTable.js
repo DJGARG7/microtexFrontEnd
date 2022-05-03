@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toastSuccess } from "../../../components/Reuse_components/toast";
-import styles from "../../../components/UserManagement/styles/common.module.css";
+import styles from "./styles/Mill.module.css";
 import "./styles/Table.css";
 
 export default function TakaTable({ data, setTaka, setTotal, closeTakaModal }) {

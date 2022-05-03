@@ -4,7 +4,7 @@ import { Route, Redirect, BrowserRouter as Router } from "react-router-dom";
 import Login from "./components/Admin_components/Login/Login";
 import AdminDashboard from "./components/Admin_components/AdminDashboard";
 import UserDashboard from "./components/User_components/UserDashboard";
-import axiosAuth from "./components/Login/api/axios";
+import axiosAuth from "./components/Admin_components/Login/api/axios";
 import "./style.css";
 import Axios from "axios";
 
