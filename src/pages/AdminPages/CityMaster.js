@@ -1,10 +1,18 @@
 import React from "react";
 import TableComponent from "../../components/Reuse_components/Table/TableComponent";
+import StickyTable from "../../components/Reuse_components/Table/StickyTable";
 import { useState, useEffect } from "react";
 import "../../styles/CityMaster.css";
 import Axios from "axios";
 import toast from "react-hot-toast";
 
+const toastStyle = {
+    style: {
+        borderRadius: "15px",
+        background: "#333",
+        color: "#fff",
+    },
+};
 
 // Include header and cookie with every request.
 if (localStorage.getItem("userDetails") != null)
@@ -22,16 +30,22 @@ function CityMaster({ userDetails }) {
 
     useEffect(() => {
         (async function fetchdata() {
+            let cityToast;
             try {
+                cityToast = toast.loading("Fetching cities...", toastStyle);
                 const res = await Axios.get(
                     "http://localhost:3001/cityMaster/get"
                 );
                 setTabledata(res.data);
+                toast.success("Cities fetched.", { id: cityToast });
             } catch (e) {
                 console.log(e);
+                toast.success("Failed to fetch cities.", { id: cityToast });
             }
         })();
     }, []);
+
+    console.log(tabledata);
 
     const TableColData = [
         {
@@ -123,7 +137,13 @@ function CityMaster({ userDetails }) {
         };
         // checks wether the mode is edit or not if edit --> updates the exsisting selected row in the table and if !edit-> adds new data into the table if not present.
         if (editMode) {
+            let editCityToast;
             try {
+                // editCityToast = toast.loading(
+                //     `Editing to ${newData.CityName}, ${newData.StateName}...`,
+                //     toastStyle
+                // );
+
                 const result = await Axios.post(
                     "http://localhost:3001/cityMaster/update",
                     {
@@ -132,6 +152,7 @@ function CityMaster({ userDetails }) {
                         oldcity: oldcity.trim(),
                     }
                 );
+
                 if (result.data == 1) {
                     setEditMode(false);
                     setTabledata((preExpense) => {
@@ -140,23 +161,14 @@ function CityMaster({ userDetails }) {
                         return [...preExpense];
                     });
                     toast.success(
-                        `${newData.CityName}, ${newData.StateName} added successfully!`,
-                        {
-                            style: {
-                                borderRadius: "15px",
-                                background: "#333",
-                                color: "#fff",
-                            },
-                        }
+                        `${newData.CityName}, ${newData.StateName} edited successfully!`,
+                        toastStyle,
+                        { id: editCityToast }
                     );
                 } else {
                     if (result.data)
-                        toast.error(result.data, {
-                            style: {
-                                borderRadius: "15px",
-                                background: "#333",
-                                color: "#fff",
-                            },
+                        toast.error(result.data, toastStyle, {
+                            id: editCityToast,
                         });
                     console.log(result.data);
                 }
@@ -164,8 +176,13 @@ function CityMaster({ userDetails }) {
                 console.log(e);
             }
         } else {
+            let addCityToast;
             // function to add the data
             try {
+                // addCityToast = toast.loading(
+                //     `Adding ${newData.CityName}, ${newData.StateName}...`,
+                //     toastStyle
+                // );
                 const result = await Axios.post(
                     "http://localhost:3001/cityMaster/Add",
                     {
@@ -182,22 +199,13 @@ function CityMaster({ userDetails }) {
                     });
                     toast.success(
                         `${newData.CityName}, ${newData.StateName} added successfully!`,
-                        {
-                            style: {
-                                borderRadius: "15px",
-                                background: "#333",
-                                color: "#fff",
-                            },
-                        }
+                        toastStyle,
+                        { id: addCityToast }
                     );
                 } else {
                     if (result.data.sqlMessage)
-                        toast.error(result.data.sqlMessage, {
-                            style: {
-                                borderRadius: "15px",
-                                background: "#333",
-                                color: "#fff",
-                            },
+                        toast.error(result.data.sqlMessage, toastStyle, {
+                            id: addCityToast,
                         });
                 }
             } catch (e) {
