@@ -60,9 +60,7 @@ export default function AddUserForm({ corporateID, permissionsData }) {
                 });
 
                 // Toast on success.
-                setTimeout(() => {
-                    toast.success(res.data, { id: toastID });
-                }, 500);
+                toast.success(res.data, { id: toastID });
 
                 // Clearing fields.
                 setUserID("");
@@ -78,9 +76,8 @@ export default function AddUserForm({ corporateID, permissionsData }) {
                 // Clear the selected permissions state.
                 setSelectedPermissions(new Set());
             } catch (error) {
-                setTimeout(() => {
-                    toast.error(error.response.data, { id: toastID });
-                }, 500);
+                console.log(error);
+                toast.error(error.response.data, { id: toastID });
             }
         }
     };

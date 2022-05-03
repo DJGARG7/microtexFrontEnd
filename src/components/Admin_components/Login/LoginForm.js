@@ -1,7 +1,15 @@
 import React from "react";
 import axios from "./api/axios";
-import { toastError } from "../../Reuse_components/toast";
+import toast from "react-hot-toast";
 import styles from "./styles/LoginForm.module.css";
+
+const toastStyle = {
+    style: {
+        borderRadius: "15px",
+        background: "#333",
+        color: "#fff",
+    },
+};
 
 export default function LoginForm({
     rememberUser,
@@ -25,6 +33,9 @@ export default function LoginForm({
     const loginHandler = async (event) => {
         // Prevent refreshing the page
         event.preventDefault();
+
+        // Loadin toast.
+        // const loginToast = toast.loading("Logging in...", toastStyle);
 
         // Send request to backend.
         try {
@@ -77,6 +88,12 @@ export default function LoginForm({
                 }
             }
 
+            toast.success(
+                "Login successful!",
+                toastStyle
+                // {id: loginToast,}
+            );
+
             // Change state to logged in.
             onLogin(
                 "true",
@@ -91,9 +108,15 @@ export default function LoginForm({
             console.log(error);
 
             // Toast on failure.
-            toastError("Login failed!");
+            toast.error(
+                "Login failed!",
+                toastStyle
+                // { id: loginToast }
+            );
         }
     };
+
+    console.log("LoginForm");
 
     return (
         <form className={styles["form"]} onSubmit={loginHandler}>

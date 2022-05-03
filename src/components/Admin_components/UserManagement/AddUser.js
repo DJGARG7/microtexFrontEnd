@@ -26,13 +26,11 @@ export default function AddUser({ userDetails }) {
     };
 
     useEffect(() => {
-        setTimeout(() => {
-            fetchData();
-        }, 500);
+        fetchData();
 
-        return () => {
-            controller.abort();
-        };
+        // return () => {
+        //     controller.abort();
+        // };
     }, []);
 
     if (isLoading) {

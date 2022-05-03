@@ -28,6 +28,8 @@ export default function Login({ onLogin }) {
         setRememberUser(true);
     };
 
+    console.log("Login");
+
     return (
         <>
             <Toaster />
