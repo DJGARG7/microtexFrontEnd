@@ -1,4 +1,4 @@
-export default function EntityBlock({ data }) {
+export default function EntityBlock({ data, setSum }) {
     const style_main = {
         display: "flex",
         flexDirection: "column",
@@ -36,15 +36,17 @@ export default function EntityBlock({ data }) {
     return (
         <div style={style_main}>
             <div style={style_heading}>{data.heading}</div>
-            {data.subdata.map((row) => {
+            {data.subdata.map((row, index) => {
                 sum += row.value;
+                setSum(sum);
                 return (
-                    <div style={style_row}>
+                    <div style={style_row} key={index}>
                         <div>{row.name}</div>
                         <div>{row.value}</div>
                     </div>
                 );
             })}
+            {setSum(sum)}
             <hr style={style_hr} />
             <div style={style_total}>{sum}</div>
         </div>

@@ -7,7 +7,7 @@
 
     padding: 25px;
 
-    transition: 350ms;
+    transition: 250ms;
 }
 
 .title {
@@ -25,6 +25,7 @@
 
     overflow: auto;
     padding: 0;
+    padding-right: 7.5px;
 }
 
 .form--group {
@@ -96,6 +97,7 @@
     height: 40px;
 
     border: 2.5px solid black;
+    /* border: 0; */
     border-radius: 5px;
 
     font-family: "Karla", sans-serif;
@@ -109,7 +111,9 @@
 }
 
 .form--btn:hover {
-    filter: brightness(125%);
+    box-shadow: inset 0 0 0 1.5px black;
+    font-weight: 500;
+    filter: brightness(115%);
 }
 
 .form--btn:active {
@@ -121,6 +125,9 @@
 }
 
 .form--btn:disabled:hover {
+    cursor: not-allowed;
+    box-shadow: none;
+    filter: none;
     background-color: grey;
 }
 
@@ -158,11 +165,10 @@
     gap: 10px;
 
     margin-top: 2vh;
-    padding-right: 5px;
+    padding-right: 7.5px;
 
     width: 100%;
     overflow: auto;
-    transition: 350ms;
 }
 
 .grid--column {

@@ -344,6 +344,7 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                                 ? ""
                                 : selectedChallan.sentMeters
                         }
+                        placeholder="0"
                         id="sentMeters"
                         readOnly
                         className={styles["form--input"]}
@@ -375,6 +376,7 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                         type="number"
                         value={receivedMeters}
                         id="receivedMeters"
+                        placeholder="?"
                         onChange={(e) => {
                             setReceivedMeters(e.target.value);
                         }}
@@ -401,6 +403,7 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                         type="number"
                         value={millLoss}
                         id="millLoss"
+                        placeholder="?"
                         onChange={(e) => setMillLoss(e.target.value)}
                         className={styles["form--input"]}
                         style={{ width: "5vw", minWidth: "70px" }}
@@ -423,6 +426,7 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                     <input
                         type="number"
                         value={pieceLoss}
+                        placeholder="?"
                         disabled={
                             typeof selectedChallan.sentTaka === "undefined"
                                 ? true
@@ -453,6 +457,7 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                         step=".01"
                         value={rate}
                         id="rate"
+                        placeholder="?"
                         onChange={(e) => setRate(e.target.value)}
                         className={styles["form--input"]}
                         style={{ width: "5vw", minWidth: "75px" }}
@@ -472,6 +477,7 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                         value={amount}
                         id="amount"
                         onChange={(e) => setAmount(e.target.value)}
+                        placeholder="?"
                         readOnly
                         className={styles["form--input"]}
                         style={{
