@@ -1,6 +1,6 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { toastError, toastSuccess } from "../Reuse_components/toast";
+import { toastError } from "../../Reuse_components/toast";
 import axios from "./api/axios";
 import commonStyles from "./styles/common.module.css";
 

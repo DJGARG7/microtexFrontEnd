@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "./api/axios";
-import { toastError } from "../Reuse_components/toast";
+import { toastError } from "../../Reuse_components/toast";
 import styles from "./styles/LoginForm.module.css";
 
 export default function LoginForm({

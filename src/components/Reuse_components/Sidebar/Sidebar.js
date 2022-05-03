@@ -5,15 +5,11 @@ import * as RiIcons from "react-icons/ri";
 
 const UserManagementData = {
     title: "User Management",
-    path: "/dashboard/user-management",
+    path: "#",
     iconClosed: <RiIcons.RiArrowDownSFill />,
     iconOpened: <RiIcons.RiArrowUpSFill />,
 
     subNav: [
-        // {
-        //     title: "Change admin password",
-        //     path: "/dashboard/user-management/change-admin-password",
-        // },
         {
             title: "Add new user",
             path: "/dashboard/user-management/add-user",

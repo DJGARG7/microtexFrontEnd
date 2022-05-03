@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { toastError, toastSuccess } from "../Reuse_components/toast";
+import { toastError, toastSuccess } from "../../Reuse_components/toast";
 import ReactLoading from "react-loading";
 import axios from "./api/axios";
 import commonStyles from "./styles/common.module.css";
