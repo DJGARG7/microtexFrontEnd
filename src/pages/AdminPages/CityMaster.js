@@ -1,6 +1,6 @@
 import React from "react";
 import TableComponent from "../../components/Reuse_components/Table/TableComponent";
-import StickyTable from "../../components/Reuse_components/Table/StickyTable";
+import ReactLoading from "react-loading";
 import { useState, useEffect } from "react";
 import "../../styles/CityMaster.css";
 import Axios from "axios";
@@ -22,27 +22,32 @@ if (localStorage.getItem("userDetails") != null)
 Axios.defaults.withCredentials = true;
 
 let index, oldcity;
+
 function CityMaster({ userDetails }) {
+    const [isLoading, setIsLoading] = useState(true);
+
     const [tabledata, setTabledata] = useState([]);
     const [city, setCitychange] = useState("");
     const [state, setStatechange] = useState("");
     const [editMode, setEditMode] = useState(false);
 
+    const fetchData = async () => {
+        // let cityToast;
+        try {
+            // cityToast = toast.loading("Fetching cities...", toastStyle);
+            const res = await Axios.get("http://localhost:3001/cityMaster/get");
+
+            setTabledata(res.data);
+            setIsLoading(false);
+            // toast.success("Cities fetched.", { id: cityToast });
+        } catch (e) {
+            console.log(e);
+            toast.error("Failed to fetch cities.", toastStyle);
+        }
+    };
+
     useEffect(() => {
-        (async function fetchdata() {
-            let cityToast;
-            try {
-                cityToast = toast.loading("Fetching cities...", toastStyle);
-                const res = await Axios.get(
-                    "http://localhost:3001/cityMaster/get"
-                );
-                setTabledata(res.data);
-                toast.success("Cities fetched.", { id: cityToast });
-            } catch (e) {
-                console.log(e);
-                toast.success("Failed to fetch cities.", { id: cityToast });
-            }
-        })();
+        fetchData();
     }, []);
 
     console.log(tabledata);
@@ -121,9 +126,11 @@ function CityMaster({ userDetails }) {
             ),
         },
     ];
+
     const cityHandler = (event) => {
         setCitychange(event.target.value);
     };
+
     const stateHandler = (event) => {
         setStatechange(event.target.value);
     };
@@ -213,6 +220,19 @@ function CityMaster({ userDetails }) {
             }
         }
     };
+
+    if (isLoading) {
+        return (
+            <div
+                style={{
+                    marginTop: "10vh",
+                }}
+            >
+                <ReactLoading type="bubbles" color="#212121" />
+            </div>
+        );
+    }
+
     return (
         <div className="citymaster">
             <h2>City Master</h2>

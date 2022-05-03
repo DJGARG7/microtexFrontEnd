@@ -2,17 +2,29 @@ import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import "../../styles/Accesslogs.css";
 import styles from "../../pages/UserPages/Mill/styles/Mill.module.css";
-import TableComponent from "./../../components/Reuse_components/Table/TableComponent";
+import StickyTable from "../../components/Reuse_components/Table/StickyTable";
+import ReactLoading from "react-loading";
+import toast from "react-hot-toast";
+const toastStyle = {
+    style: {
+        borderRadius: "15px",
+        background: "#333",
+        color: "#fff",
+    },
+};
+
 Axios.defaults.withCredentials = true;
 const usrinstance = Axios.create({
     baseURL: "http://localhost:3005/accesslogs",
 });
+
 function AccessLog() {
     const tablecoldata = [
         {
             Header: "User Name",
             accessor: "userName",
             Filter: "",
+            // width: 100,
         },
         {
             Header: "Corporate Id ",
@@ -35,22 +47,53 @@ function AccessLog() {
             Filter: "",
         },
     ];
+
+    const [isLoading, setIsLoading] = useState(true);
     const [logs, setlogs] = useState([]);
-    useEffect(() => {
-        (async () => {
+
+    const fetchData = async () => {
+        try {
             const res = await usrinstance.get(" ");
             res.data.forEach((item, index) => {
                 const date = new Date(item.user_date);
                 item.user_date = date.toLocaleDateString();
             });
             setlogs(res.data);
-        })();
+            setIsLoading(false);
+        } catch (error) {
+            console.log(error);
+            toast.error("Failed to fetch access logs.", toastStyle);
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
     }, []);
+
+    if (isLoading) {
+        return (
+            <div
+                style={{
+                    marginTop: "10vh",
+                }}
+            >
+                <ReactLoading type="bubbles" color="#212121" />
+            </div>
+        );
+    }
+
     return (
-        <div className="log--main">
-            <h2 className={styles["title"]}>Access Logs</h2>
-            <div className="log--div">
-                <TableComponent TableCol={tablecoldata} TableData={logs} />
+        <div className={styles["main"]}>
+            <h2>Access Logs</h2>
+            <div className={styles["form--table"]}>
+                <StickyTable
+                    TableCol={tablecoldata}
+                    TableData={logs}
+                    style={{
+                        maxWidth: "100%",
+                        maxHeight: "70vh",
+                    }}
+                />
             </div>
         </div>
     );
