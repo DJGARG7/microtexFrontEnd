@@ -2,21 +2,43 @@ import { useState, useEffect } from "react";
 import Modal from "../../components/Reuse_components/Modal";
 import AccountTypeData from "../../jsonData/adminData/AccountTypeData";
 import styles from "../../styles/AccountMaster.module.css";
-import Axios from "axios";
+import axios from "axios";
 import toast from "react-hot-toast";
 import CurrentDate from "../../components/Reuse_components/CurrentDate";
 import AccountMasterTable from "../../components/Admin_components/AccountMasterTable";
+import ReactLoading from "react-loading";
 
-if (localStorage.getItem("userDetails") != null)
-    Axios.defaults.headers.common["userID"] = JSON.parse(
-        localStorage.getItem("userDetails")
-    ).userID;
-Axios.defaults.withCredentials = true;
-const instance = Axios.create({
+// axios default configuration to include cookie and user ID with every request.
+axios.defaults.withCredentials = true;
+axios.defaults.headers.common["userID"] = localStorage.getItem("userDetails")
+    ? JSON.parse(localStorage.getItem("userDetails")).userID
+    : "";
+
+const instance = axios.create({
     baseURL: "http://localhost:3003/accountMaster/",
 });
-const currDate = CurrentDate();
+
+function convertDate(inputFormat) {
+    function pad(s) {
+        return s < 10 ? "0" + s : s;
+    }
+    var d = new Date(inputFormat);
+    return [d.getFullYear(), pad(d.getMonth() + 1), pad(d.getDate())].join("-");
+}
+
+const currDate = convertDate(new Date());
+
+const toastStyle = {
+    style: {
+        borderRadius: "15px",
+        background: "#333",
+        color: "#fff",
+    },
+};
+
 const AccountMaster = ({ userDetails }) => {
+    const [isLoading, setIsLoading] = useState(true);
+
     const [isOpen, setIsOpen] = useState(false);
 
     const [isEntering, setIsEntering] = useState(true);
@@ -55,6 +77,7 @@ const AccountMaster = ({ userDetails }) => {
     const [disMode, setDisMode] = useState(0);
 
     const [citydata, setcitydata] = useState([]);
+
     const buttonModes = {
         0: [
             { dis: true, label: "Delete" },
@@ -78,11 +101,12 @@ const AccountMaster = ({ userDetails }) => {
             { dis: false, label: "Exit" },
         ],
     };
+
     //fetch cities from cityService
     useEffect(() => {
         (async function fetchdata() {
             try {
-                const res = await Axios.get(
+                const res = await axios.get(
                     "http://localhost:3001/cityMaster/get"
                 );
                 setcitydata(
@@ -90,14 +114,9 @@ const AccountMaster = ({ userDetails }) => {
                         return res.data[city].CityName;
                     })
                 );
+                setIsLoading(false);
             } catch (e) {
-                toast.error("Error loading city data", {
-                    style: {
-                        borderRadius: "15px",
-                        background: "#333",
-                        color: "#fff",
-                    },
-                });
+                toast.error("Error loading city data", toastStyle);
             }
         })();
     }, []);
@@ -107,6 +126,7 @@ const AccountMaster = ({ userDetails }) => {
         setBoolList(AccountTypeData[e.target.value]);
         setType(e.target.value);
     };
+
     //insert and update
     const addSaveHandler = async (event) => {
         event.preventDefault();
@@ -141,38 +161,35 @@ const AccountMaster = ({ userDetails }) => {
             shares: share,
             currDate: currDate,
         };
+
         //data insert
         if (disMode === 0) {
             try {
-                const res = await Axios.post(
+                const res = axios.post(
                     "http://localhost:3003/accountMaster/",
                     data
                 );
-                // const res = await instance.post("", data);
-                if (res.data.status == 1) {
-                    setuuid(res.data.uuid);
-                    console.log("data added to db");
-                    toast.success("Account added successfully!", {
-                        style: {
-                            borderRadius: "15px",
-                            background: "#333",
-                            color: "#fff",
+
+                toast.promise(
+                    res,
+                    {
+                        loading: "Adding account...",
+                        success: (res) => {
+                            console.log(data);
+                            if (res.data.status == 1) {
+                                setuuid(res.data.uuid);
+
+                                setDisMode(1);
+                                setIsEntering(false);
+                            }
+                            return "Account added successfully!";
                         },
-                    });
-                    setDisMode(1);
-                    setIsEntering(false);
-                } else {
-                    throw res.data;
-                }
+                        error: "Failed to add account.",
+                    },
+                    toastStyle
+                );
             } catch (error) {
                 console.log(error);
-                toast.error("Addition failed!", {
-                    style: {
-                        borderRadius: "15px",
-                        background: "#333",
-                        color: "#fff",
-                    },
-                });
             }
         }
         // data update
@@ -181,13 +198,7 @@ const AccountMaster = ({ userDetails }) => {
                 const res = await instance.put(uuid, data);
                 if (res.data === 1) {
                     console.log("data updated in  db");
-                    toast.success("Account updated successfully!", {
-                        style: {
-                            borderRadius: "15px",
-                            background: "#333",
-                            color: "#fff",
-                        },
-                    });
+                    toast.success("Account updated successfully!", toastStyle);
                     setDisMode(1);
                     setIsEntering(false);
                 } else {
@@ -205,6 +216,7 @@ const AccountMaster = ({ userDetails }) => {
             }
         }
     };
+
     //delete data
     const deleteHandler = async () => {
         if (disMode === 1) {
@@ -276,10 +288,12 @@ const AccountMaster = ({ userDetails }) => {
         setIfsc(rowdetails.IFSC);
         setShare(rowdetails.shares);
     };
+
     //closes modal
     const closeHandler = () => {
         setIsOpen(false);
     };
+
     const editViewHandler = async () => {
         if (disMode === 0) {
             setIsOpen(true);
@@ -289,12 +303,26 @@ const AccountMaster = ({ userDetails }) => {
             setIsEntering(true);
         }
     };
+
     const cancelHandler = () => {
         if (disMode === 2) {
             setDisMode(1);
             setIsEntering(false);
         }
     };
+
+    if (isLoading) {
+        return (
+            <div
+                style={{
+                    marginTop: "10vh",
+                }}
+            >
+                <ReactLoading type="bubbles" color="#212121" />
+            </div>
+        );
+    }
+
     return (
         <div className={styles["main"]}>
             <h2>Account Master</h2>
@@ -634,6 +662,7 @@ const AccountMaster = ({ userDetails }) => {
                     </button>
                 </div>
             </div>
+
             <Modal open={isOpen} onClose={closeHandler}>
                 <AccountMasterTable showclick={showHandler} />
             </Modal>

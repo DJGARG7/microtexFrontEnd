@@ -2,6 +2,15 @@ import React from "react";
 import { useState, useEffect } from "react";
 import Axios from "axios";
 import StickyTable from "../Reuse_components//Table/StickyTable";
+import toast from "react-hot-toast";
+
+const toastStyle = {
+    style: {
+        borderRadius: "15px",
+        background: "#333",
+        color: "#fff",
+    },
+};
 
 function AccountMasterTable({ showclick }) {
     const [tabledata, settabledata] = useState([]);
@@ -65,7 +74,7 @@ function AccountMasterTable({ showclick }) {
             Filter: "",
         },
         {
-            Header: "Phone No",
+            Header: "Phone No.",
             accessor: "phoneNo",
             Filter: "",
         },
@@ -80,12 +89,12 @@ function AccountMasterTable({ showclick }) {
             Filter: "",
         },
         {
-            Header: "RegDate",
+            Header: "Reg. Date",
             accessor: "RegDate",
             Filter: "",
         },
         {
-            Header: "propName",
+            Header: "prop. Name",
             accessor: "propName",
             Filter: "",
         },
@@ -105,7 +114,7 @@ function AccountMasterTable({ showclick }) {
             Filter: "",
         },
         {
-            Header: "OpeningBal",
+            Header: "Opening Bal.",
             accessor: "openingBal",
             Filter: "",
         },
@@ -115,16 +124,15 @@ function AccountMasterTable({ showclick }) {
             accessor: "CrDr",
         },
         {
-            Header: "BeneName",
+            Header: "Ben. Name",
             accessor: "beneName",
             Filter: "",
         },
         {
-            Header: "Account Number",
+            Header: "Account No.",
             accessor: "AccountNum",
             Filter: "",
         },
-
         {
             Header: "IFSC",
             accessor: "IFSC",
@@ -139,14 +147,33 @@ function AccountMasterTable({ showclick }) {
 
     useEffect(() => {
         (async function fetchdata() {
+            // const FToast = toast.loading("Fetching accounts...", toastStyle);
+
             try {
-                const res = await Axios.get(
-                    "http://localhost:3003/accountMaster"
+                const res = Axios.get("http://localhost:3003/accountMaster");
+
+                toast.promise(
+                    res,
+                    {
+                        loading: "Fetching accounts...",
+                        success: (data) => {
+                            console.log(data);
+                            data.data.forEach((item, index) => {
+                                const date = new Date(item.RegDate);
+                                item.RegDate = date.toLocaleDateString("en-GB");
+                            });
+                            settabledata(data.data);
+                            return "Accounts fetched!";
+                        },
+                        error: "Failed to fetch account data.",
+                    },
+                    toastStyle
                 );
-                console.log(res);
-                settabledata(res.data);
             } catch (e) {
                 console.log(e);
+                // toast.error("Failed to fetch accounts.", toastStyle, {
+                //     id: FToast,
+                // });
             }
         })();
     }, []);
