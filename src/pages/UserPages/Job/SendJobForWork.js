@@ -164,6 +164,8 @@ function SendJobForWork({ userDetails }) {
     const [onViewJobItemModal, setOnViewJobItemModal] = useState(false); // controls the view all items modal
     const [inventoryID, setinventoryID] = useState();
     const [invoicemdoal, setinvoicemodal] = useState(false);
+    const [billsubmit, setbillsubmit] = useState(false);
+    const [pdf, setpdf] = useState([]);
     /*- - - - - - - - - - - - - - - - - - - - - - Use states - - - - - - - - - - - - - - - - - - - - */
     // Authorization state.
     const [isAllowed, setIsAllowed] = useState(false);
@@ -339,6 +341,8 @@ function SendJobForWork({ userDetails }) {
         try {
             const res = await jobinstance.post("/addjobdetails", postdata);
             console.log(res);
+            setbillsubmit(true);
+            setpdf(postdata);
             clearall();
             toastSuccess(res.data);
         } catch (e) {
@@ -361,6 +365,12 @@ function SendJobForWork({ userDetails }) {
         } catch (e) {
             console.log(e.response.data);
         }
+    };
+
+    const onCancelHandler = () => {
+        clearall();
+        setbillsubmit(false);
+        setpdf("");
     };
 
     if (isAllowedLoading || isAccountsLoading) {
@@ -657,7 +667,7 @@ function SendJobForWork({ userDetails }) {
                             alignSelf: "center",
                         }}
                         onClick={onBillSubmit}
-                        disabled={!sendjobitemslist.length}
+                        disabled={billsubmit || !(sendjobitemslist.length > 0)}
                     >
                         Send
                     </button>
@@ -670,8 +680,21 @@ function SendJobForWork({ userDetails }) {
                             margin: "0 10px 0 10px",
                             alignSelf: "center",
                         }}
+                        onClick={onCancelHandler}
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        type="button"
+                        className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
+                        style={{
+                            width: "125px",
+                            minWidth: "125px",
+                            margin: "0 10px 0 10px",
+                            alignSelf: "center",
+                        }}
                         onClick={() => setinvoicemodal(true)}
-                        disabled={!sendjobitemslist.length}
+                        disabled={!billsubmit}
                     >
                         Print invoice
                     </button>
@@ -697,9 +720,9 @@ function SendJobForWork({ userDetails }) {
             </Modal>
             <Modal open={invoicemdoal} onClose={() => setinvoicemodal(false)}>
                 <Sendjobpdf
-                    challandetails={challandetails}
-                    itemdetials={itemdetials}
-                    sendjobitemslist={sendjobitemslist}
+                    challandetails={pdf.challandetails}
+                    itemdetials={pdf.itemdetials}
+                    sendjobitemslist={pdf.sendjobitemslist}
                 />
             </Modal>
         </div>

@@ -3,6 +3,8 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import styles from "./styles/Mill.module.css";
 import BillsTable from "./BillsTable";
+import Modal from "../../../components/Reuse_components/Modal";
+import PdfMill from "./PdfMill";
 
 const toastStyle = {
     style: {
@@ -35,7 +37,12 @@ export default function SendToMillForm({ itemData, millsData }) {
     const [selectedBill, setSelectedBill] = useState({});
     const [selectedTaka, setSelectedTaka] = useState([]);
     const [totalMeters, setTotalMeters] = useState(0);
-
+    const [challansubmit, setchallansubmit] = useState(false);
+    const [pdfmodal, setpdfmodal] = useState(false);
+    const [pdfdata, setpdfdata] = useState();
+    const [SupplierAccountName, setSupplierAccountName] = useState();
+    const [millaccoutname,setmillaccountname] = useState();
+    const [itemname,setitemname] = useState();
     // Fetch supppliers for an item from backend.
     const fetchSuppliers = async () => {
         if (selectedGrey === "DEFAULT") return;
@@ -119,7 +126,19 @@ export default function SendToMillForm({ itemData, millsData }) {
         e.preventDefault();
 
         const submitToast = toast.loading("Sending to mill...", toastStyle);
+        const postData = {
+            // For MILL_CHALLAN.
+            challanNumber: parseInt(challanNumber),
+            challanDate,
+            supplierID: selectedSupplier,
+            itemID: parseInt(selectedGrey),
+            millID: selectedMill,
+            totalMeters,
 
+            // For MILL_TAKA_DETAILS.
+            billNumber: selectedBill.billNumber,
+            selectedTaka,
+        };
         try {
             const res = await axios.post(`http://localhost:3005/mill/send/`, {
                 // For MILL_CHALLAN.
@@ -145,7 +164,11 @@ export default function SendToMillForm({ itemData, millsData }) {
             setSelectedMill("DEFAULT");
             setSelectedBill({});
             setSelectedTaka([]);
+            setBillFromTable([])
+            setBills("");
             setTotalMeters(0);
+            setchallansubmit(true);
+            setpdfdata(postData);
         } catch (error) {
             console.log(error);
             toast.error(`Failed to send: ${error.response.data}.`, {
@@ -154,6 +177,10 @@ export default function SendToMillForm({ itemData, millsData }) {
         }
     };
 
+    const onInvoicePrint = () => {
+        console.log(pdfdata);
+        setpdfmodal(true);
+    };
     return (
         <form onSubmit={submitHandler} className={styles["form"]}>
             {/* Row 1: Inputs. */}
@@ -196,6 +223,11 @@ export default function SendToMillForm({ itemData, millsData }) {
                     className={`${styles["form--input"]} ${styles["form--input-select"]}`}
                     value={selectedMill}
                     onChange={(e) => {
+                        const index = e.target.selectedIndex;
+                        const el = e.target.childNodes[index];
+                        const name = el.getAttribute("id");
+                        setmillaccountname(name);
+         
                         setSelectedMill(e.target.value);
                     }}
                     style={{
@@ -207,9 +239,9 @@ export default function SendToMillForm({ itemData, millsData }) {
                     <option disabled hidden value="DEFAULT">
                         Select mill...
                     </option>
-                    {millsData.map((mill) => {
+                    {millsData.map((mill,index) => {
                         return (
-                            <option value={mill.uid} key={mill.AccName}>
+                            <option value={mill.uid} key={index} id={mill.AccName}>
                                 {mill.AccName}
                             </option>
                         );
@@ -222,6 +254,12 @@ export default function SendToMillForm({ itemData, millsData }) {
                     className={`${styles["form--input"]} ${styles["form--input-select"]}`}
                     value={selectedGrey}
                     onChange={(e) => {
+                        const index = e.target.selectedIndex;
+                        const el = e.target.childNodes[index];
+                        const name = el.getAttribute("id");
+                        console.log(name);
+                        setitemname(name);
+                        
                         setSelectedGrey(e.target.value);
                     }}
                     style={{
@@ -235,7 +273,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                     </option>
                     {itemData.map((cloth) => {
                         return (
-                            <option value={cloth.itemID} key={cloth.itemID}>
+                            <option value={cloth.itemID} key={cloth.itemID} id={cloth.itemName}>
                                 {cloth.itemName}
                             </option>
                         );
@@ -248,6 +286,10 @@ export default function SendToMillForm({ itemData, millsData }) {
                     className={`${styles["form--input"]} ${styles["form--input-select"]}`}
                     value={selectedSupplier}
                     onChange={(e) => {
+                        const index = e.target.selectedIndex;
+                        const el = e.target.childNodes[index];
+                        const name = el.getAttribute("id");
+                        setSupplierAccountName(name);
                         setSelectedSupplier(e.target.value);
                     }}
                     style={{
@@ -263,6 +305,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                         return (
                             <option
                                 value={supplier.uid}
+                                id={supplier.AccName}
                                 key={supplier.uid}
                                 disabled={supplier.uid === -1 ? true : false}
                             >
@@ -462,7 +505,24 @@ export default function SendToMillForm({ itemData, millsData }) {
                 >
                     Send
                 </button>
+                <button
+                    className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
+                    style={{
+                        width: "75px",
+                        minWidth: "50px",
+                        margin: "0 10px 0 10px",
+                        alignSelf: "center",
+                    }}
+                    disabled={!challansubmit}
+                    type="button"
+                    onClick={onInvoicePrint}
+                >
+                    Invoice
+                </button>
             </div>
+            <Modal open={pdfmodal} onClose={() => setpdfmodal(false)}>
+                <PdfMill data={pdfdata} accountName={millaccoutname} itemname={itemname}/>
+            </Modal>
         </form>
     );
 }
