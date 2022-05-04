@@ -41,8 +41,8 @@ export default function SendToMillForm({ itemData, millsData }) {
     const [pdfmodal, setpdfmodal] = useState(false);
     const [pdfdata, setpdfdata] = useState();
     const [SupplierAccountName, setSupplierAccountName] = useState();
-    const [millaccoutname,setmillaccountname] = useState();
-    const [itemname,setitemname] = useState();
+    const [millaccoutname, setmillaccountname] = useState();
+    const [itemname, setitemname] = useState();
     // Fetch supppliers for an item from backend.
     const fetchSuppliers = async () => {
         if (selectedGrey === "DEFAULT") return;
@@ -164,7 +164,7 @@ export default function SendToMillForm({ itemData, millsData }) {
             setSelectedMill("DEFAULT");
             setSelectedBill({});
             setSelectedTaka([]);
-            setBillFromTable([])
+            setBillFromTable([]);
             setBills("");
             setTotalMeters(0);
             setchallansubmit(true);
@@ -227,7 +227,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                         const el = e.target.childNodes[index];
                         const name = el.getAttribute("id");
                         setmillaccountname(name);
-         
+
                         setSelectedMill(e.target.value);
                     }}
                     style={{
@@ -239,9 +239,13 @@ export default function SendToMillForm({ itemData, millsData }) {
                     <option disabled hidden value="DEFAULT">
                         Select mill...
                     </option>
-                    {millsData.map((mill,index) => {
+                    {millsData.map((mill, index) => {
                         return (
-                            <option value={mill.uid} key={index} id={mill.AccName}>
+                            <option
+                                value={mill.uid}
+                                key={index}
+                                id={mill.AccName}
+                            >
                                 {mill.AccName}
                             </option>
                         );
@@ -259,7 +263,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                         const name = el.getAttribute("id");
                         console.log(name);
                         setitemname(name);
-                        
+
                         setSelectedGrey(e.target.value);
                     }}
                     style={{
@@ -273,7 +277,11 @@ export default function SendToMillForm({ itemData, millsData }) {
                     </option>
                     {itemData.map((cloth) => {
                         return (
-                            <option value={cloth.itemID} key={cloth.itemID} id={cloth.itemName}>
+                            <option
+                                value={cloth.itemID}
+                                key={cloth.itemID}
+                                id={cloth.itemName}
+                            >
                                 {cloth.itemName}
                             </option>
                         );
@@ -364,7 +372,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                         id="billNumber"
                         readOnly
                         className={styles["form--input"]}
-                        style={{ width: "7.5vw", minWidth: "125px" }}
+                        style={{ width: "7.5vw", minWidth: "100px" }}
                         disabled={
                             typeof selectedBill.sentTaka === "undefined"
                                 ? true
@@ -479,7 +487,7 @@ export default function SendToMillForm({ itemData, millsData }) {
                         id="totalMeters"
                         readOnly
                         className={styles["form--input"]}
-                        style={{ width: "3vw", minWidth: "90px" }}
+                        style={{ width: "3vw", minWidth: "75px" }}
                         disabled={
                             typeof selectedBill.sentTaka === "undefined"
                                 ? true
@@ -489,39 +497,52 @@ export default function SendToMillForm({ itemData, millsData }) {
                 </div>
 
                 {/* Column 5: Submit button. */}
-                <button
-                    className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
+                <div
+                    className={styles["form--group"]}
                     style={{
-                        width: "75px",
-                        minWidth: "50px",
-                        margin: "0 10px 0 10px",
-                        alignSelf: "center",
+                        width: "auto",
+                        margin: "0",
+                        alignItems: "center",
                     }}
-                    disabled={
-                        typeof selectedBill.billNumber === "undefined"
-                            ? true
-                            : false
-                    }
                 >
-                    Send
-                </button>
-                <button
-                    className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
-                    style={{
-                        width: "75px",
-                        minWidth: "50px",
-                        margin: "0 10px 0 10px",
-                        alignSelf: "center",
-                    }}
-                    disabled={!challansubmit}
-                    type="button"
-                    onClick={onInvoicePrint}
-                >
-                    Invoice
-                </button>
+                    <button
+                        className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
+                        style={{
+                            width: "60px",
+                            minWidth: "50px",
+                            margin: "0 0 0 10px",
+                            alignSelf: "center",
+                        }}
+                        disabled={
+                            typeof selectedBill.billNumber === "undefined"
+                                ? true
+                                : false
+                        }
+                    >
+                        Send
+                    </button>
+                    <button
+                        className={`${styles["form--btn"]} ${styles["form--edit-btn"]}`}
+                        style={{
+                            width: "67.5px",
+                            minWidth: "50px",
+                            margin: "0 10px 0 10px",
+                            alignSelf: "center",
+                        }}
+                        disabled={!challansubmit}
+                        type="button"
+                        onClick={onInvoicePrint}
+                    >
+                        Invoice
+                    </button>
+                </div>
             </div>
             <Modal open={pdfmodal} onClose={() => setpdfmodal(false)}>
-                <PdfMill data={pdfdata} accountName={millaccoutname} itemname={itemname}/>
+                <PdfMill
+                    data={pdfdata}
+                    accountName={millaccoutname}
+                    itemname={itemname}
+                />
             </Modal>
         </form>
     );
