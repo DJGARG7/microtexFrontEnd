@@ -1,10 +1,18 @@
 import React from "react";
 import TableComponent from "../../components/Reuse_components/Table/TableComponent";
+import ReactLoading from "react-loading";
 import { useState, useEffect } from "react";
 import "../../styles/CityMaster.css";
 import Axios from "axios";
 import toast from "react-hot-toast";
 
+const toastStyle = {
+    style: {
+        borderRadius: "15px",
+        background: "#333",
+        color: "#fff",
+    },
+};
 
 // Include header and cookie with every request.
 if (localStorage.getItem("userDetails") != null)
@@ -14,24 +22,35 @@ if (localStorage.getItem("userDetails") != null)
 Axios.defaults.withCredentials = true;
 
 let index, oldcity;
+
 function CityMaster({ userDetails }) {
+    const [isLoading, setIsLoading] = useState(true);
+
     const [tabledata, setTabledata] = useState([]);
     const [city, setCitychange] = useState("");
     const [state, setStatechange] = useState("");
     const [editMode, setEditMode] = useState(false);
 
+    const fetchData = async () => {
+        // let cityToast;
+        try {
+            // cityToast = toast.loading("Fetching cities...", toastStyle);
+            const res = await Axios.get("http://localhost:3001/cityMaster/get");
+
+            setTabledata(res.data);
+            setIsLoading(false);
+            // toast.success("Cities fetched.", { id: cityToast });
+        } catch (e) {
+            console.log(e);
+            toast.error("Failed to fetch cities.", toastStyle);
+        }
+    };
+
     useEffect(() => {
-        (async function fetchdata() {
-            try {
-                const res = await Axios.get(
-                    "http://localhost:3001/cityMaster/get"
-                );
-                setTabledata(res.data);
-            } catch (e) {
-                console.log(e);
-            }
-        })();
+        fetchData();
     }, []);
+
+    console.log(tabledata);
 
     const TableColData = [
         {
@@ -107,9 +126,11 @@ function CityMaster({ userDetails }) {
             ),
         },
     ];
+
     const cityHandler = (event) => {
         setCitychange(event.target.value);
     };
+
     const stateHandler = (event) => {
         setStatechange(event.target.value);
     };
@@ -123,7 +144,13 @@ function CityMaster({ userDetails }) {
         };
         // checks wether the mode is edit or not if edit --> updates the exsisting selected row in the table and if !edit-> adds new data into the table if not present.
         if (editMode) {
+            let editCityToast;
             try {
+                // editCityToast = toast.loading(
+                //     `Editing to ${newData.CityName}, ${newData.StateName}...`,
+                //     toastStyle
+                // );
+
                 const result = await Axios.post(
                     "http://localhost:3001/cityMaster/update",
                     {
@@ -132,6 +159,7 @@ function CityMaster({ userDetails }) {
                         oldcity: oldcity.trim(),
                     }
                 );
+
                 if (result.data == 1) {
                     setEditMode(false);
                     setTabledata((preExpense) => {
@@ -140,23 +168,14 @@ function CityMaster({ userDetails }) {
                         return [...preExpense];
                     });
                     toast.success(
-                        `${newData.CityName}, ${newData.StateName} added successfully!`,
-                        {
-                            style: {
-                                borderRadius: "15px",
-                                background: "#333",
-                                color: "#fff",
-                            },
-                        }
+                        `${newData.CityName}, ${newData.StateName} edited successfully!`,
+                        toastStyle,
+                        { id: editCityToast }
                     );
                 } else {
                     if (result.data)
-                        toast.error(result.data, {
-                            style: {
-                                borderRadius: "15px",
-                                background: "#333",
-                                color: "#fff",
-                            },
+                        toast.error(result.data, toastStyle, {
+                            id: editCityToast,
                         });
                     console.log(result.data);
                 }
@@ -164,8 +183,13 @@ function CityMaster({ userDetails }) {
                 console.log(e);
             }
         } else {
+            let addCityToast;
             // function to add the data
             try {
+                // addCityToast = toast.loading(
+                //     `Adding ${newData.CityName}, ${newData.StateName}...`,
+                //     toastStyle
+                // );
                 const result = await Axios.post(
                     "http://localhost:3001/cityMaster/Add",
                     {
@@ -182,22 +206,13 @@ function CityMaster({ userDetails }) {
                     });
                     toast.success(
                         `${newData.CityName}, ${newData.StateName} added successfully!`,
-                        {
-                            style: {
-                                borderRadius: "15px",
-                                background: "#333",
-                                color: "#fff",
-                            },
-                        }
+                        toastStyle,
+                        { id: addCityToast }
                     );
                 } else {
                     if (result.data.sqlMessage)
-                        toast.error(result.data.sqlMessage, {
-                            style: {
-                                borderRadius: "15px",
-                                background: "#333",
-                                color: "#fff",
-                            },
+                        toast.error(result.data.sqlMessage, toastStyle, {
+                            id: addCityToast,
                         });
                 }
             } catch (e) {
@@ -205,6 +220,19 @@ function CityMaster({ userDetails }) {
             }
         }
     };
+
+    if (isLoading) {
+        return (
+            <div
+                style={{
+                    marginTop: "10vh",
+                }}
+            >
+                <ReactLoading type="bubbles" color="#212121" />
+            </div>
+        );
+    }
+
     return (
         <div className="citymaster">
             <h2>City Master</h2>
