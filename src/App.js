@@ -6,12 +6,20 @@ import AdminDashboard from "./components/Admin_components/AdminDashboard";
 import UserDashboard from "./components/User_components/UserDashboard";
 import axiosAuth from "./components/Admin_components/Login/api/axios";
 import "./style.css";
-import Axios from "axios";
+import axios from "axios";
 
-Axios.defaults.withCredentials = true;
-const usrinstance = Axios.create({
+axios.defaults.withCredentials = true;
+const usrinstance = axios.create({
     baseURL: "http://localhost:3005/accesslogs",
 });
+
+function convertDate(inputFormat) {
+    function pad(s) {
+        return s < 10 ? "0" + s : s;
+    }
+    var d = new Date(inputFormat);
+    return [d.getFullYear(), pad(d.getMonth() + 1), pad(d.getDate())].join("-");
+}
 
 function App() {
     // Storing user details in localStorage and as state.
@@ -39,15 +47,6 @@ function App() {
         localStorage.setItem("userDetails", JSON.stringify(user));
     }, [user]);
 
-    function convertDate(inputFormat) {
-        function pad(s) {
-            return s < 10 ? "0" + s : s;
-        }
-        var d = new Date(inputFormat);
-        return [d.getFullYear(), pad(d.getMonth() + 1), pad(d.getDate())].join(
-            "-"
-        );
-    }
     var current = new Date();
     const loginHandler = (
         status,
@@ -74,11 +73,13 @@ function App() {
             // Setting login status.
             setIsLoggedIn("true");
 
+            let current = new Date();
+
             const usrdata = {
                 corporateID: corporateID,
                 userID: userID,
                 userName: userName,
-                date: convertDate(new Date()),
+                date: convertDate(current),
                 time: current.toLocaleTimeString(),
             };
 

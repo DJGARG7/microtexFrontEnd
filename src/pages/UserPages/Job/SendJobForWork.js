@@ -673,7 +673,7 @@ function SendJobForWork({ userDetails }) {
                     </button>
                     <button
                         type="button"
-                        className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
+                        className={`${styles["form--btn"]} ${styles["form--del-btn"]}`}
                         style={{
                             width: "125px",
                             minWidth: "125px",
@@ -686,7 +686,7 @@ function SendJobForWork({ userDetails }) {
                     </button>
                     <button
                         type="button"
-                        className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
+                        className={`${styles["form--btn"]} ${styles["form--edit-btn"]}`}
                         style={{
                             width: "125px",
                             minWidth: "125px",

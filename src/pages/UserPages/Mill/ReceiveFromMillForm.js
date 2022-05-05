@@ -333,7 +333,7 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                 >
                     <label
                         htmlFor="sentMeters"
-                        style={{ margin: "0 10px 0 10px" }}
+                        style={{ margin: "0 10px 0 10px", fontSize: "0.95rem" }}
                     >
                         Sent Meters
                     </label>
@@ -348,7 +348,11 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                         id="sentMeters"
                         readOnly
                         className={styles["form--input"]}
-                        style={{ width: "5vw", minWidth: "70px" }}
+                        style={{
+                            width: "5vw",
+                            minWidth: "60px",
+                            fontSize: "0.95rem",
+                        }}
                         disabled={
                             typeof selectedChallan.sentTaka === "undefined"
                                 ? true
@@ -368,7 +372,7 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                 >
                     <label
                         htmlFor="receivedMeters"
-                        style={{ margin: "0 10px 0 1vw" }}
+                        style={{ margin: "0 10px 0 1vw", fontSize: "0.95rem" }}
                     >
                         Received Meters
                     </label>
@@ -383,7 +387,8 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                         className={styles["form--input"]}
                         style={{
                             width: "5vw",
-                            minWidth: "70px",
+                            minWidth: "60px",
+                            fontSize: "0.95rem",
                         }}
                         disabled={
                             typeof selectedChallan.sentTaka === "undefined"
@@ -395,7 +400,7 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
 
                     <label
                         htmlFor="millLoss"
-                        style={{ margin: "0 10px 0 1vw" }}
+                        style={{ margin: "0 10px 0 1vw", fontSize: "0.95rem" }}
                     >
                         Mill Loss
                     </label>
@@ -406,7 +411,11 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                         placeholder="?"
                         onChange={(e) => setMillLoss(e.target.value)}
                         className={styles["form--input"]}
-                        style={{ width: "5vw", minWidth: "70px" }}
+                        style={{
+                            width: "5vw",
+                            minWidth: "60px",
+                            fontSize: "0.95rem",
+                        }}
                         disabled={
                             typeof selectedChallan.sentTaka === "undefined"
                                 ? true
@@ -419,7 +428,7 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
 
                     <label
                         htmlFor="pieceLoss"
-                        style={{ margin: "0 10px 0 1vw" }}
+                        style={{ margin: "0 10px 0 1vw", fontSize: "0.95rem" }}
                     >
                         Piece Loss
                     </label>
@@ -436,7 +445,11 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                         step=".01"
                         readOnly
                         className={styles["form--input"]}
-                        style={{ width: "5vw", minWidth: "50px" }}
+                        style={{
+                            width: "3vw",
+                            minWidth: "25px",
+                            fontSize: "0.95rem",
+                        }}
                     />
                 </div>
 
@@ -449,7 +462,10 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                         alignItems: "center",
                     }}
                 >
-                    <label htmlFor="rate" style={{ margin: "0 10px 0 1vw" }}>
+                    <label
+                        htmlFor="rate"
+                        style={{ margin: "0 10px 0 1vw", fontSize: "0.95rem" }}
+                    >
                         Rate
                     </label>
                     <input
@@ -460,7 +476,11 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                         placeholder="?"
                         onChange={(e) => setRate(e.target.value)}
                         className={styles["form--input"]}
-                        style={{ width: "5vw", minWidth: "75px" }}
+                        style={{
+                            width: "4.5vw",
+                            minWidth: "60px",
+                            fontSize: "0.95rem",
+                        }}
                         disabled={
                             typeof selectedChallan.sentTaka === "undefined"
                                 ? true
@@ -469,7 +489,10 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                         required
                     />
 
-                    <label htmlFor="amount" style={{ margin: "0 10px 0 1vw" }}>
+                    <label
+                        htmlFor="amount"
+                        style={{ margin: "0 10px 0 1vw", fontSize: "0.95rem" }}
+                    >
                         Amount
                     </label>
                     <input
@@ -481,8 +504,9 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                         readOnly
                         className={styles["form--input"]}
                         style={{
-                            width: "7.5vw",
-                            minWidth: "75px",
+                            width: "6.5vw",
+                            minWidth: "65px",
+                            fontSize: "0.95rem",
                         }}
                         disabled={
                             typeof selectedChallan.sentTaka === "undefined"
@@ -494,17 +518,47 @@ export default function ReceiveFromMillForm({ itemData, millsData }) {
                     />
                 </div>
                 {/* Column: Submit button. */}
-                <button
-                    className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
-                    style={{ margin: "0 10px 0 1vw", alignSelf: "center" }}
-                    disabled={
-                        typeof selectedChallan.sentTaka === "undefined"
-                            ? true
-                            : false
-                    }
+                <div
+                    className={styles["form--group"]}
+                    style={{
+                        width: "auto",
+                        margin: "0",
+                        alignItems: "center",
+                    }}
                 >
-                    Receive
-                </button>
+                    <button
+                        className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
+                        style={{
+                            width: "65px",
+                            minWidth: "65px",
+                            margin: "0 0 0 1vw",
+                            alignSelf: "center",
+                            fontSize: "0.9rem",
+                        }}
+                        disabled={
+                            typeof selectedChallan.sentTaka === "undefined"
+                                ? true
+                                : false
+                        }
+                    >
+                        Receive
+                    </button>
+                    <button
+                        className={`${styles["form--btn"]} ${styles["form--edit-btn"]}`}
+                        style={{
+                            width: "62.5px",
+                            minWidth: "62.5px",
+                            margin: "0 10px 0 10px",
+                            alignSelf: "center",
+                            fontSize: "0.9rem",
+                        }}
+                        // disabled={!challansubmit}
+                        type="button"
+                        // onClick={onInvoicePrint}
+                    >
+                        Invoice
+                    </button>
+                </div>
             </div>
         </form>
     );

@@ -19,6 +19,7 @@
     /* box-shadow: 0 9px #999; */
     margin-right: -2px;
     transition: all 0.1s;
+    cursor: pointer;
 }
 
 .delete-user:hover {

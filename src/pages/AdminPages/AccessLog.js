@@ -5,6 +5,7 @@ import styles from "../../pages/UserPages/Mill/styles/Mill.module.css";
 import StickyTable from "../../components/Reuse_components/Table/StickyTable";
 import ReactLoading from "react-loading";
 import toast from "react-hot-toast";
+
 const toastStyle = {
     style: {
         borderRadius: "15px",
@@ -38,12 +39,12 @@ function AccessLog() {
         },
         {
             Header: "Date",
-            accessor: "user_date",
+            accessor: "loginDate",
             Filter: "",
         },
         {
             Header: "Time",
-            accessor: "Time",
+            accessor: "loginTime",
             Filter: "",
         },
     ];
@@ -55,8 +56,8 @@ function AccessLog() {
         try {
             const res = await usrinstance.get(" ");
             res.data.forEach((item, index) => {
-                const date = new Date(item.user_date);
-                item.user_date = date.toLocaleDateString();
+                const date = new Date(item.loginDate);
+                item.loginDate = date.toLocaleDateString("en-GB");
             });
             setlogs(res.data);
             setIsLoading(false);

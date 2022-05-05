@@ -130,7 +130,7 @@ function TakaDetails({ takaList, onTakaHandler, totalMts }) {
                             width: "100px",
                             minWidth: "100px",
                         }}
-                        disabled
+                        readOnly
                     />
                     <div
                         className={styles["form--group"]}

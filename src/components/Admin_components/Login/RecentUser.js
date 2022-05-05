@@ -15,7 +15,7 @@ function RecentUser(props) {
             className={[styles["recent-user"], styles[props.type]].join(" ")}
             onClick={clickHandler}
         >
-            <div className="name">{props.user.name}</div>
+            <div className={styles["username"]}>{props.user.name}</div>
             {props.type === "firm" ? (
                 <div className={styles[`${props.type}-id`]}>
                     <div>{props.user.c_id}</div>

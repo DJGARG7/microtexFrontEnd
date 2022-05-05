@@ -14,8 +14,9 @@
     border: 2.5px solid black;
     border-radius: 0 10px 10px 0;
     /* box-shadow: 0 9px #999; */
-    padding: 25px;
+    padding: 1vw;
     transition: all 0.1s;
+    cursor: pointer;
 }
 
 .recent-user:active {
@@ -43,4 +44,18 @@
 .recent-user .proprietor-id {
     display: flex;
     flex-direction: column;
+    align-items: flex-end;
+    font-size: 0.975rem;
+}
+
+.recent-user .firm-id {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: 0.975rem;
+}
+
+.recent-user .username {
+    font-size: 1.075rem;
+    font-weight: 600;
 }

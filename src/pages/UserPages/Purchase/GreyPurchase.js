@@ -288,10 +288,22 @@ export default function GreyPurchase({ userDetails }) {
 
         // Post the item to backend.
         try {
-            const res = await purchases.post("items", {
+            const res = purchases.post("items", {
                 itemName: newItemName,
             });
-            toastSuccess(res.data);
+
+            toast.promise(
+                res,
+                {
+                    loading: "Adding item...",
+                    success: (res) => {
+                        getItems();
+                        return res.data;
+                    },
+                    error: "Failed to add item.",
+                },
+                toastStyle
+            );
 
             // Close the modal.
             closeItemModal();
@@ -299,10 +311,9 @@ export default function GreyPurchase({ userDetails }) {
             // Reset new item name.
             setNewItemName("");
         } catch (error) {
-            toastError(error.response.data);
+            console.log(error);
+            // toastError(error.response.data);
         }
-
-        getItems();
     };
 
     // function to handle onsubmit form request
@@ -368,26 +379,35 @@ export default function GreyPurchase({ userDetails }) {
 
     const onMainSubmit = async () => {
         try {
-            const res = await purchases.post("bills", {
+            const res = purchases.post("bills", {
                 formData,
                 purchaseditems,
                 totalamount,
             });
 
-            toast.success(res.data, toastStyle);
+            toast.promise(
+                res,
+                {
+                    loading: "Saving bill...",
+                    success: (res) => {
+                        setFormData({
+                            ...formData,
+                            billNumber: "",
+                            accountID: "DEFAULT",
+                            itemID: 0,
+                        });
 
-            setFormData({
-                ...formData,
-                billNumber: "",
-                accountID: "DEFAULT",
-                itemID: 0,
-            });
-
-            setpurchaseditems([]);
-            settotalamount(0);
+                        setpurchaseditems([]);
+                        settotalamount(0);
+                        return "Bill saved!";
+                    },
+                    error: "Failed to save bill.",
+                },
+                toastStyle
+            );
         } catch (error) {
             console.log(error);
-            toast.error("Failed to save bill.", toastStyle);
+            // toast.error("Failed to save bill.", toastStyle);
         }
     };
 
@@ -615,7 +635,6 @@ export default function GreyPurchase({ userDetails }) {
                         readOnly
                         className={styles["form--input"]}
                         style={{ width: "10vw", minWidth: "150px" }}
-                        
                     />
                     <input
                         type="number"
@@ -714,7 +733,6 @@ export default function GreyPurchase({ userDetails }) {
                             value={formData.Amount - formData.DiscountAmt}
                             readOnly
                             required
-                            
                             className={styles["form--input"]}
                             style={{ width: "7.5vw", minWidth: "100px" }}
                         />
@@ -728,7 +746,9 @@ export default function GreyPurchase({ userDetails }) {
                             type="submit"
                             value="Add to List"
                             className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
-                            disabled={(formData.Amount - formData.DiscountAmt)<=0}
+                            disabled={
+                                formData.Amount - formData.DiscountAmt <= 0
+                            }
                             style={{ width: "100px", minWidth: "100px" }}
                         />
                     </div>

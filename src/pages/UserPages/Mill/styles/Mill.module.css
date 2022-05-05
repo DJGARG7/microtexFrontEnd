@@ -136,11 +136,11 @@
     color: white;
 }
 .form--edit-btn {
-    background-color: #3e3eff;
+    background-color: #2297be;
     color: white;
 }
 .form--edit-btn:active {
-    background-color: #0000b2;
+    filter: brightness(110%);
     color: white;
 }
 
