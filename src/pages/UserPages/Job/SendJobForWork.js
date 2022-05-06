@@ -413,7 +413,7 @@ function SendJobForWork({ userDetails }) {
                             id="challanNo"
                             disabled={sendjobitemslist.length}
                             onChange={onChallanChnageHandler}
-                            placeholder="Bill Number"
+                            placeholder="Challan Number"
                             className={styles["form--input"]}
                             style={{
                                 width: "10vw",
