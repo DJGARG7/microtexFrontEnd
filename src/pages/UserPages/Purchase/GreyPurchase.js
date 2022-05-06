@@ -820,7 +820,7 @@ export default function GreyPurchase({ userDetails }) {
 
             {/* Modal 1: Saved bills. */}
             <Modal open={isPurchaseModalOpen} onClose={closePurchaseHandler}>
-                <h2 style={{ marginBottom: "25px" }}>Purchases</h2>
+                <h2 style={{ marginBottom: "2vh" }}>Grey Purchases</h2>
                 <StickyTable
                     TableCol={billColumns}
                     TableData={bills}
@@ -834,7 +834,7 @@ export default function GreyPurchase({ userDetails }) {
 
             {/* Modal 2: New item information. */}
             <Modal open={isItemModalOpen} onClose={closeItemModal}>
-                <h2 style={{ marginBottom: "25px" }}>Add Item</h2>
+                <h2 style={{ marginBottom: "2vh" }}>Add Item</h2>
                 <form
                     className={styles["form"]}
                     style={{ padding: "0", flexDirection: "row" }}

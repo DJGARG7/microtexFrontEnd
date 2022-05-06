@@ -606,14 +606,14 @@ function SendJobForWork({ userDetails }) {
                         className={styles["form--input"]}
                         style={{
                             width: "5vw",
-                            minWidth: "75px",
+                            minWidth: "87.5px",
                         }}
                     />
                     <button
                         className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
                         style={{
-                            width: "100px",
-                            minWidth: "100px",
+                            width: "95px",
+                            minWidth: "95px",
                             margin: "0 10px 0 10px",
                             alignSelf: "center",
                         }}
