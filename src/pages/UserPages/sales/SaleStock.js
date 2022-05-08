@@ -9,9 +9,11 @@ import Modal from "../../../components/Reuse_components/Modal";
 import SaleStockModal from "../../../components/User_components/sales/SaleStockModal";
 const SaleStock = () => {
     const [currMts, setCurrMts] = useState(0);
+    const [inventoryID, setInventoryID] = useState(0);
     const addSaleStockHandler = (rowData) => {
         console.log(rowData.row.values);
         setCurrMts(rowData.row.values.pieces);
+        setInventoryID(rowData.row.values.InventoryID);
         setIsOpen(true);
     };
     const rowDisplayHandler = (cellData) => {
@@ -118,12 +120,18 @@ const SaleStock = () => {
             toastError("Failed to fetch designs");
         }
     };
-    const transferInventoryHandler = (num) => {
-        console.log(num);
-        //axios request to transfer if success ->close modal and show success msg
-        //reset cloth type and job list
+    const transferInventoryHandler = async (num) => {
+        const data = { num: num, DName: DName, inventoryID: inventoryID };
+        console.log(data);
+        try {
+            await Axios.post(`http://localhost:3005/sales/addSaleStocks`, data);
+            toastSuccess("Sale Stock added successfully");
+        } catch (e) {
+            toastError("Failed to add sale stock");
+        }
         setIsOpen(false);
-        //else show error msg
+        setClothType("");
+        setJobStockList([]);
     };
     return (
         <>

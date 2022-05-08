@@ -77,7 +77,7 @@ export default function SaleBilling({ userDetails }) {
                     >
                         Show
                     </button>
-                    <button
+                    {/* <button
                         className={`${styles["form--btn"]} ${styles["form--del-btn"]}`}
                         style={{
                             cursor: "pointer",
@@ -90,7 +90,7 @@ export default function SaleBilling({ userDetails }) {
                         }}
                     >
                         Delete
-                    </button>
+                    </button> */}
                     <button
                         onClick={() => salesBillHandler(tableProps.row)}
                         className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}

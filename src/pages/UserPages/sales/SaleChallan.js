@@ -19,6 +19,7 @@ function convertDate(inputFormat) {
 }
 
 export default function SaleChallan({ userDetails }) {
+    const [qtyHandle, setQtyHandle] = useState({});
     const TableColData = [
         {
             Header: "Action",
@@ -66,6 +67,9 @@ export default function SaleChallan({ userDetails }) {
 
     const rowDeleteHandler = (tableData) => {
         const copyData = [...tableData.data];
+        qtyHandle[tableData.row.values.clothType] =
+            parseInt(qtyHandle[tableData.row.values.clothType]) -
+            parseInt(tableData.row.values.quantity);
         copyData.splice(tableData.row.index, 1);
         setItemList(copyData);
     };
@@ -93,6 +97,9 @@ export default function SaleChallan({ userDetails }) {
     const [isAccountsLoading, setIsAccountsLoading] = useState(true);
     const [isDesignsLoading, setIsDesignsLoading] = useState(true);
 
+    //stock data useStates
+    const [qty, setQty] = useState(0);
+    const [estimate, setEstimate] = useState(0);
     const checkPermission = async () => {
         try {
             const res = await Axios.get(
@@ -136,7 +143,32 @@ export default function SaleChallan({ userDetails }) {
         fetchAccounts();
         fetchDesigns();
     }, []);
+    useEffect(async () => {
+        if (clothType !== "none") {
+            try {
+                const res = await Axios.get(
+                    `http://localhost:3004/designMaster/quantity/${clothType}`
+                );
+                console.log(res.data[0]);
+                console.log(parseInt(qtyHandle[clothType]));
+                if (clothType in qtyHandle) {
+                    setQty(
+                        parseInt(res.data[0].qty) -
+                            parseInt(qtyHandle[clothType])
+                    );
+                } else {
+                    setQty(parseInt(res.data[0].qty));
+                }
 
+                setEstimate(res.data[0].CALC_PRICE);
+            } catch (e) {
+                toastError("cannot fetch quantity");
+            }
+        } else {
+            setQty(0);
+            setEstimate(0);
+        }
+    }, [clothType]);
     const addItemHandler = () => {
         try {
             if (DName === "none") {
@@ -155,6 +187,13 @@ export default function SaleChallan({ userDetails }) {
                     quantity: quantity,
                 },
             ]);
+            if (clothType in qtyHandle) {
+                qtyHandle[clothType] =
+                    parseInt(qtyHandle[clothType]) + parseInt(quantity);
+            } else {
+                qtyHandle[clothType] = parseInt(quantity);
+            }
+            console.log(qtyHandle);
             setDName("none");
             setClothType("none");
             setRate("");
@@ -175,13 +214,14 @@ export default function SaleChallan({ userDetails }) {
             if (res.data != 1) throw res.data;
             console.log("data added to db");
             toastSuccess("Challan Added");
-            setChallan("");
-            setCustName("");
-            setItemList([]);
         } catch (error) {
             console.log(error);
             toastError("Addition failed!");
         }
+        setChallan("");
+        setCustName("");
+        setItemList([]);
+        setQtyHandle({});
     };
 
     if (isAllowedLoading || isDesignsLoading || isAccountsLoading) {
@@ -352,6 +392,7 @@ export default function SaleChallan({ userDetails }) {
                             width: "10vw",
                             minWidth: "150px",
                         }}
+                        disabled={clothType == "none"}
                     />
 
                     <button
@@ -359,6 +400,7 @@ export default function SaleChallan({ userDetails }) {
                         onClick={addItemHandler}
                         className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
                         style={{ width: "100px" }}
+                        disabled={quantity <= 0 || quantity > qty}
                     >
                         Add item
                     </button>
@@ -368,6 +410,8 @@ export default function SaleChallan({ userDetails }) {
                     className={styles["form--table"]}
                     style={{ marginBottom: "40px" }}
                 >
+                    <p> Available pieces : {qty}</p>
+                    <p> Estimated Price : {estimate}</p>
                     <StickyTable TableCol={TableColData} TableData={itemList} />
                 </div>
 
