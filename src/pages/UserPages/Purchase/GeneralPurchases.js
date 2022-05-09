@@ -18,7 +18,7 @@ axios.defaults.headers.common["userID"] = localStorage.getItem("userDetails")
 
 // Axios instances.
 const accounts = axios.create({
-    baseURL: "http://localhost:3003/accountMaster",
+    baseURL: "http://localhost:3003/accountMaster/",
 });
 const purchases = axios.create({
     baseURL: "http://localhost:3005/purchases/",
@@ -204,6 +204,7 @@ function GeneralPurchases({ userDetails }) {
         const type = "Creditors for expenses";
         try {
             const res = await accounts.get(`${type}`);
+            console.log(res);
             setaccntlist(res.data);
             setIsAccountsLoading(false);
         } catch (e) {
@@ -452,13 +453,12 @@ function GeneralPurchases({ userDetails }) {
                         onClick={() => {
                             (async function fetchdata() {
                                 try {
-                                    const res = await purchases.get(
-                                        "fetchgeneralpurchase"
-                                    );
+                                    const res = await purchases.get("/fetchgeneralpurchases");
+                                    console.log(res);
                                     settabledata(res.data);
                                     setModal(true);
                                 } catch (e) {
-                                    console.log(e.response.data);
+                                    console.log(e);
                                 }
                             })();
                         }}
