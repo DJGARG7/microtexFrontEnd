@@ -21,7 +21,7 @@ const accounts = axios.create({
     baseURL: "http://localhost:3003/accountMaster/",
 });
 const purchases = axios.create({
-    baseURL: "http://localhost:3005/purchases/",
+    baseURL: "http://localhost:3005/purchases",
 });
 
 // helper function to get the current date
@@ -452,11 +452,13 @@ function GeneralPurchases({ userDetails }) {
                         className={`${styles["add-btn"]} ${styles["btn"]}`}
                         onClick={() => {
                             (async function fetchdata() {
+                                setModal(true);
+
                                 try {
                                     const res = await purchases.get("/fetchgeneralpurchases");
                                     console.log(res);
                                     settabledata(res.data);
-                                    setModal(true);
+                                    toastSuccess("Bills fetched!");
                                 } catch (e) {
                                     console.log(e);
                                 }
@@ -470,6 +472,7 @@ function GeneralPurchases({ userDetails }) {
 
             {/* Modal. */}
             <Modal open={modal} onClose={() => setModal(false)}>
+                <h2 style={{ marginBottom: "2vh" }}>General Purchases</h2>
                 <StickyTable
                     TableCol={tablecoldata}
                     TableData={tabledata}
