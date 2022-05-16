@@ -130,8 +130,9 @@ export default function SaleChallan({ userDetails }) {
             const res1 = await Axios.get(
                 "http://localhost:3004/designMaster/nameAndType"
             );
-            setDNamelist(res1.data[0]);
-            setClothlist(res1.data[1]);
+            setDNamelist(res1.data);
+
+            // setClothlist(res1.data[1]);
             setIsDesignsLoading(false);
         } catch (e) {
             toastError("Failed to fetch designs");
@@ -143,6 +144,18 @@ export default function SaleChallan({ userDetails }) {
         fetchAccounts();
         fetchDesigns();
     }, []);
+    useEffect(async () => {
+        setClothType("none");
+        if (DName !== "none") {
+            try {
+                const res = await Axios.get(
+                    `http://localhost:3004/designMaster/Type/${DName}`
+                );
+                console.log("running");
+                setClothlist(res.data);
+            } catch (e) {}
+        }
+    }, [DName]);
     useEffect(async () => {
         if (clothType !== "none") {
             try {

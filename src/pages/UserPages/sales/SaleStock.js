@@ -91,11 +91,10 @@ const SaleStock = () => {
     const [isOpen, setIsOpen] = useState(false);
     const fetchDesigns = async () => {
         try {
-            const res1 = await Axios.get(
+            const res = await Axios.get(
                 "http://localhost:3004/designMaster/nameAndType"
             );
-            setDNamelist(res1.data[0]);
-            setClothlist(res1.data[1]);
+            setDNamelist(res.data);
             // setIsDesignsLoading(false);
         } catch (e) {
             toastError("Failed to fetch designs");
@@ -106,14 +105,14 @@ const SaleStock = () => {
     }, []);
     const fetchJobStocksHandler = async () => {
         try {
-            const res1 = await Axios.get(
+            const res = await Axios.get(
                 `http://localhost:3005/sales/jobStocks/${clothType}`
             );
-            console.log(res1.data);
-            if (res1.data.length == 0) {
+            console.log(res.data);
+            if (res.data.length == 0) {
                 toastError("No stock for this cloth");
             } else {
-                setJobStockList(res1.data);
+                setJobStockList(res.data);
             }
             // setIsDesignsLoading(false);
         } catch (e) {
@@ -133,6 +132,18 @@ const SaleStock = () => {
         setClothType("");
         setJobStockList([]);
     };
+    useEffect(async () => {
+        setClothType("");
+        setJobStockList([]);
+        if (DName !== "") {
+            try {
+                const res = await Axios.get(
+                    `http://localhost:3004/designMaster/Type/${DName}`
+                );
+                setClothlist(res.data);
+            } catch (e) {}
+        }
+    }, [DName]);
     return (
         <>
             <form>
