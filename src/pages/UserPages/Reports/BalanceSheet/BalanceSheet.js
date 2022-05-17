@@ -97,18 +97,7 @@ export default function BalanceSheet({ userDetails }) {
 
     // Data.
     const [BSData, setBSData] = useState({});
-
-    let assetSum = 0;
-    let liabilitySum = 0;
-
-    let setAssetSum = (n) => {
-        console.log(assetSum, "exec");
-        assetSum += n;
-    };
-    let setLiabilitySum = (n) => {
-        console.log(liabilitySum, "exec");
-        liabilitySum += n;
-    };
+    const [total, setTotal] = useState(0);
 
     const checkPermission = async () => {
         try {
@@ -128,7 +117,11 @@ export default function BalanceSheet({ userDetails }) {
             const res = await axios.get(
                 "http://localhost:3005/reports/balancesheet"
             );
+            const res1 = await axios.get(
+                "http://localhost:3005/reports/totalBS"
+            );
             setBSData(res.data);
+            setTotal(res1.data);
             setIsBSLoading(false);
         } catch (error) {
             console.log(error);
@@ -171,25 +164,19 @@ export default function BalanceSheet({ userDetails }) {
             <div className={styles["grid--container"]}>
                 <div className={styles["grid--column"]}>
                     {BSData.liabilites?.map((liability, index) => {
-                        console.log(liabilitySum);
                         return (
                             <EntityBlock
+                                mode={-1}
                                 key={index}
                                 data={liability}
-                                setSum={setLiabilitySum}
                             />
                         );
                     })}
                 </div>
                 <div className={styles["grid--column"]}>
                     {BSData.assets?.map((assets, index) => {
-                        console.log(assetSum);
                         return (
-                            <EntityBlock
-                                key={index}
-                                data={assets}
-                                setSum={setAssetSum}
-                            />
+                            <EntityBlock mode={1} key={index} data={assets} />
                         );
                     })}
                 </div>
@@ -221,8 +208,8 @@ export default function BalanceSheet({ userDetails }) {
                     }}
                 >
                     <div style={{ marginLeft: "1vw" }}>Total</div>
-                    <div style={{ marginRight: "100px" }}>{liabilitySum}</div>
-                    <div style={{ marginRight: "1vw" }}>{assetSum}</div>
+                    <div style={{ marginRight: "100px" }}>{total}</div>
+                    <div style={{ marginRight: "1vw" }}>{total}</div>
                 </div>
             </div>
         </div>
