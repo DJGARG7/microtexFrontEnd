@@ -136,14 +136,14 @@ function GeneralReport() {
                 <div className={styles["charts"]} style={{width:"700px"}}>
                     <BarChart chartData={accountCreditors} />
                     <br />
-                    <label>Accounts to whom we have given business to</label>
+                    <label>Accounts to whom we have given business to(INR)</label>
                 </div>
             </div>
             <div className={styles["chart-row"]}>
                 <div className={styles["charts"]} style={{width:"700px"}}>
                     <BarChart chartData={salesAccountWise} />
                     <br />
-                    <label>Accounts who has given business to us</label>
+                    <label>Accounts who has given business to us(INR)</label>
                 </div>
             </div>
         </div>
