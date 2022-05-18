@@ -122,7 +122,7 @@ export const UserSideBarDataTest = [
                 path: "#",
                 iconOpened: <RiIcons.RiArrowUpSFill />,
                 iconClosed: <RiIcons.RiArrowDownSFill />,
-                subNav:[
+                subNav: [
                     {
                         title: "Mill Report",
                         path: "/dashboard/reports/mill",
@@ -131,12 +131,8 @@ export const UserSideBarDataTest = [
                         title: "Job Report",
                         path: "/dashboard/reports/job",
                     },
-                ]
+                ],
             },
         ],
-    },
-    {
-        title: "xyz",
-        path: "/xyz",
     },
 ];

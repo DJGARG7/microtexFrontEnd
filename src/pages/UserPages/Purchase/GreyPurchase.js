@@ -342,7 +342,7 @@ export default function GreyPurchase({ userDetails }) {
         });
 
         if (1) {
-            toastSuccess("Item qdded to the list!");
+            toastSuccess("Item added to the list!");
             settotalamount((presamount) => {
                 return parseFloat(presamount + newItem.Amount);
             });
