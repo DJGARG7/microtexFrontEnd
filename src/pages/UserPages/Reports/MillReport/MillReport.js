@@ -2,7 +2,8 @@ import styles from "../../Mill/styles/Mill.module.css";
 import toast from "react-hot-toast";
 import ReactLoading from "react-loading";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
+import StickyTable from "../../../../components/Reuse_components/Table/StickyTable";
 
 const toastStyle = {
     style: {
@@ -26,19 +27,93 @@ export default function MillReport({ userDetails }) {
     const [isItemsLoading, setIsItemsLoading] = useState(true);
     const [isSuppliersLoading, setIsSuppliersLoading] = useState(true);
     const [isMillsLoading, setIsMillsLoading] = useState(true);
+    const [isGreyStockLoading, setIsGreyStockLoading] = useState(false);
 
     // Form-related data.
     const [items, setItems] = useState([]);
     const [suppliers, setSuppliers] = useState([]);
     const [mill, setMills] = useState([]);
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
+    const [greyStock, setGreyStock] = useState([]);
 
     // Form binding.
     const [selectedType, setSelectedType] = useState("DEFAULT");
     const [selectedGrey, setSelectedGrey] = useState("DEFAULT");
     const [selectedSupplier, setSelectedSupplier] = useState("DEFAULT");
     const [selectedMill, setSelectedMill] = useState("DEFAULT");
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
+
+    // Table column definitions.
+    // Grey inventory.
+    const greyCols = useMemo(() => [
+        {
+            Header: "Item ID",
+            accessor: "itemID",
+            Filter: "",
+        },
+        {
+            Header: "Item Name",
+            accessor: "itemName",
+            Filter: "",
+        },
+        {
+            Header: "Supplier",
+            accessor: "supplier",
+            Filter: "",
+        },
+        {
+            Header: "Stock Avail. (in M)",
+            accessor: "meters",
+            Filter: "",
+            width: 185,
+        },
+    ]);
+
+    // Mill status.
+    const sentMillCols = useMemo(() => [
+        {
+            Header: "Challan Number",
+            accessor: "challanNumber",
+        },
+        {
+            Header: "Mill",
+            accessor: "mill",
+        },
+        {
+            Header: "Supplier",
+            accessor: "supplier",
+        },
+        {
+            Header: "Sent Date",
+            accessor: "sendDate",
+            Filter: "",
+        },
+        {
+            Header: "Sent Meters",
+            accessor: "sentMeters",
+            Filter: "",
+        },
+    ]);
+
+    const recMillCols = useMemo(() => [
+        {
+            Header: selectedType === "2" ? "Challan Number" : "Bill Number",
+            accessor: "challanNumber",
+        },
+        {
+            Header: "Item Name",
+            accessor: "itemName",
+        },
+        {
+            Header: "Supplier",
+            accessor: "supplier",
+        },
+        {
+            Header: "Available Meters",
+            accessor: "meters",
+            Filter: "",
+        },
+    ]);
 
     const fetchItems = async () => {
         try {
@@ -85,6 +160,22 @@ export default function MillReport({ userDetails }) {
         }
     };
 
+    const fetchGreyStock = async () => {
+        setIsGreyStockLoading(true);
+
+        try {
+            const res = await axios.get(
+                `http://localhost:3005/reports/greyStock`
+            );
+
+            setGreyStock(res.data);
+            setIsGreyStockLoading(false);
+        } catch (error) {
+            console.log(error);
+            toast.error("Failed to fetch grey stock", toastStyle);
+        }
+    };
+
     const submitHandler = () => {
         console.log("Hello");
     };
@@ -93,6 +184,7 @@ export default function MillReport({ userDetails }) {
         fetchItems();
         fetchSuppliers();
         fetchMills();
+        fetchGreyStock();
     }, []);
 
     if (isMillsLoading || isSuppliersLoading || isItemsLoading) {
@@ -113,7 +205,7 @@ export default function MillReport({ userDetails }) {
             <form onSubmit={submitHandler} className={styles["form"]}>
                 {/* Row 1: Inputs. */}
                 <div className={styles["form--group"]}>
-                    {/* Column 2: selectedMill. */}
+                    {/* Column 1: Report type */}
                     <select
                         placeholder="Type"
                         className={`${styles["form--input"]} ${styles["form--input-select"]}`}
@@ -123,26 +215,29 @@ export default function MillReport({ userDetails }) {
                         }}
                         style={{
                             width: "15%",
-                            minWidth: "150px",
+                            minWidth: "175px",
                             margin: "10px 0",
                         }}
                     >
                         <option disabled hidden value="DEFAULT">
                             Select report type...
                         </option>
-                        <option>Grey Stock</option>
-                        <option>Pending Stock</option>
-                        <option>Received Stock</option>
+                        <option value="1">Grey Stock</option>
+                        <option value="2">Pending Stock</option>
+                        <option value="3">Received Stock</option>
                     </select>
 
-                    {/* Column 3: selectedGrey. */}
+                    {/* Column 2: Filters. */}
                     <div
                         className={styles["form--group"]}
                         style={{ width: "auto", margin: "0" }}
                     >
-                        <label htmlFor="" style={{ margin: "20px 10px" }}>
+                        {/* <label
+                            htmlFor=""
+                            style={{ margin: "20px 0px 20px 5px" }}
+                        >
                             Filters
-                        </label>
+                        </label> */}
                         <select
                             placeholder="Filter item"
                             className={`${styles["form--input"]} ${styles["form--input-select"]}`}
@@ -151,18 +246,16 @@ export default function MillReport({ userDetails }) {
                                 setSelectedGrey(e.target.value);
                             }}
                             style={{
-                                width: "20%",
-                                minWidth: "200px",
-                                margin: "10px 5px",
+                                width: "12.5vw",
+                                minWidth: "150px",
+                                margin: "10px 5px 10px 10px",
                             }}
                         >
-                            <option disabled hidden value="DEFAULT">
-                                Filter by item...
-                            </option>
+                            <option value="DEFAULT">Filter by item...</option>
                             {items.map((cloth) => {
                                 return (
                                     <option
-                                        value={cloth.itemID}
+                                        value={cloth.itemName}
                                         key={cloth.itemID}
                                         id={cloth.itemName}
                                     >
@@ -180,18 +273,18 @@ export default function MillReport({ userDetails }) {
                                 setSelectedSupplier(e.target.value);
                             }}
                             style={{
-                                width: "20%",
-                                minWidth: "200px",
+                                width: "12.5vw",
+                                minWidth: "175px",
                                 margin: "10px 5px",
                             }}
                         >
-                            <option disabled hidden value="DEFAULT">
+                            <option value="DEFAULT">
                                 Filter by supplier...
                             </option>
                             {suppliers.map((supplier) => {
                                 return (
                                     <option
-                                        value={supplier.uid}
+                                        value={supplier.AccName}
                                         id={supplier.AccName}
                                         key={supplier.uid}
                                     >
@@ -209,14 +302,14 @@ export default function MillReport({ userDetails }) {
                                 setSelectedMill(e.target.value);
                             }}
                             style={{
-                                width: "20%",
-                                minWidth: "200px",
+                                width: "12.5vw",
+                                minWidth: "175px",
                                 margin: "10px 5px",
+                                display:
+                                    selectedType === "1" ? "none" : "inline",
                             }}
                         >
-                            <option disabled hidden value="DEFAULT">
-                                Filter by mill...
-                            </option>
+                            <option value="DEFAULT">Filter by mill...</option>
                             {mill.map((mill) => {
                                 return (
                                     <option
@@ -230,12 +323,14 @@ export default function MillReport({ userDetails }) {
                             })}
                         </select>
                     </div>
+
+                    {/* Column 3: Date range. */}
                     <div
                         className={styles["form--group"]}
                         style={{ width: "auto", margin: "0" }}
                     >
-                        <label htmlFor="" style={{ margin: "20px 10px" }}>
-                            Date Range
+                        <label htmlFor="" style={{ margin: "20px 5px" }}>
+                            Between
                         </label>
                         <input
                             type="text"
@@ -250,6 +345,7 @@ export default function MillReport({ userDetails }) {
                                 minWidth: "150px",
                                 margin: "10px 5px",
                             }}
+                            disabled={selectedType === "1" ? true : false}
                             required
                         />
                         <input
@@ -265,9 +361,38 @@ export default function MillReport({ userDetails }) {
                                 minWidth: "150px",
                                 margin: "10px 5px",
                             }}
+                            disabled={selectedType === "1" ? true : false}
                             required
                         />
                     </div>
+                </div>
+
+                <div className={styles["form--table"]}>
+                    {isGreyStockLoading ? (
+                        <ReactLoading type="bubbles" color="#212121" />
+                    ) : (
+                        <StickyTable
+                            TableCol={greyCols}
+                            TableData={greyStock
+                                .filter((stock) => {
+                                    if (selectedGrey === "DEFAULT")
+                                        return (
+                                            stock.itemName === stock.itemName
+                                        );
+                                    else return stock.itemName === selectedGrey;
+                                })
+                                .filter((stock) => {
+                                    if (selectedSupplier === "DEFAULT")
+                                        return (
+                                            stock.supplier === stock.supplier
+                                        );
+                                    else
+                                        return (
+                                            stock.supplier === selectedSupplier
+                                        );
+                                })}
+                        />
+                    )}
                 </div>
             </form>
         </div>
