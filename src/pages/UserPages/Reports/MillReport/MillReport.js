@@ -29,6 +29,7 @@ export default function MillReport({ userDetails }) {
     const [isMillsLoading, setIsMillsLoading] = useState(true);
     const [isGreyStockLoading, setIsGreyStockLoading] = useState(false);
     const [isMillPendingLoading, setIsMillPendingLoading] = useState(false);
+    const [isMillReceivedLoading, setIsMillReceivedLoading] = useState(false);
 
     // Form-related data.
     const [items, setItems] = useState([]);
@@ -36,6 +37,7 @@ export default function MillReport({ userDetails }) {
     const [mill, setMills] = useState([]);
     const [greyStock, setGreyStock] = useState([]);
     const [millPending, setMillPending] = useState([]);
+    const [millReceived, setMillReceived] = useState([]);
 
     // Form binding.
     const [selectedType, setSelectedType] = useState("DEFAULT");
@@ -52,6 +54,7 @@ export default function MillReport({ userDetails }) {
             Header: "Item ID",
             accessor: "itemID",
             Filter: "",
+            sticky: "left",
         },
         {
             Header: "Item",
@@ -77,6 +80,7 @@ export default function MillReport({ userDetails }) {
             Header: "Challan NO.",
             accessor: "challanNumber",
             Filter: "",
+            sticky: "left",
         },
         {
             Header: "Item",
@@ -107,21 +111,71 @@ export default function MillReport({ userDetails }) {
 
     const recMillCols = useMemo(() => [
         {
-            Header: selectedType === "2" ? "Challan Number" : "Bill Number",
+            Header: "Bill No.",
             accessor: "challanNumber",
+            Filter: "",
+            width: 100,
+            sticky: "left",
         },
         {
-            Header: "Item Name",
+            Header: "Item",
             accessor: "itemName",
+            Filter: "",
+            width: 100,
         },
         {
             Header: "Supplier",
             accessor: "supplier",
+            Filter: "",
         },
         {
-            Header: "Available Meters",
-            accessor: "meters",
+            Header: "Mill",
+            accessor: "mill",
             Filter: "",
+        },
+        {
+            Header: "Sent Date",
+            accessor: "sentDate",
+            Filter: "",
+        },
+        {
+            Header: "Sent Meters",
+            accessor: "sentMeters",
+            Filter: "",
+        },
+        {
+            Header: "Receive Date",
+            accessor: "receiveDate",
+            Filter: "",
+        },
+        {
+            Header: "Rec. Meters",
+            accessor: "receivedMeters",
+            Filter: "",
+        },
+        {
+            Header: "Mill Loss",
+            accessor: "millLoss",
+            Filter: "",
+            width: 100,
+        },
+        {
+            Header: "Piece Loss",
+            accessor: "pieceLoss",
+            Filter: "",
+            width: 110,
+        },
+        {
+            Header: "Rate",
+            accessor: "rate",
+            Filter: "",
+            width: 100,
+        },
+        {
+            Header: "Amount",
+            accessor: "amount",
+            Filter: "",
+            width: 100,
         },
     ]);
 
@@ -207,6 +261,29 @@ export default function MillReport({ userDetails }) {
         }
     };
 
+    const fetchMillReceived = async () => {
+        setIsMillReceivedLoading(true);
+
+        try {
+            const res = await axios.get(
+                `http://localhost:3005/reports/millReceived`
+            );
+
+            res.data.forEach((bill) => {
+                const sentDate = new Date(bill.sentDate);
+                const receiveDate = new Date(bill.receiveDate);
+                bill.sentDate = sentDate.toLocaleDateString("en-GB");
+                bill.receiveDate = receiveDate.toLocaleDateString("en-GB");
+            });
+
+            setMillReceived(res.data);
+            setIsMillReceivedLoading(false);
+        } catch (error) {
+            console.log(error);
+            toast.error("Failed to fetch mill pending stock", toastStyle);
+        }
+    };
+
     const submitHandler = () => {
         console.log("Hello");
     };
@@ -217,6 +294,7 @@ export default function MillReport({ userDetails }) {
         fetchMills();
         fetchGreyStock();
         fetchMillPending();
+        fetchMillReceived();
     }, []);
 
     if (isMillsLoading || isSuppliersLoading || isItemsLoading) {
@@ -251,9 +329,7 @@ export default function MillReport({ userDetails }) {
                             margin: "10px 0",
                         }}
                     >
-                        <option disabled hidden value="DEFAULT">
-                            Select report type...
-                        </option>
+                        <option value="DEFAULT">Select report type...</option>
                         <option value="1">Grey Stock</option>
                         <option value="2">Pending Stock</option>
                         <option value="3">Received Stock</option>
@@ -421,8 +497,9 @@ export default function MillReport({ userDetails }) {
                                             stock.supplier === selectedSupplier
                                         );
                                 })}
+                            style={{ maxWidth: "75vw", maxHeight: "60vh" }}
                         />
-                    ) : (
+                    ) : selectedType === "2" ? (
                         <StickyTable
                             TableCol={sentMillCols}
                             TableData={millPending
@@ -448,10 +525,40 @@ export default function MillReport({ userDetails }) {
                                         return stock.mill === stock.mill;
                                     else return stock.mill === selectedMill;
                                 })}
+                            style={{ maxWidth: "75vw", maxHeight: "60vh" }}
                         />
+                    ) : selectedType === "3" ? (
+                        <StickyTable
+                            TableCol={recMillCols}
+                            TableData={millReceived
+                                .filter((stock) => {
+                                    if (selectedGrey === "DEFAULT")
+                                        return (
+                                            stock.itemName === stock.itemName
+                                        );
+                                    else return stock.itemName === selectedGrey;
+                                })
+                                .filter((stock) => {
+                                    if (selectedSupplier === "DEFAULT")
+                                        return (
+                                            stock.supplier === stock.supplier
+                                        );
+                                    else
+                                        return (
+                                            stock.supplier === selectedSupplier
+                                        );
+                                })
+                                .filter((stock) => {
+                                    if (selectedMill === "DEFAULT")
+                                        return stock.mill === stock.mill;
+                                    else return stock.mill === selectedMill;
+                                })}
+                            style={{ maxWidth: "77.5vw", maxHeight: "60vh" }}
+                        />
+                    ) : (
+                        <div></div>
                     )}
                 </div>
-                {console.log(millPending)}
             </form>
         </div>
     );
