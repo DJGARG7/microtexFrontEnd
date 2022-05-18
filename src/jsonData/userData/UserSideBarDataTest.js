@@ -125,11 +125,11 @@ export const UserSideBarDataTest = [
                 subNav:[
                     {
                         title: "Mill Report",
-                        path: "/dashboard/report/mill",
+                        path: "/dashboard/reports/mill",
                     },
                     {
                         title: "Job Report",
-                        path: "/dashboard/report/job",
+                        path: "/dashboard/reports/job",
                     },
                 ]
             },
