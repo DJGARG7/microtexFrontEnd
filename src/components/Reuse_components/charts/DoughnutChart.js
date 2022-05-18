@@ -14,10 +14,22 @@ function DoughnutChart({ labels, data }) {
                     "rgb(54, 162, 235)",
                     "rgb(255, 205, 86)",
                     "rgb(0, 255, 0)",
+                    "rgb(255,0,0)",
+                    "rgb(128,128,128)",
                 ],
                 hoverOffset: 4,
             },
         ],
+        plugins: {
+            datalabels: {
+                display: true,
+                formatter: (val, ctx) => {
+                    return ctx.chart.data.labels[ctx.dataIndex];
+                },
+                color: "#fff",
+                backgroundColor: "#404040",
+            },
+        },
     };
     return (
         <div>

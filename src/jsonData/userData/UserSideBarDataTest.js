@@ -118,8 +118,20 @@ export const UserSideBarDataTest = [
                 cName: "sub-nav",
             },
             {
-                title: "Mill Report",
-                path: "/dashboard/reports/mill",
+                title: "Module Reports",
+                path: "#",
+                iconOpened: <RiIcons.RiArrowUpSFill />,
+                iconClosed: <RiIcons.RiArrowDownSFill />,
+                subNav: [
+                    {
+                        title: "Mill Report",
+                        path: "/dashboard/reports/mill",
+                    },
+                    {
+                        title: "Job Report",
+                        path: "/dashboard/reports/job",
+                    },
+                ],
             },
         ],
     },
