@@ -28,12 +28,14 @@ export default function MillReport({ userDetails }) {
     const [isSuppliersLoading, setIsSuppliersLoading] = useState(true);
     const [isMillsLoading, setIsMillsLoading] = useState(true);
     const [isGreyStockLoading, setIsGreyStockLoading] = useState(false);
+    const [isMillPendingLoading, setIsMillPendingLoading] = useState(false);
 
     // Form-related data.
     const [items, setItems] = useState([]);
     const [suppliers, setSuppliers] = useState([]);
     const [mill, setMills] = useState([]);
     const [greyStock, setGreyStock] = useState([]);
+    const [millPending, setMillPending] = useState([]);
 
     // Form binding.
     const [selectedType, setSelectedType] = useState("DEFAULT");
@@ -52,7 +54,7 @@ export default function MillReport({ userDetails }) {
             Filter: "",
         },
         {
-            Header: "Item Name",
+            Header: "Item",
             accessor: "itemName",
             Filter: "",
         },
@@ -69,23 +71,31 @@ export default function MillReport({ userDetails }) {
         },
     ]);
 
-    // Mill status.
+    // Pending mill inventory.
     const sentMillCols = useMemo(() => [
         {
-            Header: "Challan Number",
+            Header: "Challan NO.",
             accessor: "challanNumber",
+            Filter: "",
         },
         {
-            Header: "Mill",
-            accessor: "mill",
+            Header: "Item",
+            accessor: "itemName",
+            Filter: "",
         },
         {
             Header: "Supplier",
             accessor: "supplier",
+            Filter: "",
+        },
+        {
+            Header: "Mill",
+            accessor: "mill",
+            Filter: "",
         },
         {
             Header: "Sent Date",
-            accessor: "sendDate",
+            accessor: "sentDate",
             Filter: "",
         },
         {
@@ -176,6 +186,27 @@ export default function MillReport({ userDetails }) {
         }
     };
 
+    const fetchMillPending = async () => {
+        setIsMillPendingLoading(true);
+
+        try {
+            const res = await axios.get(
+                `http://localhost:3005/reports/millPending`
+            );
+
+            res.data.forEach((bill) => {
+                const date = new Date(bill.sentDate);
+                bill.sentDate = date.toLocaleDateString("en-GB");
+            });
+
+            setMillPending(res.data);
+            setIsMillPendingLoading(false);
+        } catch (error) {
+            console.log(error);
+            toast.error("Failed to fetch mill pending stock", toastStyle);
+        }
+    };
+
     const submitHandler = () => {
         console.log("Hello");
     };
@@ -185,6 +216,7 @@ export default function MillReport({ userDetails }) {
         fetchSuppliers();
         fetchMills();
         fetchGreyStock();
+        fetchMillPending();
     }, []);
 
     if (isMillsLoading || isSuppliersLoading || isItemsLoading) {
@@ -232,12 +264,12 @@ export default function MillReport({ userDetails }) {
                         className={styles["form--group"]}
                         style={{ width: "auto", margin: "0" }}
                     >
-                        {/* <label
+                        <label
                             htmlFor=""
                             style={{ margin: "20px 0px 20px 5px" }}
                         >
-                            Filters
-                        </label> */}
+                            Filter by
+                        </label>
                         <select
                             placeholder="Filter item"
                             className={`${styles["form--input"]} ${styles["form--input-select"]}`}
@@ -246,12 +278,12 @@ export default function MillReport({ userDetails }) {
                                 setSelectedGrey(e.target.value);
                             }}
                             style={{
-                                width: "12.5vw",
-                                minWidth: "150px",
+                                width: "11vw",
+                                minWidth: "140px",
                                 margin: "10px 5px 10px 10px",
                             }}
                         >
-                            <option value="DEFAULT">Filter by item...</option>
+                            <option value="DEFAULT">Item...</option>
                             {items.map((cloth) => {
                                 return (
                                     <option
@@ -273,14 +305,12 @@ export default function MillReport({ userDetails }) {
                                 setSelectedSupplier(e.target.value);
                             }}
                             style={{
-                                width: "12.5vw",
-                                minWidth: "175px",
+                                width: "11vw",
+                                minWidth: "150px",
                                 margin: "10px 5px",
                             }}
                         >
-                            <option value="DEFAULT">
-                                Filter by supplier...
-                            </option>
+                            <option value="DEFAULT">Supplier...</option>
                             {suppliers.map((supplier) => {
                                 return (
                                     <option
@@ -302,18 +332,18 @@ export default function MillReport({ userDetails }) {
                                 setSelectedMill(e.target.value);
                             }}
                             style={{
-                                width: "12.5vw",
-                                minWidth: "175px",
+                                width: "11vw",
+                                minWidth: "140px",
                                 margin: "10px 5px",
                                 display:
                                     selectedType === "1" ? "none" : "inline",
                             }}
                         >
-                            <option value="DEFAULT">Filter by mill...</option>
+                            <option value="DEFAULT">Mill...</option>
                             {mill.map((mill) => {
                                 return (
                                     <option
-                                        value={mill.uid}
+                                        value={mill.AccName}
                                         id={mill.AccName}
                                         key={mill.uid}
                                     >
@@ -368,9 +398,9 @@ export default function MillReport({ userDetails }) {
                 </div>
 
                 <div className={styles["form--table"]}>
-                    {isGreyStockLoading ? (
+                    {isGreyStockLoading || isMillPendingLoading ? (
                         <ReactLoading type="bubbles" color="#212121" />
-                    ) : (
+                    ) : selectedType === "1" ? (
                         <StickyTable
                             TableCol={greyCols}
                             TableData={greyStock
@@ -392,8 +422,36 @@ export default function MillReport({ userDetails }) {
                                         );
                                 })}
                         />
+                    ) : (
+                        <StickyTable
+                            TableCol={sentMillCols}
+                            TableData={millPending
+                                .filter((stock) => {
+                                    if (selectedGrey === "DEFAULT")
+                                        return (
+                                            stock.itemName === stock.itemName
+                                        );
+                                    else return stock.itemName === selectedGrey;
+                                })
+                                .filter((stock) => {
+                                    if (selectedSupplier === "DEFAULT")
+                                        return (
+                                            stock.supplier === stock.supplier
+                                        );
+                                    else
+                                        return (
+                                            stock.supplier === selectedSupplier
+                                        );
+                                })
+                                .filter((stock) => {
+                                    if (selectedMill === "DEFAULT")
+                                        return stock.mill === stock.mill;
+                                    else return stock.mill === selectedMill;
+                                })}
+                        />
                     )}
                 </div>
+                {console.log(millPending)}
             </form>
         </div>
     );
