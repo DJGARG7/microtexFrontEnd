@@ -13,6 +13,7 @@ import CashPay from "../../pages/UserPages/cashbooks/CashPay";
 import CashReceive from "../../pages/UserPages/cashbooks/CashReceive";
 import BalanceSheet from "../../pages/UserPages/Reports/BalanceSheet/BalanceSheet";
 import GeneralReport from "../../pages/UserPages/Reports/GeneralReport/GeneralReport";
+import MillReport from "../../pages/UserPages/Reports/MillReport/MillReport";
 
 const UserContent = ({ userDetails }) => {
     return (
@@ -64,6 +65,9 @@ const UserContent = ({ userDetails }) => {
             </Route>
             <Route path="/dashboard/reports/general" exact>
                 <GeneralReport userDetails={userDetails} />
+            </Route>
+            <Route path="/dashboard/reports/mill" exact>
+                <MillReport userDetails={userDetails} />
             </Route>
             <Route path="/dashboard" exact />
         </>

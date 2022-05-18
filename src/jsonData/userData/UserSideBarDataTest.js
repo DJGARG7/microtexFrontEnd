@@ -118,13 +118,9 @@ export const UserSideBarDataTest = [
                 cName: "sub-nav",
             },
             {
-                title: "Reports 3",
-                path: "/dashboard/reports3",
+                title: "Mill Report",
+                path: "/dashboard/reports/mill",
             },
         ],
-    },
-    {
-        title: "xyz",
-        path: "/xyz",
     },
 ];
