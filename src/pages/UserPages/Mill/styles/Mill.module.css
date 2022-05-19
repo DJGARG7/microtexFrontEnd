@@ -6,7 +6,7 @@
     height: 100%;
 
     padding: 25px;
-
+    overflow: auto;
     transition: 250ms;
 }
 
