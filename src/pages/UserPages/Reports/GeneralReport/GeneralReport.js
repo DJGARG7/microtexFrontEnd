@@ -20,8 +20,8 @@ function GeneralReport() {
     const [expense, getExpense] = useState("");
     const [itemlist, setItemList] = useState([]);
     const [itemmts, setitemmts] = useState([]);
-    const [expenditure,setexpenditure] = useState(0);
-    const [income,setincome] = useState(0);
+    const [expenditure, setexpenditure] = useState(0);
+    const [income, setincome] = useState(0);
     const [accountCreditors, setAccountCreditors] = useState({
         labels: [],
         data: [],
@@ -91,10 +91,10 @@ function GeneralReport() {
             });
             let totalexp = 0;
 
-            res.data.forEach((item)=>{
-                totalexp+= parseInt(item.total)
-            })
-            console.log("total exp",totalexp);
+            res.data.forEach((item) => {
+                totalexp += parseInt(item.total);
+            });
+            console.log("total exp", totalexp);
             setexpenditure(totalexp);
             setIsLoading3(false);
         } catch (e) {
@@ -125,7 +125,13 @@ function GeneralReport() {
                 labels: res.data.map((item) => item.CNAME),
                 data: res.data.map((item) => item.amount),
             });
+            let totalinc = 0;
+            res.data.forEach((item) => {
+                totalinc += parseInt(item.amount);
+            });
+            setincome(totalinc);
             setIsLoading5(false);
+            console.log("total inc", totalinc);
         } catch (e) {
             console.log(e);
         }
@@ -176,6 +182,14 @@ function GeneralReport() {
                         />
                         <br />
                         <label>Items Sold(pcs)</label>
+                    </div>
+                    <div className={styles["charts"]}>
+                        <DoughnutChart
+                            labels={["Income", "Expense"]}
+                            data={[income, expenditure]}
+                        />
+                        <br />
+                        <label>Expense Vs Income</label>
                     </div>
                 </div>
                 <div className={styles["chart-row"]}>
