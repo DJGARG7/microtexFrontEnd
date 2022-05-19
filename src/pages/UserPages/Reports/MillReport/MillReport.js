@@ -250,6 +250,7 @@ export default function MillReport({ userDetails }) {
 
             res.data.forEach((bill) => {
                 const date = new Date(bill.sentDate);
+                bill.sentDateUnf = date;
                 bill.sentDate = date.toLocaleDateString("en-GB");
             });
 
@@ -272,6 +273,7 @@ export default function MillReport({ userDetails }) {
             res.data.forEach((bill) => {
                 const sentDate = new Date(bill.sentDate);
                 const receiveDate = new Date(bill.receiveDate);
+                bill.receiveDateUnf = receiveDate;
                 bill.sentDate = sentDate.toLocaleDateString("en-GB");
                 bill.receiveDate = receiveDate.toLocaleDateString("en-GB");
             });
@@ -524,6 +526,26 @@ export default function MillReport({ userDetails }) {
                                     if (selectedMill === "DEFAULT")
                                         return stock.mill === stock.mill;
                                     else return stock.mill === selectedMill;
+                                })
+                                .filter((stock) => {
+                                    let d1 = stock.sentDateUnf;
+                                    let d2 = new Date(startDate);
+
+                                    if (startDate === "")
+                                        return (
+                                            stock.sentDate === stock.sentDate
+                                        );
+                                    else return d1 >= d2;
+                                })
+                                .filter((stock) => {
+                                    let d1 = stock.sentDateUnf;
+                                    let d2 = new Date(endDate);
+
+                                    if (endDate === "")
+                                        return (
+                                            stock.sentDate === stock.sentDate
+                                        );
+                                    else return d1 <= d2;
                                 })}
                             style={{ maxWidth: "75vw", maxHeight: "60vh" }}
                         />
@@ -552,6 +574,28 @@ export default function MillReport({ userDetails }) {
                                     if (selectedMill === "DEFAULT")
                                         return stock.mill === stock.mill;
                                     else return stock.mill === selectedMill;
+                                })
+                                .filter((stock) => {
+                                    let d1 = stock.receiveDateUnf;
+                                    let d2 = new Date(startDate);
+
+                                    if (startDate === "")
+                                        return (
+                                            stock.receiveDate ===
+                                            stock.receiveDate
+                                        );
+                                    else return d1 >= d2;
+                                })
+                                .filter((stock) => {
+                                    let d1 = stock.receiveDateUnf;
+                                    let d2 = new Date(endDate);
+
+                                    if (endDate === "")
+                                        return (
+                                            stock.receiveDate ===
+                                            stock.receiveDate
+                                        );
+                                    else return d1 <= d2;
                                 })}
                             style={{ maxWidth: "77.5vw", maxHeight: "60vh" }}
                         />
