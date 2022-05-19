@@ -97,6 +97,7 @@ function JobReport() {
     const getgodownstock = async (itemname)=>{
       try{
         const res = await reports.get(`/getgodownitem/${itemname}`);
+        setgodownstock(res.data)
         console.log(res.data);
       }catch(e){
         console.log(e);
@@ -119,19 +120,24 @@ function JobReport() {
 
     useEffect(()=>{
       getitemlist();
-    })
+    },[])
+
+    const onChangeItemlist = (e) =>{
+      getgodownstock(e.target.value);
+    }
 
     return (
         <div className={styles["main"]}>
           <div className={styles["row"]}>
               <div className={styles["question"]}>
-                1. Show items present in godown &nbsp;
-                <select onChange={onChangeJobType} >
+                1. Show &nbsp;
+                <select onChange={onChangeItemlist} >
                     <option value="NaN">Select Item Name</option>
-                    <option value="Embroidery">Embroidery</option>
-                    <option value="Stone">Stone Work</option>
-                    <option value="Lace">Lace Work</option>
+                    {itemlist.map((item,key)=>{
+                      return <option key={key}value={item.itemName}>{item.itemName}</option>
+                    })}
                 </select>
+                &nbsp; present in godown 
               </div>
                 <StickyTable TableCol={godownstockcol} TableData={godownstock} style={{width:"752px"}}/>
             </div>
