@@ -420,11 +420,22 @@ export default function SaleChallan({ userDetails }) {
                 </div>
 
                 <div
+                    className={styles["form--group"]}
+                    style={{
+                        width: "auto",
+                        margin: "0",
+                        flexDirection: "column",
+                        alignItems: "center",
+                    }}
+                >
+                    <p>Available Pieces: {qty}</p>
+                    <p>Estimated Price: {estimate}</p>
+                </div>
+
+                <div
                     className={styles["form--table"]}
                     style={{ marginBottom: "40px" }}
                 >
-                    <p> Available pieces : {qty}</p>
-                    <p> Estimated Price : {estimate}</p>
                     <StickyTable TableCol={TableColData} TableData={itemList} />
                 </div>
 

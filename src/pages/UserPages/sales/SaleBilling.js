@@ -200,13 +200,14 @@ export default function SaleBilling({ userDetails }) {
             );
             console.log("here");
             toastSuccess("Bill Transacted");
-            setIsOpen(false);
+            // setIsOpen(false);
             setSalesDetailList([]);
         } catch (error) {
             toastError("Transaction Failed");
+            return false;
         }
+        return true;
     };
-
     if (isAllowedLoading || isSalesLoading) {
         return (
             <div
@@ -260,6 +261,8 @@ export default function SaleBilling({ userDetails }) {
                     setSalesDetailList([]);
                 }}
             >
+                <h2>Make Bill</h2>
+                <br />
                 <SaleBillModal
                     billData={{
                         info: billInfo,

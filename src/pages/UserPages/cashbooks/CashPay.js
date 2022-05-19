@@ -7,6 +7,8 @@ import {
 import styles from "../Mill/styles/Mill.module.css";
 import StickyTable from "../../../components/Reuse_components/Table/StickyTable";
 import CurrentDate from "../../../components/Reuse_components/CurrentDate";
+import ReactLoading from "react-loading";
+
 const CashPay = () => {
     //----
     const [type, setType] = useState("");
@@ -18,6 +20,9 @@ const CashPay = () => {
     const [checkedList, setCheckedList] = useState({});
     const [selectedAmt, setSelectedAmt] = useState({});
     const [billsString, setBillsString] = useState("");
+
+    const [isAccountsLoading, setIsAccountsLoading] = useState(true);
+
     useEffect(() => {
         setTotal(
             Object.values(selectedAmt).reduce(
@@ -33,6 +38,7 @@ const CashPay = () => {
                 .toString()
         );
     }, [selectedAmt]);
+
     const checkboxHandler = (e, tableProps) => {
         console.log(e.target.checked);
         if (e.target.checked) {
@@ -55,6 +61,7 @@ const CashPay = () => {
             });
         }
     };
+
     const TableColData = [
         {
             Header: "Action",
@@ -68,7 +75,7 @@ const CashPay = () => {
             width: 100,
         },
         {
-            Header: "Bill no",
+            Header: "Bill no.",
             accessor: "billno",
             Filter: "",
         },
@@ -86,19 +93,22 @@ const CashPay = () => {
             Header: "transaction id",
             accessor: "t_id",
             Filter: "",
+            width: 155,
         },
     ];
+
     const fetchAccounts = async () => {
         try {
             const res = await Axios.get(
                 `http://localhost:3003/accountMaster/${type}`
             );
             setSdlist(res.data);
-            // setIsAccountsLoading(false);
+            setIsAccountsLoading(false);
         } catch (e) {
-            toastError("Error fetching SD data");
+            toastError("Error fetching account data");
         }
     };
+
     const showUnpaidBillHandler = async () => {
         console.log("running");
         try {
@@ -118,17 +128,23 @@ const CashPay = () => {
         }
         setTotal(0);
     };
+
     useEffect(() => {
         setCustName("");
         setDrBillsList([]);
-        if (!type == "") fetchAccounts();
+        // if (!type == "") fetchAccounts();
     }, [type]);
     useEffect(() => {
         if (custName !== "") {
             showUnpaidBillHandler();
         }
     }, [custName]);
-    const recordCashHandler = async () => {
+    useEffect(() => {
+        fetchAccounts();
+    });
+
+    const recordCashHandler = async (e) => {
+        e.preventDefault();
         const data = {
             date: CurrentDate(),
             uid: custName,
@@ -143,73 +159,118 @@ const CashPay = () => {
                 `http://localhost:3005/cashbook/payment`,
                 data
             );
-            toastSuccess("Successful Transaction");
+            toastSuccess("Transaction successfull!");
         } catch (e) {
-            toastError("Transaction Failed. Try again");
+            toastError("Transaction failed! Please try again");
         }
         setCustName("");
         setDrBillsList([]);
         setTotal(0);
     };
+
+    if (isAccountsLoading) {
+        return (
+            <div
+                style={{
+                    marginTop: "10vh",
+                }}
+            >
+                <ReactLoading type="bubbles" color="#212121" />
+            </div>
+        );
+    }
+
     return (
-        <div>
-            <select
-                name="type"
-                value={type}
-                onChange={(e) => {
-                    setType(e.target.value);
-                }}
-                className={`${styles["form--input"]} ${styles["form--input-select"]}`}
-                style={{
-                    width: "20%",
-                    minWidth: "200px",
-                    margin: "10px 0",
-                }}
-            >
-                <option value="" disabled hidden>
-                    Select Account Type
-                </option>
-                <option value="Sundry Creditors">Sundry Creditors</option>
-                <option value="Creditors For Job">Creditors For Job</option>
-                <option value="Creditors for process">
-                    Creditors for process
-                </option>
-            </select>
-            <select
-                name="custName"
-                value={custName}
-                onChange={(e) => {
-                    setCustName(e.target.value);
-                }}
-                required
-                className={`${styles["form--input"]} ${styles["form--input-select"]}`}
-                style={{
-                    width: "20%",
-                    minWidth: "200px",
-                    margin: "10px 0",
-                }}
-            >
-                <option value="" disabled hidden>
-                    Select customer...
-                </option>
-                {sdlist.map((sd) => {
-                    return (
-                        <option value={sd.uid} key={sd.uid}>
-                            {sd.AccName}
+        <div className={styles["main"]}>
+            <h2>Make Payment</h2>
+            <form className={styles["form"]}>
+                <div
+                    className={styles["form--group"]}
+                    style={{ justifyContent: "space-around" }}
+                >
+                    <select
+                        name="type"
+                        value={type}
+                        onChange={(e) => {
+                            setType(e.target.value);
+                        }}
+                        className={`${styles["form--input"]} ${styles["form--input-select"]}`}
+                        style={{
+                            width: "22.5%",
+                            minWidth: "200px",
+                            margin: "10px 0",
+                        }}
+                    >
+                        <option value="" disabled hidden>
+                            Select Account Type
                         </option>
-                    );
-                })}
-            </select>
-            <StickyTable TableCol={TableColData} TableData={drBillsList} />
-            <p>Total Amount : {total}</p>
-            <button
-                type="button"
-                onClick={recordCashHandler}
-                disabled={total == 0}
-            >
-                Record Cash Receive
-            </button>
+                        <option value="Sundry Creditors">
+                            Sundry Creditors
+                        </option>
+                        <option value="Creditors For Job">
+                            Creditors For Job
+                        </option>
+                        <option value="Creditors for process">
+                            Creditors for process
+                        </option>
+                    </select>
+                    <select
+                        name="custName"
+                        value={custName}
+                        onChange={(e) => {
+                            setCustName(e.target.value);
+                        }}
+                        required
+                        className={`${styles["form--input"]} ${styles["form--input-select"]}`}
+                        style={{
+                            width: "22.5%",
+                            minWidth: "200px",
+                            margin: "10px 0",
+                        }}
+                    >
+                        <option value="" disabled hidden>
+                            Select customer...
+                        </option>
+                        {sdlist.map((sd) => {
+                            return (
+                                <option value={sd.uid} key={sd.uid}>
+                                    {sd.AccName}
+                                </option>
+                            );
+                        })}
+                    </select>
+                </div>
+
+                <div className={styles["form--table"]}>
+                    <StickyTable
+                        TableCol={TableColData}
+                        TableData={drBillsList}
+                    />
+                </div>
+
+                <div
+                    className={styles["form--group"]}
+                    style={{
+                        alignItems: "center",
+                        flexDirection: "column",
+                    }}
+                >
+                    <p>
+                        <strong>Total Amount:</strong> {total}
+                    </p>
+                    <button
+                        type="button"
+                        onClick={recordCashHandler}
+                        disabled={total == 0}
+                        className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
+                        style={{ width: "175px" }}
+                    >
+                        Record Cash Receive
+                    </button>
+                </div>
+            </form>
         </div>
     );
 };
+
 export default CashPay;
