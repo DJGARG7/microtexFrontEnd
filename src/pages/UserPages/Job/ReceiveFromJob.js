@@ -472,9 +472,6 @@ function ReceiveFromJob({ userDetails }) {
                     }
                 </div>
             </form>
-            <button type="button" onClick={() => setinvoicemodal(true)}>
-                View e bill
-            </button>
         </div>
     );
 }
