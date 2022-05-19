@@ -115,6 +115,7 @@ const CashReceive = () => {
             );
             if (res.data.length == 0) {
                 toastSuccess("No unpaid bills for this account");
+                setDrBillsList([]);
             } else {
                 setDrBillsList(res.data);
             }
@@ -123,6 +124,7 @@ const CashReceive = () => {
             setCustName("");
             setDrBillsList([]);
         }
+        setCheckedList({});
         setTotal(0);
     };
 

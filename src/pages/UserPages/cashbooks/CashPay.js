@@ -38,7 +38,6 @@ const CashPay = () => {
                 .toString()
         );
     }, [selectedAmt]);
-
     const checkboxHandler = (e, tableProps) => {
         console.log(e.target.checked);
         if (e.target.checked) {
@@ -126,12 +125,15 @@ const CashPay = () => {
             setCustName("");
             setDrBillsList([]);
         }
+        setCheckedList({});
         setTotal(0);
     };
 
     useEffect(() => {
-        setCustName("");
-        setDrBillsList([]);
+        if (type !== "") {
+            setCustName("");
+            setDrBillsList([]);
+        }
         // if (!type == "") fetchAccounts();
     }, [type]);
     useEffect(() => {
@@ -141,7 +143,7 @@ const CashPay = () => {
     }, [custName]);
     useEffect(() => {
         fetchAccounts();
-    });
+    }, []);
 
     const recordCashHandler = async (e) => {
         e.preventDefault();
