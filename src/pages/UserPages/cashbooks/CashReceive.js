@@ -7,6 +7,8 @@ import {
 import styles from "../Mill/styles/Mill.module.css";
 import StickyTable from "../../../components/Reuse_components/Table/StickyTable";
 import CurrentDate from "../../../components/Reuse_components/CurrentDate";
+import ReactLoading from "react-loading";
+
 const CashReceive = () => {
     const [sdlist, setSdlist] = useState([]);
     const [custName, setCustName] = useState("");
@@ -16,6 +18,9 @@ const CashReceive = () => {
     const [checkedList, setCheckedList] = useState({});
     const [selectedAmt, setSelectedAmt] = useState({});
     const [billsString, setBillsString] = useState("");
+
+    const [isAccountsLoading, setIsAccountsLoading] = useState(true);
+
     useEffect(() => {
         setTotal(
             Object.values(selectedAmt).reduce(
@@ -31,6 +36,7 @@ const CashReceive = () => {
                 .toString()
         );
     }, [selectedAmt]);
+
     const checkboxHandler = (e, tableProps) => {
         console.log(e.target.checked);
         if (e.target.checked) {
@@ -53,6 +59,7 @@ const CashReceive = () => {
             });
         }
     };
+
     const TableColData = [
         {
             Header: "Action",
@@ -84,19 +91,22 @@ const CashReceive = () => {
             Header: "transaction id",
             accessor: "t_id",
             Filter: "",
+            width: 155,
         },
     ];
+
     const fetchAccounts = async () => {
         try {
             const res = await Axios.get(
                 `http://localhost:3003/accountMaster/${type}`
             );
             setSdlist(res.data);
-            // setIsAccountsLoading(false);
+            setIsAccountsLoading(false);
         } catch (e) {
             toastError("Error fetching SD data");
         }
     };
+
     const showUnpaidBillHandler = async () => {
         console.log("running");
         try {
@@ -115,14 +125,17 @@ const CashReceive = () => {
         }
         setTotal(0);
     };
+
     useEffect(() => {
         fetchAccounts();
     }, []);
+
     useEffect(() => {
         if (custName !== "") {
             showUnpaidBillHandler();
         }
     }, [custName]);
+
     const recordCashHandler = async () => {
         const data = {
             date: CurrentDate(),
@@ -146,42 +159,82 @@ const CashReceive = () => {
         setDrBillsList([]);
         setTotal(0);
     };
-    return (
-        <div>
-            <select
-                name="custName"
-                value={custName}
-                onChange={(e) => {
-                    setCustName(e.target.value);
-                }}
-                required
-                className={`${styles["form--input"]} ${styles["form--input-select"]}`}
+
+    if (isAccountsLoading) {
+        return (
+            <div
                 style={{
-                    width: "20%",
-                    minWidth: "200px",
-                    margin: "10px 0",
+                    marginTop: "10vh",
                 }}
             >
-                <option value="" disabled hidden>
-                    Select customer...
-                </option>
-                {sdlist.map((sd) => {
-                    return (
-                        <option value={sd.uid} key={sd.uid}>
-                            {sd.AccName}
+                <ReactLoading type="bubbles" color="#212121" />
+            </div>
+        );
+    }
+
+    return (
+        <div className={styles["main"]}>
+            <h2>Receive Payment</h2>
+            <form className={styles["form"]}>
+                <div
+                    className={styles["form--group"]}
+                    style={{ justifyContent: "center" }}
+                >
+                    <select
+                        name="custName"
+                        value={custName}
+                        onChange={(e) => {
+                            setCustName(e.target.value);
+                        }}
+                        required
+                        className={`${styles["form--input"]} ${styles["form--input-select"]}`}
+                        style={{
+                            width: "20%",
+                            minWidth: "200px",
+                            margin: "10px 0",
+                        }}
+                    >
+                        <option value="" disabled hidden>
+                            Select customer...
                         </option>
-                    );
-                })}
-            </select>
-            <StickyTable TableCol={TableColData} TableData={drBillsList} />
-            <p>Total Amount : {total}</p>
-            <button
-                type="button"
-                onClick={recordCashHandler}
-                disabled={total == 0}
-            >
-                Record Cash Receive
-            </button>
+                        {sdlist.map((sd) => {
+                            return (
+                                <option value={sd.uid} key={sd.uid}>
+                                    {sd.AccName}
+                                </option>
+                            );
+                        })}
+                    </select>
+                </div>
+
+                <div className={styles["form--table"]}>
+                    <StickyTable
+                        TableCol={TableColData}
+                        TableData={drBillsList}
+                    />
+                </div>
+
+                <div
+                    className={styles["form--group"]}
+                    style={{
+                        alignItems: "center",
+                        flexDirection: "column",
+                    }}
+                >
+                    <p>
+                        <strong>Total Amount:</strong> {total}
+                    </p>
+                    <button
+                        type="button"
+                        onClick={recordCashHandler}
+                        disabled={total == 0}
+                        className={`${styles["form--btn"]} ${styles["form--add-btn"]}`}
+                        style={{ width: "175px" }}
+                    >
+                        Record Cash Receive
+                    </button>
+                </div>
+            </form>
         </div>
     );
 };

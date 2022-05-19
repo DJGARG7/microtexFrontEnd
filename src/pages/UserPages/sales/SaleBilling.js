@@ -260,6 +260,8 @@ export default function SaleBilling({ userDetails }) {
                     setSalesDetailList([]);
                 }}
             >
+                <h2>Make Bill</h2>
+                <br />
                 <SaleBillModal
                     billData={{
                         info: billInfo,
