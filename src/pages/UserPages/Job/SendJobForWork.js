@@ -696,7 +696,7 @@ function SendJobForWork({ userDetails }) {
                         onClick={() => setinvoicemodal(true)}
                         disabled={!billsubmit}
                     >
-                        Print invoice
+                        Print Challan
                     </button>
                 </div>
             </form>
