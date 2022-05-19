@@ -15,8 +15,59 @@ const reports = Axios.create({
 function JobReport() {
   const sentItemCol = [
     {
+      Header:"Challan Number",
+      accessor: "challanNo",
+      Filter:""
+    },
+    {
+      Header:"Account",
+      accessor: "AccName",
+      Filter:""
+    },
+    {
+      Header:"Challan Date",
+      accessor: "challanDate",
+      Filter:"",
+
+    },
+    {
       Header:"Item Name",
-      accessor: "itemName"
+      accessor: "itemName",
+      Filter : ""
+    },
+    {
+      Header:"Total Pieces",
+      accessor: "pieces",
+      Filter:"",
+    },
+  ];
+  const receiveItemcol = [
+    {
+      Header:"Challan Number",
+      accessor: "challanNo",
+      Filter:""
+    },
+    {
+      Header:"Account",
+      accessor: "AccName",
+      Filter:""
+    },
+    {
+      Header:"Sent Date",
+      accessor: "challanDate",
+      Filter:"",
+
+    },
+    {
+      Header:"Received Date",
+      accessor: "receiveDate",
+      Filter:"",
+
+    },
+    {
+      Header:"Item Name",
+      accessor: "itemName",
+      Filter : ""
     },
     {
       Header:"Total Pieces",
@@ -78,6 +129,10 @@ function JobReport() {
       try{
         const res = await reports.get(`/getitemsent/${jobtype}`);
         console.log(res.data);
+        res.data.forEach((data, index) => {
+          const date = new Date(data.challanDate);
+          data.challanDate = date.toLocaleDateString("en-GB");
+      });
         setitemsentlist(res.data);
       }catch(e){
         console.log(e);
@@ -88,6 +143,12 @@ function JobReport() {
       try{
         const res = await reports.get(`/getitemreceived/${jobtype}`);
         console.log(res.data);
+        res.data.forEach((data, index) => {
+          const date = new Date(data.challanDate);
+          const date2 = new Date(data.receiveDate)
+          data.challanDate = date.toLocaleDateString("en-GB");
+          data.receiveDate = date.toLocaleDateString("en-GB");
+      });
         setitemreceivedlist(res.data);
       }catch(e){
         console.log(e);
@@ -108,7 +169,7 @@ function JobReport() {
       try{
         const res = await reports.get("/getitemlist");
         setitemlist(res.data);
-        console.log(res.data);
+        // console.log(res.data);
       }catch(e){
         console.log(e);
       }
@@ -143,7 +204,7 @@ function JobReport() {
             </div>
             <div className={styles["row"]}>
               <div className={styles["question"]}>
-                1. Show items sent to &nbsp;
+                2. Show items sent to &nbsp;
                 <select onChange={onChangeJobType}  >
                     <option value="NaN">Select Work type</option>
                     <option value="Embroidery">Embroidery</option>
@@ -151,11 +212,11 @@ function JobReport() {
                     <option value="Lace">Lace Work</option>
                 </select>
               </div>
-                <StickyTable TableCol={sentItemCol} TableData={itemsentlist} style={{width:"302px"}}/>
+                <StickyTable TableCol={sentItemCol} TableData={itemsentlist} style={{width:"752px"}}/>
             </div>
             <div className={styles["row"]}>
               <div className={styles["question"]}>
-                2. Show items received from &nbsp;
+                3. Show items received from &nbsp;
                 <select onChange={(e)=>getitemreceived(e.target.value)}>
                     <option value="NaN">Select Work type</option>
                     <option value="Embroidery">Embroidery</option>
@@ -163,7 +224,7 @@ function JobReport() {
                     <option value="Lace">Lace Work</option>
                 </select>
               </div>
-                <StickyTable TableCol={sentItemCol} TableData={itemreceivedlist} style={{width:"302px"}}/>
+                <StickyTable TableCol={receiveItemcol} TableData={itemreceivedlist} style={{width:"902px"}}/>
             </div>
         </div>
     );
