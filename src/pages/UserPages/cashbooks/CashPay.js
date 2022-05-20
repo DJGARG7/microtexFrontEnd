@@ -7,7 +7,6 @@ import {
 import styles from "../Mill/styles/Mill.module.css";
 import StickyTable from "../../../components/Reuse_components/Table/StickyTable";
 import CurrentDate from "../../../components/Reuse_components/CurrentDate";
-import ReactLoading from "react-loading";
 
 const CashPay = () => {
     //----
@@ -20,8 +19,6 @@ const CashPay = () => {
     const [checkedList, setCheckedList] = useState({});
     const [selectedAmt, setSelectedAmt] = useState({});
     const [billsString, setBillsString] = useState("");
-
-    const [isAccountsLoading, setIsAccountsLoading] = useState(true);
 
     useEffect(() => {
         setTotal(
@@ -102,7 +99,6 @@ const CashPay = () => {
                 `http://localhost:3003/accountMaster/${type}`
             );
             setSdlist(res.data);
-            setIsAccountsLoading(false);
         } catch (e) {
             toastError("Error fetching account data");
         }
@@ -118,6 +114,10 @@ const CashPay = () => {
                 toastSuccess("No unpaid bills for this account");
                 setDrBillsList([]);
             } else {
+                res.data.forEach((data, index) => {
+                    const date = new Date(data.t_date);
+                    data.t_date = date.toLocaleDateString("en-GB");
+                });
                 setDrBillsList(res.data);
             }
         } catch (e) {
@@ -131,6 +131,7 @@ const CashPay = () => {
 
     useEffect(() => {
         if (type !== "") {
+            fetchAccounts();
             setCustName("");
             setDrBillsList([]);
         }
@@ -141,9 +142,6 @@ const CashPay = () => {
             showUnpaidBillHandler();
         }
     }, [custName]);
-    useEffect(() => {
-        fetchAccounts();
-    }, []);
 
     const recordCashHandler = async (e) => {
         e.preventDefault();
@@ -169,18 +167,6 @@ const CashPay = () => {
         setDrBillsList([]);
         setTotal(0);
     };
-
-    if (isAccountsLoading) {
-        return (
-            <div
-                style={{
-                    marginTop: "10vh",
-                }}
-            >
-                <ReactLoading type="bubbles" color="#212121" />
-            </div>
-        );
-    }
 
     return (
         <div className={styles["main"]}>
@@ -223,6 +209,7 @@ const CashPay = () => {
                             setCustName(e.target.value);
                         }}
                         required
+                        disabled={type === ""}
                         className={`${styles["form--input"]} ${styles["form--input-select"]}`}
                         style={{
                             width: "22.5%",

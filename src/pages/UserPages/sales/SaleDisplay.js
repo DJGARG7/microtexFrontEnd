@@ -42,6 +42,10 @@ function SaleDisplay({ userDetails }) {
             if (res.data.length == 0) {
                 toastSuccess(`No data!`);
             }
+            res.data.forEach((data, index) => {
+                const date = new Date(data.ORDER_DATE);
+                data.ORDER_DATE = date.toLocaleDateString("en-GB");
+            });
             setSalesList(res.data);
         } catch (e) {
             toastError("Error loading sales data");
@@ -56,7 +60,7 @@ function SaleDisplay({ userDetails }) {
         },
         {
             Header: "Customer",
-            accessor: "CNAME",
+            accessor: "AccName",
             Filter: "",
         },
         {

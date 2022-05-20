@@ -117,6 +117,10 @@ const CashReceive = () => {
                 toastSuccess("No unpaid bills for this account");
                 setDrBillsList([]);
             } else {
+                res.data.forEach((data, index) => {
+                    const date = new Date(data.t_date);
+                    data.t_date = date.toLocaleDateString("en-GB");
+                });
                 setDrBillsList(res.data);
             }
         } catch (e) {
